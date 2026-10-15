@@ -1,0 +1,50 @@
+name: Product CI/CD
+on:
+  push:
+    branches: [ main, development ]
+    paths:
+      - 'codes/**'
+  pull_request:
+    branches: [ main, development ]
+    paths:
+      - 'codes/**'
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: codes
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Run Linter
+        run: npm run lint
+        continue-on-error: true # Sesuaikan dengan kebijakan project
+
+      - name: Run Unit Tests
+        run: npm run test
+
+  security-scan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: codes
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        
+      - name: Run NPM Audit
+        run: npm audit --audit-level=high

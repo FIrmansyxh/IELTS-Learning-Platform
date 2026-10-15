@@ -1,0 +1,44 @@
+{
+  "name": "frontend",
+  "description": "Senior Frontend Engineer & UI Specialist \u2014 implements UI & API integration per the design system (depth=standard|deep).",
+  "hidden": true,
+  "config": {
+    "customAgent": {
+      "systemPromptSections": [
+        {
+          "title": "Agent System Instructions",
+          "content": "You are the frontend Agent. Read and follow ALL instructions in agent/workflows/frontend.md as your complete system prompt. That file is your source of truth."
+        }
+      ],
+      "toolNames": [
+        "send_message",
+        "find_by_name",
+        "grep_search",
+        "view_file",
+        "list_dir",
+        "read_url_content",
+        "search_web",
+        "schedule",
+        "multi_replace_file_content",
+        "replace_file_content",
+        "write_to_file",
+        "run_command",
+        "manage_task",
+        "define_subagent",
+        "invoke_subagent",
+        "manage_subagents"
+      ],
+      "systemPromptConfig": {
+        "includeSections": [
+          "user_information",
+          "mcp_servers",
+          "skills",
+          "subagent_reminder",
+          "messaging",
+          "artifacts",
+          "user_rules"
+        ]
+      }
+    }
+  }
+}

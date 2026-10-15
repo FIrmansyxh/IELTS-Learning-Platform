@@ -1,0 +1,25 @@
+{
+  "_comment": "DESIRED-STATE manifest written by the Toolsmith agent to state/workspace-manifest.json. Platform-agnostic: lists WHAT skills + MCP the project wants. Re-applying to a new tool (tool-switch) reads this same file and realizes it in the new tool's config format. This is the source of truth; per-tool config files are derived artifacts.",
+  "version": 1,
+  "project": "<project name>",
+  "decidedFrom": ["project_overview.md tech stack", "requirements.md", "find-skills"],
+  "skills": [
+    { "id": "find-skills", "reason": "discover further skills on demand" },
+    { "id": "ui-ux-pro-max", "reason": "UI-heavy frontend (example)" }
+  ],
+  "mcp": [
+    { "id": "filesystem", "reason": "ground agent in workspace" },
+    { "id": "git", "reason": "code-aware context" }
+  ],
+  "appliedTo": {
+    "_comment": "ISO timestamp of last successful apply per platform, or null if never applied. Toolsmith updates this after each apply.",
+    "claude-code": null,
+    "opencode": null,
+    "antigravity": null,
+    "codex": null,
+    "github-copilot": null
+  },
+  "revisionHistory": [
+    { "timestamp": "<YYYY-MM-DD HH:MM>", "agent": "toolsmith", "change": "initial provisioning" }
+  ]
+}

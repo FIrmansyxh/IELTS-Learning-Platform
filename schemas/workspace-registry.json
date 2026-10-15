@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "description": "Curated registry for the Toolsmith agent. Maps project needs (tech stack / phase) to recommended skills + MCP servers, and encodes how to write MCP config for each AI tool platform. Toolsmith reads this as the DEFAULT catalog, then may augment via requirements + find-skills.",
+
+  "stackMappings": {
+    "_comment": "tech-stack / capability keyword -> recommended skills + mcp ids. Match loosely (case-insensitive substring) against project_overview tech stack & key features.",
+    "ui|frontend|react|next|nextjs|vue|svelte|tailwind|shadcn": { "skills": ["ui-ux-pro-max"], "mcp": ["shadcn"] },
+    "prototype|mockup|wireframe|demo": { "skills": ["ui-ux-pro-max", "theme-factory"], "mcp": ["shadcn"] },
+    "postgres|postgresql|prisma|sql|database": { "skills": [], "mcp": ["postgres"] },
+    "e2e|test|testing|playwright|qa": { "skills": [], "mcp": ["playwright"] },
+    "security|auth|oauth|pentest|owasp": { "skills": ["penetration-testing"], "mcp": [] },
+    "*": { "skills": ["find-skills"], "mcp": ["filesystem", "git", "fetch"] }
+  },
+
+  "mcpCatalog": {
+    "_comment": "Common, safe MCP servers. command/args are indicative starting points — Toolsmith MUST verify the current invocation against the live MCP registry (or each server's README) before applying, since package names drift. `runtime` notes whether it ships via npx (Node) or uvx (Python).",
+    "filesystem": {
+      "description": "Read/write files within allowed roots — grounds the agent in the workspace.",
+      "runtime": "npx",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "env": {}
+    },
+    "git": {
+      "description": "Inspect git history, diffs, and status — context for code-aware agents.",
+      "runtime": "uvx",
+      "command": "uvx",
+      "args": ["mcp-server-git"],
+      "env": {}
+    },
+    "fetch": {
+      "description": "Fetch and convert web content (docs, references) into agent-readable text.",
+      "runtime": "uvx",
+      "command": "uvx",
+      "args": ["mcp-server-fetch"],
+      "env": {}
+    },
+    "postgres": {
+      "description": "Query a Postgres database (schema introspection, read queries). Set POSTGRES_URL.",
+      "runtime": "npx",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${POSTGRES_URL}"],
+      "env": { "POSTGRES_URL": "${POSTGRES_URL}" }
+    },
+    "playwright": {
+      "description": "Drive a real browser for E2E testing & verification (Tester agent).",
+      "runtime": "npx",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {}
+    },
+    "shadcn": {
+      "description": "Search & pull shadcn/ui component examples — pairs with ui-ux-pro-max skill. Verify current invocation (e.g. `npx shadcn@latest mcp`) before applying.",
+      "runtime": "npx",
+      "command": "npx",
+      "args": ["-y", "shadcn@latest", "mcp"],
+      "env": {}
+    }
+  },
+
+  "platformTargets": {
+    "_comment": "How to write MCP config declaratively for each tool. `file` is project-relative. `topLevelKey` is the JSON key holding servers. `entryShape` documents the per-server object shape; substitute command/args/env from mcpCatalog.",
+    "claude-code": {
+      "detect": [".claude/", ".mcp.json"],
+      "file": ".mcp.json",
+      "topLevelKey": "mcpServers",
+      "entryShape": { "command": "<command>", "args": ["<args>"], "env": {} },
+      "skillsDir": ".claude/skills/"
+    },
+    "opencode": {
+      "detect": [".opencode/", "opencode.json"],
+      "file": "opencode.json",
+      "topLevelKey": "mcp",
+      "entryShape": { "type": "local", "command": ["<command>", "<args>"], "enabled": true, "environment": {} },
+      "skillsDir": ".opencode/skills/",
+      "note": "OpenCode merges command+args into a single `command` array and uses `environment` (not `env`). Include \"$schema\": \"https://opencode.ai/config.json\" at the root."
+    },
+    "antigravity": {
+      "detect": [".agents/"],
+      "file": ".agents/mcp.json",
+      "topLevelKey": "mcpServers",
+      "entryShape": { "command": "<command>", "args": ["<args>"], "env": {} },
+      "skillsDir": ".agents/skills/",
+      "note": "Antigravity uses an mcpServers-shaped config. Confirm the exact path your Antigravity build reads (workspace vs global) with the human; .agents/mcp.json is the project-local default."
+    },
+    "codex": {
+      "detect": [".codex/", "AGENTS.md"],
+      "file": ".codex/config.toml",
+      "topLevelKey": "mcp_servers",
+      "entryShape": { "command": "<command>", "args": ["<args>"], "env": {} },
+      "skillsDir": ".agents/skills/",
+      "note": "Codex uses TOML tables `[mcp_servers.<id>]` in project-local `.codex/config.toml`. For streamable HTTP use `url`; preserve existing settings when merging. Project-scoped config is loaded only for trusted projects."
+    },
+    "github-copilot": {
+      "detect": [".github/prompts/", ".vscode/"],
+      "file": ".vscode/mcp.json",
+      "topLevelKey": "servers",
+      "entryShape": { "command": "<command>", "args": ["<args>"], "env": {} },
+      "skillsDir": null,
+      "note": "Copilot/VS Code uses the `servers` key (not `mcpServers`). Copilot has no skills dir — skills are Claude/OpenCode/Antigravity only."
+    }
+  }
+}
