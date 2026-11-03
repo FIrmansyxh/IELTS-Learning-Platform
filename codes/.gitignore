@@ -1,0 +1,35 @@
+# deps & build
+node_modules/
+.next/
+dist/
+out/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# env & secrets (jangan pernah di-commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# test & tooling output
+playwright-report/
+test-results/
+scripts/bench/results/
+.vitest-cache/
+
+# backup & model (di luar repo; aman bila diarahkan ke dalam repo)
+backups/
+models/
+*.dump
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# DB lokal jalur B (dev-db.ps1)
+.local-pg/

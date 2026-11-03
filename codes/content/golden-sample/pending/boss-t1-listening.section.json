@@ -1,0 +1,157 @@
+{
+  "set_type": "BOSS_SECTION",
+  "title": "Boss Tier 1 - Listening",
+  "tier_number": 1,
+  "skill_category": "LISTENING",
+  "time_limit_seconds": 1200,
+  "pass_percent": 80,
+  "listening_asset_code": "gs/listening/boss-t1",
+  "origin": "AI_GENERATED_REVIEWED",
+  "source_code": "OWN",
+  "questions": [
+    {
+      "question_id": "Q-BL-01",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "Monthly rent: £ _______",
+      "correct_answers": [
+        "450",
+        "£450",
+        "four hundred and fifty"
+      ],
+      "explanation_id": "Agen menyebut 'four hundred and fifty pounds a month'.",
+      "max_words": 2,
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-02",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "The room is on the _______ floor.",
+      "correct_answers": [
+        "second",
+        "2nd"
+      ],
+      "explanation_id": "Agen berkata 'It's on the second floor'.",
+      "max_words": 1,
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-03",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "What is included in the rent?",
+      "options": [
+        "Electricity",
+        "Water",
+        "The internet",
+        "Cleaning"
+      ],
+      "correct_answers": [
+        "The internet"
+      ],
+      "explanation_id": "'The rent includes the internet'. Listrik dan air dibayar terpisah.",
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-04",
+      "question_type": "SHORT_ANSWER",
+      "skill": "LISTENING",
+      "prompt": "Apa yang harus dibawa penelepon saat melihat kamar? (Maksimal SATU kata)",
+      "correct_answers": [
+        "passport"
+      ],
+      "max_words": 1,
+      "explanation_id": "Agen meminta 'Please bring your passport'.",
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-05",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "What time will the bus leave on Friday?",
+      "options": [
+        "8:00 am",
+        "8:15 am",
+        "8:30 am",
+        "3:30 pm"
+      ],
+      "correct_answers": [
+        "8:15 am"
+      ],
+      "explanation_id": "'A quarter past eight' sama dengan 8:15. Pukul 3:30 adalah waktu kembali ke sekolah.",
+      "section_no": 2
+    },
+    {
+      "question_id": "Q-BL-06",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "Everybody must bring a _______ and a bottle of water.",
+      "correct_answers": [
+        "packed lunch"
+      ],
+      "explanation_id": "Guru berkata 'bring a packed lunch and a bottle of water'.",
+      "max_words": 2,
+      "section_no": 2
+    },
+    {
+      "question_id": "Q-BL-07",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "What will the students do first at the museum?",
+      "options": [
+        "Complete the worksheet",
+        "Visit the exhibition rooms",
+        "Watch a short film",
+        "Have lunch"
+      ],
+      "correct_answers": [
+        "Watch a short film"
+      ],
+      "explanation_id": "'First, we will watch a short film'. Lembar kerja dikerjakan setelah itu.",
+      "section_no": 2
+    },
+    {
+      "question_id": "Q-BL-08",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "What topic do Anna and Tom choose?",
+      "options": [
+        "Travel",
+        "Recycling",
+        "Music",
+        "Sport"
+      ],
+      "correct_answers": [
+        "Recycling"
+      ],
+      "explanation_id": "Tom menolak travel karena terlalu banyak; Anna mengusulkan recycling dan disetujui.",
+      "section_no": 3
+    },
+    {
+      "question_id": "Q-BL-09",
+      "question_type": "SHORT_ANSWER",
+      "skill": "LISTENING",
+      "prompt": "Siapa yang akan mencari gambar? (Maksimal SATU kata)",
+      "correct_answers": [
+        "Anna"
+      ],
+      "max_words": 1,
+      "explanation_id": "Anna berkata 'I'll find the pictures'. Tom menulis teks slide.",
+      "section_no": 3
+    },
+    {
+      "question_id": "Q-BL-10",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "They will meet in the _______ on Thursday.",
+      "correct_answers": [
+        "library",
+        "the library"
+      ],
+      "explanation_id": "Kafe terlalu berisik, jadi mereka sepakat bertemu di library.",
+      "max_words": 2,
+      "section_no": 3
+    }
+  ]
+}

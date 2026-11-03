@@ -1,0 +1,180 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/* .gitignore akar repo mengabaikan codes/*; deteksi sumber otomatis Tailwind 4 mengikuti .gitignore, jadi daftarkan eksplisit. */
+@source '../';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Token dari design-system.md bagian 2 dan 9. Jangan menambah token baru tanpa change-management. */
+:root {
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-subtle: #eef2ff;
+  --color-secondary: #14b8a6;
+  --color-secondary-text: #0f766e;
+  --color-accent: #f59e0b;
+  --color-accent-text: #b45309;
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-text: #0f172a;
+  --color-text-2: #475569;
+  --color-text-muted: #64748b;
+  --color-locked: #94a3b8;
+  --color-progress: #4f46e5;
+  --color-done: #16a34a;
+  --color-done-text: #15803d;
+  --color-error: #dc2626;
+  --color-warning: #f59e0b;
+  --color-info: #0ea5e9;
+  --color-crown-gold: #f59e0b;
+  --color-crown-gold-edge: #b45309;
+  --color-crown-silver: #94a3b8;
+  --color-crown-silver-edge: #64748b;
+  --color-streak: #f97316;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 300ms;
+
+  /* Pemetaan ke token shadcn */
+  --background: var(--color-bg);
+  --foreground: var(--color-text);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-text);
+  --popover: var(--color-surface);
+  --popover-foreground: var(--color-text);
+  --primary: var(--color-primary);
+  --primary-foreground: #ffffff;
+  --secondary: var(--color-surface-muted);
+  --secondary-foreground: var(--color-text);
+  --muted: var(--color-surface-muted);
+  --muted-foreground: var(--color-text-muted);
+  --accent: var(--color-primary-subtle);
+  --accent-foreground: var(--color-text);
+  --destructive: var(--color-error);
+  --border: var(--color-border);
+  --input: var(--color-border-strong);
+  --ring: var(--color-primary);
+  --radius: 0.75rem;
+}
+
+.dark,
+:root[data-theme='dark'] {
+  --color-primary: #6366f1;
+  --color-primary-hover: #818cf8;
+  --color-primary-subtle: #1e1b4b;
+  --color-secondary: #2dd4bf;
+  --color-secondary-text: #5eead4;
+  --color-accent: #fbbf24;
+  --color-accent-text: #fcd34d;
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-muted: #172033;
+  --color-border: #334155;
+  --color-border-strong: #475569;
+  --color-text: #f1f5f9;
+  --color-text-2: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-locked: #64748b;
+  --color-progress: #6366f1;
+  --color-done: #22c55e;
+  --color-done-text: #4ade80;
+  --color-error: #f87171;
+  --color-warning: #fbbf24;
+  --color-info: #38bdf8;
+  --color-crown-gold: #fbbf24;
+  --color-crown-gold-edge: #fbbf24;
+  --color-crown-silver: #cbd5e1;
+  --color-crown-silver-edge: #cbd5e1;
+  --color-streak: #fb923c;
+
+  /* Tombol primary di dark tetap #4F46E5 + teks putih (design-system 2.1) */
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not(.light) {
+    --color-primary: #6366f1;
+    --color-primary-hover: #818cf8;
+    --color-primary-subtle: #1e1b4b;
+    --color-secondary: #2dd4bf;
+    --color-secondary-text: #5eead4;
+    --color-accent: #fbbf24;
+    --color-accent-text: #fcd34d;
+    --color-bg: #0f172a;
+    --color-surface: #1e293b;
+    --color-surface-muted: #172033;
+    --color-border: #334155;
+    --color-border-strong: #475569;
+    --color-text: #f1f5f9;
+    --color-text-2: #cbd5e1;
+    --color-text-muted: #94a3b8;
+    --color-locked: #64748b;
+    --color-progress: #6366f1;
+    --color-done: #22c55e;
+    --color-done-text: #4ade80;
+    --color-error: #f87171;
+    --color-warning: #fbbf24;
+    --color-info: #38bdf8;
+    --color-crown-gold: #fbbf24;
+    --color-crown-gold-edge: #fbbf24;
+    --color-crown-silver: #cbd5e1;
+    --color-crown-silver-edge: #cbd5e1;
+    --color-streak: #fb923c;
+    --primary: #4f46e5;
+    --primary-foreground: #ffffff;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 0.25rem);
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-heading);
+  --font-mono: var(--font-mono);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading), system-ui, sans-serif;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

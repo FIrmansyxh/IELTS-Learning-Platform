@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "project": "ielts-learning-platform",
+  "decidedFrom": ["project_overview.md tech stack (WORK_DEPTH=standard)", "state/knowledge_base/requirements/requirements.md", "schemas/workspace-registry.json stackMappings"],
+  "skills": [
+    { "id": "find-skills", "reason": "baseline: discover further skills on demand" },
+    { "id": "ui-ux-pro-max", "reason": "Next.js + Tailwind + shadcn/ui frontend (skill/UI-heavy learning platform)" },
+    { "id": "penetration-testing", "reason": "Auth.js credentials auth, RBAC, file uploads (audio/importer) -> security phase" }
+  ],
+  "mcp": [
+    { "id": "filesystem", "reason": "baseline: ground agent in workspace" },
+    { "id": "git", "reason": "baseline: code-aware context" },
+    { "id": "fetch", "reason": "baseline: fetch docs (Drizzle, Auth.js, Ollama, whisper.cpp, IELTS band descriptors)" },
+    { "id": "shadcn", "reason": "Next.js + Tailwind + shadcn/ui component lookup" },
+    { "id": "postgres", "reason": "PostgreSQL 16 (Docker) + Drizzle schema introspection; requires POSTGRES_URL once DB is up (pending)" },
+    { "id": "playwright", "reason": "Playwright E2E (gatekeeping, Skip Test, Resume) per testing stack" }
+  ],
+  "appliedTo": {
+    "claude-code": "2026-11-03T00:00:00Z",
+    "opencode": null,
+    "antigravity": null,
+    "codex": null,
+    "github-copilot": null
+  },
+  "revisionHistory": [
+    { "timestamp": "2026-11-03 00:00", "agent": "toolsmith", "change": "initial provisioning (mode init, tool=claude-code, depth=standard): 3 skills, 6 MCP; .mcp.json written declaratively, no packages installed" }
+  ]
+}

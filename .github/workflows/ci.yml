@@ -1,0 +1,194 @@
+name: Product CI
+
+on:
+  push:
+    branches: [main, development]
+    paths: ['codes/**', '.github/workflows/ci.yml', 'content/**']
+  pull_request:
+    branches: [main, development]
+    paths: ['codes/**', '.github/workflows/ci.yml', 'content/**']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_ENV: test
+  LLM_DRIVER: mock
+  STT_DRIVER: mock
+  AI_ENABLED: 'true'
+  NODE_VERSION: 22.20.0
+
+defaults:
+  run:
+    working-directory: codes
+
+jobs:
+  lint-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: codes/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: codes/package-lock.json
+      - run: npm ci
+      # Ambang coverage src/server/** lines >= 70% ada di vitest.config.ts (gagal bila kurang).
+      - run: npm run test -- --coverage
+
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16.10-alpine
+        env:
+          POSTGRES_DB: ielts_test
+          POSTGRES_USER: ci_admin
+          # Kredensial sekali pakai untuk service container CI; bukan rahasia.
+          POSTGRES_PASSWORD: ci-only-throwaway-password
+        ports: ['5433:5432']
+        options: >-
+          --health-cmd "pg_isready -U ci_admin -d ielts_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgres://ci_admin:ci-only-throwaway-password@127.0.0.1:5433/ielts_test
+      DATABASE_MIGRATOR_URL: postgres://ci_admin:ci-only-throwaway-password@127.0.0.1:5433/ielts_test
+      SKIP_PRE_MIGRATE_BACKUP: 'true'
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: codes/package-lock.json
+      - run: npm ci
+      - run: npm run db:migrate
+      - run: npm run test:integration
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: codes/package-lock.json
+      - run: npm ci
+      - run: npm run build
+        env:
+          NODE_ENV: production
+      - run: npm run build:worker
+        env:
+          NODE_ENV: production
+      - name: Validasi docker compose (tanpa rahasia nyata)
+        run: |
+          cat > .env <<'EOF'
+          POSTGRES_PASSWORD=ci-compose-config-only
+          APP_RW_PASSWORD=ci-compose-config-only
+          APP_MIGRATOR_PASSWORD=ci-compose-config-only
+          AUTH_SECRET=ci-compose-config-only-ci-compose-config-only
+          IP_HMAC_SECRET=ci-compose-config-only-ci-compose-config-only
+          BACKUP_DIR=/tmp/ci-backups
+          EOF
+          docker compose -f docker-compose.yml config > /tmp/compose.rendered.yml
+          if grep -E 'image:.*:latest' /tmp/compose.rendered.yml; then echo "Image bertag latest dilarang"; exit 1; fi
+          rm -f .env
+      - run: docker build --target web -t ielts-web:ci .
+      - run: docker build --target worker -t ielts-worker:ci .
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      CI: 'true'
+      E2E_PG_PASSWORD: ci-only-throwaway-password
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: codes/package-lock.json
+      - run: npm ci
+      - name: Siapkan .env sekali pakai untuk Compose
+        run: |
+          {
+            echo "POSTGRES_DB=ielts"
+            echo "POSTGRES_USER=ci_admin"
+            echo "POSTGRES_PASSWORD=$E2E_PG_PASSWORD"
+            echo "APP_RW_PASSWORD=ci-rw-throwaway-password"
+            echo "APP_MIGRATOR_PASSWORD=ci-mig-throwaway-password"
+            echo "AUTH_SECRET=$(openssl rand -base64 32)"
+            echo "IP_HMAC_SECRET=$(openssl rand -base64 32)"
+            echo "BACKUP_DIR=/tmp/ci-backups"
+          } > .env
+      - name: Jalankan Postgres (Compose) + migrasi + seed
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --wait db
+          export DATABASE_MIGRATOR_URL="postgres://app_migrator:ci-mig-throwaway-password@127.0.0.1:5432/ielts"
+          SKIP_PRE_MIGRATE_BACKUP=true npm run db:migrate
+          npm run db:seed
+          # Fixture konten sintetis (BUKAN konten produksi) dimuat oleh globalSetup Playwright dari tests/fixtures/content/
+      - run: npx playwright install --with-deps chromium
+      - name: Playwright
+        run: npm run test:e2e
+        env:
+          NODE_ENV: development
+          DATABASE_URL: postgres://app_rw:ci-rw-throwaway-password@127.0.0.1:5432/ielts
+          AUTH_URL: http://127.0.0.1:3000
+          ALLOWED_HOSTS: 127.0.0.1:3000,localhost:3000
+          ASSETS_DIR: /tmp/ci-assets
+      - uses: actions/upload-artifact@v4.6.2
+        if: always()
+        with:
+          name: playwright-report
+          path: codes/playwright-report/
+          retention-days: 7
+      - if: always()
+        run: docker compose -f docker-compose.yml -f docker-compose.dev.yml down -v
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: codes/package-lock.json
+      - run: npm ci
+      - run: npm audit --audit-level=high --omit=dev
+      - uses: gitleaks/gitleaks-action@v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Organisasi (bukan akun pribadi) memerlukan GITLEAKS_LICENSE sebagai GitHub Secret.
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+      - run: docker build --target web -t ielts-web:scan .
+      - uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: ielts-web:scan
+          severity: CRITICAL
+          exit-code: '1'
+          ignore-unfixed: true

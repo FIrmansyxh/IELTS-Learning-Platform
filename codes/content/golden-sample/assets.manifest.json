@@ -1,0 +1,37 @@
+{
+  "contract_version": "1.1",
+  "assets": [
+    {
+      "asset_code": "gs/passive-voice/slide-formula",
+      "kind": "SLIDE_IMAGE",
+      "title": "Slide 2.1.3 - Rumus inti Passive Voice",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "slides/passive-formula.webp"
+    },
+    {
+      "asset_code": "gs/passive-voice/slide-transform",
+      "kind": "SLIDE_IMAGE",
+      "title": "Slide 2.1.3 - Dari aktif ke pasif",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "slides/passive-transform.webp"
+    },
+    {
+      "asset_code": "gs/passive-voice/slide-process",
+      "kind": "SLIDE_IMAGE",
+      "title": "Slide 2.1.3 - Pasif pada deskripsi proses",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "slides/passive-process.webp"
+    },
+    {
+      "asset_code": "gs/passive-voice/cheatsheet",
+      "kind": "DOCUMENT",
+      "title": "Cheatsheet Passive Voice (PDF)",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "docs/passive-voice-cheatsheet.pdf"
+    }
+  ]
+}

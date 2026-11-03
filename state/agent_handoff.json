@@ -1,0 +1,29 @@
+{
+  "from_agent": "backend",
+  "to_agent": "orchestrator",
+  "task_id": "TASK-001..004 (W1)",
+  "timestamp": "2026-11-03 07:55",
+  "status": "backend_ready_w1_partial_004",
+  "notes": "Backend W1 selesai untuk TASK-001/002/003 (ready_to_test) dan sebagian TASK-004 (library, seed, CLI selesai; Golden Sample GS-1..6 BELUM dibuat: pekerjaan konten). Drift FE sebelumnya (lint INVITE_CODE_RE, TS2748 argon2, TS2559 bootstrap, peringatan fs, seed.test) sudah diperbaiki. Perubahan kontrak aditif: SettingDTO.options (spec 002 + _api-contract diperbarui). Catatan untuk FE: (1) session cookie = JWT Auth.js via next-auth/jwt (tanpa rute /api/auth/*); Server Component dapat memakai getUserFromCookieHeader di src/server/auth/guards.ts; (2) mutasi wajib header Origin (ALLOWED_HOSTS) atau Sec-Fetch-Site: same-origin; (3) tests/setup.ts sempat tertimpa Backend dan afterEach(cleanup) dipulihkan; src/contracts/admin.ts ditimpa Backend dan dilengkapi alias FE (isi asli tidak terpulihkan, 86 tes FE lulus); (4) jangan jalankan next build dengan NODE_ENV=development. Verifikasi: tsc, eslint, 199 tes unit, 96 tes integrasi (Postgres 16 lokal), next build, build:worker lulus; E2E/Docker/Node 22 belum.",
+  "previous": {
+    "from_agent": "frontend",
+    "to_agent": "backend",
+    "task_id": "TASK-001..004 (W1)",
+    "timestamp": "2026-11-03 07:25",
+    "status": "frontend_ready_contract_notes",
+    "notes": "Frontend W1 selesai terhadap kontrak (dev_log di task/TASK-00[1-3]_*/dev_log.md). Tidak ada drift respons yang ditambal di klien; klien mem-parse respons dengan Zod dan menandai RESPONSE_INVALID bila menyimpang. Catatan untuk Backend: (1) src/contracts/auth.ts INVITE_CODE_RE memicu eslint security/detect-unsafe-regex (lint max-warnings=0 gagal); bentuk aman: pisah '-' lalu uji 20 karakter. (2) src/server/admin/health.ts:38,41 peringatan security/detect-non-literal-fs-filename. (3) scripts/admin-bootstrap.ts(14,36) TS2559 memblokir tsc dan next build. (4) tests/unit/seed.test.ts gagal setelah perubahan registri seed. (5) Asumsi klien: GET /curriculum/tree dipakai admin untuk daftar target override (ID konten global sama untuk semua pengguna). (6) Klien memakai SettingDTO.options (aditif Backend) untuk Select enum. (7) Tidak ada middleware.ts dari frontend; pengalihan tanpa sesi di klien (AuthGate). (8) globals.css: ditambah @source '../' karena .gitignore akar (codes/*) membuat Tailwind 4 tidak memindai sumber.",
+    "artifacts": [
+      "task/TASK-001_auth-session/dev_log.md",
+      "task/TASK-002_admin-users-invites/dev_log.md",
+      "task/TASK-003_skill-tree-gatekeeping/dev_log.md",
+      "task/TASK-004_content-foundation/dev_log.md"
+    ]
+  },
+  "artifacts": [
+    "task/TASK-001_auth-session/dev_log.md",
+    "task/TASK-002_admin-users-invites/dev_log.md",
+    "task/TASK-003_skill-tree-gatekeeping/dev_log.md",
+    "task/TASK-004_content-foundation/dev_log.md",
+    "codes/README.md"
+  ]
+}

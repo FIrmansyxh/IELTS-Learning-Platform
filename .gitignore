@@ -4,10 +4,8 @@
 # ==========================================
 # Project Folders to Ignore
 # ==========================================
-# Ignore all files in codes folder (development code)
-codes/*
-!codes/.gitkeep
-
+# codes/ is tracked in this repo (monorepo); secrets, deps, and build
+# output are excluded by codes/.gitignore.
 
 .mcp.json
 opencode.json
