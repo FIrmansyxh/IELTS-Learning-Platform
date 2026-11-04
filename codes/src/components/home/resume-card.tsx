@@ -52,7 +52,7 @@ export function ResumeCard({ card }: { card: ResumeCardData }) {
   );
 }
 
-function EmptyResume({ placementAvailable }: { placementAvailable: boolean }) {
+function EmptyResume({ placementHref }: { placementHref: string | null }) {
   return (
     <Card data-testid="resume-empty">
       <CardHeader>
@@ -68,9 +68,9 @@ function EmptyResume({ placementAvailable }: { placementAvailable: boolean }) {
             {id.resume.startTier1}
           </Link>
         </Button>
-        {placementAvailable ? (
+        {placementHref ? (
           <Button asChild size="lg" variant="outline">
-            <Link href="/placement">{id.resume.placement}</Link>
+            <Link href={placementHref}>{id.resume.placement}</Link>
           </Button>
         ) : null}
       </CardContent>
@@ -79,7 +79,8 @@ function EmptyResume({ placementAvailable }: { placementAvailable: boolean }) {
 }
 
 /** Memuat GET /me/last-learned lalu menampilkan kartu, empty state, skeleton, atau galat. */
-export function ResumeSection({ placementAvailable = false }: { placementAvailable?: boolean }) {
+/** `placementHref` (dari GET /placement) menampilkan tombol "Ikut Placement Test" pada empty state; null = tersembunyi. */
+export function ResumeSection({ placementHref = null }: { placementHref?: string | null }) {
   const q = useQuery({
     queryKey: RESUME_KEY,
     queryFn: ({ signal }) => resumeApi.get(signal),
@@ -98,5 +99,5 @@ export function ResumeSection({ placementAvailable = false }: { placementAvailab
       </div>
     );
   }
-  return q.data ? <ResumeCard card={q.data} /> : <EmptyResume placementAvailable={placementAvailable} />;
+  return q.data ? <ResumeCard card={q.data} /> : <EmptyResume placementHref={placementHref} />;
 }

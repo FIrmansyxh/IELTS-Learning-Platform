@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { AssessmentType, IsoDateTime, SkillCategory, Uuid } from './common';
+import { GamificationBlockSchema } from './gamification';
 import { MasteryCrownLevel } from './player';
 
 /** Skema mesin soal & attempt (SPEC-006). Klien longgar terhadap kunci tambahan. */
@@ -174,7 +175,11 @@ export const AttemptResultSchema = z.object({
   skip: z.unknown().nullable().optional(),
   boss: z.unknown().nullable().optional(),
   placement: z.unknown().nullable().optional(),
-  gamification: z.unknown().nullable().optional(),
+  gamification: GamificationBlockSchema.nullable().optional(),
 });
 export type AttemptResult = z.infer<typeof AttemptResultSchema>;
 export const AttemptResultResponseSchema = z.object({ data: AttemptResultSchema });
+
+/** SPEC-011: GET /attempts/{attempt_id}/audio (aditif; query `section` hanya bermakna untuk attempt TIER_BOSS_EXAM, SPEC-014). */
+export const AudioStreamParamsSchema = z.strictObject({ attempt_id: Uuid });
+export const AudioStreamQuerySchema = z.object({ section: Uuid.optional() });

@@ -10,6 +10,7 @@ import { closeQueue } from '@/server/jobs/queue';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { runImportPublish, runImportValidate } from '@/server/import/jobs';
 import { purgeImportBatches } from '@/server/import/purge';
+import { recoverStuckBatches } from '@/server/import/service';
 import { POST as createRoute, GET as listRoute } from '@/app/api/v1/admin/import-batches/route';
 import { GET as batchGet } from '@/app/api/v1/admin/import-batches/[batch_id]/route';
 import { GET as itemsGet } from '@/app/api/v1/admin/import-batches/[batch_id]/items/route';
@@ -21,7 +22,8 @@ import { GET as templateGet } from '@/app/api/v1/admin/import-templates/[kind]/r
 import { GET as contractGet } from '@/app/api/v1/admin/import-contract/route';
 import { POST as assetUpload } from '@/app/api/v1/admin/assets/route';
 import { PATCH as assetPatch } from '@/app/api/v1/admin/assets/[asset_id]/route';
-import { adminSession, call, callMultipart, learnerSession } from './helpers';
+import { jobHandlers } from '@/worker/registry';
+import { adminSession, call, callMultipart, cleanupContentFixtures, learnerSession } from './helpers';
 
 const db = getDb();
 let admin: Awaited<ReturnType<typeof adminSession>>;
@@ -30,22 +32,13 @@ beforeAll(async () => {
   admin = await adminSession();
 });
 afterAll(async () => {
+  await cleanupContentFixtures();
   await closeQueue();
   await closeDb();
 });
 beforeEach(async () => {
   resetRateLimits();
-  await db.execute(sql`DELETE FROM attempts`);
-  await db.execute(sql`DELETE FROM import_batch_items`);
-  await db.execute(sql`DELETE FROM async_jobs`);
-  await db.execute(sql`DELETE FROM import_batches`);
-  await db.execute(sql`DELETE FROM content_revisions`);
-  await db.execute(sql`DELETE FROM assessment_sets`);
-  await db.execute(sql`DELETE FROM learning_materials`);
-  await db.execute(sql`DELETE FROM sub_modules WHERE sub_module_code LIKE '1.99.%'`);
-  await db.execute(sql`DELETE FROM modules WHERE module_code = '1.99'`);
-  await db.execute(sql`DELETE FROM content_assets`);
-  await db.execute(sql`UPDATE sub_modules SET status='DRAFT', content_version=1`);
+  await cleanupContentFixtures();
 });
 
 // ------------------------------------------------------------ fabrik paket
@@ -97,7 +90,7 @@ async function uploadValidated(format: 'JSON' | 'CSV', filename: string, data: B
   await runImportValidate(id, await jobOf(id, 'IMPORT_VALIDATE'));
   return { id, upload: r.json.data, batch: (await getB(id)).json.data };
 }
-async function publishRun(id: string, body: { target_status: 'DRAFT' | 'PUBLISHED'; acknowledge_warnings?: boolean }) {
+async function publishRun(id: string, body: { target_status: 'DRAFT' | 'PUBLISHED'; acknowledge_warnings?: boolean; confirm_reviewed?: boolean }) {
   const r = await pub(id, body);
   expect(r.status, JSON.stringify(r.json)).toBe(202);
   await runImportPublish(id, await jobOf(id, 'IMPORT_PUBLISH'));
@@ -513,5 +506,238 @@ describe('SPEC-019 retensi (I7)', () => {
     const fresh = await uploadValidated('JSON', 'p2.json', json(pkg([sub(2)])));
     expect(await purgeImportBatches(db)).toBe(0);
     expect(fresh.id).toBeTruthy();
+  });
+});
+
+// ================================================================ akses & worker (celah ditutup Backend W4)
+describe('SPEC-019 akses learner/anon dan handler worker', () => {
+  it('learner 403 dan tanpa sesi 401 pada SELURUH endpoint impor', async () => {
+    const l = await learnerSession();
+    const { id } = await uploadValidated('JSON', 'akses.json', json(pkg([sub(1)])));
+    const P = { batch_id: id, row_number: '1', kind: 'content-package' };
+    const calls: Array<[string, (cookie: string | null) => Promise<{ status: number }>]> = [
+      ['list', (c) => call(listRoute, 'GET', '/api/v1/admin/import-batches', { cookie: c })],
+      ['get', (c) => call(batchGet, 'GET', '/x', { cookie: c, params: P })],
+      ['items', (c) => call(itemsGet, 'GET', '/x', { cookie: c, params: P })],
+      ['item', (c) => call(itemGet, 'GET', '/x', { cookie: c, params: P })],
+      ['publish', (c) => call(publishPost, 'POST', '/x', { cookie: c, params: P, body: { target_status: 'DRAFT' } })],
+      ['cancel', (c) => call(cancelPost, 'POST', '/x', { cookie: c, params: P })],
+      ['rollback', (c) => call(rollbackPost, 'POST', '/x', { cookie: c, params: P })],
+      ['template', (c) => call(templateGet, 'GET', '/x', { cookie: c, params: P })],
+      ['contract', (c) => call(contractGet, 'GET', '/x', { cookie: c })],
+    ];
+    for (const [name, fn] of calls) {
+      expect((await fn(l.cookie)).status, `learner ${name}`).toBe(403);
+      expect((await fn(null)).status, `anon ${name}`).toBe(401);
+    }
+    expect((await getB(id)).json.data.status).toBe('PREVIEW_READY'); // tidak ada efek
+  });
+
+  it('handler worker pg-boss (registry): import-validate lalu import-publish menyelesaikan batch; pengulangan idempoten', async () => {
+    const r = await upload('JSON', 'worker.json', json(pkg([sub(1), sub(2)])));
+    const id = r.json.data.id as string;
+    const jlog = { info: () => undefined, warn: () => undefined, error: () => undefined, child: () => jlog } as never;
+    const validateJob = [{ id: 'j1', name: 'import-validate', data: { batch_id: id, async_job_id: await jobOf(id, 'IMPORT_VALIDATE') } }];
+    await jobHandlers['import-validate'](validateJob, { log: jlog });
+    expect((await getB(id)).json.data).toMatchObject({ status: 'PREVIEW_READY', total_items: 3, job: { kind: 'IMPORT_VALIDATE', status: 'SUCCEEDED', progress_percent: 100 } });
+    await jobHandlers['import-validate'](validateJob, { log: jlog }); // pengulangan: dilewati, status tidak berubah
+    expect((await getB(id)).json.data.status).toBe('PREVIEW_READY');
+
+    expect((await pub(id, { target_status: 'DRAFT' })).status).toBe(202);
+    const publishJob = [{ id: 'j2', name: 'import-publish', data: { batch_id: id, async_job_id: await jobOf(id, 'IMPORT_PUBLISH') } }];
+    await jobHandlers['import-publish'](publishJob, { log: jlog });
+    const done = (await getB(id)).json.data;
+    expect(done).toMatchObject({ status: 'PUBLISHED', created_count: 3, job: { kind: 'IMPORT_PUBLISH', status: 'SUCCEEDED' } });
+    await jobHandlers['import-publish'](publishJob, { log: jlog });
+    expect((await getB(id)).json.data).toMatchObject({ status: 'PUBLISHED', created_count: 3 });
+    expect((await db.select().from(subModules).where(eq(subModules.subModuleCode, '1.99.1'))).length).toBe(1);
+  });
+
+  it('worker mati saat VALIDATING: job dikerjakan ulang dari status VALIDATING dan selesai', async () => {
+    const r = await upload('JSON', 'crash.json', json(pkg([sub(1)])));
+    const id = r.json.data.id as string;
+    await db.update(importBatches).set({ status: 'VALIDATING' }).where(eq(importBatches.id, id));
+    expect(await runImportValidate(id, await jobOf(id, 'IMPORT_VALIDATE'))).toBe('done');
+    expect((await getB(id)).json.data.status).toBe('PREVIEW_READY');
+  });
+
+  it('cancel saat VALIDATING ditolak bila job RUNNING dan diizinkan bila tidak; batch dibatalkan sebelum worker jalan -> worker melewati', async () => {
+    const r = await upload('JSON', 'cx.json', json(pkg([sub(1)])));
+    const id = r.json.data.id as string;
+    expect((await cancel(id)).json.data.status).toBe('CANCELLED');
+    expect(await runImportValidate(id, await jobOf(id, 'IMPORT_VALIDATE'))).toBe('skipped');
+    expect((await getB(id)).json.data.status).toBe('CANCELLED');
+    const r2 = await upload('JSON', 'cy.json', json(pkg([sub(2)])));
+    const id2 = r2.json.data.id as string;
+    await db.update(importBatches).set({ status: 'VALIDATING' }).where(eq(importBatches.id, id2));
+    await db.update(asyncJobs).set({ status: 'RUNNING', startedAt: new Date() }).where(eq(asyncJobs.importBatchId, id2));
+    const c = await cancel(id2); // job RUNNING -> ditolak
+    expect(c.status).toBe(409);
+    expect(c.json.error.code).toBe('BATCH_NOT_CANCELLABLE');
+    await db.update(asyncJobs).set({ status: 'QUEUED' }).where(eq(asyncJobs.importBatchId, id2));
+    expect((await cancel(id2)).json.data.status).toBe('CANCELLED'); // job tidak RUNNING -> boleh (F-19-02)
+  });
+});
+
+// ================================================================ perbaikan QA W4
+describe('SPEC-019 perbaikan QA W4', () => {
+  const slideMat = (codes: string[]) => ({ article_markdown: '# Materi', slides: codes.map((c, i) => ({ order: i + 1, asset_code: c, caption: `Slide ${i + 1}` })) });
+
+  it('F-19-01: batch DRAFT yang meng-UPDATE sub-modul PUBLISHED dengan aset UNVERIFIED dibatalkan (PUBLISH_BLOCKED), konten tayang tidak berubah', async () => {
+    await uploadAsset('tier1/slides/ok', '#0a0a0a', 'OWN_ORIGINAL');
+    await uploadAsset('tier1/slides/baru', '#0b0b0b'); // UNVERIFIED
+    const v1 = await uploadValidated('JSON', 'live1.json', json(pkg([sub(1, { materials: slideMat(['tier1/slides/ok']) })])));
+    expect((await publishRun(v1.id, { target_status: 'PUBLISHED' })).status).toBe('PUBLISHED');
+    const live = await subRow('1.99.1');
+    expect(live!.status).toBe('PUBLISHED');
+
+    const v2 = await uploadValidated('JSON', 'live2.json', json(pkg([sub(1, { materials: slideMat(['tier1/slides/ok', 'tier1/slides/baru']) })])));
+    expect(v2.batch.valid_items).toBeGreaterThan(0);
+    const out = await publishRun(v2.id, { target_status: 'DRAFT', acknowledge_warnings: true });
+    expect(out.status).toBe('PREVIEW_READY');
+    expect(out.summary.last_error.code).toBe('PUBLISH_BLOCKED');
+    expect(out.summary.last_error.blockers.map((b: { code: string }) => b.code)).toContain('ASSET_UNVERIFIED');
+    const after = await subRow('1.99.1');
+    expect(after!.status).toBe('PUBLISHED');
+    expect(after!.contentVersion).toBe(live!.contentVersion);
+    expect((await db.select().from(contentRevisions).where(eq(contentRevisions.importBatchId, v2.id))).length).toBe(0);
+
+    // target PUBLISHED juga tidak lolos lewat jalur "sudah PUBLISHED"
+    const again = await publishRun(v2.id, { target_status: 'PUBLISHED', acknowledge_warnings: true });
+    expect(again.status).toBe('PREVIEW_READY');
+    expect(again.summary.last_error.code).toBe('PUBLISH_BLOCKED');
+  });
+
+  it('F-19-01: video YouTube baru pada sub-modul PUBLISHED (dibuat UNVERIFIED) juga menghalangi', async () => {
+    const v1 = await uploadValidated('JSON', 'vlive1.json', json(pkg([sub(1, { materials: { article_markdown: '# M' } })])));
+    expect((await publishRun(v1.id, { target_status: 'PUBLISHED' })).status).toBe('PUBLISHED');
+    const withVideo = sub(1, { materials: { article_markdown: '# M', videos: [{ video_id: 'dQw4w9WgXcQ', title: 'V', language: 'EN', start_sec: 0, end_sec: 60 }] } });
+    const v2 = await uploadValidated('JSON', 'vlive2.json', json(pkg([withVideo])));
+    const out = await publishRun(v2.id, { target_status: 'DRAFT', acknowledge_warnings: true });
+    expect(out.status).toBe('PREVIEW_READY');
+    expect(out.summary.last_error.code).toBe('PUBLISH_BLOCKED');
+    expect((await db.execute(sql`SELECT count(*)::int AS n FROM content_assets WHERE kind='VIDEO_EMBED'`)).rows[0]).toEqual({ n: 0 });
+  });
+
+  it('F-19-02: watchdog memulihkan batch macet (job terminal / tanpa kemajuan) dan upload baru tidak lagi IMPORT_IN_PROGRESS', async () => {
+    const a = await upload('JSON', 'stuck1.json', json(pkg([sub(1)])));
+    const id = a.json.data.id as string;
+    await db.update(importBatches).set({ status: 'VALIDATING' }).where(eq(importBatches.id, id));
+    await db.update(asyncJobs).set({ status: 'FAILED', errorCode: 'X', finishedAt: new Date() }).where(eq(asyncJobs.importBatchId, id));
+    const b = await upload('JSON', 'stuck2.json', json(pkg([sub(2)]))); // pemulihan lazy
+    expect(b.status, JSON.stringify(b.json)).toBe(201);
+    const rec = (await getB(id)).json.data;
+    expect(rec.status).toBe('FAILED');
+    expect(rec.summary.last_error.code).toBe('JOB_STALLED');
+
+    // PUBLISHING macet tanpa kemajuan > ambang -> kembali PREVIEW_READY
+    await cancel(b.json.data.id);
+    const c = await uploadValidated('JSON', 'stuck3.json', json(pkg([sub(3)])));
+    expect((await pub(c.id, { target_status: 'DRAFT' })).status).toBe(202);
+    expect(await recoverStuckBatches(db)).toBe(0); // job baru, belum macet
+    expect(await recoverStuckBatches(db, new Date(Date.now() + 31 * 60_000))).toBe(1);
+    const back = (await getB(c.id)).json.data;
+    expect(back.status).toBe('PREVIEW_READY');
+    expect(back.summary.last_error.code).toBe('JOB_STALLED');
+    expect(back.job).toMatchObject({ status: 'FAILED', error_code: 'JOB_STALLED' });
+    expect((await pub(c.id, { target_status: 'DRAFT' })).status).toBe(202); // dapat dicoba lagi
+  });
+
+  it('F-19-03: audit publikasi memakai admin yang menekan Publikasikan (IMPORT_PUBLISH_REQUESTED + IMPORT_PUBLISHED)', async () => {
+    const admin2 = await adminSession();
+    const v = await uploadValidated('JSON', 'actor.json', json(pkg([sub(1)])));
+    const r = await call(publishPost, 'POST', '/x', { cookie: admin2.cookie, params: { batch_id: v.id }, body: { target_status: 'DRAFT' } });
+    expect(r.status).toBe(202);
+    await runImportPublish(v.id, await jobOf(v.id, 'IMPORT_PUBLISH'));
+    const rows = (await db.execute(sql`SELECT action, actor_user_id::text AS actor FROM audit_log WHERE entity_id = ${v.id} AND action IN ('IMPORT_PUBLISH_REQUESTED','IMPORT_PUBLISHED')`)).rows as Array<{ action: string; actor: string }>;
+    expect(rows.map((x) => x.action).sort()).toEqual(['IMPORT_PUBLISHED', 'IMPORT_PUBLISH_REQUESTED']);
+    expect(rows.every((x) => x.actor === admin2.user.id)).toBe(true);
+    const revs = await db.select().from(contentRevisions).where(eq(contentRevisions.importBatchId, v.id));
+    expect(revs.length).toBeGreaterThan(0);
+  });
+
+  it('F-19-04: array JSON sangat besar -> 400 too_many_items (bukan 500 RangeError)', async () => {
+    const body = Buffer.from(`{"contract_version":"1.1","modules":[${new Array(300_000).fill('0').join(',')}]}`);
+    const r = await upload('JSON', 'big-array.json', body);
+    expect(r.status).toBe(400);
+    expect(r.json.error.code).toBe('IMPORT_FILE_INVALID');
+    expect(r.json.error.details[0].code).toBe('too_many_items');
+  });
+});
+
+// ================================================================ QA W8
+describe('QA W8 F-20-03: publikasi impor memuat konten buatan AI wajib confirm_reviewed (K2)', () => {
+  const ai = (n: number) => sub(n, { origin: 'AI_GENERATED_REVIEWED', materials: { article_markdown: '# Materi AI' } });
+  const auditsOf = async (action: string, batchId: string) => (await db.select().from(auditLog).where(and(eq(auditLog.action, action), eq(auditLog.entityId, batchId)))).map((a) => a.metadata as Record<string, unknown>);
+
+  it('target PUBLISHED tanpa confirm_reviewed -> 409 REVIEW_CONFIRMATION_REQUIRED, batch tetap PREVIEW_READY; dengan confirm -> PUBLISHED dan confirmed_by tercatat di audit', async () => {
+    const { id, batch } = await uploadValidated('JSON', 'ai.json', json(pkg([ai(1)])));
+    expect(batch.summary.has_ai_generated).toBe(true); // FE dapat menampilkan kotak konfirmasi di muka
+    const denied = await pub(id, { target_status: 'PUBLISHED', acknowledge_warnings: true });
+    expect(denied.status).toBe(409);
+    expect(denied.json.error.code).toBe('REVIEW_CONFIRMATION_REQUIRED');
+    expect(denied.json.error.details[0]).toMatchObject({ path: 'confirm_reviewed', code: 'required' });
+    expect((await getB(id)).json.data.status).toBe('PREVIEW_READY');
+    expect(await subRow('1.99.1')).toBeUndefined();
+    // confirm_reviewed: false eksplisit juga ditolak
+    expect((await pub(id, { target_status: 'PUBLISHED', acknowledge_warnings: true, confirm_reviewed: false })).status).toBe(409);
+
+    const done = await publishRun(id, { target_status: 'PUBLISHED', acknowledge_warnings: true, confirm_reviewed: true });
+    expect(done.status).toBe('PUBLISHED');
+    expect((await subRow('1.99.1'))!.status).toBe('PUBLISHED');
+    expect((await setRow('ACTIVE_DRILL:1.99.1'))!.status).toBe('PUBLISHED');
+    const [requested] = await auditsOf('IMPORT_PUBLISH_REQUESTED', id);
+    const [published] = await auditsOf('IMPORT_PUBLISHED', id);
+    expect(requested).toMatchObject({ target_status: 'PUBLISHED', confirmed_by: admin.user.id });
+    expect(published).toMatchObject({ target_status: 'PUBLISHED', confirmed_by: admin.user.id });
+  });
+
+  it('target DRAFT tidak memerlukan konfirmasi dan tidak mencatat confirmed_by; konten non-AI PUBLISHED tidak memerlukannya', async () => {
+    const a = await uploadValidated('JSON', 'ai-draft.json', json(pkg([ai(1)])));
+    const done = await publishRun(a.id, { target_status: 'DRAFT', acknowledge_warnings: true });
+    expect(done.status).toBe('PUBLISHED');
+    expect((await auditsOf('IMPORT_PUBLISHED', a.id))[0]).not.toHaveProperty('confirmed_by');
+    await cleanupContentFixtures();
+    const b = await uploadValidated('JSON', 'plain.json', json(pkg([sub(2, { materials: { article_markdown: '# Materi' } })])));
+    expect(b.batch.summary.has_ai_generated).toBe(false);
+    expect((await publishRun(b.id, { target_status: 'PUBLISHED', acknowledge_warnings: true })).status).toBe('PUBLISHED');
+  });
+
+  it('job memeriksa ulang origin di DB: item NOOP atas set AI berstatus DRAFT dipublikasikan tanpa konfirmasi -> dibatalkan, PREVIEW_READY + REVIEW_CONFIRMATION_REQUIRED', async () => {
+    const first = await uploadValidated('JSON', 'ai-1.json', json(pkg([ai(1)])));
+    await publishRun(first.id, { target_status: 'DRAFT', acknowledge_warnings: true });
+    expect((await subRow('1.99.1'))!.status).toBe('DRAFT');
+    // Berkas berbeda (tambah sub-modul non-AI) tetapi item AI tetap NOOP: pemeriksaan cepat di permintaan lolos, job yang menolak.
+    const again = await uploadValidated('JSON', 'ai-2.json', json(pkg([ai(1), sub(2, { materials: { article_markdown: '# Materi' } })])));
+    expect((await items(again.id)).json.data.find((x: { entity_code: string }) => x.entity_code === '1.99.1').action).toBe('NOOP');
+    const r = await pub(again.id, { target_status: 'PUBLISHED', acknowledge_warnings: true });
+    expect(r.status, JSON.stringify(r.json)).toBe(202);
+    await runImportPublish(again.id, await jobOf(again.id, 'IMPORT_PUBLISH'));
+    const b = (await getB(again.id)).json.data;
+    expect(b.status).toBe('PREVIEW_READY');
+    expect(b.summary.last_error.code).toBe('REVIEW_CONFIRMATION_REQUIRED');
+    expect(b.job).toMatchObject({ status: 'FAILED', error_code: 'REVIEW_CONFIRMATION_REQUIRED' });
+    expect((await subRow('1.99.1'))!.status).toBe('DRAFT');
+    expect(await subRow('1.99.2')).toBeUndefined(); // transaksi dibatalkan seluruhnya
+    const ok = await publishRun(again.id, { target_status: 'PUBLISHED', acknowledge_warnings: true, confirm_reviewed: true });
+    expect(ok.status).toBe('PUBLISHED');
+    expect((await subRow('1.99.1'))!.status).toBe('PUBLISHED');
+  });
+});
+
+describe('QA W8 F-20-04: impor memakai definisi attempt hidup yang sama dengan kurasi', () => {
+  it('attempt PRACTICE basi (> 24 jam) tidak lagi memblokir impor; yang segar tetap memblokir', async () => {
+    const v1 = await uploadValidated('JSON', 'v1.json', json(pkg([sub(1)])));
+    await publishRun(v1.id, { target_status: 'DRAFT' });
+    const learner = await learnerSession();
+    const set = (await setRow('ACTIVE_DRILL:1.99.1'))!;
+    const [a] = await db.insert(attempts).values({ userId: learner.user.id, assessmentSetId: set.id, assessmentVersion: set.version, mode: 'PRACTICE', status: 'IN_PROGRESS' }).returning();
+    const pkg2 = json(pkg([sub(1, {}, [mcq(11), mcq(12, 'am')])]));
+    const busy = await uploadValidated('JSON', 'v2.json', pkg2);
+    expect((await items(busy.id, '?status=INVALID')).json.data[0].errors.map((e: { code: string }) => e.code)).toContain('set_has_active_attempts');
+    await cancel(busy.id);
+    await db.execute(sql`UPDATE attempts SET updated_at = now() - interval '25 hours' WHERE id = ${a!.id}::uuid`);
+    const free = await uploadValidated('JSON', 'v2b.json', json(pkg([sub(1, {}, [mcq(21), mcq(22, 'am')])])));
+    expect(free.batch.invalid_items).toBe(0);
   });
 });

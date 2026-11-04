@@ -4,6 +4,8 @@ import { CheckCircle2, ChevronDown, MinusCircle, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import * as React from 'react';
 import { CrownBadge } from '@/components/gamification/crown-badge';
+import { GamificationResult, parseGamification } from '@/components/gamification/gamification-result';
+import { useRefreshProgressOnMount } from '@/components/gamification/use-stats';
 import { Button } from '@/components/ui/button';
 import type { AttemptResult, QuestionPublic } from '@/contracts/attempts';
 import { fmt, id } from '@/i18n/id';
@@ -36,6 +38,9 @@ export function DrillResult({
   const unlocked = progress?.unlocked ?? [];
   const next = progress?.next_sub_module_code ?? null;
   const crown = progress?.mastery_crown ?? 'NONE';
+  const gami = React.useMemo(() => parseGamification(result.gamification), [result.gamification]);
+  const crownShownBelow = gami?.crown?.changed === true && gami.crown.current !== 'NONE';
+  useRefreshProgressOnMount();
 
   return (
     <section aria-labelledby="drill-result-title" className="grid gap-5">
@@ -73,12 +78,14 @@ export function DrillResult({
         <p className="text-sm text-muted-foreground">
           {fmt(id.quiz.result.rawScore, { raw: attempt.raw_score, max: attempt.max_score })}
         </p>
-        {crown !== 'NONE' ? <CrownBadge crown={crown} scorePercent={Math.round(progress?.best_score_percent ?? score)} /> : null}
+        {crown !== 'NONE' && !crownShownBelow ? <CrownBadge crown={crown} scorePercent={Math.round(progress?.best_score_percent ?? score)} /> : null}
         <p className="text-sm">{passed ? id.quiz.result.passedMessage : id.quiz.result.failedMessage}</p>
         {passed && unlocked.length > 0 ? (
           <p className="text-sm font-medium">{fmt(id.quiz.result.unlocked, { list: unlocked.map((u) => u.label).join(', ') })}</p>
         ) : null}
       </div>
+
+      {gami ? <GamificationResult block={gami} scorePercent={progress?.best_score_percent ?? attempt.score_percent} /> : null}
 
       {result.per_skill.length > 1 ? (
         <div className="rounded-xl border bg-card p-4">

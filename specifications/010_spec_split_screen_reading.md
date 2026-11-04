@@ -111,3 +111,4 @@ Rujukan: `design-system.md` 5.13 Split-Screen Reading, 5.12 Kuis/Mesin Soal (ren
 | Date | Author | Changes |
 |------|--------|---------|
 | 2026-11-03 | Analyst Agent | Initial draft |
+| 2026-11-03 | Backend Engineer | Audit BE: tidak ada perubahan kontrak. `passage_markdown`/`passage_no` sudah dilayani SPEC-006 apa adanya; validator server (`src/server/content/passages.ts`) menegakkan `too_many_passages`, `duplicate_paragraph_label`, `passage_out_of_range`. `parsePassages` UI (`src/lib/reading/`) milik Frontend; pemisah wajib identik dengan `splitPassages` server (baris PERSIS `===PASSAGE===`). |

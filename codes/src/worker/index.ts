@@ -6,6 +6,11 @@ import { parseEnv } from '../server/env';
 import { safeErr } from '../server/safe-error';
 import { AI_QUEUES, QUEUE_NAMES, type QueueName } from './queues';
 import { jobHandlers } from './registry';
+import { startAiRecoveryLoop } from './recovery';
+import { recoverStuckBatches } from '../server/import/service';
+import { recoverStuckAiJobs } from '../server/ai/dispatch';
+import { cleanupStaleTempDirs } from '../server/ai/pipeline';
+import '../server/ai/register';
 
 const HEARTBEAT_FILE = process.env.WORKER_HEARTBEAT_FILE ?? '/tmp/worker.heartbeat';
 const HEARTBEAT_MS = 15_000;
@@ -66,6 +71,11 @@ async function main() {
       log.warn({ err: safeErr(err) }, 'heartbeat gagal');
     }
   };
+  await recoverStuckBatches().catch((err) => log.warn({ err: safeErr(err) }, 'recoverStuckBatches gagal'));
+  // SPEC-012/013: pulihkan job AI tertinggal dan bersihkan direktori sementara STT berumur > 1 jam.
+  await recoverStuckAiJobs().catch((err) => log.warn({ err: safeErr(err) }, 'recoverStuckAiJobs gagal'));
+  const stopRecovery = startAiRecoveryLoop(recoverStuckAiJobs, log, safeErr);
+  await cleanupStaleTempDirs().catch((err) => log.warn({ err: safeErr(err) }, 'cleanupStaleTempDirs gagal'));
   await beat();
   const timer = setInterval(beat, HEARTBEAT_MS);
 
@@ -75,6 +85,7 @@ async function main() {
     stopping = true;
     log.info({ signal }, 'menghentikan worker');
     clearInterval(timer);
+    stopRecovery();
     try {
       await boss.stop({ graceful: true, timeout: 30_000 });
       await pool.end();

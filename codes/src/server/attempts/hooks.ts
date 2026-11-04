@@ -10,6 +10,10 @@ export interface ScoreSummary {
   passPercent: number | null;
   passed: boolean | null;
   perSkill: Array<{ skill: string; rawH: number; maxH: number; percentH: number }>;
+  /** Band attempt (Boss: `bossBand`); null/undefined = tidak ada. */
+  bandScore?: number | null;
+  /** Rincian khusus tipe (Boss: perhitungan section) untuk `onFinish` tipe itu; tidak dipakai hook lain. */
+  detail?: unknown;
 }
 
 export interface AttemptCompletedContext {

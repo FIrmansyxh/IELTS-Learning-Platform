@@ -35,3 +35,6 @@ Attempts API, 10 tipe soal objektif, penilaian server, pengacakan urutan soal/op
 | 2026-11-03 08:30 | frontend | ready for QA/integration | UI mesin soal 12 tipe, Active Drill, hasil, ExamShell/Navigator selesai terhadap kontrak; integrasi dengan backend belum diuji |
 | 2026-11-03 11:50 | backend | development started | - |
 | 2026-11-03 11:58 | backend | ready for QA/integration | unit + integration lulus; lihat dev_log [BACKEND] |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test passed | E2E lulus |

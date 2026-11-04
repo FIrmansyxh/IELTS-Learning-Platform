@@ -5,7 +5,7 @@
 **Size:** L
 **Assigned To:** Developer Agent
 **Dependencies:** TASK-006, TASK-007, TASK-009, TASK-012, TASK-013, TASK-014
-**Current Status:** not_started
+**Current Status:** ready_to_test (Backend + Frontend ready; integrasi/E2E belum diuji)
 
 ---
 
@@ -30,3 +30,11 @@
 | Timestamp | Agent | Status | Notes |
 |-----------|-------|--------|-------|
 | 2026-11-03 18:30 | pm agent | task created | - |
+| 2026-11-03 15:40 | frontend | development started | - |
+| 2026-11-03 16:05 | frontend | ready for QA/integration | radar, prediksi, riwayat ujian + grafik selesai; tsc/vitest lulus; integrasi backend belum diuji |
+| 2026-11-03 17:30 | backend | development started | - |
+| 2026-11-03 17:55 | backend | ready for QA/integration | radar 6 sumbu + prediksi + riwayat band/ujian, evaluationGradedHooks terisi; tsc/eslint bersih, vitest 1063, test:integration 576 lulus; E2E belum diverifikasi |
+| 2026-11-03 20:00 | backend | QA W8 fix | F-17-01 (dedupe per soal), F-17-02 (min sampel 10, rentang by sampel, sample_size/low_sample) selesai; tsc/eslint bersih, vitest 1086, test:integration 593 lulus |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test passed | E2E lulus |

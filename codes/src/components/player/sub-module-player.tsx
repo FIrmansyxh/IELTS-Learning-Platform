@@ -254,8 +254,8 @@ export function SubModulePlayer({ code, initial }: { code: string; initial: Play
   const drillDone = progress.best_score_percent >= drill.pass_percent && progress.best_score_percent > 0;
 
   return (
-    <div className="grid gap-5">
-      <header className="grid gap-3">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-5">
+      <header className="grid grid-cols-[minmax(0,1fr)] gap-3">
         <div className="flex items-start gap-2">
           <Button asChild variant="ghost" size="icon" aria-label={id.player.backAria}>
             <Link href="/peta">
@@ -314,7 +314,15 @@ export function SubModulePlayer({ code, initial }: { code: string; initial: Play
           />
         </TabsContent>
         <TabsContent value="terapkan">
-          <ApplyTab detail={d} onMarkDone={() => markMiniTask.mutate()} marking={markMiniTask.isPending} />
+          <ApplyTab
+            detail={d}
+            onMarkDone={() => markMiniTask.mutate()}
+            marking={markMiniTask.isPending}
+            onGraded={() => {
+              void qc.invalidateQueries({ queryKey: subModuleKey(code) });
+              void qc.invalidateQueries({ queryKey: CURRICULUM_TREE_KEY });
+            }}
+          />
         </TabsContent>
       </Tabs>
 

@@ -9,6 +9,16 @@ const bool = (def: boolean) =>
 const intRange = (def: number, min: number, max: number) =>
   z.coerce.number().int().min(min).max(max).default(def);
 
+/** Zona IANA yang dikenali runtime (F-16-05): salah ketik gagal cepat saat boot, bukan jatuh diam-diam ke zona lain. */
+const ianaTimezone = z.string().min(1).refine((tz) => {
+  try {
+    new Intl.DateTimeFormat('en-CA', { timeZone: tz });
+    return true;
+  } catch {
+    return false;
+  }
+}, 'bukan zona waktu IANA yang valid');
+
 const secret32 = z
   .string()
   .refine((v) => Buffer.byteLength(v, 'utf8') >= 32, 'minimal 32 byte');
@@ -16,7 +26,7 @@ const secret32 = z
 const baseSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
-  APP_TIMEZONE: z.string().min(1).default('Asia/Jakarta'),
+  APP_TIMEZONE: ianaTimezone.default('Asia/Jakarta'),
 
   DATABASE_URL: z.string().url(),
   AUTH_SECRET: secret32,
@@ -47,6 +57,7 @@ const baseSchema = z.object({
   OLLAMA_KEEP_ALIVE: z.string().default('5m'),
   STT_DRIVER: z.enum(['whisper', 'mock']).default('whisper'),
   STT_BASE_URL: z.string().url().optional(),
+  STT_MODEL: z.string().optional(),
   AI_JOB_TIMEOUT_SEC: intRange(180, 10, 3600),
   AI_NUM_PREDICT: intRange(1500, 100, 8192),
 });

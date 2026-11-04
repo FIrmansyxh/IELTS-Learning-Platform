@@ -154,8 +154,16 @@ export function makeSkipHandler(type: SkipType): AssessmentTypeHandler {
     async onFinish({ tx, userId, attempt, set, result }) {
       const passed = result.passed === true;
       const before = await recomputeStatuses(tx, userId);
-      const target = resolveSkipTarget(before, set);
-      if (!target) throw new Error('target Skip tidak ditemukan saat menyelesaikan attempt');
+      // F-20-01: modul diarsipkan di tengah Skip Test -> target tidak ada di snapshot. Skor tetap tersimpan; tanpa efek progres.
+      const target: SkipTarget = resolveSkipTarget(before, set) ?? {
+        scope: set.assessmentType === 'SKIP_TIER_TEST' ? 'TIER' : 'MODULE',
+        id: set.moduleId ?? set.tierId ?? set.id,
+        label: set.title,
+        thresholdPercent: result.passPercent ?? 0,
+        available: false,
+        eligible: false,
+        subs: [],
+      };
       const skippedBefore = new Set(target.subs.filter((s) => s.status === 'SKIPPED').map((s) => s.id));
 
       // D6: persen untuk skip_best_percent; keputusan lulus/gagal sudah ditentukan tepat (D2) oleh mesin attempt.

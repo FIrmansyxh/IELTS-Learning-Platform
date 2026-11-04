@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { makeAttempt, makeResult, Q } from '@/components/quiz/fixtures';
 import { curriculumApi } from '@/lib/api/curriculum';
 import { errorBody, mockFetch, renderWithProviders } from '@/components/test-utils';
-import type { ExamIntro } from '@/contracts/exams';
+import type { ExamIntroData as ExamIntro } from '@/lib/api/exams';
 import { ExamIntroView } from './exam-intro';
 import { ExamResult, ExamResultView, firstSubModuleCode } from './exam-result';
 import { ExamRunner, ExamSession } from './exam-runner';
@@ -140,6 +140,37 @@ describe('ExamSession (mode ujian)', () => {
     expect(screen.queryByText('Benar!')).toBeNull();
     expect(screen.queryByText('Kurang tepat')).toBeNull();
     expect(await screen.findByText('Jawaban tersimpan')).toBeInTheDocument();
+  });
+
+  it('F-10-07: PUT jawaban per soal diserialkan; yang terakhir menang dan tidak pernah paralel', async () => {
+    let active = 0;
+    let maxActive = 0;
+    const bodies: unknown[] = [];
+    const releases: Array<() => void> = [];
+    globalThis.fetch = (async (input: RequestInfo | URL, init: RequestInit = {}) => {
+      const url = new URL(String(input), 'http://localhost');
+      if (init.method === 'PUT' && url.pathname.endsWith('/answers/Q-01')) {
+        bodies.push(JSON.parse(String(init.body)));
+        active += 1;
+        maxActive = Math.max(maxActive, active);
+        await new Promise<void>((r) => releases.push(r));
+        active -= 1;
+      }
+      return new Response(JSON.stringify(answerOk.body), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }) as unknown as typeof fetch;
+    renderWithProviders(<ExamSession attempt={examAttempt()} />);
+    const radios = screen.getAllByRole('radio');
+    fireEvent.click(radios[1]!);
+    await waitFor(() => expect(bodies).toHaveLength(1));
+    fireEvent.click(radios[0]!);
+    await new Promise((r) => setTimeout(r, 700)); // lewati debounce 400 ms sementara PUT pertama masih berjalan
+    expect(bodies).toHaveLength(1);
+    releases[0]!();
+    await waitFor(() => expect(bodies).toHaveLength(2));
+    releases[1]!();
+    expect(maxActive).toBe(1);
+    expect(bodies[1]).toEqual({ response: { option_ids: [expect.any(String)] } });
+    expect(bodies[1]).not.toEqual(bodies[0]);
   });
 
   it('navigator memindah soal (menyimpan dulu) dan menandai soal; pilihan masih bisa diganti', async () => {

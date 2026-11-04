@@ -10,7 +10,10 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { ErrorState } from '@/components/common/state-views';
 import { FormErrorSummary } from '@/components/form/form-error-summary';
+import { RecordingPrefsCard } from '@/components/ai/recording-prefs-card';
 import { LogoutButton } from '@/components/auth/logout-button';
+import { PointsHistorySheet } from '@/components/gamification/points-history-sheet';
+import { ProfileStats } from '@/components/gamification/stats-card';
 import { ShortcutPref } from '@/components/auth/shortcut-pref';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -181,6 +184,7 @@ export function ProfileCard() {
           <ProfileForm key={me.data.id + me.data.display_name + String(me.data.target_band)} user={me.data} />
         </CardContent>
       </Card>
+      <ProfileStats onOpenHistory={<PointsHistorySheet />} />
       <Card>
         <CardContent>
           <ThemePicker />
@@ -191,6 +195,7 @@ export function ProfileCard() {
           <ShortcutPref />
         </CardContent>
       </Card>
+      <RecordingPrefsCard user={me.data} />
       <Card>
         <CardHeader>
           <CardTitle>{id.profile.securityTitle}</CardTitle>

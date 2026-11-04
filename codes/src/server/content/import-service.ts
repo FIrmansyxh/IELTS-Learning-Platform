@@ -4,12 +4,13 @@ import { and, eq, inArray, isNotNull } from 'drizzle-orm';
 import { assessmentSets, contentAssets, contentSources, modules, subModules } from '@/db/schema';
 import type { AssetManifest, ContentIssue, ContentPackage } from '@/contracts/content';
 import { writeAudit } from '../audit';
-import type { Db } from '../db';
+import type { Db, Tx } from '../db';
 import { safeErr } from '../safe-error';
 import { getStorage, type StorageDriver } from '../storage';
 import { applyContentPlan, ContentApplyError, type ApplyResult } from './apply';
 import { registerFromManifest, validateAssetFile } from './assets';
-import { planContentPackage, summarize } from './plan';
+import { hasActiveAttempts } from './active-attempts';
+import { loadDbState, planContentPackage, summarize, type ContentPlan } from './plan';
 import { publish, type Blocker, type PublishEntityType } from './publish';
 import { parseAssetManifest, parseContentPackage, type ParseContext, type SourceInfo } from './validate';
 import { MODULE_SEEDS } from './curriculum-structure';
@@ -123,6 +124,8 @@ export interface ImportOptions {
   dryRun: boolean;
   actorUserId: string | null;
   storage?: StorageDriver;
+  /** Izinkan UPDATE pada entitas yang sudah PUBLISHED (flag CLI `--allow-published-overwrite`). Bawaan: ditolak. */
+  allowPublishedOverwrite?: boolean;
 }
 export interface ImportOutcome {
   exitCode: 0 | 1 | 2 | 3;
@@ -135,6 +138,39 @@ const PUBLISH_ORDER = (t: { kind: string; setType?: string }) =>
   t.kind === 'ASSESSMENT_SET' ? (t.setType === 'TIER_BOSS_EXAM' ? 1 : 0) : t.kind === 'SUB_MODULE' ? 2 : 3;
 
 /** import: validate -> rencana -> satu transaksi (aset, modul, sub-modul, set) -> opsional publish. */
+/**
+ * O-1 (E2E Fase 3): impor CLI tidak boleh menimpa entitas yang sudah PUBLISHED tanpa reviu.
+ * - UPDATE pada MODULE/SUB_MODULE/ASSESSMENT_SET berstatus PUBLISHED ditolak (`published_overwrite_blocked`)
+ *   kecuali `allowPublishedOverwrite` (flag eksplisit).
+ * - UPDATE pada set yang sedang dikerjakan (attempt hidup; definisi SPEC-020 K3) SELALU ditolak (`set_has_active_attempts`),
+ *   apa pun flag-nya, selaras dengan penjaga SPEC-019/020.
+ * Status entitas tidak pernah diturunkan oleh CLI (applyContentPlan mempertahankan status).
+ */
+export async function guardPublishedOverwrite(tx: Tx, plan: ContentPlan, allow: boolean): Promise<ContentIssue[]> {
+  const db = await loadDbState(tx);
+  const out: ContentIssue[] = [];
+  const err = (path: string, code: string, message: string): ContentIssue => ({ path, code, message, severity: 'error' });
+  for (const it of plan.items) {
+    if (it.action !== 'UPDATE') continue;
+    const existing =
+      it.entityKind === 'MODULE' ? db.modules.get(it.entityCode) : it.entityKind === 'SUB_MODULE' ? db.subs.get(it.entityCode) : db.sets.get(it.entityCode);
+    if (!existing) continue;
+    const label = `${it.entityKind} ${it.entityCode}`;
+    if (it.entityKind === 'ASSESSMENT_SET' && (await hasActiveAttempts(tx, existing.id))) {
+      out.push(err(label, 'set_has_active_attempts', 'Set sedang dikerjakan pengguna (percobaan masih berjalan); ubah setelah selesai.'));
+    } else if (existing.status === 'PUBLISHED' && !allow) {
+      out.push(
+        err(
+          label,
+          'published_overwrite_blocked',
+          'Entitas sudah PUBLISHED dan akan berubah isinya tanpa reviu. Ubah lewat impor Admin (SPEC-019) atau jalankan ulang dengan --allow-published-overwrite bila memang disengaja.',
+        ),
+      );
+    }
+  }
+  return out;
+}
+
 export async function runImport(db: Db, o: ImportOptions): Promise<ImportOutcome> {
   const lines: string[] = [];
   const ctx = await contextFromDb(db);
@@ -151,7 +187,11 @@ export async function runImport(db: Db, o: ImportOptions): Promise<ImportOutcome
 
   try {
     if (o.dryRun) {
-      const plan = await db.transaction(async (tx) => planContentPackage(tx, pkg));
+      const { plan, guard } = await db.transaction(async (tx) => {
+        const p = await planContentPackage(tx, pkg);
+        return { plan: p, guard: await guardPublishedOverwrite(tx, p, o.allowPublishedOverwrite === true) };
+      });
+      if (guard.length) return { exitCode: 1, lines: [...lines, ...guard.map(formatIssue)] };
       const s = summarize(plan);
       let newAssets = 0;
       for (const a of manifest?.assets ?? []) {
@@ -181,6 +221,8 @@ export async function runImport(db: Db, o: ImportOptions): Promise<ImportOutcome
         }
         const plan = await planContentPackage(tx, pkg);
         if (plan.errors.length) throw new Abort({ exitCode: 1, lines: plan.errors.map(formatIssue) });
+        const guard = await guardPublishedOverwrite(tx, plan, o.allowPublishedOverwrite === true);
+        if (guard.length) throw new Abort({ exitCode: 1, lines: guard.map(formatIssue) });
         applied = await applyContentPlan(tx, plan, { actorUserId: o.actorUserId, importBatchId: null });
         const c = applied.counts;
         await writeAudit(tx, {

@@ -275,11 +275,12 @@ describe('POST learn-complete', () => {
     const u = await learnerSession();
     await detail(u, '1.1.1');
     await setProgress(u, id, sql`learn_active_seconds = 30, learn_visited_subtabs = '{ARTICLE}'`);
-    await db.execute(sql`UPDATE app_settings SET value = '20'::jsonb WHERE key = 'learn.min_active_seconds'`);
+    await db.execute(sql`INSERT INTO app_settings (key, value) VALUES ('learn.min_active_seconds', '20'::jsonb) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`);
     try {
-      expect((await complete(u, id)).status).toBe(200);
+      const r = await complete(u, id);
+      expect(r.status, JSON.stringify(r.json)).toBe(200);
     } finally {
-      await db.execute(sql`UPDATE app_settings SET value = '60'::jsonb WHERE key = 'learn.min_active_seconds'`);
+      await db.execute(sql`INSERT INTO app_settings (key, value) VALUES ('learn.min_active_seconds', '60'::jsonb) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`);
     }
   });
 

@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { ErrorState } from '@/components/common/state-views';
+import { BossPointsNote } from '@/components/gamification/gamification-result';
+import { useRefreshProgressOnMount } from '@/components/gamification/use-stats';
 import { BandBadge, BandResultBlock } from '@/components/band/band-display';
 import { CURRICULUM_TREE_KEY } from '@/components/skill-tree/skill-tree-view';
 import { Button } from '@/components/ui/button';
@@ -17,8 +19,13 @@ import { fmt, id } from '@/i18n/id';
 import { attemptsApi } from '@/lib/api/attempts';
 import { isApiError } from '@/lib/api/client';
 import { curriculumApi } from '@/lib/api/curriculum';
+import { BossResultSchema } from '@/lib/api/boss-contract';
+import { PlacementResultSchema } from '@/lib/api/placement-contract';
+import { clearAttemptStorage } from '@/lib/reading/storage';
 import { formatScorePercent, formatTimeWib } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import { BossResultView, type AiPoll } from './boss/boss-result';
+import { PlacementResultView } from './placement/placement-result';
 
 /** Sub-modul pertama (AVAILABLE) di bawah Modul/Tier target, untuk "Mulai Belajar dari Awal Modul". */
 export function firstSubModuleCode(tree: CurriculumTree | undefined, scope: SkipResult['scope']): string | null {
@@ -33,11 +40,50 @@ export function firstSubModuleCode(tree: CurriculumTree | undefined, scope: Skip
   return null;
 }
 
+/** Jeda dan batas polling hasil AI Boss Stage (SPEC-014): tiap 10 detik, berhenti setelah 10 menit. */
+export const AI_POLL_INTERVAL_MS = 10_000;
+export const AI_POLL_MAX_MS = 10 * 60_000;
+
+/** Jumlah submission Writing/Speaking Boss yang belum terminal; 0 bila bukan Boss/bentuk tidak dikenal. */
+export function pendingAiOf(result: AttemptResult | undefined): number {
+  if (!result || result.boss == null) return 0;
+  const p = BossResultSchema.safeParse(result.boss);
+  return p.success ? p.data.pending_ai : 0;
+}
+
+/**
+ * Hasil ujian: Boss Stage (SPEC-014) dan Placement (SPEC-015) memakai tampilan sendiri; selain itu hasil generik.
+ * Blok `boss`/`placement` yang ada tetapi tidak sesuai kontrak ditampilkan sebagai galat, bukan ditambal.
+ */
+export function ExamResultView({ result, poll }: { result: AttemptResult; poll?: AiPoll }) {
+  const boss = React.useMemo(() => (result.boss == null ? null : BossResultSchema.safeParse(result.boss)), [result.boss]);
+  const placement = React.useMemo(() => (result.placement == null ? null : PlacementResultSchema.safeParse(result.placement)), [result.placement]);
+  useRefreshProgressOnMount();
+  if (boss) {
+    return boss.success ? (
+      <div className="grid gap-4">
+        <BossResultView boss={boss.data} poll={poll} />
+        <BossPointsNote raw={result.gamification} />
+      </div>
+    ) : (
+      <ErrorState className="mx-auto max-w-md" title={id.exam.result.loadFailed} body={id.boss.result.invalid} />
+    );
+  }
+  if (placement) {
+    return placement.success ? (
+      <PlacementResultView attemptId={result.attempt.id} placement={placement.data} />
+    ) : (
+      <ErrorState className="mx-auto max-w-md" title={id.exam.result.loadFailed} body={id.placement.result.invalid} />
+    );
+  }
+  return <GenericResultView result={result} />;
+}
+
 /**
  * Hasil ujian mode EXAM: skor agregat, ambang, status, dan rincian per skill. TIDAK menampilkan benar/salah per
  * soal, kunci, maupun pembahasan (QA F-08-01, ADR-003 #27); `review` dari server diabaikan di sini.
  */
-export function ExamResultView({ result }: { result: AttemptResult }) {
+function GenericResultView({ result }: { result: AttemptResult }) {
   const skip = React.useMemo(() => {
     const p = SkipResultSchema.safeParse(result.skip);
     return p.success ? p.data : null;
@@ -168,18 +214,48 @@ export function ExamResultView({ result }: { result: AttemptResult }) {
 /** Memuat GET /attempts/{id}/result; attempt yang belum selesai dialihkan kembali ke ujian. */
 export function ExamResult({ attemptId }: { attemptId: string }) {
   const router = useRouter();
+  const pollStart = React.useRef(Date.now());
+  const [pollTimedOut, setPollTimedOut] = React.useState(false);
   const q = useQuery({
     queryKey: ['exam-result', attemptId],
     queryFn: ({ signal }) => attemptsApi.result(attemptId, signal),
     staleTime: Infinity,
     retry: false,
+    // Boss: evaluasi AI Writing/Speaking datang belakangan; ambil ulang tiap 10 detik selama pending_ai > 0.
+    refetchInterval: (query) => {
+      if (pendingAiOf(query.state.data) <= 0) return false;
+      return Date.now() - pollStart.current >= AI_POLL_MAX_MS ? false : AI_POLL_INTERVAL_MS;
+    },
   });
+  const pendingAi = pendingAiOf(q.data);
+  React.useEffect(() => {
+    if (pendingAi <= 0) {
+      setPollTimedOut(false);
+      return;
+    }
+    const left = AI_POLL_MAX_MS - (Date.now() - pollStart.current);
+    if (left <= 0) {
+      setPollTimedOut(true);
+      return;
+    }
+    const t = setTimeout(() => setPollTimedOut(true), left);
+    return () => clearTimeout(t);
+  }, [pendingAi]);
+  const checkAgain = React.useCallback(() => {
+    pollStart.current = Date.now();
+    setPollTimedOut(false);
+    void q.refetch();
+  }, [q]);
   const notFinished = q.isError && isApiError(q.error) && q.error.code === 'ATTEMPT_NOT_FINISHED';
   React.useEffect(() => {
     if (notFinished) router.replace(`/ujian/${attemptId}`);
   }, [notFinished, router, attemptId]);
+  const finished = q.isSuccess;
+  React.useEffect(() => {
+    if (finished) clearAttemptStorage(attemptId);
+  }, [finished, attemptId]);
   if (q.isPending || notFinished) return <Skeleton className="mx-auto h-96 max-w-2xl rounded-xl" role="status" aria-label={id.common.loading} />;
-  if (q.isError) {
+  if (q.isError && !q.data) {
     if (isApiError(q.error) && q.error.status === 404) {
       return (
         <div className="mx-auto grid max-w-md gap-3 rounded-lg border bg-card p-6 text-center">
@@ -192,5 +268,6 @@ export function ExamResult({ attemptId }: { attemptId: string }) {
     }
     return <ErrorState title={id.exam.result.loadFailed} onRetry={() => void q.refetch()} />;
   }
-  return <ExamResultView result={q.data} />;
+  if (!q.data) return null;
+  return <ExamResultView result={q.data} poll={{ timedOut: pollTimedOut, checking: q.isFetching, onCheckAgain: checkAgain }} />;
 }

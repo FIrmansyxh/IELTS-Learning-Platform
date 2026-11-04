@@ -3,6 +3,10 @@ import { writeAudit } from '../server/audit';
 import { getDb, type Db } from '../server/db';
 import { userAnonymizedHooks } from '../server/auth/hooks';
 import { purgeImportBatches } from '../server/import/purge';
+import { recoverStuckBatches } from '../server/import/service';
+import '../server/ai/register';
+import { purgeAiRawOutput, purgeRecordings } from '../server/ai/recordings';
+import { recoverStuckAiJobs } from '../server/ai/dispatch';
 
 /**
  * Anonimisasi pengguna terhapus > 30 hari (SPEC-002 butir 10). Idempoten: baris yang sudah teranonimisasi
@@ -38,9 +42,36 @@ export const purgeTasks: Array<{ name: string; run: () => Promise<void> }> = [
     },
   },
   {
+    name: 'recoverStuckImportBatches',
+    run: async () => {
+      await recoverStuckBatches();
+    },
+  },
+  {
     name: 'purgeImportBatches',
     run: async () => {
       await purgeImportBatches();
+    },
+  },
+  // SPEC-012: keluaran mentah LLM dihapus setelah retention.ai_raw_output_days.
+  {
+    name: 'purgeAiRawOutput',
+    run: async () => {
+      await purgeAiRawOutput();
+    },
+  },
+  // SPEC-013: berkas rekaman dihapus setelah retention.audio_days (audit RECORDING_PURGED).
+  {
+    name: 'purgeRecordings',
+    run: async () => {
+      await purgeRecordings();
+    },
+  },
+  // SPEC-012/013: job AI tertinggal (kedaluwarsa, belum terkirim, AI dimatikan) dipulihkan.
+  {
+    name: 'recoverStuckAiJobs',
+    run: async () => {
+      await recoverStuckAiJobs();
     },
   },
 ];

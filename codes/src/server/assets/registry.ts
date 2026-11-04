@@ -109,9 +109,16 @@ const refPredicate = (assetId: SQL | string) => sql`(
   OR lm.attachments_json @> jsonb_build_array(jsonb_build_object('asset_id', ${assetId}::text))
   OR lm.videos_json @> jsonb_build_array(jsonb_build_object('asset_id', ${assetId}::text)))`;
 
+/** Set yang merujuk aset sebagai audio listening ATAU stimulus Writing (`questions_json[].stimulus_asset_code`, F-18-01). */
+const setRefPredicate = (assetId: SQL | string, assetCode: SQL | string) => sql`(
+  s.listening_asset_id = ${assetId}::uuid
+  OR EXISTS (
+    SELECT 1 FROM jsonb_array_elements(CASE WHEN jsonb_typeof(s.questions_json) = 'array' THEN s.questions_json ELSE '[]'::jsonb END) q
+    WHERE ${assetCode}::text IS NOT NULL AND q->>'stimulus_asset_code' = ${assetCode}::text))`;
+
 const referenceCountSql = sql<number>`((
   SELECT count(*) FROM learning_materials lm WHERE ${refPredicate(sql`"content_assets"."id"`)})
-  + (SELECT count(*) FROM assessment_sets s WHERE s.listening_asset_id = "content_assets"."id"))::int`;
+  + (SELECT count(*) FROM assessment_sets s WHERE ${setRefPredicate(sql`"content_assets"."id"`, sql`"content_assets"."asset_code"`)}))::int`;
 
 interface Ref {
   entity_type: 'SUB_MODULE' | 'ASSESSMENT_SET';
@@ -125,8 +132,9 @@ async function referencesOf(db: DbOrTx, assetId: string): Promise<Ref[]> {
     FROM learning_materials lm JOIN sub_modules s ON s.id = lm.sub_module_id
     WHERE ${refPredicate(assetId)}
     UNION ALL
-    SELECT 'ASSESSMENT_SET'::text, a.id::text, a.title, a.status::text
-    FROM assessment_sets a WHERE a.listening_asset_id = ${assetId}::uuid
+    SELECT 'ASSESSMENT_SET'::text, s.id::text, s.title, s.status::text
+    FROM assessment_sets s
+    WHERE ${setRefPredicate(assetId, sql`(SELECT asset_code FROM content_assets WHERE id = ${assetId}::uuid)`)}
     ORDER BY 1, 3`);
   return res.rows as unknown as Ref[];
 }
@@ -145,8 +153,19 @@ async function sourceAssetCount(db: DbOrTx, id: string): Promise<number> {
   return Number(r?.n ?? 0);
 }
 
+/** F-18-02: flag kepatuhan tidak boleh diturunkan dari yang diwajibkan jenis lisensi. */
+function assertComplianceFlags(license: string, flags: { share_alike?: boolean; non_commercial_only?: boolean }) {
+  if (license === 'CC_BY_NC' && flags.non_commercial_only === false) {
+    throw validationError('non_commercial_only', 'flag_required_by_license', 'Sumber CC BY-NC harus bertanda non-komersial.');
+  }
+  if (license === 'CC_BY_SA' && flags.share_alike === false) {
+    throw validationError('share_alike', 'flag_required_by_license', 'Sumber CC BY-SA harus bertanda share-alike.');
+  }
+}
+
 export async function createSource(actorId: string, body: CreateSourceBody, ipHash: string | null) {
   const lic = body.license_type;
+  assertComplianceFlags(lic, body);
   const values = {
     code: body.code,
     name: body.name,
@@ -177,6 +196,7 @@ export async function updateSource(actorId: string, id: string, body: UpdateSour
     if (body.may_store_copy === true && NO_COPY_LICENSES.includes(cur.licenseType)) {
       throw validationError('may_store_copy', 'store_copy_not_allowed', 'Sumber tautan-saja atau embed tidak boleh disimpan salinannya.');
     }
+    assertComplianceFlags(cur.licenseType, body);
     if (body.may_store_copy === false && cur.mayStoreCopy) {
       const [stored] = await tx
         .select({ n: count() })
@@ -415,6 +435,10 @@ export async function updateAsset(actorId: string, id: string, body: UpdateAsset
     if (body.attribution_text !== undefined) set.attributionText = body.attribution_text === null || body.attribution_text.trim() === '' ? null : body.attribution_text;
 
     const target = body.rights_status;
+    // F-18-03: atribusi tidak boleh dikosongkan pada aset terverifikasi (VERIFIED_OPEN) yang sumbernya mensyaratkan atribusi.
+    if ((target ?? cur.rightsStatus) === 'VERIFIED_OPEN' && body.attribution_text !== undefined && (src!.shareAlike || src!.licenseType.startsWith('CC_BY')) && (body.attribution_text ?? '').trim() === '') {
+      throw new ApiError('ATTRIBUTION_REQUIRED', { status: 409, message: 'Atribusi wajib diisi untuk lisensi ini.' });
+    }
     let audit: { from: string; to: string } | null = null;
     if (target !== undefined && target !== cur.rightsStatus) {
       if (!ALLOWED_RIGHTS_BY_KIND[cur.kind as AssetKindValue].includes(target)) {

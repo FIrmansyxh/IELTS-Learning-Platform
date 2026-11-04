@@ -69,7 +69,7 @@ Konvensi: `_api-contract.md` bagian 1. Zod di `src/contracts/assets.ts`. Semua e
 **Response (Error)**
 | HTTP | Error Code | Kapan terjadi |
 |------|-----------|---------------|
-| 400 | VALIDATION_ERROR | Format salah; `details[].code = "store_copy_not_allowed"` bila `may_store_copy=true` dengan tipe lisensi terlarang |
+| 400 | VALIDATION_ERROR | Format salah; `details[].code = "store_copy_not_allowed"` bila `may_store_copy=true` dengan tipe lisensi terlarang; `flag_required_by_license` bila `non_commercial_only=false` pada `CC_BY_NC` atau `share_alike=false` pada `CC_BY_SA` |
 | 409 | SOURCE_CODE_TAKEN | `code` sudah ada |
 
 ### PATCH /api/v1/admin/content-sources/{source_id}
@@ -157,7 +157,7 @@ Urutan `created_at DESC`. **Response:** `{ "data": [ <AssetDTO + reference_count
 | `title` | string | tidak | 1-200 |
 | `attribution_text` | string \| null | tidak | <= 500 |
 | `rights_status` | enum | tidak | lihat aturan di bawah |
-Minimal satu field. Aturan `rights_status` (tabel nilai yang diizinkan per `kind`): `SLIDE_IMAGE`, `IMAGE`, `DOCUMENT`, `AUDIO_LISTENING` -> `UNVERIFIED` \| `OWN_ORIGINAL` \| `VERIFIED_OPEN`; `VIDEO_EMBED` -> `UNVERIFIED` \| `EMBED_ONLY`; `REFERENCE_LINK` -> `LINK_ONLY` saja. Kesesuaian sumber: `OWN_ORIGINAL` hanya bila `source.license_type = OWN`; `VERIFIED_OPEN` hanya bila `source.license_type` salah satu `CC0`, `CC_BY`, `CC_BY_SA`, `CC_BY_NC`, `MIT`. Atribusi: bila sumber `share_alike` atau `license_type` diawali `CC_BY`, memverifikasi (`VERIFIED_OPEN`) membutuhkan `attribution_text` non-kosong pada aset (di request atau sudah ada). Efek: status terverifikasi mengisi `license_verified_at = now()` dan `license_verified_by` = admin; kembali ke `UNVERIFIED` mengosongkan keduanya.
+Minimal satu field. Aturan `rights_status` (tabel nilai yang diizinkan per `kind`): `SLIDE_IMAGE`, `IMAGE`, `DOCUMENT`, `AUDIO_LISTENING` -> `UNVERIFIED` \| `OWN_ORIGINAL` \| `VERIFIED_OPEN`; `VIDEO_EMBED` -> `UNVERIFIED` \| `EMBED_ONLY`; `REFERENCE_LINK` -> `LINK_ONLY` saja. Kesesuaian sumber: `OWN_ORIGINAL` hanya bila `source.license_type = OWN`; `VERIFIED_OPEN` hanya bila `source.license_type` salah satu `CC0`, `CC_BY`, `CC_BY_SA`, `CC_BY_NC`, `MIT`. Atribusi: bila sumber `share_alike` atau `license_type` diawali `CC_BY`, memverifikasi (`VERIFIED_OPEN`) membutuhkan `attribution_text` non-kosong pada aset (di request atau sudah ada). Atribusi tidak boleh dikosongkan (`ATTRIBUTION_REQUIRED`) pada aset `VERIFIED_OPEN` bila aturan atribusi di atas berlaku. Efek: status terverifikasi mengisi `license_verified_at = now()` dan `license_verified_by` = admin; kembali ke `UNVERIFIED` mengosongkan keduanya.
 ```json
 { "rights_status": "OWN_ORIGINAL" }
 ```
@@ -188,7 +188,7 @@ Minimal satu field. Aturan `rights_status` (tabel nilai yang diizinkan per `kind
 `publish_blockers` = jumlah baris `v_publish_blockers` (aset `UNVERIFIED` yang dirujuk). Daftar sumber = `code` sumber dengan flag terkait yang punya aset.
 
 ## Database Changes
-Tidak ada tabel/kolom baru (memakai `content_sources`, `content_assets`; `asset_code` dari SPEC-004). Kendala diandalkan: `content_assets_nocopy_chk`, `content_assets_location_chk`, `content_assets_sha256_uq`, `content_assets_asset_code_uq`, `content_sources_nocopy_chk`. Audit: `SOURCE_CREATED`, `SOURCE_UPDATED`, `ASSET_UPLOADED`, `ASSET_EXTERNAL_CREATED`, `LICENSE_STATUS_CHANGED` (`metadata`: `asset_id`, `from`, `to`), `ASSET_DELETED`. Penulisan lewat `AssetRegistryService` (SPEC-004).
+Tidak ada tabel/kolom baru; view `v_publish_blockers` diperbarui (migrasi 0007) agar melacak `stimulus_asset_code` soal Writing, dan rujukan aset (`referenced_by`, `reference_count`, `ASSET_IN_USE`, `ASSET_IN_PUBLISHED_USE`) mencakup stimulus itu (memakai `content_sources`, `content_assets`; `asset_code` dari SPEC-004). Kendala diandalkan: `content_assets_nocopy_chk`, `content_assets_location_chk`, `content_assets_sha256_uq`, `content_assets_asset_code_uq`, `content_sources_nocopy_chk`. Audit: `SOURCE_CREATED`, `SOURCE_UPDATED`, `ASSET_UPLOADED`, `ASSET_EXTERNAL_CREATED`, `LICENSE_STATUS_CHANGED` (`metadata`: `asset_id`, `from`, `to`), `ASSET_DELETED`. Penulisan lewat `AssetRegistryService` (SPEC-004).
 
 ## UI/UX
 Rujukan: `design-system.md` 5.20 Admin Importer (kolom `source`/`license`, aset tanpa lisensi ditandai merah), 5.6 Table, 5.4 Dialog/Sheet, 5.2 Input/Form (dropzone file), 5.7 Badge/Toast.
@@ -245,3 +245,4 @@ Rujukan: `design-system.md` 5.20 Admin Importer (kolom `source`/`license`, aset 
 | Date | Author | Changes |
 |------|--------|---------|
 | 2026-11-03 | Analyst Agent | Initial draft |
+| 2026-11-03 13:45 | Backend Engineer | QA W4: stimulus_asset_code terlacak (migrasi 0007), invarian flag lisensi, atribusi tidak boleh dikosongkan, ffprobe timeout (aditif) |

@@ -35,3 +35,6 @@ Mode EXAM untuk set Skip Modul/Tier: intro, ketersediaan, timer deadline, tanpa 
 | 2026-11-03 09:30 | frontend | ready for QA/integration | UI intro/ujian berjalan/hasil Skip, tombol peta dengan konfirmasi selesai terhadap kontrak; integrasi dengan backend belum diuji |
 | 2026-11-03 12:30 | backend | development started | - |
 | 2026-11-03 12:30 | backend | ready for QA/integration | API server selesai + unit/integration lulus; E2E belum diuji |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test passed | E2E lulus |

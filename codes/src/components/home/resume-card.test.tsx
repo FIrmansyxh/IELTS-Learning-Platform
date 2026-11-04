@@ -1,5 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { RADAR_EMPTY, STATS_NEW_USER } from '@/components/gamification/fixtures';
 import { errorBody, mockFetch, renderWithProviders, USER } from '@/components/test-utils';
 import type { ResumeCard as ResumeData } from '@/contracts/resume';
 import { Dashboard } from './dashboard';
@@ -24,6 +25,8 @@ function serve(resume: { status?: number; body: unknown }) {
   return mockFetch((url) => {
     if (url.pathname === '/api/v1/me/last-learned') return resume;
     if (url.pathname === '/api/v1/auth/me') return { body: { data: { user: USER } } };
+    if (url.pathname === '/api/v1/me/stats') return { body: { data: STATS_NEW_USER } };
+    if (url.pathname === '/api/v1/me/skills/radar') return { body: { data: RADAR_EMPTY } };
     return { status: 404, body: errorBody('NOT_FOUND', 'x') };
   });
 }

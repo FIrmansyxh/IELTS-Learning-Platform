@@ -10,6 +10,9 @@ import {
 import { apiFetch } from './client';
 import { uploadMultipart, type UploadOptions } from './upload';
 
+/** Body publikasi: `confirm_reviewed` (F-20-03, K2) ada di skema server (`PublishBatchBodySchema`); skema klien lama belum memuatnya. */
+export type PublishBatchInput = PublishBatchRequest & { confirm_reviewed?: boolean };
+
 export type BatchListParams = { page: number; page_size: number; status?: string };
 export type ItemListParams = {
   page: number;
@@ -46,7 +49,7 @@ export const importsApi = {
     }
     return out;
   },
-  publish: async (batchId: string, body: PublishBatchRequest) =>
+  publish: async (batchId: string, body: PublishBatchInput) =>
     (await apiFetch(`/admin/import-batches/${batchId}/publish`, { method: 'POST', body, schema: BatchResponseSchema })).data,
   cancel: async (batchId: string) =>
     (await apiFetch(`/admin/import-batches/${batchId}/cancel`, { method: 'POST', schema: BatchResponseSchema })).data,

@@ -301,6 +301,8 @@ describe('audit-log dan health', () => {
   it('health: 200 dengan db up; LLM mati -> down, komponen lain tetap dilaporkan, < 5 detik', async () => {
     const a = await adminSession();
     process.env.AI_ENABLED = 'true';
+    process.env.LLM_DRIVER = 'ollama';
+    process.env.STT_DRIVER = 'whisper';
     process.env.OLLAMA_BASE_URL = 'http://127.0.0.1:1';
     process.env.STT_BASE_URL = 'http://127.0.0.1:1';
     try {
@@ -315,10 +317,31 @@ describe('audit-log dan health', () => {
       expect(r.json.data.app.node).toBe(process.versions.node);
     } finally {
       delete process.env.AI_ENABLED;
+      delete process.env.LLM_DRIVER;
+      delete process.env.STT_DRIVER;
       delete process.env.OLLAMA_BASE_URL;
       delete process.env.STT_BASE_URL;
     }
     const off = await call(healthGet, 'GET', '/api/v1/admin/health', { cookie: a.cookie });
     expect(off.json.data.llm.status).toBe('disabled');
+  });
+
+  it('health (D-005): driver mock dilaporkan up tanpa probe jaringan', async () => {
+    const a = await adminSession();
+    process.env.AI_ENABLED = 'true';
+    process.env.LLM_DRIVER = 'mock';
+    process.env.STT_DRIVER = 'mock';
+    delete process.env.OLLAMA_BASE_URL;
+    delete process.env.STT_BASE_URL;
+    try {
+      const r = await call(healthGet, 'GET', '/api/v1/admin/health', { cookie: a.cookie });
+      expect(r.status).toBe(200);
+      expect(r.json.data.llm).toMatchObject({ enabled: true, driver: 'mock', status: 'up' });
+      expect(r.json.data.stt.status).toBe('up');
+    } finally {
+      delete process.env.AI_ENABLED;
+      delete process.env.LLM_DRIVER;
+      delete process.env.STT_DRIVER;
+    }
   });
 });

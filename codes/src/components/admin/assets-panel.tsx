@@ -72,6 +72,13 @@ export function AssetsPanel() {
     return () => clearTimeout(h);
   }, [qInput]);
   React.useEffect(() => setPage(1), [kind, rights, sourceId, onlyUnverified, q]);
+  // Tautan dari kurasi konten (SPEC-020): `?buka=<asset_id>` membuka detail aset, `?belum=1` memfilter belum diverifikasi.
+  React.useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    const target = sp.get('buka');
+    if (target) setDetailId(target);
+    if (sp.get('belum') === '1') setOnlyUnverified(true);
+  }, []);
 
   const sources = useQuery({ queryKey: ['admin', 'sources'], queryFn: assetsApi.sources });
   const params = {

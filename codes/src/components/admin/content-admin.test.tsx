@@ -706,6 +706,29 @@ describe('StepPreview', () => {
     expect(screen.getAllByText(/Karena objek\./).length).toBeGreaterThan(0);
   });
 
+  it('F-19-05: pratinjau item CSV ({ set_type, scope_code, question }) menampilkan soal', async () => {
+    mockFetch((url) =>
+      /items\/2$/.test(url.pathname)
+        ? {
+            body: {
+              data: {
+                ...item(2),
+                payload: {
+                  set_type: 'ACTIVE_DRILL',
+                  scope_code: '1.99.1',
+                  question: { question_id: 'Q-C1', question_type: 'TFNG', prompt: 'Pernyataan CSV', correct_answers: ['True'], explanation_id: 'Karena benar.', points: 1 },
+                },
+              },
+            },
+          }
+        : { body: page([item(2)]) },
+    );
+    renderWithProviders(<StepPreview batch={batch() as never} onNext={() => {}} onBack={() => {}} />);
+    fireEvent.click(await screen.findByRole('button', { name: /Pratinjau:/ }));
+    expect(await screen.findByText('Pernyataan CSV')).toBeInTheDocument();
+    expect(screen.getByText('ACTIVE_DRILL:1.99.1')).toBeInTheDocument();
+  });
+
   it('payload null (dipurge) menampilkan pesan retensi', async () => {
     mockFetch((url) =>
       /items\/2$/.test(url.pathname) ? { body: { data: { ...item(2), payload: null } } } : { body: page([item(2)]) },
@@ -750,6 +773,35 @@ describe('StepPublish', () => {
     const post = calls.find((c) => c.init.method === 'POST')!;
     expect(post.url.pathname).toBe(`/api/v1/admin/import-batches/${BATCH}/publish`);
     expect(post.json).toEqual({ target_status: 'DRAFT', acknowledge_warnings: true });
+  });
+
+  it('REVIEW_CONFIRMATION_REQUIRED (batch memuat konten AI): kotak reviu muncul, wajib dicentang, lalu mengirim confirm_reviewed', async () => {
+    let posts = 0;
+    const calls = mockFetch((url, init) => {
+      if (init.method === 'POST') {
+        posts += 1;
+        if (posts === 1) return { status: 409, body: errorBody('REVIEW_CONFIRMATION_REQUIRED', 'x') };
+        return { status: 202, body: { data: batch({ status: 'PUBLISHING' }) } };
+      }
+      return { body: page([item(1, { action: 'CREATE' })]) };
+    });
+    renderWithProviders(<StepPublish batch={batch() as never} acknowledged={false} onAcknowledge={noop} onBack={noop} onRollback={noop} />);
+    const published = await screen.findByRole('radio', { name: /Publikasikan sekarang/ });
+    await waitFor(() => expect(published).toBeEnabled());
+    fireEvent.click(published);
+    expect(screen.queryByTestId('ai-review-confirm')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Publikasikan' }));
+    let dialog = await screen.findByRole('dialog', { name: 'Terapkan impor ini?' });
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Ya, terapkan' }));
+    const box = await screen.findByRole('checkbox', { name: /Saya telah meninjau konten buatan AI/ });
+    expect(calls.find((c) => c.init.method === 'POST')!.json).toEqual({ target_status: 'PUBLISHED', acknowledge_warnings: false });
+    expect(screen.getByRole('button', { name: 'Publikasikan' })).toBeDisabled();
+    fireEvent.click(box);
+    fireEvent.click(screen.getByRole('button', { name: 'Publikasikan' }));
+    dialog = await screen.findByRole('dialog', { name: 'Terapkan impor ini?' });
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Ya, terapkan' }));
+    await waitFor(() => expect(calls.filter((c) => c.init.method === 'POST')).toHaveLength(2));
+    expect(calls.filter((c) => c.init.method === 'POST')[1]!.json).toEqual({ target_status: 'PUBLISHED', acknowledge_warnings: false, confirm_reviewed: true });
   });
 
   it('PUBLISH_BLOCKED menampilkan daftar penghalang dengan tautan ke aset', async () => {

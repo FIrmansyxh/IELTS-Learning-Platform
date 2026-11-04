@@ -256,6 +256,9 @@ export const assessmentSets = pgTable('assessment_sets', {
   index('assessment_sets_module_idx').on(t.moduleId, t.assessmentType),
   index('assessment_sets_tier_idx').on(t.tierId, t.assessmentType),
   index('assessment_sets_parent_idx').on(t.parentSetId),
+  // QA F-14-01: anak per skill per induk Boss dan satu induk Boss PUBLISHED per Tier.
+  uniqueIndex('assessment_sets_boss_child_skill_uq').on(t.parentSetId, t.skillCategory).where(sql`${t.assessmentType} = 'BOSS_SECTION' AND ${t.status} = 'PUBLISHED'`),
+  uniqueIndex('assessment_sets_boss_tier_published_uq').on(t.tierId).where(sql`${t.assessmentType} = 'TIER_BOSS_EXAM' AND ${t.status} = 'PUBLISHED'`),
   check('assessment_sets_scope_chk', sql`
     (${t.assessmentType} = 'ACTIVE_DRILL'      AND ${t.subModuleId} IS NOT NULL AND ${t.moduleId} IS NULL AND ${t.tierId} IS NULL) OR
     (${t.assessmentType} = 'SKIP_MODULE_TEST'  AND ${t.moduleId}    IS NOT NULL AND ${t.subModuleId} IS NULL AND ${t.tierId} IS NULL) OR
@@ -476,6 +479,8 @@ export const aiEvaluations = pgTable('ai_evaluations', {
   rawOutput: text('raw_output'),                                // keluaran mentah LLM untuk debug (retensi pendek)
   latencyMs: integer('latency_ms'),
   errorCode: varchar('error_code', { length: 40 }),
+  // SPEC-012 (spec_012_ai_flags): bendera pasca-proses {injection_suspected, score_capped, cap_reason, ...}.
+  flags: jsonb('flags').notNull().default(sql`'{}'::jsonb`),
   disclaimerAcknowledged: boolean('disclaimer_acknowledged').notNull().default(true),
   createdAt: createdAt(),
 }, (t) => [
@@ -527,7 +532,11 @@ export const pointLedger = pgTable('point_ledger', {           // append-only
   points: integer('points').notNull(),
   note: varchar('note', { length: 200 }),
   createdAt: createdAt(),
-}, (t) => [index('point_ledger_user_idx').on(t.userId, t.createdAt.desc())]);
+}, (t) => [
+  index('point_ledger_user_idx').on(t.userId, t.createdAt.desc()),
+  // SPEC-016 (spec_016_points_unique): satu baris per (user, sumber, source_id) untuk sumber sekali-beri; DAILY dikecualikan.
+  uniqueIndex('point_ledger_once_uq').on(t.userId, t.source, t.sourceId).where(sql`${t.source} IN ('DRILL','SPEED_STREAK','CROWN','MINI_TASK','BOSS')`),
+]);
 
 export const userSkillScores = pgTable('user_skill_scores', {   // sumber radar 6 sumbu
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),

@@ -189,6 +189,9 @@ Rujukan: `design-system.md` 5.16 Perekam Speaking, 5.4 Dialog, 5.7 Progress/Toas
 
 ---
 
+## Catatan Keputusan
+- **Urutan secure-context vs consent (Frontend, 2026-11-03; QA F-13-11 menilai dapat diterima):** Technical Flow langkah 2 (consent) dan 3 (secure context) dibalik di klien: secure context/dukungan `MediaRecorder` diperiksa lebih dulu; bila gagal, kartu HTTPS/tidak didukung tampil tanpa dialog consent. Alasan: tanpa secure context tidak ada rekaman yang bisa diambil, sehingga meminta persetujuan menyesatkan. Server tetap menegakkan consent (409 `RECORDING_CONSENT_REQUIRED` sebelum body dibaca), jadi perlindungan privasi tidak berkurang. Acceptance Criteria (kartu HTTPS tampil, tombol Rekam tidak ada) tetap terpenuhi.
+
 ## Human Approval
 
 **Human Approval Status:** approved
@@ -200,3 +203,5 @@ Rujukan: `design-system.md` 5.16 Perekam Speaking, 5.4 Dialog, 5.7 Progress/Toas
 | Date | Author | Changes |
 |------|--------|---------|
 | 2026-11-03 | Analyst Agent | Initial draft; persetujuan rekaman dan opsi tanpa simpan (ADR-003 #19), retensi 90 hari |
+| 2026-11-03 | Backend Engineer | Implementasi backend (aditif): tanpa tabel/kolom baru (migrasi hanya `spec_012_ai_flags` dari SPEC-012). Penyimpanan `private/recordings/` ditambahkan ke `STORAGE_DIRS` (dir 0700). Klarifikasi: persetujuan diperiksa sebelum body dibaca; `duration_sec` klien tidak disimpan (durasi dari ffprobe; webm tanpa elemen Duration seperti MediaRecorder dihitung dari WAV hasil konversi); bila `AI_ENABLED=false` dan `keep_recordings=false` berkas tidak disimpan sama sekali (tanpa transkripsi tidak ada alasan menyimpan); `retention_expires_at` ditetapkan pada setiap status terminal (GRADED, FAILED, FALLBACK) selama berkas tersimpan; kegagalan berkas (`AUDIO_*`) menghapus berkas dan menandai `purged_at`, `STT_EMPTY` tidak menghapus (retensi berlaku); setelah STT selesai `submissions.status` menjadi `GRADING` (job `GRADE_SPEAKING` `QUEUED`); admin memutar rekaman -> audit `ADMIN_PLAYED_RECORDING` pada tiap permintaan; unggahan field tak dikenal -> `unrecognized_key`. Aturan lint `no-restricted-imports` melarang impor `exec`/`execSync` dari `child_process` (+ uji statis `tests/unit/ai-audio-type-media.test.ts`). Belum diverifikasi: WhisperCppClient terhadap whisper.cpp asli (hanya server HTTP palsu; ffmpeg/ffprobe nyata dipakai di uji), perekaman peramban nyata. |
+| 2026-11-03 | Frontend Engineer | Catatan Keputusan: urutan pemeriksaan secure-context sebelum consent di klien (QA F-13-11); kunci `ai-sub:v1:` terikat pengguna dan dibersihkan saat logout/401 (QA F-12-04) |

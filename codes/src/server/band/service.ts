@@ -177,10 +177,14 @@ export async function deleteTable(actorId: string, tableId: string, ipHash?: str
   await getDb().transaction(async (tx) => {
     const [t] = await tx.select().from(bandConversionTables).where(eq(bandConversionTables.id, tableId)).limit(1).for('update');
     if (!t) throw notFound();
-    // Dirujuk lewat kolom atau tercantum di result_json attempt mana pun (spec 010/011/014 menyimpan id tabel di sana).
+    // Dirujuk lewat kolom (FK RESTRICT) atau tercantum di result_json attempt mana pun (spec 014: `band_table_ids`).
+    // F-09-03: pencocokan nilai string PERSIS lewat jsonpath (bukan `result_json::text LIKE`, yang cocok substring dan
+    // membangun teks seluruh JSON); hanya baris ber-result_json yang dipindai.
     const ref = await tx.execute(sql`
       SELECT 1 FROM attempts
-      WHERE band_table_id = ${tableId}::uuid OR result_json::text LIKE ${`%${tableId}%`}
+      WHERE band_table_id = ${tableId}::uuid
+         OR (result_json IS NOT NULL
+             AND jsonb_path_exists(result_json, '$.** ? (@.type() == "string" && @ == $id)', jsonb_build_object('id', ${tableId}::text)))
       LIMIT 1`);
     if (t.isActive || ref.rows.length > 0) throw new ApiError('BAND_TABLE_IN_USE');
     await tx.delete(bandConversionTables).where(eq(bandConversionTables.id, tableId));

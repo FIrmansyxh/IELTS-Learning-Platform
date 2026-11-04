@@ -24,6 +24,39 @@ export async function lockImports(tx: Tx): Promise<void> {
   await tx.execute(sql`SELECT pg_advisory_xact_lock(${IMPORT_LOCK_KEY})`);
 }
 
+/** Batas diam sebelum batch aktif dianggap macet (queue expire 15 menit x2). */
+export const STALL_MS = 30 * 60_000;
+
+/**
+ * F-19-02: pulihkan batch aktif yang macet (job terminal tanpa penyelesaian batch, atau tanpa kemajuan > STALL_MS):
+ * UPLOADED/VALIDATING -> FAILED, PUBLISHING -> PREVIEW_READY, keduanya dengan `summary.last_error = JOB_STALLED`.
+ * Idempoten; dipanggil lazy sebelum pemeriksaan "batch aktif", saat boot worker, dan oleh tugas retensi.
+ */
+export async function recoverStuckBatches(db: ReturnType<typeof getDb> = getDb(), now: Date = new Date(), stallMs: number = STALL_MS): Promise<number> {
+  return db.transaction(async (tx) => {
+    await lockImports(tx);
+    const rows = await tx.select().from(importBatches).where(inArray(importBatches.status, [...ACTIVE])).for('update');
+    let n = 0;
+    for (const b of rows) {
+      const [job] = await tx.select().from(asyncJobs).where(eq(asyncJobs.importBatchId, b.id)).orderBy(desc(asyncJobs.createdAt), desc(asyncJobs.id)).limit(1);
+      const terminal = job !== undefined && (job.status === 'FAILED' || job.status === 'CANCELLED' || job.status === 'SUCCEEDED');
+      const since = job ? (job.status === 'RUNNING' ? (job.startedAt ?? job.createdAt) : job.createdAt) : b.createdAt;
+      if (!terminal && now.getTime() - since.getTime() <= stallMs) continue;
+      const next = b.status === 'PUBLISHING' ? 'PREVIEW_READY' : 'FAILED';
+      await tx
+        .update(importBatches)
+        .set({ status: next, summary: { ...summaryOf(b), last_error: { code: 'JOB_STALLED', message: 'Pekerjaan impor terhenti sebelum selesai; tidak ada perubahan konten yang disimpan. Coba lagi.' } } })
+        .where(eq(importBatches.id, b.id));
+      if (job && (job.status === 'QUEUED' || job.status === 'RUNNING')) {
+        await tx.update(asyncJobs).set({ status: 'FAILED', errorCode: 'JOB_STALLED', finishedAt: now }).where(eq(asyncJobs.id, job.id));
+      }
+      logger.warn({ batchId: b.id, from: b.status, to: next }, 'import_batch_recovered');
+      n++;
+    }
+    return n;
+  });
+}
+
 // ------------------------------------------------------------------ DTO
 type BatchRow = typeof importBatches.$inferSelect;
 type JobRow = typeof asyncJobs.$inferSelect;
@@ -34,7 +67,11 @@ export interface BatchSummary {
   by_kind?: Record<string, number>;
   last_error?: { code: string; message: string; blockers?: unknown[] } | null;
   csv_kind?: string | null;
+  /** F-20-03 (aditif): batch memuat entitas buatan AI yang berubah; FE menampilkan kotak konfirmasi di muka. */
+  has_ai_generated?: boolean;
   target_status?: 'DRAFT' | 'PUBLISHED' | null;
+  /** F-20-03: admin yang mengonfirmasi telah meninjau konten buatan AI saat meminta publikasi (null bila tidak dikonfirmasi). */
+  confirmed_by?: string | null;
   applied_entities?: Array<{ kind: 'MODULE' | 'SUB_MODULE' | 'ASSESSMENT_SET'; id: string; code: string; action: 'CREATE' | 'UPDATE' }>;
   purged_at?: string;
   cancelled_at?: string;
@@ -85,6 +122,7 @@ export async function batchDto(db: DbOrTx, b: BatchRow): Promise<Batch> {
           warnings: s.warnings ?? 0,
           noop: s.noop ?? 0,
           by_kind: s.by_kind ?? {},
+          has_ai_generated: s.has_ai_generated ?? false,
           last_error: (s.last_error as Batch['summary'] extends infer X ? (X extends { last_error?: infer L } ? L : never) : never) ?? null,
         }
       : s.last_error
@@ -137,6 +175,7 @@ export async function createBatch(actorId: string, input: UploadInput, ipHash: s
   const sha = createHash('sha256').update(input.data).digest('hex');
   const db = getDb();
 
+  await recoverStuckBatches(db);
   const key = await storage.put(input.data, '', 'private/imports');
   let created: { batchId: string; jobId: string };
   try {
@@ -244,8 +283,9 @@ export async function getItem(batchId: string, rowNumber: number) {
 }
 
 // ------------------------------------------------------------------ publish-request & cancel
-export async function requestPublish(actorId: string, batchId: string, body: z.output<typeof PublishBatchBodySchema>): Promise<Batch> {
+export async function requestPublish(actorId: string, batchId: string, body: z.output<typeof PublishBatchBodySchema>, ipHash: string | null = null): Promise<Batch> {
   const db = getDb();
+  await recoverStuckBatches(db);
   const jobId = await db.transaction(async (tx) => {
     await lockImports(tx);
     const [b] = await tx.select().from(importBatches).where(eq(importBatches.id, batchId)).for('update');
@@ -258,11 +298,31 @@ export async function requestPublish(actorId: string, batchId: string, body: z.o
     }
     const [other] = await tx.select({ id: importBatches.id }).from(importBatches).where(and(ne(importBatches.id, batchId), inArray(importBatches.status, [...ACTIVE]))).limit(1);
     if (other) throw new ApiError('IMPORT_IN_PROGRESS', { status: 409, message: 'Masih ada impor lain yang berjalan.' });
+    // F-20-03 (K2): publikasi konten buatan AI wajib konfirmasi eksplisit. Pemeriksaan cepat dari payload item; job publikasi
+    // memeriksa ulang terhadap origin di DB (mencakup set yang hanya disentuh CSV atau berstatus DRAFT).
+    if (body.target_status === 'PUBLISHED' && body.confirm_reviewed !== true) {
+      const ai = await tx.execute(sql`
+        SELECT 1 FROM import_batch_items
+        WHERE batch_id = ${batchId}::uuid AND entity_kind IN ('SUB_MODULE', 'ASSESSMENT_SET') AND action IN ('CREATE', 'UPDATE')
+          AND payload->>'origin' = 'AI_GENERATED_REVIEWED' LIMIT 1`);
+      if (ai.rows.length > 0) {
+        throw new ApiError('REVIEW_CONFIRMATION_REQUIRED', { details: [{ path: 'confirm_reviewed', code: 'required', message: 'confirm_reviewed wajib true: batch memuat konten buatan AI.' }] });
+      }
+    }
+    const confirmedBy = body.target_status === 'PUBLISHED' && body.confirm_reviewed === true ? actorId : null;
     await tx
       .update(importBatches)
-      .set({ status: 'PUBLISHING', summary: { ...s, target_status: body.target_status, last_error: null } })
+      .set({ status: 'PUBLISHING', summary: { ...s, target_status: body.target_status, confirmed_by: confirmedBy, last_error: null } })
       .where(eq(importBatches.id, batchId));
     const [job] = await tx.insert(asyncJobs).values({ kind: 'IMPORT_PUBLISH', userId: actorId, importBatchId: batchId }).returning({ id: asyncJobs.id });
+    await writeAudit(tx, {
+      actorUserId: actorId,
+      action: 'IMPORT_PUBLISH_REQUESTED',
+      entityType: 'import_batch',
+      entityId: batchId,
+      metadata: { batch_id: batchId, target_status: body.target_status, ...(confirmedBy ? { confirmed_by: confirmedBy } : {}) },
+      ipHash,
+    });
     return job!.id;
   });
   await dispatch(batchId, jobId, 'import-publish');
@@ -275,7 +335,11 @@ export async function cancelBatch(actorId: string, batchId: string, ipHash: stri
     await lockImports(tx);
     const [b] = await tx.select().from(importBatches).where(eq(importBatches.id, batchId)).for('update');
     if (!b) throw notFound();
-    if (b.status !== 'UPLOADED' && b.status !== 'PREVIEW_READY') {
+    if (b.status === 'VALIDATING' || b.status === 'PUBLISHING') {
+      // F-19-02: boleh dibatalkan bila job belum/tidak sedang berjalan (antre atau sudah terminal); job RUNNING ditolak.
+      const [job] = await tx.select().from(asyncJobs).where(eq(asyncJobs.importBatchId, batchId)).orderBy(desc(asyncJobs.createdAt), desc(asyncJobs.id)).limit(1);
+      if (job?.status === 'RUNNING') throw new ApiError('BATCH_NOT_CANCELLABLE', { status: 409, message: 'Batch sedang diproses; tunggu selesai.' });
+    } else if (b.status !== 'UPLOADED' && b.status !== 'PREVIEW_READY') {
       throw new ApiError('BATCH_NOT_CANCELLABLE', { status: 409, message: 'Batch tidak dapat dibatalkan pada status ini.' });
     }
     await tx.update(importBatches).set({ status: 'CANCELLED', summary: { ...summaryOf(b), cancelled_at: new Date().toISOString() } }).where(eq(importBatches.id, batchId));

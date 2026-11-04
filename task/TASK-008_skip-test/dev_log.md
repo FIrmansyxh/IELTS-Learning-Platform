@@ -70,3 +70,23 @@ Tidak diverifikasi: E2E Playwright, `next build`/`next dev` (sengaja tidak dijal
 - **F-08-04**: `formatScorePercent` (`lib/format.ts`) memotong (bukan membulatkan) ke 2 desimal: 84,996 tampil `84,99%`. Lulus/gagal tetap dari server (`passed`), tidak dihitung ulang di klien.
 - **F-08-09** (`components/exam/exam-runner.tsx`): (a) pengiriman otomatis saat waktu habis dicoba lagi tiap 3 detik bila gagal; (b) `flushPending` kini mengembalikan `ok|failed|ended`, soal yang gagal disimpan dilacak dan dicoba ulang, dan ujian TIDAK dikirim bila ada jawaban yang belum tersimpan (toast tetap + coba lagi); (c) peringatan `beforeunload` selama sesi berjalan (dilepas setelah submit/akhir).
 - Tes (`exam/exam.test.tsx`): tanpa benar/salah per soal, toleran tanpa `review`, 84,996 -> 84,99%, retry auto-submit, tidak submit saat simpan gagal, beforeunload. Seluruh `vitest run` 35 berkas / 512 tes lulus.
+
+
+---
+
+## [BACKEND] 2026-11-03 12:40 (Backend Engineer, wave W4) - Verifikasi perbaikan QA W3 (TASK-008)
+
+| ID | Status | Bukti |
+|---|---|---|
+| F-08-01 | TERTUTUP (sudah ada, diverifikasi) | `HIDE_REVIEW_TYPES` di `attempts/dto.ts` (SKIP_MODULE_TEST, SKIP_TIER_TEST, TIER_BOSS_EXAM, BOSS_SECTION, PLACEMENT_TEST): `review: null` pada mode EXAM; PRACTICE tetap memuat review. Tes `skip.itest.ts` dan `attempts.itest.ts`. |
+| F-08-02 | TERTUTUP (sudah ada) | `skip.ts` `onFinish`: D1 divalidasi ulang; tidak eligible -> hasil dicatat tanpa efek progres, audit `effect_skipped`. Tes `skip.itest.ts` "F-08-02". |
+| F-08-04 | TERTUTUP (sudah ada) | `displayPercentHundredths`: 84,996 tampil 84,99 saat belum lulus; `skip_best_percent` memakai persen tampilan. Tes `skip.itest.ts` 84.99% dan unit `attempts-engine.test.ts`. |
+| F-08-07 | DITUTUP (baru) | `skip.itest.ts`: tiga `POST /attempts` serentak -> tepat satu attempt, id sama; start serentak di ambang batas harian -> 3x 429 `DAILY_ATTEMPT_LIMIT`, tetap 3 attempt. |
+| F-08-05 | TIDAK DIKERJAKAN | Rate limit khusus intro (LOW); bucket `general_user` global tetap berlaku. Catat sebagai hardening. |
+
+Verifikasi: lihat dev_log TASK-018 (tsc, eslint, vitest 520, integration 280 lulus).
+
+### Revision History
+| Timestamp | Changes |
+|-----------|---------|
+| 2026-11-03 12:40 | Backend W4: verifikasi perbaikan QA W3, tes start serentak |

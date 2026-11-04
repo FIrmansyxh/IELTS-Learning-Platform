@@ -33,3 +33,9 @@ Daftar (mode open/invite/closed), masuk, keluar, ganti password, dan profil dasa
 | 2026-11-03 07:10 | frontend | development started | - |
 | 2026-11-03 07:25 | frontend | ready for QA/integration | UI auth (masuk, daftar, ganti password, profil, AppShell, AuthGate) + klien API + test; lihat dev_log.md |
 | 2026-11-03 07:55 | backend | ready for QA/integration | Backend: sesi/auth/withApi/bootstrap selesai; 36 tes integrasi + 40 tes unit/security lulus; lihat dev_log.md |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test failed | Issues: D-001 |
+| 2026-11-03 19:00 | fixer agent | fixing started | Issues: D-001 |
+| 2026-11-03 19:05 | fixer agent | fix complete, ready to test | Tambah lg:w-auto pada <main> (blok mengisi sisa lebar setelah margin sidebar); mobile tidak berubah (w-full tetap tanpa margin kiri). |
+| 2026-11-03 19:30 | test agent | test passed | Run penuh bersih Fase 3: 105 lulus/0 gagal/1 skip (+ spec012b AI mati lulus); defek terkait terverifikasi |

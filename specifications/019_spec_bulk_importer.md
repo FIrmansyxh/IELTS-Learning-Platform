@@ -27,7 +27,7 @@ Sebagai Admin (kurator konten), saya ingin mengunggah berkas JSON (paket konten)
 **I2. Pemeriksaan sinkron saat unggah** (kegagalan = 400 `IMPORT_FILE_INVALID` kecuali disebut lain): ukuran <= 5 MB (413), tipe (415 `UNSUPPORTED_FILE_TYPE`), UTF-8 valid dan paling banyak satu BOM, tanpa karakter kontrol selain `\n \r \t`, JSON: sintaks valid, kedalaman <= 10, tanpa kunci `__proto__`/`constructor`/`prototype`, `contract_version` ∈ {"1.0","1.1"}, total item <= 2.000; CSV: header sesuai, baris <= 5.000, kolom <= 50, panjang sel <= 5.000.
 **I3. Validasi asinkron** (job `import-validate`): Zod kontrak SPEC-004 per item + aturan silang + rencana CREATE/UPDATE/NOOP (hash konten) -> baris `import_batch_items` (`status` `VALID`/`INVALID`, `action`, `errors`). Item `INVALID` bila memiliki >= 1 galat `severity="error"`; peringatan (`severity="warning"`) tidak membuatnya `INVALID`.
 **I4. Peringatan baku:** `asset_unverified` (aset dirujuk berstatus `UNVERIFIED`; menghalangi target `PUBLISHED`), `video_unverified` (video YouTube baru dibuat `UNVERIFIED`), `attribution_recommended`, `noop_item`.
-**I5. Publikasi** (job `import-publish`, satu transaksi untuk seluruh batch): menerapkan rencana segar; `target_status = DRAFT` -> entitas ditulis `DRAFT` (entitas yang sudah `PUBLISHED` tetap `PUBLISHED` dengan `version`/`content_version` +1 bila hash berubah); `target_status = PUBLISHED` -> setelah penulisan, `PublishService.publish` untuk tiap entitas terdampak (SPEC-004); satu penghalang saja membatalkan seluruh transaksi dan batch kembali `PREVIEW_READY` dengan `summary.last_error = { code: "PUBLISH_BLOCKED", blockers: [...] }`.
+**I5. Publikasi** (job `import-publish`, satu transaksi untuk seluruh batch; aktor audit/revisi = admin yang menekan Publikasikan, audit `IMPORT_PUBLISH_REQUESTED`; entitas `PUBLISHED` yang di-UPDATE selalu dicek penghalang apa pun `target_status`, satu penghalang membatalkan transaksi dengan `PUBLISH_BLOCKED`; QA F-19-01/03): menerapkan rencana segar; `target_status = DRAFT` -> entitas ditulis `DRAFT` (entitas yang sudah `PUBLISHED` tetap `PUBLISHED` dengan `version`/`content_version` +1 bila hash berubah); `target_status = PUBLISHED` -> setelah penulisan, `PublishService.publish` untuk tiap entitas terdampak (SPEC-004); satu penghalang saja membatalkan seluruh transaksi dan batch kembali `PREVIEW_READY` dengan `summary.last_error = { code: "PUBLISH_BLOCKED", blockers: [...] }`.
 **I6. Rollback:** hanya batch `PUBLISHED`. Item `UPDATE`: entitas dikembalikan ke snapshot `content_revisions` sebelum batch (versi naik +1, revisi baru dicatat). Item `CREATE`: entitas dihapus bila TIDAK dirujuk data pengguna (tidak ada `attempts`, `submissions`, `user_last_learned_state` terkait; dan semua baris `user_*_progress` entitas itu berstatus `LOCKED`/`UNLOCKED` dengan `attempts_count = 0`); jika ada satu saja yang tertahan, seluruh rollback ditolak (409 `ROLLBACK_BLOCKED`). Aset video YouTube yang dibuat batch tidak dihapus.
 **I7. Retensi:** file asli dan `payload` item dihapus 90 hari setelah `PUBLISHED`/`CANCELLED` (tugas `purgeImportBatches`); ringkasan hitungan dipertahankan.
 
@@ -121,6 +121,7 @@ Urutan `row_number ASC`. **Response (Success):**
 |---|---|---|---|
 | `target_status` | enum | ya | `DRAFT` \| `PUBLISHED` |
 | `acknowledge_warnings` | boolean | tidak | default `false`; wajib `true` bila `summary.warnings > 0` |
+| `confirm_reviewed` | boolean | tidak | default `false` (aditif, QA W8 F-20-03); wajib `true` bila `target_status = PUBLISHED` dan batch memuat konten `AI_GENERATED_REVIEWED` yang berubah (`summary.has_ai_generated`) |
 ```json
 { "target_status": "DRAFT", "acknowledge_warnings": true }
 ```
@@ -132,6 +133,7 @@ Urutan `row_number ASC`. **Response (Success):**
 | 409 | BATCH_NOT_PUBLISHABLE | Status bukan `PREVIEW_READY` |
 | 409 | BATCH_HAS_ERRORS | `invalid_items > 0` |
 | 409 | WARNINGS_NOT_ACKNOWLEDGED | `summary.warnings > 0` dan `acknowledge_warnings` bukan `true` |
+| 409 | REVIEW_CONFIRMATION_REQUIRED | `target_status = PUBLISHED`, batch memuat konten buatan AI, `confirm_reviewed` bukan `true` |
 | 409 | IMPORT_IN_PROGRESS | Batch aktif lain |
 Kegagalan di worker (bukan respons langsung): lihat I5 (`PUBLISH_BLOCKED`) dan `FAILED` `VALIDATION_CHANGED` (rencana segar menemukan galat baru).
 
@@ -141,7 +143,7 @@ Kegagalan di worker (bukan respons langsung): lihat I5 (`PUBLISH_BLOCKED`) dan `
 | HTTP | Error Code | Kapan terjadi |
 |------|-----------|---------------|
 | 404 | NOT_FOUND | Batch tidak ada |
-| 409 | BATCH_NOT_CANCELLABLE | Status selain `UPLOADED`/`PREVIEW_READY` |
+| 409 | BATCH_NOT_CANCELLABLE | Status selain `UPLOADED`/`PREVIEW_READY`; untuk `VALIDATING`/`PUBLISHING` hanya bila job terakhir `RUNNING` (jika antre atau terminal, pembatalan diizinkan; QA F-19-02) |
 
 ### POST /api/v1/admin/import-batches/{batch_id}/rollback
 - **Success status:** 200 | **Response:** `{ "data": <BatchDTO status "ROLLED_BACK"> }`
@@ -159,7 +161,7 @@ Kegagalan di worker (bukan respons langsung): lihat I5 (`PUBLISH_BLOCKED`) dan `
 - **Success status:** 200 | **Response:** `{ "data": { "contract_version": "1.1", "json_schema": { /* hasil z.toJSONSchema(ContentPackageSchema) */ } } }`
 
 ## Database Changes
-Tidak ada tabel/kolom baru. Memakai `import_batches` (`admin_user_id`, `format`, `contract_version`, `file_name`, `file_sha256`, `storage_key`, `status`, hitungan, `summary`, `created_at`, `validated_at`, `published_at`), `import_batch_items`, `content_revisions` (kolom `import_batch_id`), `async_jobs` (`import_batch_id`). `csv_kind` dan `target_status` disimpan di `import_batches.summary` (`summary.csv_kind`, `summary.target_status`) agar tanpa kolom baru. Berkas asli di `private/imports/<uuid>` (izin direktori 0700). Worker mendaftarkan handler `import-validate` dan `import-publish` (concurrency 1, tidak memegang kunci advisory AI 727001). Tugas purge: `purgeImportBatches`. Audit: `IMPORT_UPLOADED`, `IMPORT_VALIDATED`, `IMPORT_PUBLISHED`, `IMPORT_CANCELLED`, `IMPORT_ROLLED_BACK` (selalu memuat `batch_id`). Seluruh penulisan konten lewat `applyContentPlan` dan `PublishService` (SPEC-004).
+Tidak ada tabel/kolom baru. Memakai `import_batches` (`admin_user_id`, `format`, `contract_version`, `file_name`, `file_sha256`, `storage_key`, `status`, hitungan, `summary`, `created_at`, `validated_at`, `published_at`), `import_batch_items`, `content_revisions` (kolom `import_batch_id`), `async_jobs` (`import_batch_id`). `csv_kind` dan `target_status` disimpan di `import_batches.summary` (`summary.csv_kind`, `summary.target_status`) agar tanpa kolom baru. Berkas asli di `private/imports/<uuid>` (izin direktori 0700). Batch aktif yang macet (job terminal atau tanpa kemajuan > 30 menit) dipulihkan otomatis (`recoverStuckBatches`: UPLOADED/VALIDATING -> `FAILED`, PUBLISHING -> `PREVIEW_READY`, `summary.last_error.code = JOB_STALLED`) saat boot worker, di tugas retensi, dan sebelum pemeriksaan `IMPORT_IN_PROGRESS`. Worker mendaftarkan handler `import-validate` dan `import-publish` (concurrency 1, tidak memegang kunci advisory AI 727001). Tugas purge: `purgeImportBatches`. Audit: `IMPORT_UPLOADED`, `IMPORT_VALIDATED`, `IMPORT_PUBLISHED`, `IMPORT_CANCELLED`, `IMPORT_ROLLED_BACK` (selalu memuat `batch_id`). Seluruh penulisan konten lewat `applyContentPlan` dan `PublishService` (SPEC-004).
 
 ## UI/UX
 Rujukan: `design-system.md` 5.20 Admin Importer (stepper 4 langkah), 5.6 Table, 5.4 Dialog/Sheet, 5.7 Badge/Progress/Toast, 8.9 wireframe Admin Importer.
@@ -218,3 +220,5 @@ Rujukan: `design-system.md` 5.20 Admin Importer (stepper 4 langkah), 5.6 Table, 
 | Date | Author | Changes |
 |------|--------|---------|
 | 2026-11-03 | Analyst Agent | Initial draft; CSV dibatasi `QUESTIONS`; target status draf/publikasi |
+| 2026-11-03 13:45 | Backend Engineer | QA W4: cancel saat job tidak RUNNING, JOB_STALLED, PUBLISH_BLOCKED untuk UPDATE entitas PUBLISHED, aktor publikasi (aditif, tanpa perubahan bentuk API) |
+| 2026-11-03 | Backend Engineer | Amandemen QA W8 (ADR-003 #37): (1) F-20-03: `POST /admin/import-batches/{id}/publish` menerima field aditif `confirm_reviewed` (boolean, default false); bila `target_status = PUBLISHED` dan batch memuat entitas `AI_GENERATED_REVIEWED` yang berubah, wajib `true`, jika tidak 409 `REVIEW_CONFIRMATION_REQUIRED` (`details[0].path = confirm_reviewed`); job publikasi memeriksa ulang origin di DB (set/sub-modul yang akan berubah menjadi PUBLISHED, termasuk item NOOP) dan bila belum dikonfirmasi membatalkan seluruh transaksi: batch kembali `PREVIEW_READY` dengan `summary.last_error.code = REVIEW_CONFIRMATION_REQUIRED`. `confirmed_by` (id admin) dicatat pada audit `IMPORT_PUBLISH_REQUESTED` dan `IMPORT_PUBLISHED`. `summary.has_ai_generated` (boolean aditif) memberi tahu FE di muka. (2) F-20-04: pagar set berjalan impor memakai definisi bersama dengan kurasi K3 (`content/active-attempts.ts`): attempt hidup (EXAM sebelum deadline + 5 dtk, PRACTICE aktif <= 24 jam) pada set, induknya, atau anak-anaknya (section Boss); diperiksa pada evaluasi JSON dan CSV, lalu diulang setelah apply di dalam transaksi publikasi dengan baris set terkunci (`FOR UPDATE`). Koreksi dokumentasi: pernyataan "jalur impor tidak dijaga K3" (ADR-003 #33b) tidak berlaku lagi. |

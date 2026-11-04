@@ -229,12 +229,23 @@ describe('SubModulePlayer', () => {
     expect(calls.some((c) => c.url.pathname.endsWith('/mini-task/complete'))).toBe(true);
   });
 
-  it('Terapkan tipe AI: slot "Segera hadir" dinonaktifkan', async () => {
+  it('Terapkan tipe AI (materi selesai): editor Writing SPEC-012 menggantikan slot "Segera hadir"', async () => {
+    const d = makeDetail();
+    d.material = { ...d.material, mini_task: { task_type: 'AI_SHORT_WRITING', prompt: 'Tulis.', success_criteria: null } };
+    d.progress = { ...d.progress, learn_completed_at: '2026-11-03T10:20:00.000Z' };
+    serve(d);
+    renderWithProviders(<SubModulePlayer code="2.1.3" initial={parsePlayerQuery({ tab: 'terapkan' })} />);
+    expect(await screen.findByLabelText('Tulisan Anda dalam bahasa Inggris')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Segera hadir' })).not.toBeInTheDocument();
+  });
+
+  it('Terapkan tipe AI (materi belum selesai): editor tidak muncul, ada petunjuk', async () => {
     const d = makeDetail();
     d.material = { ...d.material, mini_task: { task_type: 'AI_SHORT_WRITING', prompt: 'Tulis.', success_criteria: null } };
     serve(d);
     renderWithProviders(<SubModulePlayer code="2.1.3" initial={parsePlayerQuery({ tab: 'terapkan' })} />);
-    expect(await screen.findByRole('button', { name: 'Segera hadir' })).toBeDisabled();
+    expect(await screen.findByTestId('apply-need-learn-ai')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Tulisan Anda dalam bahasa Inggris')).not.toBeInTheDocument();
   });
 });
 

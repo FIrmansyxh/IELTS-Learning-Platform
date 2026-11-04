@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import type { Batch } from '@/contracts/import';
 import { fmt, id } from '@/i18n/id';
+import { isApiError } from '@/lib/api/client';
 import { apiErrorMessage } from '@/lib/api/errors';
 import { importsApi } from '@/lib/api/imports';
 import { ConfirmDialog } from '../dialogs';
@@ -37,6 +38,10 @@ export function StepPublish({
   const [target, setTarget] = React.useState<Target>('DRAFT');
   const [confirm, setConfirm] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  // K2 (F-20-03): batch berisi konten AI_GENERATED_REVIEWED wajib dikonfirmasi telah ditinjau. Daftar item tidak membawa `origin`,
+  // jadi kotak muncul begitu server menjawab REVIEW_CONFIRMATION_REQUIRED (sinkron atau lewat last_error) dan permintaan diulang.
+  const [aiRequired, setAiRequired] = React.useState(batch.summary?.last_error?.code === 'REVIEW_CONFIRMATION_REQUIRED');
+  const [aiConfirmed, setAiConfirmed] = React.useState(false);
   const warnings = batch.summary?.warnings ?? 0;
   const lastError = batch.summary?.last_error ?? null;
   const ready = batch.status === 'PREVIEW_READY';
@@ -59,7 +64,12 @@ export function StepPublish({
   }, [assetUnverified, target]);
 
   const publish = useMutation({
-    mutationFn: () => importsApi.publish(batch.id, { target_status: target, acknowledge_warnings: acknowledged }),
+    mutationFn: () =>
+      importsApi.publish(batch.id, {
+        target_status: target,
+        acknowledge_warnings: acknowledged,
+        ...(target === 'PUBLISHED' && aiRequired && aiConfirmed ? { confirm_reviewed: true } : {}),
+      }),
     onSuccess: () => {
       setConfirm(false);
       setError(null);
@@ -67,6 +77,7 @@ export function StepPublish({
     },
     onError: (e) => {
       setConfirm(false);
+      if (isApiError(e) && e.code === 'REVIEW_CONFIRMATION_REQUIRED') setAiRequired(true);
       setError(apiErrorMessage(e));
       invalidateImports(qc, batch.id);
     },
@@ -200,11 +211,21 @@ export function StepPublish({
         </div>
       ) : null}
 
+      {aiRequired && target === 'PUBLISHED' ? (
+        <div className="flex min-h-11 items-start gap-3" data-testid="ai-review-confirm">
+          <Checkbox id="publish-ai-reviewed" className="mt-1" checked={aiConfirmed} onCheckedChange={(c) => setAiConfirmed(c === true)} />
+          <Label htmlFor="publish-ai-reviewed" className="grid gap-0.5 font-normal">
+            <span className="font-medium">{t.aiReviewed}</span>
+            <span className="text-sm text-muted-foreground">{t.aiReviewedHint}</span>
+          </Label>
+        </div>
+      ) : null}
+
       <div className="flex flex-wrap gap-2">
         <Button variant="outline" size="lg" onClick={onBack}>
           {id.importer.preview.back}
         </Button>
-        <Button size="lg" disabled={!ready || batch.invalid_items > 0 || (warnings > 0 && !acknowledged)} onClick={() => setConfirm(true)}>
+        <Button size="lg" disabled={!ready || batch.invalid_items > 0 || (warnings > 0 && !acknowledged) || (aiRequired && target === 'PUBLISHED' && !aiConfirmed)} onClick={() => setConfirm(true)}>
           {t.submit}
         </Button>
       </div>

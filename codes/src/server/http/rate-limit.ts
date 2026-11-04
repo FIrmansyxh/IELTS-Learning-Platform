@@ -13,10 +13,18 @@ export const BUCKETS = {
   general_user: { limit: 300, windowMs: 60_000 },
   answer_submit: { limit: 60, windowMs: 60_000 },
   attempt_start: { limit: 30, windowMs: 3_600_000 },
+  /** SPEC-014 (QA F-14-05): POST sections/start|submit per pengguna (transaksi tulis + FOR UPDATE). */
+  section_action: { limit: 30, windowMs: 60_000 },
+  /** SPEC-014 (QA F-14-05): GET /exams/{id}/intro per pengguna (memicu settle + recompute). */
+  exam_intro: { limit: 30, windowMs: 60_000 },
   heartbeat: { limit: 30, windowMs: 60_000 },
   job_poll: { limit: 1, windowMs: 1_000 },
   upload_recording: { limit: 10, windowMs: 3_600_000 },
   import_admin: { limit: 10, windowMs: 3_600_000 },
+  /** SPEC-011 (QA F-11-02): GET /attempts/{id}/audio per pengguna. */
+  audio_stream: { limit: 60, windowMs: 60_000 },
+  /** SPEC-011 (QA F-11-02): permintaan audio TANPA Range (200 penuh) per attempt; peramban memakai Range setelah permintaan pertama. */
+  audio_full: { limit: 6, windowMs: 3_600_000 },
 } as const satisfies Record<string, BucketSpec>;
 export type BucketName = keyof typeof BUCKETS;
 

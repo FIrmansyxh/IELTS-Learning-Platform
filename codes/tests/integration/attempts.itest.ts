@@ -135,9 +135,15 @@ describe('POST /attempts', () => {
     const { u } = await setup();
     const [exam] = await db
       .insert(assessmentSets)
-      .values({ assessmentType: 'PLACEMENT_TEST', title: 'Placement', timeLimitSeconds: 600, questionsJson: mcqs(2), questionCount: 2, origin: 'ORIGINAL_AUTHORED', status: 'PUBLISHED' })
+      .values({ assessmentType: 'ACTIVE_DRILL', subModuleId: (await db.execute(sql`SELECT id FROM sub_modules WHERE sub_module_code = '1.1.1'`)).rows[0]!.id as string, title: 'Drill tanpa handler', timeLimitSeconds: 600, questionsJson: mcqs(2), questionCount: 2, origin: 'ORIGINAL_AUTHORED', status: 'PUBLISHED' })
       .returning();
-    expect((await start(u, exam!.id)).json.error.code).toBe('ASSESSMENT_TYPE_NOT_ENABLED');
+    const saved = assessmentTypeHandlers.ACTIVE_DRILL;
+    delete assessmentTypeHandlers.ACTIVE_DRILL;
+    try {
+      expect((await start(u, exam!.id)).json.error.code).toBe('ASSESSMENT_TYPE_NOT_ENABLED');
+    } finally {
+      assessmentTypeHandlers.ACTIVE_DRILL = saved;
+    }
     const [t1] = await db.select().from(tiers).where(eq(tiers.tierNumber, 1));
     const [boss] = await db
       .insert(assessmentSets)
@@ -205,8 +211,11 @@ describe('POST /attempts', () => {
 describe('PUT answers', () => {
   it('jawaban benar -> feedback lengkap dan baris attempt_answers; sesuai skema kontrak', async () => {
     const { u, set } = await setup();
+    const t0 = Date.parse('2026-11-03T03:00:00.000Z');
+    setClockForTest(() => t0);
     const dto = (await start(u, set.id)).json.data;
     const q = dto.questions[0];
+    setClockForTest(() => t0 + 3000); // F-16-01: kredit "dalam target" hanya bila >= 2000 ms (batas manusia)
     const r = await put(u, dto.id, q.question_id, rightOf(q));
     expect(r.status).toBe(200);
     expect(SubmitAnswerResponseSchema.safeParse(r.json).success).toBe(true);

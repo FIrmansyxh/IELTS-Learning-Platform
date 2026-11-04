@@ -5,7 +5,7 @@
 **Size:** L
 **Assigned To:** Developer Agent
 **Dependencies:** TASK-001, TASK-002, TASK-004
-**Current Status:** not_started
+**Current Status:** ready_to_test
 
 ---
 
@@ -34,3 +34,8 @@ Unggah aset (gambar WebP/PNG re-encode tanpa EXIF, audio dengan ffprobe, dokumen
 | 2026-11-03 18:30 | pm agent | task created | - |
 | 2026-11-03 14:00 | frontend | development started | - |
 | 2026-11-03 14:30 | frontend | ready for QA/integration | UI admin sumber/aset + banner lisensi selesai; tsc/eslint/vitest lulus; integrasi backend belum diuji |
+| 2026-11-03 12:40 | backend | development started | - |
+| 2026-11-03 12:40 | backend | ready for QA/integration | API + tes integrasi lulus (280); E2E belum diuji |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test passed | E2E lulus |

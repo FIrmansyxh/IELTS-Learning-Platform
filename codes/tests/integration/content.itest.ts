@@ -100,8 +100,8 @@ async function makePackage(o: PackageOpts = {}) {
   return dir;
 }
 
-const imp = (dir: string, opts: { publish?: boolean; dryRun?: boolean } = {}) =>
-  runImport(db, { dir, publish: opts.publish ?? false, dryRun: opts.dryRun ?? false, actorUserId: null, storage });
+const imp = (dir: string, opts: { publish?: boolean; dryRun?: boolean; allowPublishedOverwrite?: boolean } = {}) =>
+  runImport(db, { dir, publish: opts.publish ?? false, dryRun: opts.dryRun ?? false, actorUserId: null, storage, allowPublishedOverwrite: opts.allowPublishedOverwrite });
 const count = async (table: string) => Number((await db.execute(sql.raw(`SELECT count(*)::int AS n FROM ${table}`))).rows[0]!.n);
 const statusOf = async (code: string) => ((await db.execute(sql`SELECT status FROM sub_modules WHERE sub_module_code = ${code}`)).rows[0] as { status: string }).status;
 const filesInStorage = async () => {
@@ -223,7 +223,14 @@ describe('content:import', () => {
     const before = (await db.select().from(assessmentSets).where(eq(assessmentSets.assessmentType, 'ACTIVE_DRILL')))[0]!;
     expect(before.status).toBe('PUBLISHED');
     const dir2 = await makePackage({ skipVideo: true, editQuestion: 'Pertanyaan yang diubah.' });
-    const r = await imp(dir2);
+    // O-1: tanpa flag eksplisit impor CLI menolak menimpa entitas PUBLISHED; tidak ada yang berubah.
+    const blocked = await imp(dir2);
+    expect(blocked.exitCode).toBe(1);
+    expect(blocked.lines.join('\n')).toContain('published_overwrite_blocked');
+    expect((await imp(dir2, { dryRun: true })).exitCode).toBe(1);
+    const still = (await db.select().from(assessmentSets).where(eq(assessmentSets.id, before.id)))[0]!;
+    expect(still).toMatchObject({ version: 1, status: 'PUBLISHED', contentHash: before.contentHash });
+    const r = await imp(dir2, { allowPublishedOverwrite: true });
     expect(r.exitCode, r.lines.join('\n')).toBe(0);
     expect(r.lines.at(-1)).toMatch(/assessment_sets \+0 ~1 =2/);
     const after = (await db.select().from(assessmentSets).where(eq(assessmentSets.id, before.id)))[0]!;

@@ -9,6 +9,7 @@ import { eq } from 'drizzle-orm';
 import { writeAudit } from '../audit';
 import type { DbOrTx, Tx } from '../db';
 import { ApiError } from '../http/errors';
+import { logger } from '../logger';
 import {
   chainOf,
   isAvailable,
@@ -55,7 +56,7 @@ export async function ensureProgressRows(tx: DbOrTx, userId: string): Promise<vo
 }
 
 /** Kunci baris progres pengguna berurutan (tier, modul, sub-modul; tiap tabel urut id) agar tidak deadlock. */
-async function lockProgress(tx: DbOrTx, userId: string): Promise<void> {
+export async function lockProgress(tx: DbOrTx, userId: string): Promise<void> {
   await tx.execute(sql`SELECT 1 FROM user_tier_progress WHERE user_id = ${userId}::uuid ORDER BY tier_id FOR UPDATE`);
   await tx.execute(sql`SELECT 1 FROM user_module_progress WHERE user_id = ${userId}::uuid ORDER BY module_id FOR UPDATE`);
   await tx.execute(sql`SELECT 1 FROM user_sub_module_progress WHERE user_id = ${userId}::uuid ORDER BY sub_module_id FOR UPDATE`);
@@ -317,7 +318,7 @@ export async function assertSubModuleAccessible(tx: DbOrTx, userId: string, subM
 export function toHundredths(score: number | string): number {
   const n = typeof score === 'string' ? Number(score) : score;
   if (typeof n !== 'number' || !Number.isFinite(n) || n < 0 || n > 100) {
-    throw new Error('scorePercent di luar rentang 0-100');
+    throw new ApiError('INTERNAL_ERROR');
   }
   return Math.round(n * 100);
 }
@@ -330,8 +331,16 @@ export async function applyDrillResult(
   const hundredths = toHundredths(input.scorePercent);
   return mutate(tx, userId, (snap) => {
     const sub = findSub(snap, input.subModuleId);
-    if (!sub) throw new Error('sub-modul tidak ditemukan untuk applyDrillResult');
-    if (sub.status === 'LOCKED') throw new Error('applyDrillResult pada sub-modul terkunci');
+    // F-20-01: sub-modul/modul yang diarsipkan di tengah Drill tidak lagi ada di snapshot. Skor attempt tetap tersimpan oleh
+    // pemanggil; progres tidak diubah (tanpa 500 dan tanpa membatalkan submit).
+    if (!sub) {
+      logger.warn({ code: 'drill_target_missing', subModuleId: input.subModuleId }, 'gatekeeping_apply_skipped');
+      return;
+    }
+    if (sub.status === 'LOCKED') {
+      logger.warn({ code: 'drill_target_locked', subModuleId: input.subModuleId }, 'gatekeeping_apply_skipped');
+      return;
+    }
     sub.attempts += 1;
     sub.best = Math.max(sub.best, Math.floor(hundredths / 100));
     snap.dirty.add(sub);
@@ -362,7 +371,11 @@ export async function applySkipResult(
   return mutate(tx, userId, (snap) => {
     if (input.scope === 'MODULE') {
       const f = findModule(snap, input.targetId);
-      if (!f) throw new Error('modul tidak ditemukan untuk applySkipResult');
+      if (!f) {
+        // F-20-01: modul diarsipkan di tengah Skip Test; skor tetap tersimpan, progres tidak berubah.
+        logger.warn({ code: 'skip_target_missing', targetId: input.targetId }, 'gatekeeping_apply_skipped');
+        return;
+      }
       const { mod } = f;
       if (isTerminal(mod.status)) return; // monoton: tidak mengubah apa pun
       if (mod.skipBest === null || percent > mod.skipBest) {
@@ -374,7 +387,7 @@ export async function applySkipResult(
       skipEntity(snap, mod, 'SKIP_TEST');
     } else {
       const tier = snap.tiers.find((t) => t.id === input.targetId);
-      if (!tier) throw new Error('tier tidak ditemukan untuk applySkipResult');
+      if (!tier) throw new ApiError('INTERNAL_ERROR');
       if (!input.passed || isTerminal(tier.status) || !(tier.status === 'LOCKED' || tier.status === 'UNLOCKED')) return;
       for (const mod of tier.modules.filter((m) => m.review === 'PUBLISHED')) {
         for (const sub of mod.subs.filter((s) => isAvailable(mod, s))) skipEntity(snap, sub, 'SKIP_TEST');
@@ -393,7 +406,7 @@ export async function applyBossResult(
   const percent = toHundredths(input.percent) / 100;
   return mutate(tx, userId, (snap) => {
     const tier = snap.tiers.find((t) => t.id === input.tierId);
-    if (!tier) throw new Error('tier tidak ditemukan untuk applyBossResult');
+    if (!tier) throw new ApiError('INTERNAL_ERROR');
     if (tier.bossBestPercent === null || percent > tier.bossBestPercent) tier.bossBestPercent = percent;
     if (input.band !== null && (tier.bossBestBand === null || input.band > tier.bossBestBand)) tier.bossBestBand = input.band;
     if (input.passed && tier.bossPassedAt === null) tier.bossPassedAt = new Date();
@@ -407,7 +420,7 @@ export async function applyPlacementResult(
   input: { tierNumber: number },
 ): Promise<ApplyResult> {
   if (!Number.isInteger(input.tierNumber) || input.tierNumber < 1 || input.tierNumber > 4) {
-    throw new Error('tierNumber harus 1-4');
+    throw new ApiError('INTERNAL_ERROR');
   }
   const result = await mutate(tx, userId, (snap) => {
     for (const tier of snap.tiers) {

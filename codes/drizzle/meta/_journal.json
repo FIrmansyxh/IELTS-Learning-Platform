@@ -50,6 +50,34 @@
       "when": 1793683851927,
       "tag": "0006_spec_019_import_entity_code_band_fk_restrict",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793684851927,
+      "tag": "0007_qa_w4_publish_blockers_stimulus",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793713319770,
+      "tag": "0008_spec_012_ai_flags",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793718996475,
+      "tag": "0009_qa_w7_boss_unique_published",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793720144711,
+      "tag": "0010_spec_016_points_unique",
+      "breakpoints": true
     }
   ]
 }

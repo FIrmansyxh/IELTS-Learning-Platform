@@ -109,7 +109,7 @@ function hasForbiddenKey(v: unknown): boolean {
   const stack: unknown[] = [v];
   while (stack.length) {
     const x = stack.pop();
-    if (Array.isArray(x)) stack.push(...x);
+    if (Array.isArray(x)) for (const e of x) stack.push(e); // bukan spread: array jutaan elemen meledakkan stack
     else if (x !== null && typeof x === 'object') {
       for (const k of Object.keys(x)) {
         if (FORBIDDEN_KEYS.has(k)) return true;

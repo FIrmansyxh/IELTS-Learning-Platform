@@ -22,7 +22,7 @@
   --color-border-strong: #cbd5e1;
   --color-text: #0f172a;
   --color-text-2: #475569;
-  --color-text-muted: #64748b;
+  --color-text-muted: #556376;
   --color-locked: #94a3b8;
   --color-progress: #4f46e5;
   --color-done: #16a34a;
@@ -35,6 +35,8 @@
   --color-crown-silver: #94a3b8;
   --color-crown-silver-edge: #64748b;
   --color-streak: #f97316;
+  --color-highlight-yellow: #fde68a;
+  --color-highlight-green: #bbf7d0;
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
@@ -93,6 +95,8 @@
   --color-crown-silver: #cbd5e1;
   --color-crown-silver-edge: #cbd5e1;
   --color-streak: #fb923c;
+  --color-highlight-yellow: #854d0e;
+  --color-highlight-green: #166534;
 
   /* Tombol primary di dark tetap #4F46E5 + teks putih (design-system 2.1) */
   --primary: #4f46e5;
@@ -128,6 +132,8 @@
     --color-crown-silver: #cbd5e1;
     --color-crown-silver-edge: #cbd5e1;
     --color-streak: #fb923c;
+    --color-highlight-yellow: #854d0e;
+    --color-highlight-green: #166534;
     --primary: #4f46e5;
     --primary-foreground: #ffffff;
   }
@@ -176,5 +182,86 @@
   * {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Gamifikasi (SPEC-016) dan radar/grafik (SPEC-017): hanya transform + opacity; dimatikan saat reduced-motion. */
+@keyframes crown-drop {
+  from {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+  60% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes crown-shine {
+  0% {
+    opacity: 0;
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  40% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(220%) skewX(-20deg);
+  }
+}
+@keyframes confetti-fall {
+  0% {
+    transform: translate3d(0, -8px, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--confetti-x, 0px), 96px, 0) rotate(var(--confetti-r, 180deg));
+    opacity: 0;
+  }
+}
+@keyframes chart-enter {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes fade-100 {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.crown-celebrate {
+  animation: crown-drop 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.crown-shine {
+  animation: crown-shine 700ms ease-out 200ms 1 both;
+}
+.confetti-piece {
+  animation: confetti-fall 1200ms cubic-bezier(0.16, 1, 0.3, 1) 1 forwards;
+}
+.chart-enter {
+  transform-origin: center;
+  animation: chart-enter 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .crown-celebrate,
+  .chart-enter {
+    animation: fade-100 100ms linear both;
+  }
+  .crown-shine,
+  .confetti-piece {
+    display: none;
+    animation: none;
   }
 }

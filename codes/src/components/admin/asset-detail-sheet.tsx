@@ -218,10 +218,14 @@ function DetailBody({ asset, onClose }: { asset: AssetDetail; onClose: () => voi
                   <span className="text-muted-foreground">({r.status})</span>
                 </span>
                 <Link
-                  href="/admin/konten/kurikulum"
+                  href={
+                    r.entity_type === 'ASSESSMENT_SET'
+                      ? `/admin/konten/soal/${r.entity_id}`
+                      : `/admin/konten/kurikulum?sub_modul=${r.entity_id}`
+                  }
                   className="font-medium underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  {t.curriculumLink}
+                  {r.entity_type === 'ASSESSMENT_SET' ? t.setLink : t.curriculumLink}
                 </Link>
               </li>
             ))}

@@ -5,7 +5,7 @@
 **Size:** L
 **Assigned To:** Developer Agent
 **Dependencies:** TASK-002, TASK-004, TASK-018, TASK-019
-**Current Status:** not_started
+**Current Status:** ready_to_test (Backend + Frontend ready; integrasi/E2E belum diuji)
 
 ---
 
@@ -30,3 +30,14 @@ Transisi status DRAFT/REVIEW/PUBLISHED/ARCHIVED, penghalang publish (`PUBLISH_BL
 | Timestamp | Agent | Status | Notes |
 |-----------|-------|--------|-------|
 | 2026-11-03 18:30 | pm agent | task created | - |
+| 2026-11-03 15:40 | frontend | development started | - |
+| 2026-11-03 16:05 | frontend | ready for QA/integration | kurasi kurikulum/soal/revisi selesai; tsc/vitest lulus; integrasi backend belum diuji |
+| 2026-11-03 18:00 | backend | development started | - |
+| 2026-11-03 18:25 | backend | ready for QA/integration | 11 endpoint kurasi (status K1/K2, sunting, revisi, kualitas, pagar K3 menutup F-15-07 jalur admin); tsc/eslint bersih, vitest 1063, test:integration 576 lulus; E2E belum diverifikasi |
+| 2026-11-03 20:00 | backend | QA W8 fix | F-20-01, F-20-02, F-20-03 (server), F-20-04 selesai; tsc/eslint bersih, vitest 1086, test:integration 593 lulus |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test failed | Issues: D-004 (axe /admin/konten/kurikulum) |
+| 2026-11-03 19:00 | fixer agent | fixing started | Issues: D-004 |
+| 2026-11-03 19:05 | fixer agent | fix complete, ready to test | --color-text-muted menjadi #556376 (lihat TASK-003). |
+| 2026-11-03 19:30 | test agent | test passed | Run penuh bersih Fase 3: 105 lulus/0 gagal/1 skip (+ spec012b AI mati lulus); defek terkait terverifikasi |

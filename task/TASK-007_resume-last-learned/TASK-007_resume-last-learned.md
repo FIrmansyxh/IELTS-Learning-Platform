@@ -34,3 +34,9 @@
 | 2026-11-03 08:30 | frontend | ready for QA/integration | ResumeCard, dashboard, PositionRecorder, pemulihan posisi selesai terhadap kontrak; integrasi dengan backend belum diuji |
 | 2026-11-03 11:50 | backend | development started | - |
 | 2026-11-03 11:58 | backend | ready for QA/integration | unit + integration lulus; lihat dev_log [BACKEND] |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test failed | Issues: D-004 (axe pada /) |
+| 2026-11-03 19:00 | fixer agent | fixing started | Issues: D-004 |
+| 2026-11-03 19:05 | fixer agent | fix complete, ready to test | --color-text-muted menjadi #556376 (lihat TASK-003). |
+| 2026-11-03 19:30 | test agent | test passed | Run penuh bersih Fase 3: 105 lulus/0 gagal/1 skip (+ spec012b AI mati lulus); defek terkait terverifikasi |

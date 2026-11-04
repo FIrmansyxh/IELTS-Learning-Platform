@@ -21,6 +21,23 @@ export type AnswerRow = typeof attemptAnswers.$inferSelect;
 
 export const GRACE_MS = 5000;
 
+/** D3: attempt PRACTICE tanpa aktivitas lebih lama dari ini dianggap basi (ABANDONED); dipakai juga pagar K3 (`hasActiveAttempts`). */
+export const PRACTICE_STALE_MS = 24 * 3600_000;
+
+/** D3: attempt EXAM IN_PROGRESS yang melewati deadline + 5 detik. */
+export function isExpired(a: Pick<AttemptRow, 'status' | 'mode' | 'deadlineAt'>, now: Date): boolean {
+  return a.status === 'IN_PROGRESS' && a.mode === 'EXAM' && a.deadlineAt !== null && now.getTime() > a.deadlineAt.getTime() + GRACE_MS;
+}
+
+/** Hasil `PUT answers`. `next_question` hanya terisi pada Placement (SPEC-015); selain itu selalu null. */
+export interface AnswerOutcome {
+  question_id: string;
+  saved: true;
+  answered_count: number;
+  feedback: ReturnType<typeof feedbackFor> | null;
+  next_question: Attempt['questions'][number] | null;
+}
+
 /** Soal set (JSONB) yang sudah divalidasi ulang oleh skema kontrak v1.1. Galat = data korup (500, bukan bocor). */
 export function parseQuestions(set: SetRow): Map<string, Question> {
   const parsed = z.array(QuestionSchema).safeParse(set.questionsJson);
@@ -87,7 +104,7 @@ export function buildAttemptDTO(p: {
     remaining_seconds: remaining,
     time_limit_seconds: set.timeLimitSeconds,
     pass_percent: state.pass_percent,
-    question_count: state.order.length,
+    question_count: state.placement ? state.placement.n : state.order.length,
     answered_count: answers.length,
     current_index: current,
     passage_markdown: set.readingPassageMarkdown,
@@ -114,7 +131,7 @@ export function buildAttemptDTO(p: {
 export const HIDE_REVIEW_TYPES: ReadonlySet<string> = new Set(['SKIP_MODULE_TEST', 'SKIP_TIER_TEST', 'TIER_BOSS_EXAM', 'BOSS_SECTION', 'PLACEMENT_TEST']);
 
 /** Persen tampilan: ujian (EXAM) yang belum lulus tidak boleh tampak mencapai ambang karena pembulatan (F-08-04). */
-function scoreForDisplay(attempt: AttemptRow, passPercent: number | null, practice: boolean): number {
+export function scoreForDisplay(attempt: AttemptRow, passPercent: number | null, practice: boolean): number {
   const stored = Number(attempt.scorePercent ?? 0);
   if (practice || attempt.rawScore === null || attempt.maxScore === null) return stored;
   const maxH = Math.round(Number(attempt.maxScore) * 100);
@@ -132,7 +149,9 @@ export function buildResultDTO(p: { attempt: AttemptRow; set: SetRow; questions:
 
   const review: NonNullable<AttemptResult['review']> = [];
   const skillAgg = new Map<string, { rawH: number; maxH: number }>();
-  for (const qid of state.order) {
+  // F-15-05: Placement adaptif hanya menghitung soal yang DIJAWAB (history); soal `pending` tak terjawab tidak ikut.
+  const scored = set.assessmentType === 'PLACEMENT_TEST' && state.placement ? state.placement.history.map((h) => h.question_id) : state.order;
+  for (const qid of scored) {
     const q = questions.get(qid);
     if (!q || !isObjective(q)) continue;
     const a = answerByQ.get(qid);
@@ -151,7 +170,7 @@ export function buildResultDTO(p: { attempt: AttemptRow; set: SetRow; questions:
     });
   }
 
-  const stored = (attempt.resultJson ?? {}) as { progress?: AttemptResult['progress']; skip?: unknown; boss?: unknown; placement?: unknown };
+  const stored = (attempt.resultJson ?? {}) as { progress?: AttemptResult['progress']; skip?: unknown; boss?: unknown; placement?: unknown; gamification?: AttemptResult['gamification'] };
   const perSkill = [...skillAgg.entries()].map(([skill, v]) => ({
     skill: skill as AttemptResult['per_skill'][number]['skill'],
     raw_score: hundredths(v.rawH),
@@ -181,6 +200,6 @@ export function buildResultDTO(p: { attempt: AttemptRow; set: SetRow; questions:
     skip: stored.skip ?? null,
     boss: stored.boss ?? null,
     placement: stored.placement ?? null,
-    gamification: null,
+    gamification: stored.gamification ?? null,
   };
 }

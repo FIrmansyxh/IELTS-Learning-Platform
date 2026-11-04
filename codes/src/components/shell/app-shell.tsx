@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { isNavActive, NAV_ITEMS, type NavItem } from '@/app/nav.config';
+import { StatChips } from '@/components/gamification/stat-chips';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useMe } from '@/hooks/use-auth';
 import { id } from '@/i18n/id';
@@ -102,13 +103,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </aside>
       ) : null}
 
+      {!hideNav ? (
+        <header
+          aria-label={id.gamification.chips.region}
+          className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 lg:ml-64"
+        >
+          <div className="mx-auto flex min-h-12 max-w-6xl items-center justify-end px-4 py-2 md:px-6 lg:px-8">
+            <StatChips />
+          </div>
+        </header>
+      ) : null}
+
       <main
         id="main"
         ref={mainRef}
         tabIndex={-1}
         className={cn(
           'mx-auto w-full max-w-6xl px-4 py-6 outline-none md:px-6 lg:px-8',
-          !hideNav && 'pb-24 lg:ml-64 lg:max-w-none lg:pb-8',
+          !hideNav && 'pb-24 lg:ml-64 lg:w-auto lg:max-w-none lg:pb-8',
         )}
       >
         <div className={cn(!hideNav && 'lg:mx-auto lg:max-w-6xl')}>{children}</div>

@@ -8,6 +8,6 @@ export const dynamic = 'force-dynamic';
 
 const ParamSchema = z.strictObject({ assessment_set_id: Uuid });
 
-export const GET = withApi({ auth: 'user', params: ParamSchema }, async ({ user, params }) => ({
+export const GET = withApi({ auth: 'user', params: ParamSchema, rateLimit: [{ bucket: 'exam_intro', key: 'user' }] }, async ({ user, params }) => ({
   data: await getExamIntro(getDb(), user!.id, params.assessment_set_id),
 }));

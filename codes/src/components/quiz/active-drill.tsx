@@ -3,6 +3,9 @@
 import { Timer } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
+import { ListeningPlayer } from '@/components/listening/listening-player';
+import { parseAttemptPassages } from '@/components/reading/parse-attempt';
+import { ReadingWorkspace } from '@/components/reading/reading-workspace';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -78,6 +81,9 @@ export function ActiveDrill({
   const [shortcuts] = useShortcutPref();
   const legendRef = React.useRef<HTMLLegendElement | null>(null);
   const q = questions[index];
+  const parsed = React.useMemo(() => parseAttemptPassages(attempt.passage_markdown), [attempt.passage_markdown]);
+  const [viewPassage, setViewPassage] = React.useState<number | null>(null);
+  React.useEffect(() => setViewPassage(null), [index]);
 
   /* ---------- timer ---------- */
   const skew = React.useRef(Date.parse(attempt.server_now) - Date.now());
@@ -232,6 +238,52 @@ export function ActiveDrill({
 
   const progressValue = Math.round(((index + (done ? 1 : 0)) / total) * 100);
 
+  const inWorkspace = attempt.passage_markdown !== null;
+  const body = (
+    <div className="grid gap-4">
+      <div className="rounded-xl border bg-card p-4 sm:p-6">
+        <QuestionRenderer
+          key={q.question_id}
+          ref={legendRef}
+          question={q}
+          value={response}
+          onChange={setResponse}
+          disabled={isAnswered || busy !== null}
+          feedback={feedback}
+          attemptId={attempt.id}
+          remainingSec={totalRemaining}
+        />
+      </div>
+
+      <FeedbackPanel feedback={feedback} />
+
+      <div
+        className={cn(
+          'sticky z-20 -mx-1 border-t bg-background/95 px-1 py-3 backdrop-blur',
+          inWorkspace ? 'bottom-0' : 'bottom-[4.5rem] lg:bottom-0',
+        )}
+      >
+        <Button
+          size="lg"
+          className="w-full"
+          disabled={!ready}
+          loading={busy !== null}
+          onClick={primary}
+        >
+          {busy === 'check'
+            ? id.quiz.checking
+            : busy === 'submit'
+              ? id.quiz.submitting
+              : done
+                ? lastQuestion
+                  ? id.quiz.seeResult
+                  : id.quiz.next
+                : id.quiz.check}
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
     <section aria-label={attempt.title} onKeyDown={onKeyDown} className="grid gap-4">
       <div className="grid gap-2">
@@ -256,39 +308,22 @@ export function ActiveDrill({
         <Progress value={progressValue} aria-label={id.quiz.progress} className="h-1.5" />
       </div>
 
-      <div className="rounded-xl border bg-card p-4 sm:p-6">
-        <QuestionRenderer
-          key={q.question_id}
-          ref={legendRef}
-          question={q}
-          value={response}
-          onChange={setResponse}
-          disabled={isAnswered || busy !== null}
-          feedback={feedback}
+      {attempt.listening ? (
+        <ListeningPlayer mode="PRACTICE" audioUrl={attempt.listening.audio_url} durationSec={attempt.listening.duration_sec} attemptId={attempt.id} />
+      ) : null}
+      {inWorkspace ? (
+        <ReadingWorkspace
+          fill={false}
+          attemptId={attempt.id}
+          passages={parsed.passages}
+          errorCode={parsed.error}
+          passageNo={viewPassage ?? Math.min(Math.max(1, q.passage_no ?? 1), parsed.passages?.length ?? 1)}
+          onPassageNo={setViewPassage}
+          renderQuestions={() => body}
         />
-      </div>
-
-      <FeedbackPanel feedback={feedback} />
-
-      <div className="sticky bottom-[4.5rem] z-20 -mx-1 border-t bg-background/95 px-1 py-3 backdrop-blur lg:bottom-0">
-        <Button
-          size="lg"
-          className="w-full"
-          disabled={!ready}
-          loading={busy !== null}
-          onClick={primary}
-        >
-          {busy === 'check'
-            ? id.quiz.checking
-            : busy === 'submit'
-              ? id.quiz.submitting
-              : done
-                ? lastQuestion
-                  ? id.quiz.seeResult
-                  : id.quiz.next
-                : id.quiz.check}
-        </Button>
-      </div>
+      ) : (
+        body
+      )}
 
       <Dialog open={expired}>
         <DialogContent showCloseButton={false}>

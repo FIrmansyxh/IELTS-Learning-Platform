@@ -5,6 +5,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import pg from 'pg';
 import * as schema from '../src/db/schema';
 import { MODULE_SEEDS, SUB_MODULE_SEEDS, TIER_SEEDS } from '../src/server/content/curriculum-structure';
+import { SPEAKING_RUBRIC_V1, WRITING_RUBRIC_V1 } from '../src/server/ai/rubric-seed';
 import { BAND_SEED_LABEL, BAND_SEED_NOTE, LISTENING_SEED_ROWS, READING_ACADEMIC_SEED_ROWS } from '../src/server/band/seed-data';
 
 type Tx = NodePgDatabase<typeof schema>;
@@ -171,6 +172,23 @@ export const seedModules: SeedModule[] = [
         await tx
           .insert(schema.bandConversionRows)
           .values(d.rows.map((r) => ({ tableId: t.id, rawMin: r.raw_min, rawMax: r.raw_max, band: r.band.toFixed(1) })))
+          .onConflictDoNothing();
+      }
+    },
+  },
+  {
+    // SPEC-012/013: rubrik penilaian AI v1 (parafrase orisinal; konten final = tugas C-05). Idempoten; tidak menimpa rubrik aktif lain.
+    name: 'grading-rubrics',
+    run: async (tx) => {
+      const [src] = await tx.select({ id: schema.contentSources.id }).from(schema.contentSources).where(eq(schema.contentSources.code, 'BAND_DESCRIPTORS'));
+      const defs = [
+        { skill: 'WRITING' as const, criteria: WRITING_RUBRIC_V1 },
+        { skill: 'SPEAKING' as const, criteria: SPEAKING_RUBRIC_V1 },
+      ];
+      for (const d of defs) {
+        await tx
+          .insert(schema.gradingRubrics)
+          .values({ skill: d.skill, versionLabel: 'v1', criteria: d.criteria, sourceId: src?.id ?? null, isActive: true })
           .onConflictDoNothing();
       }
     },

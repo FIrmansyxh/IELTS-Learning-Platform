@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
-import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import { chmod, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { Readable } from 'node:stream';
 import path from 'node:path';
 import { config } from '../config';
 
@@ -10,11 +12,15 @@ export interface StorageDriver {
   put(data: Buffer, ext: string, dir?: StorageDir): Promise<string>;
   get(key: string): Promise<Buffer>;
   exists(key: string): Promise<boolean>;
+  /** Ukuran berkas dalam byte; melempar bila berkas tidak ada (SPEC-011: pelayanan Range tanpa memuat seluruh berkas). */
+  size(key: string): Promise<number>;
+  /** Aliran byte inklusif `[start, end]`; stream dihentikan (fd ditutup) bila konsumen membatalkan. */
+  openRange(key: string, start: number, end: number): ReadableStream<Uint8Array>;
   remove(key: string): Promise<void>;
 }
 
 /** Direktori berprefiks yang diizinkan (matriks unggah SPEC-018; impor privat SPEC-019). */
-export const STORAGE_DIRS = ['public/slides', 'public/images', 'public/documents', 'public/audio', 'private/imports'] as const;
+export const STORAGE_DIRS = ['public/slides', 'public/images', 'public/documents', 'public/audio', 'private/imports', 'private/recordings'] as const;
 export type StorageDir = (typeof STORAGE_DIRS)[number];
 
 const SHARD_RE = /^[0-9a-f]{2}$/;
@@ -44,7 +50,13 @@ export class FsStorageDriver implements StorageDriver {
     const id = randomUUID();
     const key = `${dir ?? id.slice(0, 2)}/${id}${cleanExt ? `.${cleanExt}` : ''}`;
     const full = this.resolve(key);
-    await mkdir(path.dirname(full), { recursive: true, mode: dir === 'private/imports' ? 0o700 : undefined });
+    const priv = dir === 'private/imports' || dir === 'private/recordings';
+    await mkdir(path.dirname(full), { recursive: true, mode: priv ? 0o700 : undefined });
+    if (priv) {
+      // Izin 0700 ditegakkan eksplisit (umask dapat melonggarkan/menyempitkan hasil mkdir rekursif).
+      await chmod(path.dirname(full), 0o700);
+      await chmod(path.dirname(path.dirname(full)), 0o700).catch(() => undefined);
+    }
     try {
       await writeFile(full, data, { flag: 'wx' });
     } catch (e) {
@@ -65,6 +77,17 @@ export class FsStorageDriver implements StorageDriver {
     } catch {
       return false;
     }
+  }
+
+  async size(key: string): Promise<number> {
+    const st = await stat(this.resolve(key));
+    if (!st.isFile()) throw new Error('bukan berkas');
+    return st.size;
+  }
+
+  openRange(key: string, start: number, end: number): ReadableStream<Uint8Array> {
+    const node = createReadStream(this.resolve(key), { start, end });
+    return Readable.toWeb(node) as unknown as ReadableStream<Uint8Array>;
   }
 
   async remove(key: string): Promise<void> {

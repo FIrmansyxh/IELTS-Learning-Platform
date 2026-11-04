@@ -46,20 +46,30 @@ export interface ValidatedAsset {
 
 const err = (path: string, code: string, message: string): ContentIssue => ({ path, code, message, severity: 'error' });
 
+const FFPROBE_TIMEOUT_MS = 10_000;
+
 /** Durasi lewat ffprobe; null bila ffprobe tidak ada. */
 function ffprobeDuration(file: string): Promise<number | null | 'missing'> {
   return new Promise((resolve) => {
     let out = '';
     let child;
     try {
-      child = spawn('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file], { windowsHide: true });
+      // F-18-07: hanya protokol berkas; proses dihentikan bila melewati batas waktu.
+      child = spawn('ffprobe', ['-protocol_whitelist', 'file', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file], { windowsHide: true });
     } catch {
       resolve('missing');
       return;
     }
     child.stdout.on('data', (d: Buffer) => (out += d.toString()));
-    child.on('error', () => resolve('missing'));
+    const timer = setTimeout(() => {
+      child.kill('SIGKILL');
+    }, FFPROBE_TIMEOUT_MS);
+    child.on('error', () => {
+      clearTimeout(timer);
+      resolve('missing');
+    });
     child.on('close', (code) => {
+      clearTimeout(timer);
       const n = Number.parseFloat(out.trim());
       resolve(code === 0 && Number.isFinite(n) ? Math.round(n) : null);
     });

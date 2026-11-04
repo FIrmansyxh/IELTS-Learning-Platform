@@ -3,15 +3,16 @@
  * validasi menimpa item lama; publikasi satu transaksi sehingga tidak ada penulisan parsial.
  */
 import { eq, inArray, sql } from 'drizzle-orm';
-import { asyncJobs, importBatchItems, importBatches, subModules, assessmentSets } from '@/db/schema';
+import { asyncJobs, importBatchItems, importBatches, learningMaterials, subModules, assessmentSets } from '@/db/schema';
 import { writeAudit } from '../audit';
 import { getDb, type Tx } from '../db';
 import { ApiError } from '../http/errors';
 import { logger } from '../logger';
 import { safeErr } from '../safe-error';
 import { getStorage, type StorageDriver } from '../storage';
+import { activeAttemptSetIds, lockSets } from '../content/active-attempts';
 import { applyContentPlan, type Touched } from '../content/apply';
-import { changeStatus, type Blocker, type PublishEntityType } from '../content/publish';
+import { changeStatus, computeBlockers, type Blocker, type PublishEntityType } from '../content/publish';
 import { checkImportFile } from './file-check';
 import { evaluate, summarizeItems, type CsvSetPlan, type Evaluation } from './evaluate';
 import { lockImports, summaryOf, type BatchSummary } from './service';
@@ -111,7 +112,7 @@ export async function runImportValidate(batchId: string, jobId?: string, storage
         validItems: sum.valid,
         invalidItems: sum.invalid,
         validatedAt: new Date(),
-        summary: { ...prev, warnings: sum.warnings, noop: sum.noop, by_kind: sum.by_kind, last_error: null },
+        summary: { ...prev, warnings: sum.warnings, noop: sum.noop, by_kind: sum.by_kind, has_ai_generated: sum.has_ai_generated, last_error: null },
       })
       .where(eq(importBatches.id, batchId));
     await writeAudit(tx, {
@@ -129,7 +130,7 @@ export async function runImportValidate(batchId: string, jobId?: string, storage
 // ------------------------------------------------------------------ publikasi
 class PublishAbort extends Error {
   constructor(
-    readonly kind: 'BLOCKED' | 'VALIDATION_CHANGED',
+    readonly kind: 'BLOCKED' | 'VALIDATION_CHANGED' | 'REVIEW_REQUIRED',
     readonly detail: unknown,
   ) {
     super(kind);
@@ -139,7 +140,25 @@ class PublishAbort extends Error {
 const PUBLISH_ORDER = (t: Touched) => (t.kind === 'ASSESSMENT_SET' ? (t.setType === 'TIER_BOSS_EXAM' ? 1 : 0) : t.kind === 'SUB_MODULE' ? 2 : 3);
 
 /** Publikasikan entitas terdampak (+ modul induk) lewat PublishService; mengembalikan seluruh penghalang. */
-async function publishTouched(tx: Tx, touched: Touched[], actorId: string): Promise<Blocker[]> {
+async function publishTouched(tx: Tx, touched: Touched[], actorId: string, confirmedBy: string | null): Promise<Blocker[]> {
+  // F-20-03 (K2): konten buatan AI yang akan BERUBAH menjadi PUBLISHED wajib dikonfirmasi saat meminta publikasi.
+  if (!confirmedBy) {
+    const aiPending: string[] = [];
+    for (const t of touched) {
+      if (t.kind === 'SUB_MODULE') {
+        const [r] = await tx
+          .select({ origin: learningMaterials.origin, status: subModules.status })
+          .from(subModules)
+          .leftJoin(learningMaterials, eq(learningMaterials.subModuleId, subModules.id))
+          .where(eq(subModules.id, t.id));
+        if (r?.origin === 'AI_GENERATED_REVIEWED' && r.status !== 'PUBLISHED') aiPending.push(t.code);
+      } else if (t.kind === 'ASSESSMENT_SET') {
+        const [r] = await tx.select({ origin: assessmentSets.origin, status: assessmentSets.status }).from(assessmentSets).where(eq(assessmentSets.id, t.id));
+        if (r?.origin === 'AI_GENERATED_REVIEWED' && r.status !== 'PUBLISHED') aiPending.push(t.code);
+      }
+    }
+    if (aiPending.length) throw new PublishAbort('REVIEW_REQUIRED', aiPending);
+  }
   const all = [...touched];
   const haveMods = new Set(all.filter((t) => t.kind === 'MODULE').map((t) => t.id));
   const subIds = all.filter((t) => t.kind === 'SUB_MODULE').map((t) => t.id);
@@ -165,10 +184,31 @@ async function publishTouched(tx: Tx, touched: Touched[], actorId: string): Prom
       blockers.push({ code: e.code as Blocker['code'], entity_type: t.kind as PublishEntityType, entity_id: t.id, detail: e.message });
     }
   }
+  return decorateBlockers(blockers, codeById);
+}
+
+function decorateBlockers(blockers: Blocker[], codeById: Map<string, string>): Blocker[] {
   return blockers.map((b) => {
     const asset = /\(([^)]+)\)$/.exec(b.detail)?.[1];
     return { ...b, message: b.detail, entity_code: codeById.get(b.entity_id) ?? null, ...(asset ? { asset_code: asset } : {}) } as Blocker;
   });
+}
+
+/**
+ * F-19-01: entitas yang SUDAH `PUBLISHED` dan di-UPDATE batch tetap tayang; penghalang lisensi/isi (aset UNVERIFIED,
+ * video baru, dst.) dihitung ulang apa pun `target_status`, sehingga draf tidak menjadi jalan pintas.
+ */
+async function blockersForPublishedUpdates(tx: Tx, touched: Touched[]): Promise<Blocker[]> {
+  const updates = touched.filter((t) => t.action === 'UPDATE' && (t.kind === 'SUB_MODULE' || t.kind === 'ASSESSMENT_SET'));
+  const out: Blocker[] = [];
+  const codeById = new Map(touched.map((t) => [t.id, t.code]));
+  for (const t of updates) {
+    const table = t.kind === 'SUB_MODULE' ? subModules : assessmentSets;
+    const [row] = await tx.select({ status: table.status }).from(table).where(eq(table.id, t.id));
+    if (row?.status !== 'PUBLISHED') continue;
+    out.push(...(await computeBlockers(tx, t.kind as PublishEntityType, t.id)));
+  }
+  return decorateBlockers(out, codeById);
 }
 
 export async function runImportPublish(batchId: string, jobId?: string, storage: StorageDriver = getStorage()): Promise<'done' | 'skipped'> {
@@ -188,6 +228,9 @@ export async function runImportPublish(batchId: string, jobId?: string, storage:
   }
   const prev = summaryOf(batch);
   const target = prev.target_status ?? 'DRAFT';
+  // F-19-03: aktor = admin yang menekan Publikasikan (async_jobs.user_id), bukan pengunggah.
+  const [pubJob] = jobId ? await db.select({ userId: asyncJobs.userId }).from(asyncJobs).where(eq(asyncJobs.id, jobId)) : [];
+  const actorId = pubJob?.userId ?? batch.adminUserId;
 
   try {
     const buf = await readFile(storage, batch.storageKey);
@@ -201,13 +244,22 @@ export async function runImportPublish(batchId: string, jobId?: string, storage:
       }
       let touched: Touched[] = [];
       if (ev.jsonPlan) {
-        const applied = await applyContentPlan(tx, ev.jsonPlan, { actorUserId: batch.adminUserId, importBatchId: batchId });
+        const applied = await applyContentPlan(tx, ev.jsonPlan, { actorUserId: actorId, importBatchId: batchId });
         touched = applied.touched;
       } else if (ev.csvPlans) {
-        touched = await applyCsvPlans(tx, ev.csvPlans as CsvSetPlan[], { actorUserId: batch.adminUserId, importBatchId: batchId });
+        touched = await applyCsvPlans(tx, ev.csvPlans as CsvSetPlan[], { actorUserId: actorId, importBatchId: batchId });
       }
+      // F-20-04: pagar set berjalan diulang SETELAH apply dengan baris set terkunci (menutup jendela evaluasi -> commit);
+      // definisi "hidup" sama dengan kurasi K3, termasuk set induk/anak Boss.
+      const updatedSets = touched.filter((t) => t.kind === 'ASSESSMENT_SET' && t.action === 'UPDATE').map((t) => t.id);
+      if (updatedSets.length) {
+        await lockSets(tx, updatedSets);
+        if ((await activeAttemptSetIds(tx, updatedSets)).size > 0) throw new PublishAbort('VALIDATION_CHANGED', 'set_has_active_attempts');
+      }
+      const stillLive = await blockersForPublishedUpdates(tx, touched);
+      if (stillLive.length) throw new PublishAbort('BLOCKED', stillLive);
       if (target === 'PUBLISHED') {
-        const blockers = await publishTouched(tx, touched, batch.adminUserId);
+        const blockers = await publishTouched(tx, touched, actorId, prev.confirmed_by ?? null);
         if (blockers.length) throw new PublishAbort('BLOCKED', blockers);
       }
 
@@ -242,11 +294,11 @@ export async function runImportPublish(batchId: string, jobId?: string, storage:
         })
         .where(eq(importBatches.id, batchId));
       await writeAudit(tx, {
-        actorUserId: batch.adminUserId,
+        actorUserId: actorId,
         action: 'IMPORT_PUBLISHED',
         entityType: 'import_batch',
         entityId: batchId,
-        metadata: { batch_id: batchId, target_status: target, created, updated, skipped },
+        metadata: { batch_id: batchId, target_status: target, created, updated, skipped, ...(prev.confirmed_by ? { confirmed_by: prev.confirmed_by } : {}) },
       });
     });
     await finishJob(jobId, batchId, 'SUCCEEDED');
@@ -261,6 +313,16 @@ export async function runImportPublish(batchId: string, jobId?: string, storage:
         })
         .where(eq(importBatches.id, batchId));
       await finishJob(jobId, batchId, 'FAILED', 'PUBLISH_BLOCKED');
+    } else if (e instanceof PublishAbort && e.kind === 'REVIEW_REQUIRED') {
+      // F-20-03: batch kembali ke PREVIEW_READY agar Admin dapat meminta ulang dengan `confirm_reviewed: true`.
+      await db
+        .update(importBatches)
+        .set({
+          status: 'PREVIEW_READY',
+          summary: { ...prev, last_error: { code: 'REVIEW_CONFIRMATION_REQUIRED', message: 'Konten buatan AI wajib dikonfirmasi telah ditinjau (confirm_reviewed); tidak ada perubahan yang disimpan.' } },
+        })
+        .where(eq(importBatches.id, batchId));
+      await finishJob(jobId, batchId, 'FAILED', 'REVIEW_CONFIRMATION_REQUIRED');
     } else if (e instanceof PublishAbort) {
       await db
         .update(importBatches)

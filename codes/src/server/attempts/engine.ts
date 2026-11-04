@@ -15,6 +15,28 @@ export interface Served {
   segment_ids?: string[];
   segment_orig_index?: number[];
 }
+/** SPEC-014: status satu section Boss di `attempts.state.sections[section_set_id]`. */
+export interface BossSectionState {
+  phase: 'PENDING' | 'ACTIVE' | 'DONE';
+  started_at: string | null;
+  deadline_at: string | null;
+}
+/** SPEC-014: gerbang Tier yang dibekukan saat Boss dimulai. */
+export interface BossFrozen {
+  tier_id: string;
+  tier_number: number;
+  gate_type: 'PERCENT' | 'BAND';
+  gate_value: number;
+}
+/** SPEC-015: status Placement adaptif; `difficulty` hanya ada di server. */
+export interface PlacementState {
+  /** Jumlah soal target (`placement.question_count` saat mulai). */
+  n: number;
+  d: number;
+  served: string[];
+  pending: string | null;
+  history: Array<{ question_id: string; difficulty: number; correct: boolean }>;
+}
 export interface AttemptState {
   v: 1;
   /** Seed CSPRNG rahasia pengacakan (jangan pernah dikirim ke klien; tidak diturunkan dari id attempt). */
@@ -24,6 +46,14 @@ export interface AttemptState {
   /** Ambang lulus yang dibekukan saat mulai (null bila tipe tidak punya ambang persen). */
   pass_percent: number | null;
   served: Record<string, Served>;
+  /** SPEC-014 (hanya TIER_BOSS_EXAM). */
+  boss?: BossFrozen;
+  sections?: Record<string, BossSectionState>;
+  /** Urutan id set anak (LISTENING -> READING -> WRITING -> SPEAKING). */
+  section_order?: string[];
+  question_section?: Record<string, string>;
+  /** SPEC-015 (hanya PLACEMENT_TEST). */
+  placement?: PlacementState;
 }
 
 export type ObjectiveQuestion = Exclude<Question, { question_type: 'WRITING_TASK' | 'SPEAKING_TASK' }>;
@@ -421,6 +451,13 @@ export function isPassed(rawH: number, maxH: number, passPercent: number | null)
 }
 
 // ------------------------------------------------------------------ waktu jawaban (D8)
+/**
+ * Batas manusia (F-16-01): jawaban yang tiba < 2000 ms sejak jawaban sebelumnya/awal tidak dikreditkan sebagai "dalam target".
+ * `time_spent_ms` mengukur selang antar-jawaban, bukan saat soal ditampilkan; tanpa batas ini klien dapat menyelesaikan soal di
+ * luar lalu mengirim jawaban beruntun dalam milidetik. `time_spent_ms` tetap jujur; hanya kredit kecepatan yang ditolak.
+ */
+export const MIN_HUMAN_MS = 2000;
+
 export interface TimedAnswer {
   answeredAtMs: number;
   isCorrect: boolean | null;
@@ -442,10 +479,42 @@ export function computeTimings(
   for (const a of answers) {
     const base = Math.max(prevAt, lastResumeAtMs, startedAtMs);
     const spent = Math.max(0, Math.round(a.answeredAtMs - base));
-    const within = spent <= a.targetMs;
+    const within = spent <= a.targetMs && spent >= MIN_HUMAN_MS;
     streak = a.isCorrect === true && within ? streak + 1 : 0;
     out.push({ timeSpentMs: spent, withinTargetTime: within, speedStreakLen: streak });
     prevAt = a.answeredAtMs;
   }
   return out;
+}
+
+/**
+ * D8 untuk SATU jawaban baru (PUT answers) dengan perlindungan F-08-06 (SPEC-016, prasyarat bonus kecepatan).
+ *
+ * `time_spent_ms` tetap `now - max(jawaban sebelumnya, last_resume_at, started_at[, awal section])` (SPEC-006 D8).
+ * Namun `last_resume_at` dapat digeser klien lewat `POST /attempts` (resume setelah jeda > 60 dtk); pengguna yang
+ * berpikir lama lalu me-resume tepat sebelum menjawab akan tampak menjawab cepat. Karena itu, bila basis digeser
+ * `last_resume_at` melewati jawaban sebelumnya / awal attempt, jawaban itu TIDAK dihitung "dalam target" dan streak
+ * kecepatan direset: bonus kecepatan hanya bertumpu pada jam server yang tidak dapat direset klien.
+ */
+export function answerTiming(p: {
+  nowMs: number;
+  prevAnsweredAtMs: number | null;
+  prevStreak: number;
+  startedAtMs: number;
+  lastResumeAtMs: number;
+  sectionStartMs?: number;
+  targetMs: number;
+  isCorrect: boolean;
+}): TimingResult & { resumeShifted: boolean } {
+  const honest = Math.max(p.prevAnsweredAtMs ?? -Infinity, p.startedAtMs);
+  const resumeShifted = p.lastResumeAtMs > honest;
+  const base = Math.max(honest, p.lastResumeAtMs, p.sectionStartMs ?? -Infinity);
+  const spent = Math.max(0, p.nowMs - base);
+  const within = spent <= p.targetMs && spent >= MIN_HUMAN_MS && !resumeShifted;
+  return {
+    timeSpentMs: spent,
+    withinTargetTime: within,
+    speedStreakLen: p.isCorrect && within ? p.prevStreak + 1 : 0,
+    resumeShifted,
+  };
 }

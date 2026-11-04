@@ -5,7 +5,7 @@
 **Size:** XL
 **Assigned To:** Developer Agent
 **Dependencies:** TASK-000, TASK-001, TASK-002, TASK-005, TASK-006, TASK-009
-**Current Status:** not_started
+**Current Status:** ready_to_test
 
 ---
 
@@ -32,3 +32,12 @@ Submission Writing, job pg-boss, penilaian Ollama (driver mock untuk uji), pasca
 | Timestamp | Agent | Status | Notes |
 |-----------|-------|--------|-------|
 | 2026-11-03 18:30 | pm agent | task created | - |
+| 2026-11-03 14:00 | frontend | development started | - |
+| 2026-11-03 14:30 | frontend | ready for QA/integration | UI selesai terhadap kontrak; integrasi backend belum diuji; lihat dev_log.md [FRONTEND] |
+| 2026-11-03 14:20 | backend | development started | - |
+| 2026-11-03 14:20 | backend | ready for QA/integration | Backend: POST/GET/daftar/retry/self-assessment/status/admin, pipeline LLM mock + Zod + aturan skor, kuota, antrean, fallback, purge raw output; tsc/eslint/vitest/test:integration hijau (mock LLM/STT); Ollama/whisper.cpp nyata dan benchmark C-09 belum diverifikasi; lihat dev_log.md |
+| 2026-11-03 14:40 | backend | QA fixes applied (F-12-01, -02, -03, -05) | tsc/eslint bersih; vitest 786, test:integration 404 lulus; lihat dev_log.md [BACKEND] perbaikan QA |
+| 2026-11-03 14:45 | frontend | QA W6 fixes done | F-12-04, F-12-10; vitest 786 lulus; lihat dev_log.md [FRONTEND] |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test passed | E2E lulus |

@@ -5,7 +5,7 @@
 **Size:** XL
 **Assigned To:** Developer Agent
 **Dependencies:** TASK-000, TASK-002, TASK-004, TASK-018
-**Current Status:** not_started
+**Current Status:** ready_to_test
 
 ---
 
@@ -34,3 +34,8 @@ UI/API impor: unggah JSON/CSV (soal), validasi async di worker, pratinjau per it
 | 2026-11-03 18:30 | pm agent | task created | - |
 | 2026-11-03 14:00 | frontend | development started | - |
 | 2026-11-03 14:30 | frontend | ready for QA/integration | UI importer 4 langkah + riwayat + rollback selesai; tsc/eslint/vitest lulus; integrasi backend belum diuji |
+| 2026-11-03 12:40 | backend | development started | - |
+| 2026-11-03 12:40 | backend | ready for QA/integration | API + tes integrasi lulus (280); E2E belum diuji |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test passed | E2E lulus |

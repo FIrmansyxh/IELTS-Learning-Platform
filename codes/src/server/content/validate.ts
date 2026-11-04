@@ -256,11 +256,13 @@ function checkQuestionSet(
   });
 }
 
-function checkPassageText(md: string | undefined, path: string, out: ContentIssue[]): void {
+export function checkPassageText(md: string | undefined, path: string, out: ContentIssue[]): void {
   if (!md) return;
   checkMarkdown(md, path, out);
-  if (md.split(/\r?\n===PASSAGE===\r?\n/).length > MAX_PASSAGES) out.push(err(path, 'too_many_passages', 'Maksimal 3 bagian.'));
-  for (const p of parsePassages(md)) {
+  const parsed = parsePassages(md); // sumber tunggal dengan parser klien (lib/reading/passage-core)
+  if (parsed.length > MAX_PASSAGES) out.push(err(path, 'too_many_passages', 'Maksimal 3 bagian.'));
+  for (const p of parsed) {
+    if (p.empty) out.push(err(path, 'empty_passage', `Bagian ${p.index} kosong (pemisah ===PASSAGE=== di awal, akhir, atau berurutan).`));
     for (const l of duplicateLabels(p)) out.push(err(path, 'duplicate_paragraph_label', `Label paragraf [${l}] ganda pada bagian ${p.index}.`));
   }
 }

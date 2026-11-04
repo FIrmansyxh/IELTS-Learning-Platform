@@ -12,8 +12,12 @@ import {
 } from '@/components/ui/dialog';
 import { fmt, id } from '@/i18n/id';
 import { formatClock } from '@/lib/format';
+import { cn } from '@/lib/utils';
 
 const MILESTONES_MIN = [10, 5, 1];
+
+/** Teks tombol/dialog akhir yang dapat diganti (Boss: "Selesai Section"; Placement: "Akhiri tes"). */
+export type ExamShellLabels = { end?: string; endTitle?: string; endBody?: string; endConfirm?: string };
 
 /**
  * Kerangka Mode Ujian (design-system 5.19): tema tenang, tanpa navigasi global/gamifikasi, header tipis
@@ -26,6 +30,9 @@ export function ExamShell({
   unansweredCount,
   onEnd,
   navigator,
+  footer,
+  layout = 'page',
+  labels,
   children,
 }: {
   title: string;
@@ -33,6 +40,11 @@ export function ExamShell({
   unansweredCount: number;
   onEnd: () => void;
   navigator?: React.ReactNode;
+  /** Bilah bawah (prev/next/Kirim); menerima fungsi pembuka Dialog konfirmasi "Akhiri/Kirim". */
+  footer?: (openEnd: () => void) => React.ReactNode;
+  /** `workspace` = setinggi viewport tanpa scroll halaman (Reading split-screen, SPEC-010). */
+  layout?: 'page' | 'workspace';
+  labels?: ExamShellLabels;
   children: React.ReactNode;
 }) {
   const [confirmOpen, setConfirmOpen] = React.useState(false);
@@ -60,8 +72,13 @@ export function ExamShell({
   }, [remainingSeconds]);
 
   return (
-    <div className="min-h-dvh bg-background">
-      <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b bg-background px-4 py-2">
+    <div className={cn('bg-background', layout === 'workspace' ? 'flex h-dvh flex-col overflow-hidden' : 'min-h-dvh')}>
+      <header
+        className={cn(
+          'z-30 flex items-center justify-between gap-3 border-b bg-background px-4 py-2',
+          layout === 'workspace' ? 'shrink-0' : 'sticky top-0',
+        )}
+      >
         <h1 className="truncate text-base font-semibold">{title}</h1>
         <div className="flex items-center gap-3">
           {remainingSeconds !== null ? (
@@ -70,23 +87,35 @@ export function ExamShell({
             </p>
           ) : null}
           <Button variant="outline" size="sm" onClick={() => setConfirmOpen(true)}>
-            {id.quiz.exam.end}
+            {labels?.end ?? id.quiz.exam.end}
           </Button>
         </div>
       </header>
       <p className="sr-only" role="status" aria-live="polite">
         {announce}
       </p>
-      <main className="mx-auto grid w-full max-w-4xl gap-6 px-4 py-6 md:px-8">
-        {navigator}
-        {children}
-      </main>
+      {layout === 'workspace' ? (
+        <main className="flex min-h-0 flex-1 flex-col">
+          {navigator}
+          {children}
+        </main>
+      ) : (
+        <main className="mx-auto grid w-full max-w-4xl gap-6 px-4 py-6 md:px-8">
+          {navigator}
+          {children}
+        </main>
+      )}
+      {footer ? (
+        <div className={cn('z-30 border-t bg-background px-4 py-2', layout === 'workspace' ? 'shrink-0' : 'sticky bottom-0')}>
+          {footer(() => setConfirmOpen(true))}
+        </div>
+      ) : null}
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{id.quiz.exam.endTitle}</DialogTitle>
+            <DialogTitle>{labels?.endTitle ?? id.quiz.exam.endTitle}</DialogTitle>
             <DialogDescription>
-              {id.quiz.exam.endBody}
+              {labels?.endBody ?? id.quiz.exam.endBody}
               {unansweredCount > 0 ? ` ${fmt(id.quiz.exam.endUnanswered, { n: unansweredCount })}` : ''}
             </DialogDescription>
           </DialogHeader>
@@ -100,7 +129,7 @@ export function ExamShell({
                 onEnd();
               }}
             >
-              {id.quiz.exam.endConfirm}
+              {labels?.endConfirm ?? id.quiz.exam.endConfirm}
             </Button>
           </DialogFooter>
         </DialogContent>

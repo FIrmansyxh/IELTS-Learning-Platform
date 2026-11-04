@@ -17,10 +17,13 @@ export interface Blocker {
     | 'NO_QUESTIONS'
     | 'NO_OBJECTIVE_QUESTIONS'
     | 'PLACEMENT_BANK_TOO_SMALL'
-    | 'BOSS_SECTIONS_MISSING';
+    | 'BOSS_SECTIONS_MISSING'
+    | 'BOSS_DUPLICATE_PUBLISHED';
   entity_type: PublishEntityType;
   entity_id: string;
   detail: string;
+  /** Hanya untuk `ASSET_UNVERIFIED`: id aset yang menghalangi (aditif, SPEC-020). */
+  asset_id?: string;
 }
 
 type QuestionLite = { question_type: QuestionType; difficulty?: number };
@@ -28,15 +31,16 @@ type QuestionLite = { question_type: QuestionType; difficulty?: number };
 /** Ambil `detail` aset UNVERIFIED dari v_publish_blockers lalu perkaya dengan asset_code / external_ref. */
 async function viewBlockers(tx: Tx, entityType: 'LEARNING_MATERIAL' | 'ASSESSMENT_SET', entityId: string, as: PublishEntityType, as_id: string): Promise<Blocker[]> {
   const res = await tx.execute(sql`
-    SELECT b.reason_code, b.detail, a.asset_code, a.external_ref
+    SELECT b.reason_code, b.detail, a.id AS asset_id, a.asset_code, a.external_ref
     FROM v_publish_blockers b
     LEFT JOIN content_assets a ON b.detail = 'asset ' || a.id::text
     WHERE b.entity_type = ${entityType} AND b.entity_id = ${entityId}::uuid`);
-  return (res.rows as Array<{ reason_code: string; detail: string; asset_code: string | null; external_ref: string | null }>).map((r) => ({
+  return (res.rows as Array<{ reason_code: string; detail: string; asset_id: string | null; asset_code: string | null; external_ref: string | null }>).map((r) => ({
     code: r.reason_code as Blocker['code'],
     entity_type: as,
     entity_id: as_id,
     detail: r.asset_code || r.external_ref ? `${r.detail} (${r.asset_code ?? r.external_ref})` : r.detail,
+    ...(r.asset_id ? { asset_id: r.asset_id } : {}),
   }));
 }
 
@@ -68,6 +72,20 @@ export async function computeBlockers(tx: Tx, entityType: PublishEntityType, id:
       );
       const have = new Set(kids.map((k) => k.skill));
       if (!have.has('LISTENING') || !have.has('READING')) b('BOSS_SECTIONS_MISSING', 'Boss butuh anak LISTENING dan READING berstatus PUBLISHED.');
+    }
+    if (t === 'TIER_BOSS_EXAM' && set.tierId) {
+      // QA F-14-01: satu induk Boss PUBLISHED per Tier (unique index assessment_sets_boss_tier_published_uq).
+      const [other] = await tx.select({ id: assessmentSets.id }).from(assessmentSets).where(
+        sql`${assessmentSets.assessmentType} = 'TIER_BOSS_EXAM' AND ${assessmentSets.status} = 'PUBLISHED' AND ${assessmentSets.tierId} = ${set.tierId}::uuid AND ${assessmentSets.id} <> ${id}::uuid`,
+      );
+      if (other) b('BOSS_DUPLICATE_PUBLISHED', `Tier ini sudah punya Boss PUBLISHED (${other.id}); arsipkan dulu.`);
+    }
+    if (t === 'BOSS_SECTION' && set.parentSetId && set.skillCategory) {
+      // QA F-14-01: satu anak PUBLISHED per skill per induk (assessment_sets_boss_child_skill_uq).
+      const [other] = await tx.select({ id: assessmentSets.id }).from(assessmentSets).where(
+        sql`${assessmentSets.assessmentType} = 'BOSS_SECTION' AND ${assessmentSets.status} = 'PUBLISHED' AND ${assessmentSets.parentSetId} = ${set.parentSetId}::uuid AND ${assessmentSets.skillCategory} = ${set.skillCategory} AND ${assessmentSets.id} <> ${id}::uuid`,
+      );
+      if (other) b('BOSS_DUPLICATE_PUBLISHED', `Induk ini sudah punya section ${set.skillCategory} PUBLISHED (${other.id}); arsipkan dulu.`);
     }
   } else if (entityType === 'SUB_MODULE') {
     const [sub] = await tx.select({ id: subModules.id }).from(subModules).where(eq(subModules.id, id));

@@ -33,3 +33,9 @@ Mesin status kurikulum (LOCKED/UNLOCKED/IN_PROGRESS/COMPLETED/SKIPPED), `GET /cu
 | 2026-11-03 07:10 | frontend | development started | - |
 | 2026-11-03 07:25 | frontend | ready for QA/integration | Peta belajar SkillTree + Sheet "Buka level" di /admin/pengguna + test; lihat dev_log.md |
 | 2026-11-03 07:55 | backend | ready for QA/integration | Backend: GatekeepingService + tree + override; 24 tes integrasi + 12 unit lulus; lihat dev_log.md |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test failed | Issues: D-001, D-004 |
+| 2026-11-03 19:00 | fixer agent | fixing started | Issues: D-001, D-004 |
+| 2026-11-03 19:05 | fixer agent | fix complete, ready to test | D-001: lg:w-auto. D-004: --color-text-muted terang menjadi #556376 (5.58:1 di surface-muted, 6.12:1 di putih, 4.96:1 di border-tone #E2E8F0); gelap #94A3B8 tida |
+| 2026-11-03 19:30 | test agent | test passed | Run penuh bersih Fase 3: 105 lulus/0 gagal/1 skip (+ spec012b AI mati lulus); defek terkait terverifikasi |

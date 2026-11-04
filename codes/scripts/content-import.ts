@@ -1,7 +1,7 @@
 /**
  * CLI konten (SPEC-004):
  *   npm run content:validate -- --dir <path>
- *   npm run content:import   -- --dir <path> [--publish] [--dry-run]
+ *   npm run content:import   -- --dir <path> [--publish] [--dry-run] [--allow-published-overwrite]
  * Exit code: 0 sukses, 1 validasi gagal, 2 publikasi terhalang, 3 galat teknis.
  */
 import './_env';
@@ -19,7 +19,7 @@ async function main(): Promise<number> {
   const command = process.argv[2];
   const dirArg = arg('dir');
   if ((command !== 'validate' && command !== 'import') || !dirArg) {
-    console.error('Pemakaian: content-import.ts <validate|import> --dir <path> [--publish] [--dry-run]');
+    console.error('Pemakaian: content-import.ts <validate|import> --dir <path> [--publish] [--dry-run] [--allow-published-overwrite]');
     return 1;
   }
   const dir = path.resolve(dirArg);
@@ -55,7 +55,7 @@ async function main(): Promise<number> {
   }
 
   try {
-    const out = await svc.runImport(dbMod.getDb(), { dir, publish: flag('publish'), dryRun: flag('dry-run'), actorUserId: null });
+    const out = await svc.runImport(dbMod.getDb(), { dir, publish: flag('publish'), dryRun: flag('dry-run'), actorUserId: null, allowPublishedOverwrite: flag('allow-published-overwrite') });
     for (const l of out.lines) (out.exitCode === 0 ? console.log : console.error)(l);
     return out.exitCode;
   } finally {

@@ -1,29 +1,80 @@
 {
   "from_agent": "backend",
   "to_agent": "orchestrator",
-  "task_id": "TASK-001..004 (W1)",
-  "timestamp": "2026-11-03 07:55",
-  "status": "backend_ready_w1_partial_004",
-  "notes": "Backend W1 selesai untuk TASK-001/002/003 (ready_to_test) dan sebagian TASK-004 (library, seed, CLI selesai; Golden Sample GS-1..6 BELUM dibuat: pekerjaan konten). Drift FE sebelumnya (lint INVITE_CODE_RE, TS2748 argon2, TS2559 bootstrap, peringatan fs, seed.test) sudah diperbaiki. Perubahan kontrak aditif: SettingDTO.options (spec 002 + _api-contract diperbarui). Catatan untuk FE: (1) session cookie = JWT Auth.js via next-auth/jwt (tanpa rute /api/auth/*); Server Component dapat memakai getUserFromCookieHeader di src/server/auth/guards.ts; (2) mutasi wajib header Origin (ALLOWED_HOSTS) atau Sec-Fetch-Site: same-origin; (3) tests/setup.ts sempat tertimpa Backend dan afterEach(cleanup) dipulihkan; src/contracts/admin.ts ditimpa Backend dan dilengkapi alias FE (isi asli tidak terpulihkan, 86 tes FE lulus); (4) jangan jalankan next build dengan NODE_ENV=development. Verifikasi: tsc, eslint, 199 tes unit, 96 tes integrasi (Postgres 16 lokal), next build, build:worker lulus; E2E/Docker/Node 22 belum.",
-  "previous": {
-    "from_agent": "frontend",
-    "to_agent": "backend",
-    "task_id": "TASK-001..004 (W1)",
-    "timestamp": "2026-11-03 07:25",
-    "status": "frontend_ready_contract_notes",
-    "notes": "Frontend W1 selesai terhadap kontrak (dev_log di task/TASK-00[1-3]_*/dev_log.md). Tidak ada drift respons yang ditambal di klien; klien mem-parse respons dengan Zod dan menandai RESPONSE_INVALID bila menyimpang. Catatan untuk Backend: (1) src/contracts/auth.ts INVITE_CODE_RE memicu eslint security/detect-unsafe-regex (lint max-warnings=0 gagal); bentuk aman: pisah '-' lalu uji 20 karakter. (2) src/server/admin/health.ts:38,41 peringatan security/detect-non-literal-fs-filename. (3) scripts/admin-bootstrap.ts(14,36) TS2559 memblokir tsc dan next build. (4) tests/unit/seed.test.ts gagal setelah perubahan registri seed. (5) Asumsi klien: GET /curriculum/tree dipakai admin untuk daftar target override (ID konten global sama untuk semua pengguna). (6) Klien memakai SettingDTO.options (aditif Backend) untuk Select enum. (7) Tidak ada middleware.ts dari frontend; pengalihan tanpa sesi di klien (AuthGate). (8) globals.css: ditambah @source '../' karena .gitignore akar (codes/*) membuat Tailwind 4 tidak memindai sumber.",
-    "artifacts": [
-      "task/TASK-001_auth-session/dev_log.md",
-      "task/TASK-002_admin-users-invites/dev_log.md",
-      "task/TASK-003_skill-tree-gatekeeping/dev_log.md",
-      "task/TASK-004_content-foundation/dev_log.md"
-    ]
-  },
+  "task_id": "TASK-016, TASK-017, TASK-020 (W8)",
+  "timestamp": "2026-11-03 18:25",
+  "status": "backend_ready_w8",
+  "notes": "Backend W8 selesai (mock LLM/STT; Postgres 16 lokal; satu migrasi 0010_spec_016_points_unique). Prasyarat QA: F-14-06 (finalize tidak menghitung ulang D8 Boss) dan F-08-06 (answerTiming: resume yang menggeser basis tidak mengkredit within_target_time) diselesaikan lebih dulu; amandemen SPEC-006 D8. TASK-016: GamificationService (poin Drill/Speed/Mahkota/Boss/Mini-Task/Harian, ledger append-only + point_ledger_once_uq, streak harian APP_TIMEZONE berbasis jam server), GET /me/stats, GET /me/points, blok gamification pada AttemptResultDTO (disimpan di attempts.result_json.gamification; progress.mastery_crown ikut diperbarui). TASK-017: SkillScoreService (R1-R5), evaluationGradedHooks terisi (skillScoreEvaluationHook), attemptCompletedHooks = [handler, gamificationHook, skillScoreHook], GET /me/skills/radar (2 query SQL), /me/band-predictions, /me/exam-history. TASK-020: CurationService + 11 endpoint admin (status K1/K2/penghalang, sunting modul/sub-modul/materi/set/soal, revisi K4, kualitas K5, pagar K3 set berjalan menutup F-15-07 untuk jalur admin). Untuk FE (aditif, sudah di src/contracts/{gamification,skills,curation}.ts): GET /admin/assessment-sets/{id}.has_active_attempts, SetRef.origin, asset_id pada penghalang ASSET_UNVERIFIED, result_path divalidasi; semua skema respons SPEC-020 kini di kontrak bersama sehingga lib/api/curation-contract.ts dapat re-export penuh; Skip hanya memberi DAILY (gamification null); prediksi tanpa komponen punya basis_note 'Belum cukup data...'; Boss dengan < 5 soal per skill objektif tidak menulis titik riwayat BOSS (butuh >= 5 soal L dan R). Verifikasi: tsc exit 0; eslint src tests scripts --max-warnings=0 exit 0; vitest 66 berkas/1063 tes lulus; test:integration 22 berkas/576 tes lulus (sebelumnya 19/484; baru: gamification 29, skills 28, curation 35); build:worker dan next build lulus (artefak dihapus). BELUM diverifikasi: E2E Playwright SPEC-016/017/020, tampilan/aksesibilitas UI, K3 untuk jalur impor SPEC-019 (tidak dijaga; residual F-15-07), balapan lintas proses hook skor vs hook evaluasi (sengaja tanpa kunci advisory, ADR-003 #33d), kinerja pada konten/ledger besar, LLM/STT nyata. Keputusan perlu tinjauan human: ADR-003 #33.",
   "artifacts": [
-    "task/TASK-001_auth-session/dev_log.md",
-    "task/TASK-002_admin-users-invites/dev_log.md",
-    "task/TASK-003_skill-tree-gatekeeping/dev_log.md",
-    "task/TASK-004_content-foundation/dev_log.md",
-    "codes/README.md"
-  ]
+    "task/TASK-016_gamification/dev_log.md",
+    "task/TASK-017_radar-band-predictor/dev_log.md",
+    "task/TASK-020_content-curation/dev_log.md",
+    "specifications/_api-contract.md",
+    "state/knowledge_base/decisions/ADR-003-delegated-decisions.md"
+  ],
+  "previous": {
+    "from_agent": "backend",
+    "to_agent": "orchestrator",
+    "task_id": "TASK-014, TASK-015 (W7)",
+    "timestamp": "2026-11-03 15:00",
+    "status": "backend_ready_w7",
+    "notes": "Backend W7 selesai (mock LLM/STT; Postgres 16 lokal; tanpa migrasi/skema baru). TASK-014: handler TIER_BOSS_EXAM (start/intro/score/onFinish), POST /attempts/{id}/sections/{section}/start|submit, PUT answers Boss (SECTION_NOT_ACTIVE/SECTION_EXPIRED), penilaian L+R (scaleToForty + convertRawToBand tabel aktif), gerbang BAND/PERCENT bilangan bulat, GatekeepingService.applyBossResult (Tier COMPLETED, Tier berikutnya UNLOCKED BOSS_PASS), audit BOSS_PASSED/BOSS_FAILED, D8 overall_band_estimate dihitung ulang tiap GET result (hanya AI_LOCAL non-injeksi), pending_ai, integrasi submission Writing/Speaking dengan attempt_id/question_id Boss, audio ?section=. TASK-015: GET /placement, handler PLACEMENT_TEST (staircase mulberry32, soal tersaji satu per satu, next_question), rekomendasi D4 + safeguard 32%, POST /placement/apply (applyPlacementResult, audit PLACEMENT_APPLIED). Kontrak aditif dicatat di spec 014/015 dan _api-contract.md. Untuk FE/QA: (1) sections/start menutup otomatis section ACTIVE yang kedaluwarsa dan GET /attempts/{id} melakukan hal sama; (2) setelah attempt selesai semua section DONE, sections/submit -> 409 ATTEMPT_NOT_ACTIVE; (3) boss.sections[].status memakai SUBMITTED/EXPIRED (DB attempt_sections L/R = GRADED); (4) Placement served_count = soal yang DIJAWAB; apply.unlocked memuat TIER, MODULE, SUB_MODULE; (5) ExamIntroFullSchema memperlebar scope/blocked_reason (ExamIntroSchema Skip tidak berubah); (6) Placement: PUT answers jawaban ulang -> 409 QUESTION_ALREADY_ANSWERED. Verifikasi: tsc bersih; eslint src tests scripts --max-warnings=0 bersih; vitest 59 berkas/893 tes; test:integration 19 berkas/461 tes lulus (boss 31, placement 26 baru). BELUM diverifikasi: E2E Playwright Boss/Placement, set Boss/Placement hasil content:import, audio peramban nyata, OllamaClient/Whisper nyata, admin SPEC-020 (larangan sunting set yang punya attempt IN_PROGRESS).",
+    "artifacts": [
+      "task/TASK-014_boss-stage/dev_log.md",
+      "task/TASK-015_placement-test/dev_log.md"
+    ],
+    "previous": {
+      "from_agent": "backend",
+      "to_agent": "orchestrator",
+      "task_id": "TASK-012, TASK-013 (W6)",
+      "timestamp": "2026-11-03 14:20",
+      "status": "backend_ready_w6",
+      "notes": "Backend W6 selesai (mock LLM/STT; Postgres 16 lokal; ffmpeg/ffprobe nyata). TASK-012: migrasi 0008_spec_012_ai_flags, seed rubrik v1, src/contracts/ai.ts, src/server/ai/* (LlmClient/OllamaClient/MockLlmClient, netralisasi + pra-pemeriksaan injeksi, prompt bernonce + canary, validasi Zod + 1 perbaikan, aturan skor di kode, advisory lock 727001, kuota 24 jam bergulir, antrean maks, retry/self-assessment/status/admin), handler worker ai-grade-writing, tugas purge purgeAiRawOutput/purgeRecordings/recoverStuckAiJobs. TASK-013: SttClient/WhisperCppClient/MockSttClient, media ffmpeg/ffprobe via spawn array, consent/preferences, unggah multipart tervalidasi magic bytes (private/recordings 0700), stt-transcribe + ai-grade-speaking, retensi, serve/hapus/audit rekaman, hook anonimisasi. Kontrak aditif dicatat di spec 012/013 dan _api-contract.md (tanpa perubahan path/method/DTO). Untuk FE: (1) POST /submissions/* mengembalikan 202 dengan SubmissionDTO + quota; polling GET /submissions/{id} dibatasi 1/detik/user (429 RATE_LIMITED, beri jeda >= 2 dtk); (2) score_capped/cap_reason hanya true bila kap benar-benar menurunkan skor; (3) 503 SERVICE_UNAVAILABLE bila job gagal dikirim ke antrean; (4) self-assessment 400 memakai details[0].code=criteria_keys_mismatch bila kunci kriteria salah; (5) setelah STT selesai status submission Speaking = GRADING dengan job GRADE_SPEAKING; (6) rekaman: GET /submissions/{id}/recording (Range) dan DELETE; UserDTO.consent_recording_at terisi setelah POST /me/recording-consent; (7) mock untuk E2E: LLM_DRIVER=mock STT_DRIVER=mock, MOCK_LLM_MODE=down|invalid|timeout, MOCK_LLM_LATENCY_MS, MOCK_STT_MODE=down, MOCK_STT_TRANSCRIPT, MOCK_STT_CONFIDENCE. Verifikasi: tsc bersih; eslint src tests scripts --max-warnings=0 bersih; vitest 52 berkas/771 tes; test:integration 17 berkas/401 tes lulus; build:worker lulus. BELUM diverifikasi: OllamaClient dan WhisperCppClient terhadap layanan asli (hanya server HTTP palsu); benchmark C-09 (bench:ai) belum dijalankan sehingga model belum dikunci; rubrik masih parafrase sementara (C-05); E2E Playwright, perekaman peramban nyata, next build.",
+      "previous": {
+        "from_agent": "backend",
+        "to_agent": "orchestrator",
+        "task_id": "TASK-010, TASK-011 (W5)",
+        "timestamp": "2026-11-03 13:15",
+        "status": "backend_ready_w5",
+        "notes": "Backend W5 selesai. TASK-010: audit saja (passage_markdown/passage_no dan validator passage sudah ada dari SPEC-004/006); ditambah tes unit+integrasi, tanpa endpoint/kontrak baru. TASK-011: GET /api/v1/attempts/{id}/audio baru (Range 200/206/416, streaming dari StorageDriver.size/openRange, 404 bukan milik, 409 non-IN_PROGRESS atau lewat deadline+5s, section Boss ACTIVE, header no-store/nosniff/inline/CORP). Kontrak aditif dicatat di spec 011 dan _api-contract.md (tanpa perubahan path/method/skema). Untuk FE: audio_url tetap /api/v1/attempts/{id}/audio; 409 ATTEMPT_NOT_ACTIVE juga setelah waktu habis; kunci rewind EXAM tetap kontrol klien per spec (server menegakkan kepemilikan/status/deadline). Peringatan eslint FE: src/components/listening/listening-player.tsx:304 aria-readonly pada role=progressbar (jsx-a11y/role-supports-aria-props) membuat eslint --max-warnings=0 gagal; spec mewajibkan aria-readonly, perlu disposisi FE (mis. eslint-disable berkomentar atau role lain). Verifikasi: tsc, vitest 38 berkas/540 tes, test:integration 15 berkas/316 tes lulus; eslint hanya gagal oleh berkas FE tersebut. Belum diverifikasi: E2E, CSP, pemutaran browser nyata, Boss end-to-end (SPEC-014).",
+        "previous": {
+          "from_agent": "backend",
+          "to_agent": "orchestrator",
+          "task_id": "TASK-018, TASK-019 (W4) + perbaikan QA W3 (TASK-008/009)",
+          "timestamp": "2026-11-03 12:40",
+          "status": "backend_ready_w4",
+          "notes": "Backend W4 selesai: TASK-018 dan TASK-019 ready_to_test. Audit endpoint 65-85 dan AC SPEC-018/019 terhadap kode: seluruhnya sudah terimplementasi (registry aset, unggah aman, impor sinkron/async, worker import-validate/import-publish terdaftar di src/worker/registry.ts, rollback, purge). Tidak ada perubahan kontrak API maupun skema DB di wave ini. Perubahan: celah tes ditutup (assets: MP3, audio 51 MB, title spasi, ENOSPC; import: akses learner/anon semua endpoint, handler worker via jobHandlers, worker mati saat VALIDATING, cancel); isolasi tes DB bersama lewat cleanupContentFixtures() di beforeEach/afterAll (memperbaiki 3 kegagalan auth/gatekeeping akibat sisa data impor). QA W3: F-08-01, F-08-02, F-08-04, F-09-01, F-09-02 diverifikasi sudah ada di kode+tes; F-09-03 diganti jsonb_path_exists; F-08-07 tes start serentak ditambah; F-08-05 (rate limit intro) tidak dikerjakan. Verifikasi: tsc, eslint, vitest 35 berkas/520 tes, test:integration 13 berkas/280 tes semua lulus. Belum diverifikasi: E2E, next build, worker sebagai proses terpisah dengan pg-boss nyata, urutan berkas acak (player.itest 'learn.min_active_seconds' gagal pada --sequence.shuffle.files seed=1; di luar lingkup).",
+          "previous": {
+            "from_agent": "backend",
+            "to_agent": "orchestrator",
+            "task_id": "TASK-001..004 (W1)",
+            "timestamp": "2026-11-03 07:55",
+            "status": "backend_ready_w1_partial_004",
+            "notes": "Backend W1 selesai untuk TASK-001/002/003 (ready_to_test) dan sebagian TASK-004 (library, seed, CLI selesai; Golden Sample GS-1..6 BELUM dibuat: pekerjaan konten). Drift FE sebelumnya (lint INVITE_CODE_RE, TS2748 argon2, TS2559 bootstrap, peringatan fs, seed.test) sudah diperbaiki. Perubahan kontrak aditif: SettingDTO.options (spec 002 + _api-contract diperbarui). Catatan untuk FE: (1) session cookie = JWT Auth.js via next-auth/jwt (tanpa rute /api/auth/*); Server Component dapat memakai getUserFromCookieHeader di src/server/auth/guards.ts; (2) mutasi wajib header Origin (ALLOWED_HOSTS) atau Sec-Fetch-Site: same-origin; (3) tests/setup.ts sempat tertimpa Backend dan afterEach(cleanup) dipulihkan; src/contracts/admin.ts ditimpa Backend dan dilengkapi alias FE (isi asli tidak terpulihkan, 86 tes FE lulus); (4) jangan jalankan next build dengan NODE_ENV=development. Verifikasi: tsc, eslint, 199 tes unit, 96 tes integrasi (Postgres 16 lokal), next build, build:worker lulus; E2E/Docker/Node 22 belum.",
+            "artifacts": [
+              "task/TASK-001_auth-session/dev_log.md",
+              "task/TASK-002_admin-users-invites/dev_log.md",
+              "task/TASK-003_skill-tree-gatekeeping/dev_log.md",
+              "task/TASK-004_content-foundation/dev_log.md",
+              "codes/README.md"
+            ]
+          },
+          "artifacts": [
+            "task/TASK-018_asset-license-management/dev_log.md",
+            "task/TASK-019_bulk-importer/dev_log.md",
+            "task/TASK-008_skip-test/dev_log.md",
+            "task/TASK-009_band-converter/dev_log.md"
+          ]
+        },
+        "artifacts": [
+          "task/TASK-010_split-screen-reading/dev_log.md",
+          "task/TASK-011_listening-exam-player/dev_log.md"
+        ]
+      },
+      "artifacts": [
+        "task/TASK-012_ai-writing/dev_log.md",
+        "task/TASK-013_ai-speaking/dev_log.md"
+      ]
+    }
+  }
 }

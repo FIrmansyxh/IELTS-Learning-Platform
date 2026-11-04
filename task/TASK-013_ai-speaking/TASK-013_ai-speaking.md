@@ -5,7 +5,7 @@
 **Size:** XL
 **Assigned To:** Developer Agent
 **Dependencies:** TASK-001, TASK-005, TASK-006, TASK-012
-**Current Status:** not_started
+**Current Status:** ready_to_test
 
 ---
 
@@ -32,3 +32,12 @@ Persetujuan rekaman, unggah audio webm Opus tervalidasi, STT whisper.cpp, penila
 | Timestamp | Agent | Status | Notes |
 |-----------|-------|--------|-------|
 | 2026-11-03 18:30 | pm agent | task created | - |
+| 2026-11-03 14:00 | frontend | development started | - |
+| 2026-11-03 14:30 | frontend | ready for QA/integration | UI selesai terhadap kontrak; integrasi backend belum diuji; lihat dev_log.md [FRONTEND] |
+| 2026-11-03 14:20 | backend | development started | - |
+| 2026-11-03 14:20 | backend | ready for QA/integration | Backend: consent, unggah tervalidasi, STT, penilaian, retensi/purge rekaman, pelayanan/hapus/audit rekaman; tsc/eslint/vitest/test:integration hijau (mock LLM/STT); Ollama/whisper.cpp nyata dan benchmark C-09 belum diverifikasi; lihat dev_log.md |
+| 2026-11-03 14:40 | backend | QA fixes applied (F-13-01, -02, -06 sebagian) | tsc/eslint bersih; vitest 786, test:integration 404 lulus; lihat dev_log.md [BACKEND] perbaikan QA |
+| 2026-11-03 14:45 | frontend | QA W6 fixes done | F-12-04, F-13-11, F-12-10; vitest 786 lulus; lihat dev_log.md [FRONTEND] |
+| 2026-11-03 18:35 | test agent | test created | - |
+| 2026-11-03 18:35 | test agent | running test | Playwright E2E, lihat test_report.md |
+| 2026-11-03 18:35 | test agent | test passed | E2E lulus |

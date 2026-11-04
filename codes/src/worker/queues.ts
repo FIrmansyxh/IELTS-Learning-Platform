@@ -13,6 +13,9 @@ export type QueueName = (typeof QUEUE_NAMES)[number];
 /** Queue AI berbagi satu slot eksekusi (concurrency AI = 1, ADR-001/002). */
 export const AI_QUEUES: readonly QueueName[] = ['stt-transcribe', 'ai-grade-writing', 'ai-grade-speaking'];
 
+/** Percobaan ulang pg-boss untuk job AI (SPEC-012); total eksekusi = 1 + AI_RETRY_LIMIT. */
+export const AI_RETRY_LIMIT = 2;
+
 export interface QueueOptionsDef {
   retryLimit?: number;
   retryDelay?: number;
@@ -22,7 +25,7 @@ export interface QueueOptionsDef {
 
 export function queueOptions(name: QueueName, aiJobTimeoutSec: number): QueueOptionsDef {
   if (AI_QUEUES.includes(name)) {
-    return { retryLimit: 2, retryDelay: 30, retryBackoff: true, expireInSeconds: aiJobTimeoutSec + 60 };
+    return { retryLimit: AI_RETRY_LIMIT, retryDelay: 30, retryBackoff: true, expireInSeconds: aiJobTimeoutSec + 60 };
   }
   return { retryLimit: 1, retryDelay: 30, expireInSeconds: 900 };
 }

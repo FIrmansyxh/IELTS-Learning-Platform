@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { FastForward, Headphones, Info, Mic } from 'lucide-react';
+import { Compass, FastForward, Headphones, Info, Mic, Swords } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
@@ -18,12 +18,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { ExamIntro as ExamIntroData } from '@/contracts/exams';
 import { fmt, id } from '@/i18n/id';
 import { attemptsApi } from '@/lib/api/attempts';
 import { isApiError } from '@/lib/api/client';
-import { examsApi } from '@/lib/api/exams';
+import { examsApi, type ExamIntroData } from '@/lib/api/exams';
 import { formatTimeWib } from '@/lib/format';
+import { AudioPrecheck } from './audio-precheck';
+import { AlreadyPassedNote, BossIntroBlock } from './boss/boss-intro';
 
 export const examIntroKey = (setId: string) => ['exam-intro', setId] as const;
 
@@ -42,9 +43,16 @@ export function ExamIntroView({ intro }: { intro: ExamIntroData }) {
   const router = useRouter();
   const [starting, setStarting] = React.useState(false);
   const [dialog, setDialog] = React.useState<StartBlock>(null);
+  const [audioOk, setAudioOk] = React.useState(false);
   const resumeId = intro.active_attempt_id;
   const reason = blockedText(intro);
-  const disabled = !intro.available && !resumeId;
+  const alreadyPassed = intro.blocked_reason === 'BOSS_ALREADY_PASSED' && !resumeId;
+  const needsAudioCheck = intro.requires_audio && !resumeId && !alreadyPassed;
+  const audioBlocked = needsAudioCheck && !audioOk;
+  const disabled = (!intro.available && !resumeId) || audioBlocked;
+  const boss = intro.assessment_type === 'TIER_BOSS_EXAM' ? (intro.boss ?? null) : null;
+  const isPlacement = intro.assessment_type === 'PLACEMENT_TEST';
+  const HeaderIcon = boss ? Swords : isPlacement ? Compass : FastForward;
 
   async function start() {
     if (resumeId) {
@@ -67,6 +75,8 @@ export function ExamIntroView({ intro }: { intro: ExamIntroData }) {
         setDialog({ title: id.exam.intro.dialogTitle, body: id.exam.intro.dialogLimit });
       } else if (isApiError(e) && e.code === 'SKIP_NOT_AVAILABLE') {
         setDialog({ title: id.exam.intro.dialogTitle, body: id.exam.intro.dialogNotAvailable });
+      } else if (isApiError(e) && ['BOSS_NOT_AVAILABLE', 'BOSS_ALREADY_PASSED', 'PLACEMENT_NOT_AVAILABLE'].includes(e.code)) {
+        setDialog({ title: id.exam.intro.dialogTitle, body: id.apiErrors[e.code] ?? id.exam.intro.startFailed });
       } else {
         toast.error(id.exam.intro.startFailed);
       }
@@ -79,19 +89,25 @@ export function ExamIntroView({ intro }: { intro: ExamIntroData }) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <FastForward className="size-6" aria-hidden="true" />
+            <HeaderIcon className="size-6" aria-hidden="true" />
             <h1>{intro.title}</h1>
           </CardTitle>
           {intro.scope ? <CardDescription>{intro.scope.label}</CardDescription> : null}
         </CardHeader>
         <CardContent className="grid gap-5">
-          {intro.threshold ? (
-            <p className="flex items-start gap-2 rounded-md border bg-accent p-3 text-sm font-medium">
-              <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-              {fmt(id.exam.intro.banner, { n: intro.threshold.value })}
-            </p>
-          ) : null}
-          <p className="text-lg font-semibold">{fmt(id.exam.intro.summary, { q: intro.question_count, m: minutes })}</p>
+          {boss ? (
+            <BossIntroBlock boss={boss} />
+          ) : (
+            <>
+              {intro.threshold ? (
+                <p className="flex items-start gap-2 rounded-md border bg-accent p-3 text-sm font-medium">
+                  <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  {fmt(id.exam.intro.banner, { n: intro.threshold.value })}
+                </p>
+              ) : null}
+              <p className="text-lg font-semibold">{fmt(id.exam.intro.summary, { q: intro.question_count, m: minutes })}</p>
+            </>
+          )}
           <section aria-labelledby="exam-rules">
             <h2 id="exam-rules" className="mb-2 text-sm font-semibold">
               {id.exam.intro.rulesTitle}
@@ -123,24 +139,39 @@ export function ExamIntroView({ intro }: { intro: ExamIntroData }) {
               </ul>
             </section>
           ) : null}
+          {needsAudioCheck ? <AudioPrecheck confirmed={audioOk} onConfirmedChange={setAudioOk} /> : null}
           <p className="text-sm text-muted-foreground">
             {fmt(id.exam.intro.attempts, { n: intro.cooldown.attempts_in_window, max: intro.cooldown.max_attempts })}
           </p>
           <div className="grid gap-2">
-            <Button
-              size="lg"
-              className="w-full sm:w-fit"
-              disabled={disabled}
-              loading={starting}
-              onClick={() => void start()}
-              aria-describedby={reason ? 'exam-blocked' : undefined}
-            >
-              {starting ? id.exam.intro.starting : resumeId ? id.exam.intro.resume : id.exam.intro.start}
-            </Button>
-            {reason && disabled ? (
+            {alreadyPassed ? (
+              <AlreadyPassedNote />
+            ) : (
+              <Button
+                size="lg"
+                className="w-full sm:w-fit"
+                disabled={disabled}
+                loading={starting}
+                onClick={() => void start()}
+                aria-describedby={reason ? 'exam-blocked' : audioBlocked ? 'exam-audio-blocked' : undefined}
+              >
+                {starting ? id.exam.intro.starting : resumeId ? id.exam.intro.resume : id.exam.intro.start}
+              </Button>
+            )}
+            {audioBlocked && !reason ? (
+              <p id="exam-audio-blocked" className="text-sm text-muted-foreground">
+                {id.exam.intro.audioCheckFirst}
+              </p>
+            ) : null}
+            {reason && (disabled || alreadyPassed) ? (
               <p id="exam-blocked" className="text-sm text-muted-foreground">
                 {reason}
               </p>
+            ) : null}
+            {intro.blocked_reason === 'RESULT_PENDING_APPLY' ? (
+              <Link href="/" className="w-fit text-sm font-medium text-primary underline underline-offset-2">
+                {id.exam.intro.goHome}
+              </Link>
             ) : null}
             <Link href="/peta" className="w-fit text-sm font-medium text-primary underline underline-offset-2">
               {id.exam.intro.backToMap}

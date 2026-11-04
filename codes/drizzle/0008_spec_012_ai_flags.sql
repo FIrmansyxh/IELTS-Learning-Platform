@@ -1,0 +1,1 @@
+ALTER TABLE "ai_evaluations" ADD COLUMN "flags" jsonb DEFAULT '{}'::jsonb NOT NULL;

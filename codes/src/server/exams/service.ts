@@ -1,7 +1,7 @@
 /** ExamService (SPEC-008): layar pra-ujian generik `GET /exams/{assessment_set_id}/intro`. */
 import { and, eq } from 'drizzle-orm';
 import { assessmentSets, attempts } from '@/db/schema';
-import type { ExamIntro } from '@/contracts/exams';
+import type { ExamIntroFull } from '@/contracts/exams';
 import { nowDate } from '../clock';
 import type { Db } from '../db';
 import { notFound } from '../http/errors';
@@ -11,7 +11,7 @@ import { settleExpiredForSet } from '../attempts/service';
 const hasSpeaking = (questionsJson: unknown): boolean =>
   Array.isArray(questionsJson) && questionsJson.some((q) => (q as { question_type?: unknown } | null)?.question_type === 'SPEAKING_TASK');
 
-export async function getExamIntro(db: Db, userId: string, assessmentSetId: string): Promise<ExamIntro> {
+export async function getExamIntro(db: Db, userId: string, assessmentSetId: string): Promise<ExamIntroFull> {
   // Attempt EXAM yang sudah lewat deadline dinilai lebih dulu (commit sendiri) agar cooldown akurat.
   await settleExpiredForSet(db, userId, assessmentSetId);
   return db.transaction(async (tx) => {
@@ -33,16 +33,16 @@ export async function getExamIntro(db: Db, userId: string, assessmentSetId: stri
       assessment_type: set.assessmentType,
       title: set.title,
       scope: part.scope,
-      time_limit_seconds: set.timeLimitSeconds,
-      question_count: set.questionCount,
+      time_limit_seconds: part.overrides?.time_limit_seconds ?? set.timeLimitSeconds,
+      question_count: part.overrides?.question_count ?? set.questionCount,
       threshold: part.threshold,
       rules: part.rules,
       available: part.blocked_reason === null || activeId !== null,
       blocked_reason: activeId !== null ? null : part.blocked_reason,
       cooldown: part.cooldown,
       active_attempt_id: activeId,
-      requires_audio: set.listeningAssetId !== null,
-      requires_microphone: hasSpeaking(set.questionsJson),
+      requires_audio: part.overrides?.requires_audio ?? set.listeningAssetId !== null,
+      requires_microphone: part.overrides?.requires_microphone ?? hasSpeaking(set.questionsJson),
       boss: part.boss ?? null,
       placement: part.placement ?? null,
     };

@@ -43,7 +43,7 @@ Semua warna dipakai lewat token semantik (`--color-*`), tidak pernah hex mentah 
 | `border-strong` | `#CBD5E1` | `#475569` | input, outline |
 | `text-primary` | `#0F172A` | `#F1F5F9` | teks utama (>= 15:1) |
 | `text-secondary` | `#475569` | `#CBD5E1` | teks pendukung |
-| `text-muted` | `#64748B` | `#94A3B8` | caption, placeholder (>= 4.5:1) |
+| `text-muted` | `#556376` | `#94A3B8` | caption, placeholder (>= 4.5:1 di atas surface-muted; 5.6:1 light) |
 
 Catatan dark mode: tombol primary di dark tetap `bg #4F46E5` + teks putih (kontras teks 6.3:1) dengan border 1px `#818CF8` agar terpisah dari latar; `#6366F1` hanya untuk link/ikon/fokus. Dark mode memakai tonal desaturated, bukan inversi.
 
@@ -209,7 +209,7 @@ Tiap node: ikon + label teks (bisa disembunyikan visual pada mode kompak tetapi 
 - Paragraf diberi label huruf (A, B, C) di margin untuk soal Matching Headings. Timer dan "Kirim" di header (Mode Ujian).
 
 ### 5.14 Listening Ujian (ASM-02)
-- **Pemutar audio terkunci (Mode Ujian):** kartu audio dengan tombol Putar besar 56px, progress bar (tidak dapat diklik/digeser, `aria-readonly`), waktu `tabular-nums`, **tanpa tombol rewind/seek/ulang**, kontrol volume saja. Label tegas: "Audio hanya diputar satu kali seperti di ujian sebenarnya." Setelah audio berakhir, bagian dikunci/lanjut otomatis sesuai pengaturan Section; bila pemutaran gagal ada tombol "Muat ulang audio" (tidak mengulang posisi).
+- **Pemutar audio terkunci (Mode Ujian):** kartu audio dengan tombol Putar besar 56px, progress bar (`role="progressbar"` tanpa `aria-readonly` karena tidak valid untuk role ini; baca-saja = tanpa `tabindex`/handler, tidak dapat diklik/digeser; `aria-valuemax` minimal 1), waktu `tabular-nums`, **tanpa tombol rewind/seek/ulang**, kontrol volume saja. Label tegas: "Audio hanya diputar satu kali seperti di ujian sebenarnya." Setelah audio berakhir, bagian dikunci/lanjut otomatis sesuai pengaturan Section; bila pemutaran gagal ada tombol "Muat ulang audio" (tidak mengulang posisi).
 - **Mode Latihan:** kontrol penuh (putar ulang, mundur 5 dtk, kecepatan 0.75x/1x), transkrip dapat dibuka setelah menjawab.
 - Soal dibagi per Section (1–4) dalam tab/stepper; waktu transfer jawaban (10 menit) ditampilkan sebagai hitung mundur. Tidak ada gerak berlebih saat audio berjalan; visualisasi gelombang opsional statis.
 - Pre-flight: layar cek audio ("Pastikan volume nyala. Putar nada uji") sebelum memulai.
@@ -424,9 +424,10 @@ Admin > Impor Konten      [1 Unggah][2 Validasi][3 Pratinjau][4 Publikasi]
   --color-accent:#F59E0B; --color-accent-text:#B45309;
   --color-bg:#F8FAFC; --color-surface:#FFFFFF; --color-surface-muted:#F1F5F9;
   --color-border:#E2E8F0; --color-border-strong:#CBD5E1;
-  --color-text:#0F172A; --color-text-2:#475569; --color-text-muted:#64748B;
+  --color-text:#0F172A; --color-text-2:#475569; --color-text-muted:#556376;
   --color-locked:#94A3B8; --color-progress:#4F46E5; --color-done:#16A34A; --color-done-text:#15803D;
   --color-error:#DC2626; --color-warning:#F59E0B; --color-info:#0EA5E9;
+  --color-highlight-yellow:#FDE68A; --color-highlight-green:#BBF7D0; /* SPEC-010; dark: #854D0E / #166534; teks di atasnya --color-text (kontras >= 4.5:1) */
   --radius-sm:.5rem; --radius-md:.75rem; --radius-lg:1rem;
   --motion-fast:120ms; --motion-base:200ms; --motion-slow:300ms;
   --font-heading:"Plus Jakarta Sans",system-ui,sans-serif; --font-body:"Inter",system-ui,sans-serif; --font-mono:"JetBrains Mono",ui-monospace,monospace;

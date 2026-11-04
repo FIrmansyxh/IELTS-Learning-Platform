@@ -92,6 +92,8 @@ export async function getAdminHealth(): Promise<AdminHealth> {
       model_speaking: process.env.OLLAMA_MODEL_SPEAKING ?? null,
     };
     if (!aiEnabled) return { ...base, status: 'disabled' };
+    // Driver mock (dev/E2E) berjalan in-process: dianggap sehat tanpa probe jaringan.
+    if (base.driver === 'mock') return { ...base, status: 'up' };
     const url = process.env.OLLAMA_BASE_URL;
     return { ...base, status: url ? await probe(`${url.replace(/\/$/, '')}/api/tags`) : 'down' };
   })();
@@ -99,6 +101,7 @@ export async function getAdminHealth(): Promise<AdminHealth> {
   const sttCheck = (async (): Promise<AdminHealth['stt']> => {
     const model = process.env.STT_MODEL ?? 'base';
     if (!aiEnabled) return { status: 'disabled', model };
+    if ((process.env.STT_DRIVER ?? 'whisper') === 'mock') return { status: 'up', model };
     const url = process.env.STT_BASE_URL;
     return { status: url ? await probe(`${url.replace(/\/$/, '')}/`) : 'down', model };
   })();

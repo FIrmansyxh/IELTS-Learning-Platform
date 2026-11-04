@@ -1,32 +1,32 @@
 /**
- * parsePassages (dipakai SPEC-004 untuk validasi; SPEC-010 memakainya untuk tampilan split-screen).
- * Satu teks berisi maks 3 bagian dipisah baris tunggal `===PASSAGE===`. Paragraf berlabel diawali `[A] `.
+ * Validasi teks bacaan sisi server (SPEC-004; SPEC-010). Seluruh aturan pemecahan ada di
+ * `@/lib/reading/passage-core` (sumber tunggal, dipakai juga parser klien) agar tidak pernah menyimpang (QA F-10-01).
  */
-export const PASSAGE_SEPARATOR = '===PASSAGE===';
-export const MAX_PASSAGES = 3;
+import { analyzePassages, MAX_PASSAGES, PASSAGE_SEPARATOR, splitSections, type CorePassage } from '@/lib/reading/passage-core';
+
+export { MAX_PASSAGES, PASSAGE_SEPARATOR };
 
 export interface ParsedPassage {
   index: number; // 1-based
   text: string;
   labels: string[];
+  empty: boolean;
 }
 
+/** Bagian teks (dipangkas) TERMASUK yang kosong, identik dengan jumlah bagian yang dilihat pelajar. */
 export function splitPassages(markdown: string): string[] {
-  return markdown
-    .split(/\r?\n===PASSAGE===\r?\n/)
-    .map((p) => p.trim())
-    .filter((p) => p.length > 0);
+  return splitSections(markdown).map((s) => s.trim());
 }
+
+const toParsed = (p: CorePassage): ParsedPassage => ({
+  index: p.passage_no,
+  text: p.body,
+  labels: p.paragraphs.flatMap((x) => (x.label ? [x.label] : [])),
+  empty: p.empty,
+});
 
 export function parsePassages(markdown: string): ParsedPassage[] {
-  return splitPassages(markdown).map((text, i) => {
-    const labels: string[] = [];
-    for (const para of text.split(/\n{2,}/)) {
-      const m = /^\[([A-Z])\]\s/.exec(para.trimStart());
-      if (m) labels.push(m[1] as string);
-    }
-    return { index: i + 1, text, labels };
-  });
+  return analyzePassages(markdown).map(toParsed);
 }
 
 export function duplicateLabels(p: ParsedPassage): string[] {

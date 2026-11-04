@@ -4,6 +4,9 @@
  */
 import { initializeProgress } from './gatekeeping/service';
 import { userCreatedHooks } from './auth/hooks';
+import './ai/register';
+import './gamification/register';
+import './skills/register';
 
 if (!userCreatedHooks.includes(onUserCreated)) userCreatedHooks.push(onUserCreated);
 

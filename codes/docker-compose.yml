@@ -128,7 +128,7 @@ services:
     user: "1000:1000"
     read_only: true
     tmpfs:
-      - /tmp:uid=1000,gid=1000
+      - /tmp:size=128m,uid=1000,gid=1000
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:

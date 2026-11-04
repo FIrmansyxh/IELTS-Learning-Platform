@@ -61,6 +61,10 @@ export type RendererProps = {
   disabled: boolean;
   /** Umpan balik soal ini (hanya mode Latihan, setelah diperiksa). */
   feedback: Feedback | null;
+  /** Konteks attempt untuk soal Writing/Speaking (SPEC-012/013); tanpa ini slot AI hanya menampilkan petunjuk. */
+  attemptId?: string;
+  /** Sisa waktu attempt (detik) untuk timer editor Writing. */
+  remainingSec?: number | null;
 };
 
 export const letter = (i: number) => String.fromCharCode(65 + i);

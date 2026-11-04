@@ -43,7 +43,7 @@ const config = [
   },
   {
     // Path berkas di modul ini selalu divalidasi (UUID/storage_key, path paket di bawah assets/) sebelum dipakai.
-    files: ['src/server/storage/**', 'src/server/content/**', 'src/server/admin/health.ts'],
+    files: ['src/server/storage/**', 'src/server/content/**', 'src/server/admin/health.ts', 'src/server/ai/**'],
     rules: { 'security/detect-non-literal-fs-filename': 'off' },
   },
   {
@@ -60,6 +60,17 @@ const config = [
               name: '@/db/schema',
               importNames: ['userTierProgress', 'userModuleProgress', 'userSubModuleProgress'],
               message: 'Tabel progres hanya boleh diakses lewat GatekeepingService (src/server/gatekeeping).',
+            },
+            // SPEC-013: ffmpeg/ffprobe hanya lewat spawn/execFile dengan array argumen; exec/execSync (shell) dilarang.
+            {
+              name: 'node:child_process',
+              importNames: ['exec', 'execSync'],
+              message: 'Gunakan spawn/execFile dengan array argumen; exec/execSync memakai shell.',
+            },
+            {
+              name: 'child_process',
+              importNames: ['exec', 'execSync'],
+              message: 'Gunakan spawn/execFile dengan array argumen; exec/execSync memakai shell.',
             },
           ],
         },

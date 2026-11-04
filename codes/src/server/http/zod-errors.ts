@@ -31,6 +31,18 @@ const CUSTOM_MESSAGES: Record<string, string> = {
   csv_kind_not_allowed: 'csv_kind dilarang untuk format JSON.',
   file_required: 'Berkas wajib diunggah.',
   multiple_files: 'Hanya satu berkas yang diizinkan.',
+  // SPEC-012 / SPEC-013
+  attempt_required: 'attempt_id wajib untuk jenis ini.',
+  question_required: 'question_id wajib untuk jenis ini.',
+  sub_module_required: 'sub_module_id wajib untuk Mini-Task.',
+  unexpected_field: 'Field ini tidak diizinkan untuk jenis ini.',
+  response_too_short: 'Jawaban terlalu pendek.',
+  too_long: 'Jawaban terlalu panjang.',
+  control_char: 'Jawaban memuat karakter kontrol yang tidak diizinkan.',
+  audio_required: 'Rekaman audio wajib dikirim.',
+  audio_too_small: 'Rekaman terlalu kecil.',
+  multiple_audio_parts: 'Hanya satu rekaman yang diizinkan.',
+  criteria_keys_mismatch: 'Kunci kriteria tidak sesuai jenis pengiriman.',
 };
 
 function pathToString(p: ReadonlyArray<PropertyKey>): string {

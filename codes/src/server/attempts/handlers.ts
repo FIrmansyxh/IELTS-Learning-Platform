@@ -3,9 +3,12 @@ import { assertSubModuleAccessible, applyDrillResult, recomputeStatuses } from '
 import { chainOf } from '../gatekeeping/rules';
 import { ApiError, notFound } from '../http/errors';
 import { getSetting } from '../settings/service';
-import type { AttemptRow, SetRow } from './dto';
+import type { AnswerRow, AttemptRow, SetRow } from './dto';
+import type { AttemptState } from './engine';
 import type { ScoreSummary } from './hooks';
 import { skipModuleHandler, skipTierHandler } from '../exams/skip';
+import { bossHandler } from '../exams/boss';
+import { placementHandler } from '../exams/placement';
 
 export type AssessmentTypeName = SetRow['assessmentType'];
 
@@ -17,6 +20,12 @@ export interface StartPlan {
   questionLimit: number | null;
   /** Pertahankan urutan asli soal (set bacaan/audio). */
   keepOrder: boolean;
+  /** Ganti `deadline_at` (detik sejak mulai) bila bukan `set.time_limit_seconds` (Boss: jumlah section + 1800). */
+  deadlineSeconds?: number;
+  /** Ganti pembangunan state awal (Boss: section; Placement: soal pertama adaptif). */
+  buildState?: (attemptId: string) => AttemptState;
+  /** Dipanggil setelah baris attempt dibuat, dalam transaksi yang sama (Boss: baris `attempt_sections`). */
+  afterCreate?: (tx: Tx, attempt: AttemptRow) => Promise<void>;
 }
 export interface FinishOutcome {
   progress: {
@@ -30,22 +39,41 @@ export interface FinishOutcome {
   skip?: unknown;
   boss?: unknown;
   placement?: unknown;
+  /** Kunci tambahan di tingkat atas `attempts.result_json` (Placement: `recommended_tier`, `applied`, ...). */
+  resultExtra?: Record<string, unknown>;
 }
 /** Bagian intro ujian yang spesifik tipe (SPEC-008 `GET /exams/{id}/intro`); sisanya diisi ExamService. */
 export interface ExamIntroPart {
-  scope: { kind: 'MODULE' | 'TIER'; id: string; label: string } | null;
+  scope: { kind: 'MODULE' | 'TIER' | 'TIER_PLACEMENT'; id: string | null; label: string } | null;
   threshold: { kind: string; value: number } | null;
   rules: string[];
-  blocked_reason: 'SKIP_NOT_AVAILABLE' | 'COOLDOWN_ACTIVE' | 'DAILY_ATTEMPT_LIMIT' | null;
+  blocked_reason:
+    | 'SKIP_NOT_AVAILABLE'
+    | 'COOLDOWN_ACTIVE'
+    | 'DAILY_ATTEMPT_LIMIT'
+    | 'TIER_LOCKED'
+    | 'MODULES_INCOMPLETE'
+    | 'BOSS_ALREADY_PASSED'
+    | 'ALREADY_COMPLETED'
+    | 'PROGRESS_EXISTS'
+    | 'RESULT_PENDING_APPLY'
+    | null;
   cooldown: { next_allowed_at: string | null; attempts_in_window: number; max_attempts: number };
   boss: unknown;
   placement: unknown;
+  /** Menimpa nilai dari set induk pada intro (Boss: jumlah section; Placement: N soal). */
+  overrides?: { time_limit_seconds?: number; question_count?: number; requires_audio?: boolean; requires_microphone?: boolean };
 }
 export interface AssessmentTypeHandler {
   /** Gerbang + rencana. Melempar ApiError (403/404/409) bila tidak boleh mulai. */
   start(ctx: { tx: Tx; userId: string; set: SetRow; now: Date }): Promise<StartPlan>;
   /** Dipanggil di dalam transaksi submit/expire setelah skor dihitung; satu-satunya jalur ke GatekeepingService. */
   onFinish(ctx: { tx: Tx; userId: string; attempt: AttemptRow; set: SetRow; result: ScoreSummary }): Promise<FinishOutcome>;
+  /**
+   * Penilaian khusus tipe (Boss: L+R + band; Placement: hanya soal yang dijawab). Bila tidak ada, mesin generik menilai
+   * semua soal objektif yang disajikan. Dipanggil di dalam transaksi finalisasi (boleh membaca DB).
+   */
+  score?(ctx: { tx: Tx; userId: string; attempt: AttemptRow; set: SetRow; answers: AnswerRow[]; status: 'GRADED' | 'EXPIRED'; submittedAt: Date }): Promise<ScoreSummary>;
   /** Hanya tipe yang punya layar pra-ujian (Skip, Boss, Placement). Melempar NOT_FOUND bila set tidak dapat ditampilkan. */
   intro?(ctx: { tx: Tx; userId: string; set: SetRow; now: Date }): Promise<ExamIntroPart>;
 }
@@ -100,3 +128,5 @@ export const activeDrillHandler: AssessmentTypeHandler = {
 assessmentTypeHandlers.ACTIVE_DRILL = activeDrillHandler;
 assessmentTypeHandlers.SKIP_MODULE_TEST = skipModuleHandler; // SPEC-008
 assessmentTypeHandlers.SKIP_TIER_TEST = skipTierHandler;
+assessmentTypeHandlers.TIER_BOSS_EXAM = bossHandler; // SPEC-014
+assessmentTypeHandlers.PLACEMENT_TEST = placementHandler; // SPEC-015

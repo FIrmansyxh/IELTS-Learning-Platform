@@ -99,3 +99,24 @@ export async function callMultipart(
   const text = await res.text();
   return { status: res.status, json: text ? JSON.parse(text) : null, headers: res.headers, cookie: null };
 }
+
+/**
+ * Membersihkan fixture konten/impor/aset agar berkas itest lain (DB bersama, dijalankan serial) tidak melihat sisa data:
+ * batch impor (FK admin_user_id RESTRICT), modul/sub-modul uji `1.99`, aset, set, dan materi. Dipakai di beforeEach dan afterAll.
+ */
+export async function cleanupContentFixtures() {
+  const db = getDb();
+  await db.execute(sql`DELETE FROM attempts`);
+  await db.execute(sql`DELETE FROM import_batch_items`);
+  await db.execute(sql`DELETE FROM async_jobs WHERE import_batch_id IS NOT NULL`);
+  await db.execute(sql`DELETE FROM import_batches`);
+  await db.execute(sql`DELETE FROM content_revisions`);
+  await db.execute(sql`DELETE FROM assessment_sets`);
+  await db.execute(sql`DELETE FROM learning_materials`);
+  await db.execute(sql`DELETE FROM sub_modules WHERE sub_module_code LIKE '1.99.%'`);
+  await db.execute(sql`DELETE FROM modules WHERE module_code = '1.99'`);
+  await db.execute(sql`DELETE FROM content_assets`);
+  await db.execute(sql`DELETE FROM content_sources WHERE left(code, 2) = 'T_'`);
+  await db.execute(sql`UPDATE sub_modules SET status='DRAFT', content_version=1`);
+  await db.execute(sql`UPDATE modules SET status='DRAFT' WHERE status <> 'DRAFT'`);
+}

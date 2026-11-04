@@ -106,7 +106,8 @@ describe('ActiveDrill', () => {
 
   it('soal AI tidak memblokir: langsung bisa Lanjut tanpa memanggil answer', () => {
     drill(makeAttempt([Q.writing, Q.fill]));
-    expect(screen.getByText('Tugas dinilai AI. Kerjakan di Tab Terapkan.')).toBeInTheDocument();
+    // Dalam attempt, slot AI memuat editor Writing (SPEC-012), bukan lagi sekadar petunjuk.
+    expect(screen.getByLabelText('Tulisan Anda dalam bahasa Inggris')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Lanjut' }));
     expect(screen.getByTestId('question-counter')).toHaveTextContent('Soal 2 dari 2');
     expect(api.answer).not.toHaveBeenCalled();

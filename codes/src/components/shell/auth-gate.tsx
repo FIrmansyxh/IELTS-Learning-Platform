@@ -1,5 +1,6 @@
 'use client';
 
+import { clearExamStorage } from '@/lib/reading/storage';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
@@ -31,6 +32,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
 
   const toLogin = React.useCallback(() => {
     qc.clear();
+    clearExamStorage();
     router.replace(`/masuk?next=${encodeURIComponent(here)}`);
   }, [qc, router, here]);
 

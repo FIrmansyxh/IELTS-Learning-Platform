@@ -9,6 +9,7 @@ import type { SubModuleDetail } from '@/contracts/player';
 import type { Tx } from '../db';
 import { nowDate } from '../clock';
 import { runActivityHooks } from '../activity/hooks';
+import '../hooks-register';
 import { assertSubModuleAccessible, markStarted, recomputeStatuses } from '../gatekeeping/service';
 import { chainOf, passOf, subProgressPercent, type SubNode } from '../gatekeeping/rules';
 import { ApiError, notFound, validationError } from '../http/errors';
@@ -215,4 +216,21 @@ export async function completeMiniTask(tx: Tx, userId: string, subModuleId: stri
   await tx.update(usmp).set({ miniTaskCompletedAt: now, updatedAt: now }).where(and(eq(usmp.userId, userId), eq(usmp.subModuleId, subModuleId)));
   await runActivityHooks(tx, { userId, kind: 'MINI_TASK_COMPLETE', subModuleId });
   return { mini_task_completed_at: now.toISOString() };
+}
+
+/**
+ * SPEC-012/013: Mini-Task bertipe AI selesai saat submission mencapai GRADED (AI atau penilaian sendiri). Idempoten (sekali);
+ * dipanggil dalam transaksi penyimpanan evaluasi. Tidak memeriksa akses (sudah diperiksa saat pengiriman).
+ */
+export async function completeMiniTaskGraded(tx: Tx, userId: string, subModuleId: string): Promise<void> {
+  const [row] = await tx
+    .select({ miniTaskCompletedAt: usmp.miniTaskCompletedAt })
+    .from(usmp)
+    .where(and(eq(usmp.userId, userId), eq(usmp.subModuleId, subModuleId)))
+    .limit(1)
+    .for('update');
+  if (!row || row.miniTaskCompletedAt) return;
+  const now = nowDate();
+  await tx.update(usmp).set({ miniTaskCompletedAt: now, updatedAt: now }).where(and(eq(usmp.userId, userId), eq(usmp.subModuleId, subModuleId)));
+  await runActivityHooks(tx, { userId, kind: 'MINI_TASK_COMPLETE', subModuleId });
 }

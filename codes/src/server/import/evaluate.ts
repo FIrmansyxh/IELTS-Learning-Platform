@@ -3,10 +3,10 @@
  * CREATE/UPDATE/NOOP per item, dan peringatan baku. Dipakai job validasi DAN job publikasi ("rencana segar").
  * Tidak pernah melakukan I/O jaringan; URL pada payload hanya diterjemahkan ke asset_code atau ditolak.
  */
-import { and, eq, inArray, sql } from 'drizzle-orm';
-import { attempts, contentAssets } from '@/db/schema';
+import { contentAssets } from '@/db/schema';
 import { QuestionSchema, type ContentIssue, type ContentPackage, type Question } from '@/contracts/content';
 import type { Tx } from '../db';
+import { activeAttemptSetIds, hasActiveAttempts } from '../content/active-attempts';
 import { contextFromDb } from '../content/import-service';
 import { loadDbState, planContentPackage, type ContentPlan, type DbState, type PlanAction } from '../content/plan';
 import { canonicalJson, checkQuestion, naturalKey, parseContentPackage, sha256Hex, splitPassages, zodIssues, type SetKind } from '../content/validate';
@@ -130,13 +130,8 @@ export async function evaluateJson(tx: Tx, checked: CheckedJson, state?: DbState
       const a = assets.get(code);
       if (a?.rights === 'UNVERIFIED') push(row, warn(path, 'asset_unverified', `Aset '${code}' belum diverifikasi; menghalangi target PUBLISHED.`));
     };
-    const activeAttempts = async (setId: string) => {
-      const [r] = await tx
-        .select({ n: sql<number>`count(*)::int` })
-        .from(attempts)
-        .where(and(eq(attempts.assessmentSetId, setId), eq(attempts.status, 'IN_PROGRESS')));
-      return Number(r?.n ?? 0) > 0;
-    };
+    // F-20-04: definisi tunggal dengan kurasi K3 (hidup saja; set induk/anak Boss ikut diperhitungkan).
+    const activeAttempts = (setId: string) => hasActiveAttempts(tx, setId);
 
     for (const ref of refs) {
       const row = ref.rowNumber;
@@ -177,7 +172,7 @@ export async function evaluateJson(tx: Tx, checked: CheckedJson, state?: DbState
         if (drill && drill.action === 'UPDATE') {
           const existing = db.sets.get(naturalKey({ type: 'ACTIVE_DRILL', sub: s.sub_module_code }));
           if (existing && (await activeAttempts(existing.id))) {
-            push(row, err(`sub_modules[${ref.index}].active_drill`, 'set_has_active_attempts', 'Set sedang dikerjakan pengguna (percobaan IN_PROGRESS); ubah setelah selesai.'));
+            push(row, err(`sub_modules[${ref.index}].active_drill`, 'set_has_active_attempts', 'Set sedang dikerjakan pengguna (percobaan masih berjalan); ubah setelah selesai.'));
           }
         }
       } else {
@@ -198,7 +193,7 @@ export async function evaluateJson(tx: Tx, checked: CheckedJson, state?: DbState
         if (p?.action === 'UPDATE') {
           const existing = db.sets.get(key);
           if (existing && (await activeAttempts(existing.id))) {
-            push(row, err(`assessment_sets[${ref.index}]`, 'set_has_active_attempts', 'Set sedang dikerjakan pengguna (percobaan IN_PROGRESS); ubah setelah selesai.'));
+            push(row, err(`assessment_sets[${ref.index}]`, 'set_has_active_attempts', 'Set sedang dikerjakan pengguna (percobaan masih berjalan); ubah setelah selesai.'));
           }
         }
       }
@@ -355,15 +350,11 @@ export async function evaluateCsv(tx: Tx, checked: CheckedCsv, state?: DbState):
   // set dengan percobaan IN_PROGRESS tidak boleh diubah
   const changedSets = [...bySet.values()].filter((p) => p.changes.some((c) => c.action !== 'NOOP'));
   if (changedSets.length) {
-    const busy = await tx
-      .selectDistinct({ id: attempts.assessmentSetId })
-      .from(attempts)
-      .where(and(inArray(attempts.assessmentSetId, changedSets.map((p) => p.setId)), eq(attempts.status, 'IN_PROGRESS')));
-    const busyIds = new Set(busy.map((b) => b.id));
+    const busyIds = await activeAttemptSetIds(tx, changedSets.map((p) => p.setId));
     for (const p of changedSets.filter((x) => busyIds.has(x.setId))) {
       for (const c of p.changes.filter((x) => x.action !== 'NOOP')) {
         const it = items.find((i) => i.rowNumber === c.rowNumber)!;
-        it.errors.push(err('scope_code', 'set_has_active_attempts', 'Set sedang dikerjakan pengguna (percobaan IN_PROGRESS).'));
+        it.errors.push(err('scope_code', 'set_has_active_attempts', 'Set sedang dikerjakan pengguna (percobaan masih berjalan).'));
         it.status = 'INVALID';
         it.action = null;
         it.contentHash = null;
@@ -391,5 +382,8 @@ export function summarizeItems(items: EvalItem[]) {
     warnings += i.errors.filter((e) => e.severity === 'warning' && e.code !== 'noop_item').length;
   }
   const invalid = items.filter((i) => i.status === 'INVALID').length;
-  return { total: items.length, valid: items.length - invalid, invalid, warnings, noop, by_kind };
+  const has_ai_generated = items.some(
+    (i) => (i.entityKind === 'SUB_MODULE' || i.entityKind === 'ASSESSMENT_SET') && i.action !== 'NOOP' && (i.payload as { origin?: unknown } | null)?.origin === 'AI_GENERATED_REVIEWED',
+  );
+  return { total: items.length, valid: items.length - invalid, invalid, warnings, noop, by_kind, has_ai_generated };
 }

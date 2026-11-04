@@ -83,6 +83,8 @@ export function ReadOnlyQuestion({ q, index }: { q: Rec; index: number }) {
 
 function questionsOf(p: Rec): Rec[] {
   const drill = isRec(p.active_drill) ? p.active_drill : null;
+  // Payload item CSV: { set_type, scope_code, question } (F-19-05).
+  if (isRec(p.question)) return [p.question];
   const list = arr(drill?.questions ?? p.questions).filter(isRec);
   if (list.length === 0 && typeof p.question_type === 'string') return [p];
   return list;
@@ -96,7 +98,7 @@ function PayloadView({ payload }: { payload: Rec }) {
   const attachments = arr(materials?.attachments).filter(isRec);
   const mini = isRec(materials?.mini_task) ? materials.mini_task : null;
   const questions = questionsOf(payload);
-  const title = str(payload.sub_module_title) || str(payload.title);
+  const title = str(payload.sub_module_title) || str(payload.title) || (str(payload.set_type) ? `${str(payload.set_type)}:${str(payload.scope_code)}` : '');
 
   return (
     <div className="grid gap-5 px-4 pb-6">

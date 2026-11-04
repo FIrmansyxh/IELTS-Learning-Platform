@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { authApi } from '@/lib/api/auth';
 import type { User } from '@/lib/api/types';
+import { clearExamStorage } from '@/lib/reading/storage';
 
 export const ME_KEY = ['me'] as const;
 
@@ -27,6 +28,7 @@ export function useLogout() {
     onSuccess: () => {
       // Bersihkan seluruh cache agar data pengguna tidak bocor ke sesi berikutnya.
       qc.clear();
+      clearExamStorage();
     },
   });
 }

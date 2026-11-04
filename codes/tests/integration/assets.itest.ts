@@ -1,8 +1,12 @@
-import { existsSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import sharp from 'sharp';
 import { eq, sql } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { uploadAsset as registryUpload } from '@/server/assets/registry';
+import { computeBlockers } from '@/server/content/publish';
 import { auditLog, contentAssets, contentSources } from '@/db/schema';
 import { closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
@@ -14,7 +18,7 @@ import { POST as assetsExternal } from '@/app/api/v1/admin/assets/external/route
 import { DELETE as assetDelete, GET as assetGet, PATCH as assetPatch } from '@/app/api/v1/admin/assets/[asset_id]/route';
 import { GET as assetFile } from '@/app/api/v1/admin/assets/[asset_id]/file/route';
 import { GET as licenseSummary } from '@/app/api/v1/admin/license-summary/route';
-import { adminSession, call, callMultipart, learnerSession } from './helpers';
+import { adminSession, call, callMultipart, cleanupContentFixtures, learnerSession } from './helpers';
 
 const db = getDb();
 let admin: Awaited<ReturnType<typeof adminSession>>;
@@ -25,14 +29,13 @@ beforeAll(async () => {
   const [own] = await db.select().from(contentSources).where(eq(contentSources.code, 'OWN'));
   ownId = own!.id;
 });
-afterAll(closeDb);
+afterAll(async () => {
+  await cleanupContentFixtures();
+  await closeDb();
+});
 beforeEach(async () => {
   resetRateLimits();
-  await db.execute(sql`UPDATE sub_modules SET status='DRAFT'`);
-  await db.execute(sql`DELETE FROM assessment_sets`);
-  await db.execute(sql`DELETE FROM learning_materials`);
-  await db.execute(sql`DELETE FROM content_assets`);
-  await db.execute(sql`DELETE FROM content_sources WHERE left(code, 2) = 'T_'`);
+  await cleanupContentFixtures();
 });
 
 const srcId = async (code: string) => (await db.select().from(contentSources).where(eq(contentSources.code, code)))[0]!.id;
@@ -398,3 +401,113 @@ describe('SPEC-018 verifikasi lisensi, daftar, hapus, ringkasan', () => {
   });
 });
 
+
+// ---------------------------------------------------------------- celah AC/edge case SPEC-018 (ditutup Backend W4)
+const hasFfmpeg = spawnSync('ffmpeg', ['-version']).status === 0;
+
+describe('SPEC-018 celah AC dan edge case', () => {
+  it.skipIf(!hasFfmpeg)('MP3 valid (AUDIO_LISTENING): 201, duration_sec dari ffprobe, key public/audio/<uuid>.mp3', async () => {
+    const dir = mkdtempSync(path.join(os.tmpdir(), 'mp3-'));
+    try {
+      const out = path.join(dir, 't.mp3');
+      const r = spawnSync('ffmpeg', ['-loglevel', 'error', '-f', 'lavfi', '-i', 'sine=frequency=440:duration=2', '-c:a', 'libmp3lame', '-y', out]);
+      expect(r.status).toBe(0);
+      const res = await upload({ kind: 'AUDIO_LISTENING', title: 'MP3', source_id: ownId }, { filename: 'x.mp3', data: readFileSync(out) });
+      expect(res.status, JSON.stringify(res.json)).toBe(201);
+      expect(res.json.data).toMatchObject({ mime_type: 'audio/mpeg', duration_sec: 2 });
+      const [row] = await db.select().from(contentAssets).where(eq(contentAssets.id, res.json.data.id));
+      expect(row!.storageKey).toMatch(/^public\/audio\/[0-9a-f-]{36}\.mp3$/);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('audio 51 MB -> 413 PAYLOAD_TOO_LARGE tanpa baris/berkas; title hanya spasi -> 400', async () => {
+    const big = Buffer.concat([wav(1), Buffer.alloc(51 * 1_048_576, 1)]);
+    const r = await upload({ kind: 'AUDIO_LISTENING', title: 'Besar', source_id: ownId }, { filename: 'big.wav', data: big });
+    expect(r.status).toBe(413);
+    expect(r.json.error.code).toBe('PAYLOAD_TOO_LARGE');
+    expect((await db.select().from(contentAssets)).length).toBe(0);
+    const t = await upload(slide({ title: '    ' }), { filename: 'a.png', data: await png() });
+    expect(t.status).toBe(400);
+    expect(t.json.error.code).toBe('VALIDATION_ERROR');
+    expect(t.json.error.details.some((d: { path: string }) => d.path === 'title')).toBe(true);
+  });
+
+  it('penyimpanan penuh (ENOSPC): galat dilempar tanpa baris parsial', async () => {
+    const enospc = {
+      backend: 'FILESYSTEM' as const,
+      put: async () => {
+        throw Object.assign(new Error('ENOSPC: no space left on device'), { code: 'ENOSPC' });
+      },
+      get: async () => Buffer.alloc(0),
+      remove: async () => undefined,
+    };
+    const fields = { kind: 'SLIDE_IMAGE' as const, title: 'Penuh', source_id: ownId };
+    await expect(registryUpload(admin.user.id, { fields, file: { data: await png('#123123') } }, null, enospc as never)).rejects.toThrow(/ENOSPC/);
+    expect((await db.select().from(contentAssets)).length).toBe(0);
+  });
+
+  it('F-18-01: aset stimulus Writing terlacak: referenced_by, reference_count, v_publish_blockers, DELETE dan PATCH UNVERIFIED', async () => {
+    const up = await upload(slide({ asset_code: 'tier2/stimulus/grafik-1', kind: 'IMAGE' }), { filename: 's.png', data: await png('#778899') });
+    expect(up.status).toBe(201);
+    const id = up.json.data.id as string;
+    const q = [{ question_id: 'W-1', question_type: 'WRITING_TASK', skill: 'WRITING', prompt: 'Jelaskan grafik', stimulus_asset_code: 'tier2/stimulus/grafik-1', explanation_id: 'x' }];
+    const setId = ((await db.execute(sql`
+      INSERT INTO assessment_sets (assessment_type, title, tier_id, time_limit_seconds, origin, status, questions_json, question_count)
+      VALUES ('TIER_BOSS_EXAM', 'Set stimulus', (SELECT id FROM tiers WHERE tier_number = 1), 600, 'ORIGINAL_AUTHORED', 'DRAFT', ${JSON.stringify(q)}::jsonb, 1) RETURNING id`)).rows[0] as { id: string }).id;
+
+    const detail = await call(assetGet, 'GET', '/x', { cookie: admin.cookie, params: { asset_id: id } });
+    expect(detail.json.data.referenced_by).toEqual([{ entity_type: 'ASSESSMENT_SET', entity_id: setId, label: 'Set stimulus', status: 'DRAFT' }]);
+    const list = await call(assetsList, 'GET', '/api/v1/admin/assets?referenced=true', { cookie: admin.cookie });
+    expect(list.json.data.find((a: { id: string }) => a.id === id).reference_count).toBe(1);
+    expect((await call(assetsList, 'GET', '/api/v1/admin/assets?referenced=false', { cookie: admin.cookie })).json.data.some((a: { id: string }) => a.id === id)).toBe(false);
+
+    // penghalang: UNVERIFIED -> view + computeBlockers + ringkasan
+    const blk = (await db.execute(sql`SELECT reason_code FROM v_publish_blockers WHERE entity_type = 'ASSESSMENT_SET' AND entity_id = ${setId}::uuid`)).rows;
+    expect(blk).toEqual([{ reason_code: 'ASSET_UNVERIFIED' }]);
+    const cb = await db.transaction((tx) => computeBlockers(tx, 'ASSESSMENT_SET', setId));
+    expect(cb.map((b) => b.code)).toContain('ASSET_UNVERIFIED');
+    expect((await call(licenseSummary, 'GET', '/x', { cookie: admin.cookie })).json.data.publish_blockers).toBeGreaterThanOrEqual(1);
+
+    // DELETE ditolak selama dirujuk
+    const del = await call(assetDelete, 'DELETE', '/x', { cookie: admin.cookie, params: { asset_id: id } });
+    expect(del.status).toBe(409);
+    expect(del.json.error.code).toBe('ASSET_IN_USE');
+
+    // verifikasi -> blocker hilang; set PUBLISHED -> kembali UNVERIFIED ditolak
+    const ok = await call(assetPatch, 'PATCH', '/x', { cookie: admin.cookie, params: { asset_id: id }, body: { rights_status: 'OWN_ORIGINAL' } });
+    expect(ok.status).toBe(200);
+    expect((await db.transaction((tx) => computeBlockers(tx, 'ASSESSMENT_SET', setId))).map((b) => b.code)).not.toContain('ASSET_UNVERIFIED');
+    await db.execute(sql`UPDATE assessment_sets SET status = 'PUBLISHED' WHERE id = ${setId}::uuid`);
+    const back = await call(assetPatch, 'PATCH', '/x', { cookie: admin.cookie, params: { asset_id: id }, body: { rights_status: 'UNVERIFIED' } });
+    expect(back.status).toBe(409);
+    expect(back.json.error.code).toBe('ASSET_IN_PUBLISHED_USE');
+    await db.execute(sql`DELETE FROM assessment_sets WHERE id = ${setId}::uuid`);
+  });
+
+  it('F-18-03: atribusi tidak boleh dikosongkan pada aset VERIFIED_OPEN sumber CC BY/SA', async () => {
+    const up = await upload({ kind: 'IMAGE', title: 'N', source_id: await srcId('NGSL') }, { filename: 'n.png', data: await png('#abab12') });
+    const id = up.json.data.id as string;
+    const patch = (body: unknown) => call(assetPatch, 'PATCH', '/x', { cookie: admin.cookie, params: { asset_id: id }, body });
+    expect((await patch({ rights_status: 'VERIFIED_OPEN', attribution_text: 'NGSL (CC BY-SA)' })).status).toBe(200);
+    const clear = await patch({ attribution_text: null });
+    expect(clear.status).toBe(409);
+    expect(clear.json.error.code).toBe('ATTRIBUTION_REQUIRED');
+    expect((await patch({ attribution_text: 'NGSL v2' })).json.data.attribution_text).toBe('NGSL v2');
+  });
+
+  it('F-18-02: flag NC/share-alike tidak dapat diturunkan dari yang diwajibkan jenis lisensi', async () => {
+    const mk = (extra: Record<string, unknown>) =>
+      call(sourcesCreate, 'POST', '/api/v1/admin/content-sources', { cookie: admin.cookie, body: { code: 'T_FLAG', name: 'Uji', license_type: 'CC_BY_NC', ...extra } });
+    const bad = await mk({ non_commercial_only: false });
+    expect(bad.status).toBe(400);
+    expect(bad.json.error.details[0].code).toBe('flag_required_by_license');
+    const ok = await mk({});
+    expect(ok.status).toBe(201);
+    expect(ok.json.data.non_commercial_only).toBe(true);
+    const p = await call(sourcePatch, 'PATCH', '/x', { cookie: admin.cookie, params: { source_id: ok.json.data.id }, body: { non_commercial_only: false } });
+    expect(p.status).toBe(400);
+    expect(p.json.error.details[0].code).toBe('flag_required_by_license');
+  });
+});

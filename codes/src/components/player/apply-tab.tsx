@@ -1,22 +1,32 @@
 'use client';
 
-import { CheckCircle2, Sparkles } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
+import { SpeakingTask } from '@/components/ai/speaking-task';
+import { WritingTask } from '@/components/ai/writing-task';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { SubModuleDetail } from '@/contracts/player';
 import { id } from '@/i18n/id';
 
-/** Slot Mini-Task AI (SPEC-012/013). Sebelum spec itu selesai: "Segera hadir" dinonaktifkan. */
-export function MiniTaskAi({ taskType }: { taskType: 'AI_SHORT_WRITING' | 'AI_SHORT_SPEAKING' }) {
+/** Mini-Task AI (SPEC-012/013): editor Writing atau perekam Speaking, dinilai penilai lokal. */
+export function MiniTaskAi({
+  taskType,
+  subModuleId,
+  prompt,
+  onGraded,
+}: {
+  taskType: 'AI_SHORT_WRITING' | 'AI_SHORT_SPEAKING';
+  subModuleId: string;
+  prompt: string;
+  onGraded?: () => void;
+}) {
   return (
-    <div data-testid="mini-task-ai" data-task-type={taskType} className="flex items-start gap-3 rounded-lg border bg-muted p-4">
-      <Sparkles className="mt-0.5 size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
-      <div className="grid gap-2">
-        <p className="text-sm">{id.player.apply.aiBody}</p>
-        <Button disabled aria-disabled="true" className="w-fit">
-          {id.player.apply.aiSoon}
-        </Button>
-      </div>
+    <div data-testid="mini-task-ai" data-task-type={taskType} className="grid gap-3">
+      {taskType === 'AI_SHORT_WRITING' ? (
+        <WritingTask context={{ type: 'mini', subModuleId }} prompt={prompt} onGraded={onGraded} />
+      ) : (
+        <SpeakingTask context={{ type: 'mini', subModuleId }} prompt={prompt} onGraded={onGraded} />
+      )}
     </div>
   );
 }
@@ -26,10 +36,13 @@ export function ApplyTab({
   detail,
   onMarkDone,
   marking,
+  onGraded,
 }: {
   detail: SubModuleDetail;
   onMarkDone: () => void;
   marking: boolean;
+  /** Mini-Task AI mencapai GRADED: muat ulang progres sub-modul. */
+  onGraded?: () => void;
 }) {
   const task = detail.material.mini_task;
   const { progress } = detail;
@@ -79,8 +92,20 @@ export function ApplyTab({
               ) : null}
             </div>
           )
+        ) : done || learnDone ? (
+          <>
+            {done ? (
+              <p role="status" className="flex items-center gap-2 font-medium text-[var(--color-done-text)]">
+                <CheckCircle2 className="size-5" aria-hidden="true" />
+                {id.player.apply.done}
+              </p>
+            ) : null}
+            <MiniTaskAi taskType={task.task_type} subModuleId={detail.sub_module.id} prompt={task.prompt} onGraded={onGraded} />
+          </>
         ) : (
-          <MiniTaskAi taskType={task.task_type} />
+          <p className="text-sm text-muted-foreground" data-testid="apply-need-learn-ai">
+            {id.player.apply.needLearn}
+          </p>
         )}
       </CardContent>
     </Card>

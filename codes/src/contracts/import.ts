@@ -47,6 +47,8 @@ export const BatchDTO = z.object({
       warnings: z.number().int(),
       noop: z.number().int(),
       by_kind: z.record(z.string(), z.unknown()).optional(),
+      /** F-20-03 (aditif): true bila batch memuat konten `AI_GENERATED_REVIEWED` yang berubah (publikasi PUBLISHED wajib `confirm_reviewed`). */
+      has_ai_generated: z.boolean().optional(),
       last_error: z
         .object({ code: z.string(), message: z.string(), blockers: z.array(ImportBlockerSchema).optional() })
         .nullable()
@@ -120,6 +122,11 @@ export const CreateImportBatchFieldsSchema = z
 export const PublishBatchBodySchema = z.strictObject({
   target_status: z.enum(['DRAFT', 'PUBLISHED']),
   acknowledge_warnings: z.boolean().default(false),
+  /**
+   * F-20-03 (aditif, SPEC-020 K2): wajib `true` bila target `PUBLISHED` dan batch memuat konten `AI_GENERATED_REVIEWED`
+   * (Admin menyatakan telah meninjau). Tanpa itu: 409 `REVIEW_CONFIRMATION_REQUIRED`. Pelaku dicatat sebagai `confirmed_by` di audit.
+   */
+  confirm_reviewed: z.boolean().default(false),
 });
 
 export const BatchListQuerySchema = z.strictObject({

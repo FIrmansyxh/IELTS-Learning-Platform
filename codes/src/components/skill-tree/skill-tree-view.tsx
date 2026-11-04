@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { ErrorState } from '@/components/common/state-views';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PlacementMapHint } from '@/components/home/placement-entry';
 import { id } from '@/i18n/id';
 import { curriculumApi } from '@/lib/api/curriculum';
 import { SkillTree } from './skill-tree';
@@ -40,6 +41,7 @@ export function SkillTreeView() {
         <h1 className="text-3xl font-bold">{id.tree.title}</h1>
         <p className="mt-1 text-muted-foreground">{id.tree.description}</p>
       </header>
+      <PlacementMapHint />
       {tree.isPending ? (
         <TreeSkeleton />
       ) : tree.isError ? (

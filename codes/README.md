@@ -40,7 +40,7 @@ Jangan menjalankan `next build` dengan `NODE_ENV=development` di environment (mi
 ### CLI konten dan akun (SPEC-001/002/004)
 ```bash
 npm run content:validate -- --dir content/golden-sample           # exit 0 valid, 1 ada galat
-npm run content:import   -- --dir content/golden-sample [--dry-run] [--publish]   # exit 0/1/2 (publikasi terhalang)/3
+npm run content:import   -- --dir content/golden-sample [--dry-run] [--publish] [--allow-published-overwrite]   # exit 0/1/2 (publikasi terhalang)/3
 npm run user:reset-password -- user@example.test                  # password sementara dicetak sekali
 ```
 Tanpa `ffprobe`, durasi audio hanya terbaca untuk WAV (peringatan `ffprobe_unavailable`).

@@ -207,7 +207,7 @@ Spec ini tidak menambah endpoint HTTP. Kontrak yang mengikat adalah (a) skema Zo
 | Perintah | Argumen | Perilaku | Exit code |
 |---|---|---|---|
 | `validate` | `--dir <path>` (wajib) | memvalidasi paket + manifest + berkas aset tanpa menulis DB; mencetak galat berformat `<path JSON>: <kode>: <pesan>` satu per baris | 0 valid; 1 ada galat |
-| `import` | `--dir <path>` (wajib), `--publish` (opsional), `--dry-run` (opsional) | `validate`, lalu rencana, lalu penerapan satu transaksi; `--dry-run` hanya mencetak rencana (jumlah CREATE/UPDATE/NOOP per jenis) tanpa menulis; `--publish` memanggil `PublishService` | 0 sukses; 1 validasi gagal; 2 publikasi terhalang (daftar penghalang dicetak); 3 galat teknis |
+| `import` | `--dir <path>` (wajib), `--publish` (opsional), `--dry-run` (opsional), `--allow-published-overwrite` (opsional) | `validate`, lalu rencana, lalu penerapan satu transaksi; `--dry-run` hanya mencetak rencana (jumlah CREATE/UPDATE/NOOP per jenis) tanpa menulis; `--publish` memanggil `PublishService`; *(amandemen E2E O-1, ADR-003 #39)* UPDATE pada entitas yang sudah `PUBLISHED` ditolak (exit 1, kode `published_overwrite_blocked`, juga pada `--dry-run`) kecuali `--allow-published-overwrite`, dan UPDATE pada set yang sedang dikerjakan (attempt hidup) selalu ditolak (`set_has_active_attempts`) | 0 sukses; 1 validasi gagal; 2 publikasi terhalang (daftar penghalang dicetak); 3 galat teknis |
 Cetakan ringkasan sukses (contoh): `OK: modules +0 ~0 =13 | sub_modules +3 ~0 =28 | assessment_sets +6 ~0 =0 | assets +9`. Menjalankan ulang tanpa perubahan: semua `=` dan 0 `+`/`~`.
 
 ### Antarmuka service (`src/server/content/`)
@@ -259,7 +259,7 @@ Tidak ada layar baru. Verifikasi manual: setelah seed, `/peta` (SPEC-003) menamp
 - [ ] **Given** semua aset terverifikasi **When** `import --publish` **Then** exit 0 dan set drill, sub-modul, modul terkait `PUBLISHED`; `/peta` menampilkan GS-1 `UNLOCKED` bila predecessor selesai.
 - [ ] **Given** sub-modul tanpa `active_drill` **When** `--publish` **Then** penghalang `DRILL_NOT_PUBLISHED`.
 - [ ] **Given** Placement dengan 24 soal **When** `--publish` **Then** penghalang `PLACEMENT_BANK_TOO_SMALL`.
-- [ ] **Given** item UPDATE pada set yang sudah `PUBLISHED` **When** diimpor ulang dengan isi berbeda **Then** `version` naik 1, status tetap `PUBLISHED`, `content_revisions` menyimpan snapshot versi lama.
+- [ ] **Given** item UPDATE pada set yang sudah `PUBLISHED` **When** diimpor ulang dengan isi berbeda lewat CLI dengan `--allow-published-overwrite` (tanpa flag: ditolak exit 1 `published_overwrite_blocked`, tidak ada perubahan) **Then** `version` naik 1, status tetap `PUBLISHED`, `content_revisions` menyimpan snapshot versi lama.
 - [ ] **Given** insert `assessment_sets` dengan `assessment_type='ACTIVE_DRILL'` namun `tier_id` terisi **When** diuji integrasi **Then** CHECK `assessment_sets_scope_chk` menolak.
 - [ ] **Given** CI **When** `npm run test` **Then** uji unit untuk setiap aturan silang di tabel Question (>= 1 kasus lulus dan >= 1 kasus gagal per baris) hijau.
 
@@ -290,3 +290,4 @@ Tidak ada layar baru. Verifikasi manual: setelah seed, `/peta` (SPEC-003) menamp
 | Date | Author | Changes |
 |------|--------|---------|
 | 2026-11-03 | Analyst Agent | Initial draft; delta skema `content_assets.asset_code` |
+| 2026-11-03 | Fixer Agent | O-1 (E2E Fase 3): CLI `import` menolak UPDATE pada entitas PUBLISHED tanpa `--allow-published-overwrite` dan selalu menolak UPDATE pada set dengan attempt hidup (ADR-003 #39). |

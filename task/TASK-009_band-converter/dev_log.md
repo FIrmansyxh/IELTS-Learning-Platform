@@ -47,3 +47,21 @@ Satu rangkaian W3 dengan TASK-008 (tsc, eslint, vitest 446, integration 231 lulu
 | Timestamp | Changes |
 |-----------|---------|
 | 2026-11-03 12:30 | Backend W3: konverter band, tabel berversi, API admin, seed |
+
+
+---
+
+## [BACKEND] 2026-11-03 12:40 (Backend Engineer, wave W4) - Verifikasi perbaikan QA W3 (TASK-009)
+
+| ID | Status | Bukti |
+|---|---|---|
+| F-09-01 | TERTUTUP (sudah ada, diverifikasi) | `scaleToForty(raw, 40)` membulatkan setengah ke atas (29.5 -> 30, 28.4 -> 28), selalu bilangan bulat. Unit `band.test.ts` (vektor `[29.5, 40, 30]`). |
+| F-09-02 | TERTUTUP (sudah ada, diverifikasi) | Migrasi `0006_spec_019_import_entity_code_band_fk_restrict.sql`: FK `attempts.band_table_id` `ON DELETE restrict`; skema Drizzle `onDelete: 'restrict'`. Tes `band.itest.ts`: DELETE SQL langsung ditolak, `band_table_id` tidak dikosongkan. |
+| F-09-03 | DITUTUP (baru) | `band/service.ts` `deleteTable`: `result_json::text LIKE '%uuid%'` diganti `jsonb_path_exists(result_json, '$.** ? (@.type() == "string" && @ == $id)')` (string persis, tanpa cast teks seluruh JSON, hanya baris ber-`result_json`). Masih pemindaian sekuensial tanpa indeks (admin-only, jarang); indeks GIN ditunda sampai SPEC-014 menetapkan bentuk `band_table_ids`. Tes `band.itest.ts` "tabel yang dirujuk result_json" lulus. |
+
+Verifikasi: lihat dev_log TASK-018 (tsc, eslint, vitest 520, integration 280 lulus).
+
+### Revision History
+| Timestamp | Changes |
+|-----------|---------|
+| 2026-11-03 12:40 | Backend W4: verifikasi F-09-01/02, F-09-03 jsonpath |

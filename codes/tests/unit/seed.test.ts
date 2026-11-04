@@ -12,8 +12,8 @@ describe('seed SPEC-000', () => {
     }
   });
 
-  it('mendaftarkan modul seed berurutan (SPEC-000, 002, 004, 009)', () => {
-    expect(seedModules.map((m) => m.name)).toEqual(['content_sources', 'app_settings', 'system_settings', 'curriculum-structure', 'band-tables']);
+  it('mendaftarkan modul seed berurutan (SPEC-000, 002, 004, 009, 012)', () => {
+    expect(seedModules.map((m) => m.name)).toEqual(['content_sources', 'app_settings', 'system_settings', 'curriculum-structure', 'band-tables', 'grading-rubrics']);
   });
 
   it('menyemai tiga kunci dari env dan sisanya default', () => {

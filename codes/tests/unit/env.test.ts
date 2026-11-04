@@ -49,4 +49,12 @@ describe('parseEnv', () => {
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.keys).toEqual(expect.arrayContaining(['DATABASE_URL', 'AUTH_SECRET', 'AUTH_URL', 'ALLOWED_HOSTS']));
   });
+
+  it('F-16-05: APP_TIMEZONE harus zona IANA; salah ketik ditolak (gagal cepat)', () => {
+    expect(parseEnv({ ...valid, APP_TIMEZONE: 'Asia/Makassar' }).ok).toBe(true);
+    expect(parseEnv({ ...valid, APP_TIMEZONE: 'UTC' }).ok).toBe(true);
+    const bad = parseEnv({ ...valid, APP_TIMEZONE: 'Asia/Jakartaa' });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) expect(bad.keys).toContain('APP_TIMEZONE');
+  });
 });

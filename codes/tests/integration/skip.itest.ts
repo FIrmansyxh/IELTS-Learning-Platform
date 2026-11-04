@@ -373,6 +373,33 @@ describe('submit: hasil lulus / gagal', () => {
     expect(await modStatus(u.user.id, '2.1')).toMatchObject({ status: 'SKIPPED' });
   });
 
+  it('F-08-07: tiga POST /attempts serentak pada set Skip -> tepat satu attempt, semuanya merujuk attempt yang sama', async () => {
+    await publishModule21();
+    const set = await moduleSet('2.1', mcqs(4));
+    const u = await learnerSession();
+    const rs = await Promise.all([start(u, set.id), start(u, set.id), start(u, set.id)]);
+    expect(rs.every((r) => r.status === 200 || r.status === 201)).toBe(true);
+    expect(new Set(rs.map((r) => r.json.data.id)).size).toBe(1);
+    expect(await attemptCount(u.user.id)).toBe(1);
+  });
+
+  it('F-08-07: batas harian di ambang - tiga attempt selesai lalu start serentak ke-4 semuanya 429 DAILY_ATTEMPT_LIMIT', async () => {
+    await publishModule21();
+    await setSetting('attempt.cooldown_minutes', 0);
+    const set = await moduleSet('2.1', mcqs(4));
+    const u = await learnerSession();
+    for (let i = 0; i < 3; i++) {
+      const dto = (await start(u, set.id)).json.data;
+      await answerBy(u, dto, (n) => n <= 1);
+      expect((await submit(u, dto.id)).status).toBe(200);
+      at(clock + MIN);
+    }
+    const rs = await Promise.all([start(u, set.id), start(u, set.id), start(u, set.id)]);
+    expect(rs.map((r) => r.status)).toEqual([429, 429, 429]);
+    expect(rs.every((r) => r.json.error.code === 'DAILY_ATTEMPT_LIMIT')).toBe(true);
+    expect(await attemptCount(u.user.id)).toBe(3);
+  });
+
   it('tepat 85.00% lulus (17/20)', async () => {
     await publishModule21();
     const set = await moduleSet('2.1', mcqs(20));
