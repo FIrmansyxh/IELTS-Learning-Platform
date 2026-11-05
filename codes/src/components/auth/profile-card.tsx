@@ -12,6 +12,7 @@ import { ErrorState } from '@/components/common/state-views';
 import { FormErrorSummary } from '@/components/form/form-error-summary';
 import { LogoutButton } from '@/components/auth/logout-button';
 import { ShortcutPref } from '@/components/auth/shortcut-pref';
+import { RecordingPreferencesCard } from '@/components/profile/recording-preferences-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -191,6 +192,7 @@ export function ProfileCard() {
           <ShortcutPref />
         </CardContent>
       </Card>
+      <RecordingPreferencesCard />
       <Card>
         <CardHeader>
           <CardTitle>{id.profile.securityTitle}</CardTitle>

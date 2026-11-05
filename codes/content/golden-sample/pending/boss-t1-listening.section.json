@@ -10,7 +10,7 @@
   "source_code": "OWN",
   "questions": [
     {
-      "question_id": "Q-BL-01",
+      "question_id": "Q-BL-P1-01",
       "question_type": "FILL_IN_BLANK",
       "skill": "LISTENING",
       "prompt": "Monthly rent: £ _______",
@@ -24,7 +24,7 @@
       "section_no": 1
     },
     {
-      "question_id": "Q-BL-02",
+      "question_id": "Q-BL-P1-02",
       "question_type": "FILL_IN_BLANK",
       "skill": "LISTENING",
       "prompt": "The room is on the _______ floor.",
@@ -37,7 +37,7 @@
       "section_no": 1
     },
     {
-      "question_id": "Q-BL-03",
+      "question_id": "Q-BL-P1-03",
       "question_type": "MCQ_SINGLE",
       "skill": "LISTENING",
       "prompt": "What is included in the rent?",
@@ -50,11 +50,11 @@
       "correct_answers": [
         "The internet"
       ],
-      "explanation_id": "'The rent includes the internet'. Listrik dan air dibayar terpisah.",
+      "explanation_id": "'The rent includes the internet'.",
       "section_no": 1
     },
     {
-      "question_id": "Q-BL-04",
+      "question_id": "Q-BL-P1-04",
       "question_type": "SHORT_ANSWER",
       "skill": "LISTENING",
       "prompt": "Apa yang harus dibawa penelepon saat melihat kamar? (Maksimal SATU kata)",
@@ -66,7 +66,7 @@
       "section_no": 1
     },
     {
-      "question_id": "Q-BL-05",
+      "question_id": "Q-BL-P1-05",
       "question_type": "MCQ_SINGLE",
       "skill": "LISTENING",
       "prompt": "What time will the bus leave on Friday?",
@@ -79,11 +79,11 @@
       "correct_answers": [
         "8:15 am"
       ],
-      "explanation_id": "'A quarter past eight' sama dengan 8:15. Pukul 3:30 adalah waktu kembali ke sekolah.",
+      "explanation_id": "'A quarter past eight' sama dengan 8:15.",
       "section_no": 2
     },
     {
-      "question_id": "Q-BL-06",
+      "question_id": "Q-BL-P1-06",
       "question_type": "FILL_IN_BLANK",
       "skill": "LISTENING",
       "prompt": "Everybody must bring a _______ and a bottle of water.",
@@ -95,7 +95,7 @@
       "section_no": 2
     },
     {
-      "question_id": "Q-BL-07",
+      "question_id": "Q-BL-P1-07",
       "question_type": "MCQ_SINGLE",
       "skill": "LISTENING",
       "prompt": "What will the students do first at the museum?",
@@ -108,11 +108,11 @@
       "correct_answers": [
         "Watch a short film"
       ],
-      "explanation_id": "'First, we will watch a short film'. Lembar kerja dikerjakan setelah itu.",
+      "explanation_id": "'First, we will watch a short film'.",
       "section_no": 2
     },
     {
-      "question_id": "Q-BL-08",
+      "question_id": "Q-BL-P1-08",
       "question_type": "MCQ_SINGLE",
       "skill": "LISTENING",
       "prompt": "What topic do Anna and Tom choose?",
@@ -125,11 +125,11 @@
       "correct_answers": [
         "Recycling"
       ],
-      "explanation_id": "Tom menolak travel karena terlalu banyak; Anna mengusulkan recycling dan disetujui.",
+      "explanation_id": "Anna mengusulkan recycling dan disetujui Tom.",
       "section_no": 3
     },
     {
-      "question_id": "Q-BL-09",
+      "question_id": "Q-BL-P1-09",
       "question_type": "SHORT_ANSWER",
       "skill": "LISTENING",
       "prompt": "Siapa yang akan mencari gambar? (Maksimal SATU kata)",
@@ -137,11 +137,11 @@
         "Anna"
       ],
       "max_words": 1,
-      "explanation_id": "Anna berkata 'I'll find the pictures'. Tom menulis teks slide.",
+      "explanation_id": "Anna berkata 'I'll find the pictures'.",
       "section_no": 3
     },
     {
-      "question_id": "Q-BL-10",
+      "question_id": "Q-BL-P1-10",
       "question_type": "FILL_IN_BLANK",
       "skill": "LISTENING",
       "prompt": "They will meet in the _______ on Thursday.",
@@ -149,7 +149,298 @@
         "library",
         "the library"
       ],
-      "explanation_id": "Kafe terlalu berisik, jadi mereka sepakat bertemu di library.",
+      "explanation_id": "Mereka sepakat bertemu di library.",
+      "max_words": 2,
+      "section_no": 3
+    },
+    {
+      "question_id": "Q-BL-P2-01",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "Agreed studio lease cost: £ _______ per month",
+      "correct_answers": [
+        "520",
+        "£520",
+        "five hundred and twenty"
+      ],
+      "explanation_id": "Agen properti mengutip £520 per bulan.",
+      "max_words": 2,
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-P2-02",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "The vacant apartment is situated on the _______ story.",
+      "correct_answers": [
+        "third",
+        "3rd"
+      ],
+      "explanation_id": "Unit berada di lantai tiga ('third floor').",
+      "max_words": 1,
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-P2-03",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "Which utility expense is covered within the base rent?",
+      "options": [
+        "Central heating",
+        "Council tax",
+        "Wi-Fi broadband",
+        "Water supply"
+      ],
+      "correct_answers": [
+        "Wi-Fi broadband"
+      ],
+      "explanation_id": "Sewa bulanan sudah mencakup akses internet nirkabel (broadband).",
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-P2-04",
+      "question_type": "SHORT_ANSWER",
+      "skill": "LISTENING",
+      "prompt": "What primary identity credential must the tenant present for tenancy check? (Maximum ONE word)",
+      "correct_answers": [
+        "passport",
+        "ID"
+      ],
+      "max_words": 1,
+      "explanation_id": "Penyewa wajib membawa paspor asli.",
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-P2-05",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "What is the precise coach departure time for the educational excursion?",
+      "options": [
+        "8:15 am",
+        "8:45 am",
+        "9:00 am",
+        "2:30 pm"
+      ],
+      "correct_answers": [
+        "8:45 am"
+      ],
+      "explanation_id": "Bus pariwisata berangkat tepat pukul 'a quarter to nine' (8:45 am).",
+      "section_no": 2
+    },
+    {
+      "question_id": "Q-BL-P2-06",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "Participants must pack their own _______ and refillable beverage container.",
+      "correct_answers": [
+        "packed lunch",
+        "lunch"
+      ],
+      "explanation_id": "Siswa diwajibkan membawa bekal makan siang ('packed lunch').",
+      "max_words": 2,
+      "section_no": 2
+    },
+    {
+      "question_id": "Q-BL-P2-07",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "What activity precedes the gallery tour upon arrival at the science center?",
+      "options": [
+        "Introductory video screening",
+        "Audio guide assignment",
+        "Cafeteria snack break",
+        "Museum gift shop visit"
+      ],
+      "correct_answers": [
+        "Introductory video screening"
+      ],
+      "explanation_id": "Rombongan terlebih dahulu menonton penayangan video pengantar.",
+      "section_no": 2
+    },
+    {
+      "question_id": "Q-BL-P2-08",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "Which project theme do Liam and Sophie finalize for their presentation?",
+      "options": [
+        "Urban biodiversity",
+        "Plastic waste management",
+        "Solar transport",
+        "Ancient trade"
+      ],
+      "correct_answers": [
+        "Plastic waste management"
+      ],
+      "explanation_id": "Mereka sepakat memilih topik pengelolaan limbah plastik.",
+      "section_no": 3
+    },
+    {
+      "question_id": "Q-BL-P2-09",
+      "question_type": "SHORT_ANSWER",
+      "skill": "LISTENING",
+      "prompt": "Who assumes responsibility for designing visual presentation slides? (Maximum ONE word)",
+      "correct_answers": [
+        "Liam"
+      ],
+      "max_words": 1,
+      "explanation_id": "Liam bertugas mendesain dan menyiapkan visual slide.",
+      "section_no": 3
+    },
+    {
+      "question_id": "Q-BL-P2-10",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "The study partners scheduled their rehearsal in the campus _______ study hall.",
+      "correct_answers": [
+        "library",
+        "main library"
+      ],
+      "explanation_id": "Tempat latihan presentasi diputuskan di ruang baca perpustakaan.",
+      "max_words": 2,
+      "section_no": 3
+    },
+    {
+      "question_id": "Q-BL-P3-01",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "Fixed accommodation tariff: £ _______ per calendar month",
+      "correct_answers": [
+        "480",
+        "£480",
+        "four hundred and eighty"
+      ],
+      "explanation_id": "Biaya sewa kamar adalah £480 per bulan.",
+      "max_words": 2,
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-P3-02",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "The bedroom is located on the _______ level of the annex.",
+      "correct_answers": [
+        "first",
+        "1st",
+        "ground"
+      ],
+      "explanation_id": "Kamar tidur terletak di lantai satu ('first floor').",
+      "max_words": 1,
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-P3-03",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "Which service is bundled into the recurring rental fee without surcharge?",
+      "options": [
+        "Gas heating",
+        "High-speed internet",
+        "Weekly linen laundering",
+        "Parking space"
+      ],
+      "correct_answers": [
+        "High-speed internet"
+      ],
+      "explanation_id": "Biaya sewa mencakup layanan internet berkecepatan tinggi.",
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-P3-04",
+      "question_type": "SHORT_ANSWER",
+      "skill": "LISTENING",
+      "prompt": "What official identification must prospective tenants furnish during inspection? (Maximum ONE word)",
+      "correct_answers": [
+        "passport"
+      ],
+      "max_words": 1,
+      "explanation_id": "Petugas meminta penyewa membawa paspor.",
+      "section_no": 1
+    },
+    {
+      "question_id": "Q-BL-P3-05",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "When will the departure shuttle commence boarding on the trip morning?",
+      "options": [
+        "7:45 am",
+        "8:15 am",
+        "8:30 am",
+        "9:15 am"
+      ],
+      "correct_answers": [
+        "8:15 am"
+      ],
+      "explanation_id": "Keberangkatan shuttle ditetapkan pada pukul 8:15 am.",
+      "section_no": 2
+    },
+    {
+      "question_id": "Q-BL-P3-06",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "Every attendee is required to carry a _______ along with water.",
+      "correct_answers": [
+        "packed lunch"
+      ],
+      "explanation_id": "Setiap siswa harus membawa bekal 'packed lunch'.",
+      "max_words": 2,
+      "section_no": 2
+    },
+    {
+      "question_id": "Q-BL-P3-07",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "Which introductory event is scheduled first on the museum itinerary?",
+      "options": [
+        "A documentary screening",
+        "A scavenger hunt",
+        "A curator lecture",
+        "Souvenir shopping"
+      ],
+      "correct_answers": [
+        "A documentary screening"
+      ],
+      "explanation_id": "Menonton penayangan film dokumenter pendek terlebih dahulu.",
+      "section_no": 2
+    },
+    {
+      "question_id": "Q-BL-P3-08",
+      "question_type": "MCQ_SINGLE",
+      "skill": "LISTENING",
+      "prompt": "What assignment topic is chosen by the academic research pair?",
+      "options": [
+        "Ocean conservation",
+        "Household recycling habits",
+        "Renewable solar tech",
+        "Public parks"
+      ],
+      "correct_answers": [
+        "Household recycling habits"
+      ],
+      "explanation_id": "Pasangan peneliti memilih topik kebiasaan daur ulang rumah tangga.",
+      "section_no": 3
+    },
+    {
+      "question_id": "Q-BL-P3-09",
+      "question_type": "SHORT_ANSWER",
+      "skill": "LISTENING",
+      "prompt": "Which team member will curate photographic evidence and diagrams? (Maximum ONE word)",
+      "correct_answers": [
+        "Anna",
+        "Sophie"
+      ],
+      "max_words": 1,
+      "explanation_id": "Rekan tim perempuan bertugas mengumpulkan materi foto dan diagram.",
+      "section_no": 3
+    },
+    {
+      "question_id": "Q-BL-P3-10",
+      "question_type": "FILL_IN_BLANK",
+      "skill": "LISTENING",
+      "prompt": "The collaborative review session will be conducted inside the university _______ lounge.",
+      "correct_answers": [
+        "library"
+      ],
+      "explanation_id": "Sesi telaah bersama diselenggarakan di perpustakaan kampus.",
       "max_words": 2,
       "section_no": 3
     }

@@ -50,7 +50,7 @@
         "pass_percent": 75,
         "questions": [
           {
-            "question_id": "Q-213-01",
+            "question_id": "Q-213-P1-01",
             "question_type": "FILL_IN_BLANK",
             "skill": "GRAMMAR",
             "prompt": "Lengkapi kalimat berikut dengan bentuk pasif dari kata di dalam kurung:\n'Once the grapes _______ (harvest), they are taken to the factory.'",
@@ -61,7 +61,7 @@
             "max_words": 3
           },
           {
-            "question_id": "Q-213-02",
+            "question_id": "Q-213-P1-02",
             "question_type": "FILL_IN_BLANK",
             "skill": "GRAMMAR",
             "prompt": "Lengkapi dengan bentuk pasif Present Simple:\n'The final product _______ (sell) in supermarkets across the country.'",
@@ -72,7 +72,7 @@
             "max_words": 3
           },
           {
-            "question_id": "Q-213-03",
+            "question_id": "Q-213-P1-03",
             "question_type": "FILL_IN_BLANK",
             "skill": "GRAMMAR",
             "prompt": "Lengkapi dengan pasif modal (gunakan 'must'):\n'Waste water _______ (treat) before it is released into the river.'",
@@ -83,7 +83,7 @@
             "max_words": 3
           },
           {
-            "question_id": "Q-213-04",
+            "question_id": "Q-213-P1-04",
             "question_type": "MCQ_SINGLE",
             "skill": "GRAMMAR",
             "prompt": "Manakah kalimat yang paling tepat untuk laporan akademik tentang proses pembuatan kopi?",
@@ -99,7 +99,7 @@
             "explanation_id": "Pilihan B memakai pasif yang benar: 'beans' jamak + 'are' + V3 'ground'. Pilihan A bersifat aktif dengan pelaku yang tidak penting. Pilihan C salah kesesuaian subjek-be ('beans ... is'). Pilihan D memakai bentuk dasar 'grind', bukan V3."
           },
           {
-            "question_id": "Q-213-05",
+            "question_id": "Q-213-P1-05",
             "question_type": "MCQ_SINGLE",
             "skill": "GRAMMAR",
             "prompt": "Pilih bentuk pasif yang benar dari kalimat: 'Engineers have repaired the bridge.'",
@@ -112,10 +112,10 @@
             "correct_answers": [
               "The bridge has been repaired by engineers."
             ],
-            "explanation_id": "Kalimat aktif memakai Present Perfect, maka pasifnya has/have been + V3. Subjek baru 'the bridge' tunggal, jadi 'has been repaired'. Pilihan B mengubah tense menjadi Past Simple, C kehilangan 'been', D salah kesesuaian."
+            "explanation_id": "Kalimat aktif memakai Present Perfect, maka pasifnya has/have been + V3. Subjek baru 'the bridge' tunggal, jadi 'has been repaired'."
           },
           {
-            "question_id": "Q-213-06",
+            "question_id": "Q-213-P1-06",
             "question_type": "MCQ_SINGLE",
             "skill": "GRAMMAR",
             "prompt": "Pada kalimat mana frasa 'by + pelaku' sebaiknya dihapus karena tidak memberi informasi baru?",
@@ -128,10 +128,10 @@
             "correct_answers": [
               "The samples were tested by people."
             ],
-            "explanation_id": "'By people' tidak memberi informasi karena pengujian tentu dilakukan oleh orang. Pada pilihan lain, pelaku menambah informasi penting (pembuat lukisan, penulis laporan, pengusul teori)."
+            "explanation_id": "'By people' tidak memberi informasi karena pengujian tentu dilakukan oleh orang."
           },
           {
-            "question_id": "Q-213-07",
+            "question_id": "Q-213-P1-07",
             "question_type": "MCQ_SINGLE",
             "skill": "GRAMMAR",
             "prompt": "Pilih jawaban yang benar: 'The recycled paper can _______ into new boxes.'",
@@ -144,10 +144,10 @@
             "correct_answers": [
               "be turned"
             ],
-            "explanation_id": "Pasif modal: modal + be + V3. Setelah 'can' dipakai 'be', lalu 'turned'. 'Been' hanya dipakai setelah have/has/had, dan 'being turn' bukan bentuk yang valid."
+            "explanation_id": "Pasif modal: modal + be + V3. Setelah 'can' dipakai 'be', lalu 'turned'."
           },
           {
-            "question_id": "Q-213-08",
+            "question_id": "Q-213-P1-08",
             "question_type": "SENTENCE_REORDER",
             "skill": "GRAMMAR",
             "prompt": "Susun segmen berikut menjadi kalimat pasif yang benar tentang proses pasteurisasi susu.",
@@ -157,10 +157,10 @@
               "heated to 72 degrees",
               "and then cooled quickly."
             ],
-            "explanation_id": "Urutan yang benar: subjek (The raw milk), be (is) dengan kata urutan 'first', kata kerja V3 beserta keterangan (heated to 72 degrees), lalu bagian akhir (and then cooled quickly). Kata 'first' diletakkan setelah be, seperti pada banyak kalimat proses."
+            "explanation_id": "Urutan yang benar: subjek (The raw milk), be (is) dengan kata urutan 'first', kata kerja V3 beserta keterangan (heated to 72 degrees), lalu bagian akhir (and then cooled quickly)."
           },
           {
-            "question_id": "Q-213-09",
+            "question_id": "Q-213-P1-09",
             "question_type": "ERROR_RECOGNITION",
             "skill": "GRAMMAR",
             "prompt": "Pilih satu kata yang membuat kalimat pasif ini salah.",
@@ -179,10 +179,10 @@
             "correct_answers": [
               3
             ],
-            "explanation_id": "Setelah 'is' dibutuhkan V3, yaitu 'mixed'. 'Mix' adalah bentuk dasar, sehingga kalimat seharusnya 'The cement is mixed with water in a large drum.'"
+            "explanation_id": "Setelah 'is' dibutuhkan V3, yaitu 'mixed'. 'Mix' adalah bentuk dasar."
           },
           {
-            "question_id": "Q-213-10",
+            "question_id": "Q-213-P1-10",
             "question_type": "MATCHING_DROPDOWN",
             "skill": "GRAMMAR",
             "prompt": "Pasangkan setiap kalimat aktif dengan kalimat pasif yang tepat.",
@@ -209,7 +209,331 @@
               0
             ],
             "points": 4,
-            "explanation_id": "Samakan tense: Present Simple menjadi 'are picked', Past Simple menjadi 'was stolen', Present Perfect menjadi 'has been developed', dan Future menjadi 'will be closed'. Pilihan terakhir ('is developed') adalah pengecoh karena mengubah Present Perfect menjadi Present Simple."
+            "explanation_id": "Samakan tense: Present Simple -> 'are picked', Past Simple -> 'was stolen', Present Perfect -> 'has been developed', Future -> 'will be closed'."
+          },
+          {
+            "question_id": "Q-213-P2-01",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "GRAMMAR",
+            "prompt": "Lengkapi kalimat berikut dengan bentuk pasif dari kata di dalam kurung:\n'After the cocoa pods _______ (collect), the beans are extracted.'",
+            "correct_answers": [
+              "have been collected"
+            ],
+            "explanation_id": "Urutan proses: pemanenan selesai sebelum ekstraksi biji, memakai Present Perfect Passive 'have been collected' karena subjek 'the cocoa pods' jamak.",
+            "max_words": 3
+          },
+          {
+            "question_id": "Q-213-P2-02",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "GRAMMAR",
+            "prompt": "Lengkapi dengan bentuk pasif Present Simple:\n'The raw tea leaves _______ (dry) on large wooden trays in the sun.'",
+            "correct_answers": [
+              "are dried"
+            ],
+            "explanation_id": "Fakta proses rutin memakai Present Simple Passive. Subjek jamak 'tea leaves' memakai 'are', dan V3 dari dry adalah 'dried'.",
+            "max_words": 3
+          },
+          {
+            "question_id": "Q-213-P2-03",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "GRAMMAR",
+            "prompt": "Lengkapi dengan pasif modal (gunakan 'should'):\n'Hazardous chemicals _______ (store) in a dedicated temperature-controlled room.'",
+            "correct_answers": [
+              "should be stored"
+            ],
+            "explanation_id": "Pasif modal: modal + be + V3 -> 'should be stored'.",
+            "max_words": 3
+          },
+          {
+            "question_id": "Q-213-P2-04",
+            "question_type": "MCQ_SINGLE",
+            "skill": "GRAMMAR",
+            "prompt": "Manakah kalimat pasif yang paling sesuai untuk mendeskripsikan tahap pengemasan madu?",
+            "options": [
+              "They put the liquid honey in sterilized glass jars.",
+              "The liquid honey is poured into sterilized glass jars.",
+              "Honey pour into sterilized glass jars.",
+              "The honey is pouring into jars by them."
+            ],
+            "correct_answers": [
+              "The liquid honey is poured into sterilized glass jars."
+            ],
+            "explanation_id": "Pilihan B menggunakan kalimat pasif ilmiah objektif yang baku ('is poured'). Pilihan A menggunakan aktif informal ('they'), C salah tata bahasa, D present continuous pasif yang janggal."
+          },
+          {
+            "question_id": "Q-213-P2-05",
+            "question_type": "MCQ_SINGLE",
+            "skill": "GRAMMAR",
+            "prompt": "Pilih bentuk pasif yang benar dari kalimat: 'Researchers have discovered a new marine species.'",
+            "options": [
+              "A new marine species has been discovered by researchers.",
+              "A new marine species was discovered by researchers.",
+              "A new marine species has discovered by researchers.",
+              "A new marine species had been discovered by researchers."
+            ],
+            "correct_answers": [
+              "A new marine species has been discovered by researchers."
+            ],
+            "explanation_id": "Present perfect aktif ('have discovered') menjadi present perfect pasif ('has been discovered') menyesuaikan subjek tunggal 'a new marine species'."
+          },
+          {
+            "question_id": "Q-213-P2-06",
+            "question_type": "MCQ_SINGLE",
+            "skill": "GRAMMAR",
+            "prompt": "Pada kalimat mana frasa 'by + pelaku' sebaiknya dihapus dalam penulisan ilmiah?",
+            "options": [
+              "The theory of relativity was formulated by Albert Einstein.",
+              "The laboratory equipment was cleaned by workers.",
+              "The novel was illustrated by a local artist.",
+              "The historical document was signed by King John."
+            ],
+            "correct_answers": [
+              "The laboratory equipment was cleaned by workers."
+            ],
+            "explanation_id": "'By workers' tidak memberikan informasi baru karena pembersihan lab lumrah dilakukan oleh staf/pekerja."
+          },
+          {
+            "question_id": "Q-213-P2-07",
+            "question_type": "MCQ_SINGLE",
+            "skill": "GRAMMAR",
+            "prompt": "Pilih jawaban yang benar: 'All submitted essays must _______ by the end of this semester.'",
+            "options": [
+              "complete",
+              "be completed",
+              "been completed",
+              "being complete"
+            ],
+            "correct_answers": [
+              "be completed"
+            ],
+            "explanation_id": "Pasif modal: must + be + V3 -> 'be completed'."
+          },
+          {
+            "question_id": "Q-213-P2-08",
+            "question_type": "SENTENCE_REORDER",
+            "skill": "GRAMMAR",
+            "prompt": "Susun segmen berikut menjadi kalimat pasif yang tepat tentang pengolahan air limbah.",
+            "segments": [
+              "The contaminated water",
+              "is thoroughly",
+              "filtered through carbon beds",
+              "before chemical disinfection."
+            ],
+            "explanation_id": "Urutan yang benar: Subjek (The contaminated water) + be (is) + adverb (thoroughly) + V3 (filtered through carbon beds) + adverbial clause (before chemical disinfection)."
+          },
+          {
+            "question_id": "Q-213-P2-09",
+            "question_type": "ERROR_RECOGNITION",
+            "skill": "GRAMMAR",
+            "prompt": "Pilih satu kata yang membuat kalimat pasif ini salah.",
+            "tokens": [
+              "The",
+              "olive",
+              "oil",
+              "is",
+              "extract",
+              "from",
+              "crushed",
+              "fruits",
+              "under",
+              "pressure."
+            ],
+            "correct_answers": [
+              4
+            ],
+            "explanation_id": "Kata 'extract' setelah 'is' harus berupa bentuk V3 yaitu 'extracted'."
+          },
+          {
+            "question_id": "Q-213-P2-10",
+            "question_type": "MATCHING_DROPDOWN",
+            "skill": "GRAMMAR",
+            "prompt": "Pasangkan setiap kalimat aktif berikut dengan padanan pasifnya yang tepat.",
+            "matching": {
+              "left": [
+                "Technicians calibrate the sensors every morning.",
+                "A local contractor built the greenhouse in 2020.",
+                "The committee has approved the revised budget.",
+                "The university will host the international symposium next month."
+              ],
+              "right": [
+                "The international symposium will be hosted by the university next month.",
+                "The greenhouse was built by a local contractor in 2020.",
+                "The sensors are calibrated every morning.",
+                "The revised budget has been approved by the committee.",
+                "The sensors were calibrated every morning."
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              2,
+              1,
+              3,
+              0
+            ],
+            "points": 4,
+            "explanation_id": "Samakan tenses dengan presisi: Present Simple -> are calibrated, Past Simple -> was built, Present Perfect -> has been approved, Future -> will be hosted."
+          },
+          {
+            "question_id": "Q-213-P3-01",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "GRAMMAR",
+            "prompt": "Lengkapi kalimat berikut dengan bentuk pasif dari kata di dalam kurung:\n'When the metal sheets _______ (cut) to the specified dimensions, they are welded together.'",
+            "correct_answers": [
+              "have been cut"
+            ],
+            "explanation_id": "Urutan proses: pemotongan lembaran logam selesai terlebih dahulu memakai Present Perfect Passive 'have been cut' (V3 dari cut adalah cut).",
+            "max_words": 3
+          },
+          {
+            "question_id": "Q-213-P3-02",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "GRAMMAR",
+            "prompt": "Lengkapi dengan bentuk pasif Present Simple:\n'Purified water _______ (distribute) through underground pipelines to residential areas.'",
+            "correct_answers": [
+              "is distributed"
+            ],
+            "explanation_id": "Fakta proses distribusi air memakai Present Simple Passive. Subjek 'purified water' tidak dapat dihitung (tunggal) sehingga memakai 'is distributed'.",
+            "max_words": 3
+          },
+          {
+            "question_id": "Q-213-P3-03",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "GRAMMAR",
+            "prompt": "Lengkapi dengan pasif modal (gunakan 'may'):\n'Excess heat _______ (use) to generate electricity for the local community.'",
+            "correct_answers": [
+              "may be used"
+            ],
+            "explanation_id": "Pasif modal: may + be + V3 -> 'may be used'.",
+            "max_words": 3
+          },
+          {
+            "question_id": "Q-213-P3-04",
+            "question_type": "MCQ_SINGLE",
+            "skill": "GRAMMAR",
+            "prompt": "Manakah kalimat pasif yang paling tepat untuk laporan siklus daur ulang botol kaca?",
+            "options": [
+              "People sort the glass bottles by color manually.",
+              "The glass bottles are separated by color before melting.",
+              "Bottles separate by color in a factory.",
+              "They are separating glass bottles by color."
+            ],
+            "correct_answers": [
+              "The glass bottles are separated by color before melting."
+            ],
+            "explanation_id": "Pilihan B adalah kalimat pasif formal yang tepat untuk laporan diagram alir IELTS Task 1."
+          },
+          {
+            "question_id": "Q-213-P3-05",
+            "question_type": "MCQ_SINGLE",
+            "skill": "GRAMMAR",
+            "prompt": "Pilih bentuk pasif yang benar dari kalimat: 'The municipality has installed solar panels on all public schools.'",
+            "options": [
+              "Solar panels have been installed on all public schools by the municipality.",
+              "Solar panels were installed on all public schools.",
+              "Solar panels has been installed on all public schools.",
+              "Solar panels had been installed on all public schools."
+            ],
+            "correct_answers": [
+              "Solar panels have been installed on all public schools by the municipality."
+            ],
+            "explanation_id": "Present perfect aktif ('has installed') menjadi present perfect pasif jamak ('have been installed') menyesuaikan subjek baru 'solar panels'."
+          },
+          {
+            "question_id": "Q-213-P3-06",
+            "question_type": "MCQ_SINGLE",
+            "skill": "GRAMMAR",
+            "prompt": "Pada kalimat mana frasa 'by + pelaku' sebaiknya dihapus agar kalimat lebih padat dan formal?",
+            "options": [
+              "The symphony was composed by Ludwig van Beethoven.",
+              "The patient data was recorded by individuals.",
+              "The survey was conducted by the national statistics bureau.",
+              "The architecture was designed by Zaha Hadid."
+            ],
+            "correct_answers": [
+              "The patient data was recorded by individuals."
+            ],
+            "explanation_id": "'By individuals' adalah frasa umum yang tidak memberi kontribusi informasi bermakna."
+          },
+          {
+            "question_id": "Q-213-P3-07",
+            "question_type": "MCQ_SINGLE",
+            "skill": "GRAMMAR",
+            "prompt": "Pilih jawaban yang benar: 'Important scientific findings will _______ at the upcoming conference.'",
+            "options": [
+              "present",
+              "be presented",
+              "been presented",
+              "being present"
+            ],
+            "correct_answers": [
+              "be presented"
+            ],
+            "explanation_id": "Pasif future modal: will + be + V3 -> 'be presented'."
+          },
+          {
+            "question_id": "Q-213-P3-08",
+            "question_type": "SENTENCE_REORDER",
+            "skill": "GRAMMAR",
+            "prompt": "Susun segmen berikut menjadi kalimat pasif yang runtut mengenai proses pembuatan kertas daur ulang.",
+            "segments": [
+              "The waste paper",
+              "is shredded",
+              "and mixed with warm water",
+              "to create pulp."
+            ],
+            "explanation_id": "Urutan yang benar: Subjek (The waste paper) + be + V3 (is shredded) + klausa gabungan (and mixed with warm water) + keterangan tujuan (to create pulp)."
+          },
+          {
+            "question_id": "Q-213-P3-09",
+            "question_type": "ERROR_RECOGNITION",
+            "skill": "GRAMMAR",
+            "prompt": "Pilih satu kata yang membuat kalimat pasif ini salah.",
+            "tokens": [
+              "The",
+              "harvested",
+              "wheat",
+              "is",
+              "transport",
+              "to",
+              "the",
+              "silo",
+              "by",
+              "truck."
+            ],
+            "correct_answers": [
+              4
+            ],
+            "explanation_id": "Kata 'transport' setelah auxiliary 'is' harus berupa V3 yaitu 'transported'."
+          },
+          {
+            "question_id": "Q-213-P3-10",
+            "question_type": "MATCHING_DROPDOWN",
+            "skill": "GRAMMAR",
+            "prompt": "Pasangkan kalimat aktif berikut dengan transformasi pasif yang tepat.",
+            "matching": {
+              "left": [
+                "Farmers harvest the olives in late autumn.",
+                "The laboratory synthesized the compound last year.",
+                "The government has declared a state of emergency.",
+                "Volunteers will clean the coastal area tomorrow."
+              ],
+              "right": [
+                "The coastal area will be cleaned by volunteers tomorrow.",
+                "The compound was synthesized by the laboratory last year.",
+                "The olives are harvested in late autumn.",
+                "A state of emergency has been declared by the government.",
+                "The olives were harvested in late autumn."
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              2,
+              1,
+              3,
+              0
+            ],
+            "points": 4,
+            "explanation_id": "Present Simple -> are harvested, Past Simple -> was synthesized, Present Perfect -> has been declared, Future -> will be cleaned."
           }
         ]
       }
@@ -236,7 +560,7 @@
         "pass_percent": 75,
         "questions": [
           {
-            "question_id": "Q-311-01",
+            "question_id": "Q-311-P1-01",
             "question_type": "FILL_IN_BLANK",
             "skill": "LISTENING",
             "prompt": "Lengkapi formulir pendaftaran.\nSurname: _______",
@@ -248,7 +572,7 @@
             "section_no": 1
           },
           {
-            "question_id": "Q-311-02",
+            "question_id": "Q-311-P1-02",
             "question_type": "FILL_IN_BLANK",
             "skill": "LISTENING",
             "prompt": "Course: _______ painting for beginners",
@@ -256,24 +580,24 @@
               "watercolour",
               "watercolor"
             ],
-            "explanation_id": "Penelepon memilih 'watercolour painting'. Ejaan Inggris Britania dan Amerika sama-sama diterima.",
+            "explanation_id": "Penelepon memilih 'watercolour painting'. Ejaan UK dan US diterima.",
             "max_words": 2,
             "section_no": 1
           },
           {
-            "question_id": "Q-311-03",
+            "question_id": "Q-311-P1-03",
             "question_type": "FILL_IN_BLANK",
             "skill": "LISTENING",
             "prompt": "Start date: Tuesday, 14th _______",
             "correct_answers": [
               "October"
             ],
-            "explanation_id": "Staf menyebut 'Tuesday the fourteenth of October'. Penelepon mengulangnya: 'October the fourteenth'.",
+            "explanation_id": "Staf menyebut 'Tuesday the fourteenth of October'.",
             "max_words": 2,
             "section_no": 1
           },
           {
-            "question_id": "Q-311-04",
+            "question_id": "Q-311-P1-04",
             "question_type": "FILL_IN_BLANK",
             "skill": "LISTENING",
             "prompt": "Fee for the whole term: £ _______",
@@ -284,12 +608,12 @@
               "eighty-five",
               "eighty five"
             ],
-            "explanation_id": "Staf menyebut 'eighty-five pounds for the whole term'. Bayar sebesar 85.",
+            "explanation_id": "Staf menyebut 'eighty-five pounds for the whole term'.",
             "max_words": 2,
             "section_no": 1
           },
           {
-            "question_id": "Q-311-05",
+            "question_id": "Q-311-P1-05",
             "question_type": "FILL_IN_BLANK",
             "skill": "LISTENING",
             "prompt": "Students should bring their own _______",
@@ -303,7 +627,7 @@
             "section_no": 1
           },
           {
-            "question_id": "Q-311-06",
+            "question_id": "Q-311-P1-06",
             "question_type": "MCQ_SINGLE",
             "skill": "LISTENING",
             "prompt": "Why does Daniel want to join the course?",
@@ -316,11 +640,11 @@
             "correct_answers": [
               "He wants to learn proper techniques after practising alone."
             ],
-            "explanation_id": "Daniel berkata sudah melukis di rumah selama setahun hanya dengan meniru video, dan ingin 'learn the proper techniques from a real teacher'.",
+            "explanation_id": "Daniel sudah melukis sendiri di rumah dan ingin 'learn the proper techniques from a real teacher'.",
             "section_no": 1
           },
           {
-            "question_id": "Q-311-07",
+            "question_id": "Q-311-P1-07",
             "question_type": "MCQ_SINGLE",
             "skill": "LISTENING",
             "prompt": "What time does the class start now?",
@@ -333,11 +657,11 @@
             "correct_answers": [
               "7:00 pm"
             ],
-            "explanation_id": "Poster menyebut 6:30, tetapi staf mengoreksi bahwa jadwal dipindah menjadi pukul tujuh (7:00) agar peserta yang pulang kerja tidak terlambat. Ini contoh jebakan koreksi.",
+            "explanation_id": "Poster menyebut 6:30, tetapi staf mengoreksi bahwa jadwal dipindah menjadi pukul 7:00.",
             "section_no": 1
           },
           {
-            "question_id": "Q-311-08",
+            "question_id": "Q-311-P1-08",
             "question_type": "MCQ_SINGLE",
             "skill": "LISTENING",
             "prompt": "Where will the class be held this term?",
@@ -350,11 +674,11 @@
             "correct_answers": [
               "The Garden Studio"
             ],
-            "explanation_id": "Biasanya di Room Four, tetapi ruangan itu sedang dicat ulang sehingga kelas dipindah ke Garden Studio.",
+            "explanation_id": "Room Four sedang dicat ulang sehingga kelas dipindah ke Garden Studio.",
             "section_no": 1
           },
           {
-            "question_id": "Q-311-09",
+            "question_id": "Q-311-P1-09",
             "question_type": "MATCHING_DRAG",
             "skill": "LISTENING",
             "prompt": "Sesuai penjelasan staf, di mana letak setiap fasilitas? Seret jawaban ke tempat yang benar.",
@@ -381,11 +705,11 @@
               3
             ],
             "points": 4,
-            "explanation_id": "Kafe di sebelah pintu masuk utama (kiri); ruang penitipan mantel di belakang meja resepsionis; tempat parkir di ujung jalan setapak samping bangunan; Garden Studio adalah bangunan kaca kecil di taman. Lift berada di seberang tangga lantai satu, sehingga itu pengecoh.",
+            "explanation_id": "Kafe di sebelah pintu masuk utama (kiri); cloakroom di belakang meja resepsionis; car park di ujung side path; Garden Studio di taman.",
             "section_no": 1
           },
           {
-            "question_id": "Q-311-10",
+            "question_id": "Q-311-P1-10",
             "question_type": "SHORT_ANSWER",
             "skill": "LISTENING",
             "prompt": "Apa yang harus ditunjukkan Daniel di meja resepsionis pada hari pertama? (Maksimal TIGA kata)",
@@ -395,7 +719,330 @@
               "email confirmation"
             ],
             "max_words": 3,
-            "explanation_id": "Staf berkata untuk menunjukkan 'that email' (confirmation email) kepada petugas resepsionis; boleh ditunjukkan lewat ponsel.",
+            "explanation_id": "Staf meminta menunjukkan confirmation email kepada petugas resepsionis.",
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P2-01",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "LISTENING",
+            "prompt": "Complete the registration form.\nApplicant surname: _______",
+            "correct_answers": [
+              "Harrington",
+              "HARRINGTON"
+            ],
+            "explanation_id": "Penelepon mengeja marganya: H-A-R-R-I-N-G-T-O-N.",
+            "max_words": 2,
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P2-02",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "LISTENING",
+            "prompt": "Selected workshop: _______ pottery for novices",
+            "correct_answers": [
+              "ceramic",
+              "ceramics"
+            ],
+            "explanation_id": "Peserta mendaftar kursus 'ceramic pottery'.",
+            "max_words": 2,
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P2-03",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "LISTENING",
+            "prompt": "Orientation session: Thursday, 18th _______",
+            "correct_answers": [
+              "November"
+            ],
+            "explanation_id": "Petugas mengonfirmasi sesi orientasi pada 'November the eighteenth'.",
+            "max_words": 2,
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P2-04",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "LISTENING",
+            "prompt": "Total discounted tuition: £ _______",
+            "correct_answers": [
+              "95",
+              "£95",
+              "95 pounds",
+              "ninety-five"
+            ],
+            "explanation_id": "Biaya term setelah potongan adalah sembilan puluh lima pound (£95).",
+            "max_words": 2,
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P2-05",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "LISTENING",
+            "prompt": "Required personal equipment: clean _______",
+            "correct_answers": [
+              "towel",
+              "towels"
+            ],
+            "explanation_id": "Instruktur mewajibkan setiap siswa membawa 'clean towel' sendiri.",
+            "max_words": 2,
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P2-06",
+            "question_type": "MCQ_SINGLE",
+            "skill": "LISTENING",
+            "prompt": "What is Sarah primary motivation for enrolling in the evening class?",
+            "options": [
+              "She wants to socialize after relocating.",
+              "She hopes to master foundational throwing techniques.",
+              "She needs certification for studio licensing.",
+              "She is preparing gifts for colleagues."
+            ],
+            "correct_answers": [
+              "She hopes to master foundational throwing techniques."
+            ],
+            "explanation_id": "Sarah ingin mendalami teknik dasar pembuatan tembikar roda putar secara terstruktur.",
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P2-07",
+            "question_type": "MCQ_SINGLE",
+            "skill": "LISTENING",
+            "prompt": "According to the receptionist, when does the studio door unlock?",
+            "options": [
+              "5:45 pm",
+              "6:15 pm",
+              "6:45 pm",
+              "7:15 pm"
+            ],
+            "correct_answers": [
+              "6:45 pm"
+            ],
+            "explanation_id": "Pintu studio dibuka 15 menit sebelum kelas pukul 7, yaitu 6:45 pm.",
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P2-08",
+            "question_type": "MCQ_SINGLE",
+            "skill": "LISTENING",
+            "prompt": "Which venue will host the introductory session?",
+            "options": [
+              "Room Two",
+              "The courtyard gallery",
+              "The Ceramic Barn",
+              "The attic workshop"
+            ],
+            "correct_answers": [
+              "The Ceramic Barn"
+            ],
+            "explanation_id": "Sesi dipindahkan ke Ceramic Barn di halaman belakang karena renovasi ruang utama.",
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P2-09",
+            "question_type": "MATCHING_DRAG",
+            "skill": "LISTENING",
+            "prompt": "Match each facility with its exact location described by the receptionist:",
+            "matching": {
+              "left": [
+                "The coffee bar",
+                "The locker room",
+                "Bicycle storage",
+                "The Ceramic Barn"
+              ],
+              "right": [
+                "Beside the front foyer on the left",
+                "Adjacent to the security desk",
+                "At the northern edge of the gravel path",
+                "In the converted brick outhouse",
+                "First floor elevator lobby"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "points": 4,
+            "explanation_id": "Coffee bar di samping foyer kiri; loker di dekat meja keamanan; rak sepeda di ujung jalan kerikil; Ceramic Barn di bangunan bata belakang.",
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P2-10",
+            "question_type": "SHORT_ANSWER",
+            "skill": "LISTENING",
+            "prompt": "What document must be displayed upon arrival on day one? (Maximum THREE words)",
+            "correct_answers": [
+              "booking reference",
+              "the booking reference",
+              "digital receipt"
+            ],
+            "max_words": 3,
+            "explanation_id": "Peserta wajib menunjukkan 'booking reference' pada ponsel di meja registrasi.",
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P3-01",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "LISTENING",
+            "prompt": "Complete the enrollment details.\nCaller surname: _______",
+            "correct_answers": [
+              "Montgomery",
+              "MONTGOMERY"
+            ],
+            "explanation_id": "Penelepon mengeja namanya: M-O-N-T-G-O-M-E-R-Y.",
+            "max_words": 2,
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P3-02",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "LISTENING",
+            "prompt": "Subject title: Introduction to _______ photography",
+            "correct_answers": [
+              "digital"
+            ],
+            "explanation_id": "Pilihan kursus: 'digital photography'.",
+            "max_words": 2,
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P3-03",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "LISTENING",
+            "prompt": "Commencement date: Saturday, 22nd _______",
+            "correct_answers": [
+              "September"
+            ],
+            "explanation_id": "Tanggal mulai diumumkan pada tanggal 'twenty-second of September'.",
+            "max_words": 2,
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P3-04",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "LISTENING",
+            "prompt": "Full course subscription: £ _______",
+            "correct_answers": [
+              "120",
+              "£120",
+              "120 pounds",
+              "one hundred and twenty"
+            ],
+            "explanation_id": "Total biaya kursus adalah £120.",
+            "max_words": 2,
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P3-05",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "LISTENING",
+            "prompt": "Attendees must bring their own memory _______",
+            "correct_answers": [
+              "card",
+              "cards"
+            ],
+            "explanation_id": "Peserta diwajibkan membawa memory card kamera sendiri.",
+            "max_words": 2,
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P3-06",
+            "question_type": "MCQ_SINGLE",
+            "skill": "LISTENING",
+            "prompt": "What prompted Liam to register for the weekend module?",
+            "options": [
+              "He wants to advance beyond auto-mode settings.",
+              "He wishes to sell nature prints online.",
+              "His employer requested a portfolio.",
+              "He inherited vintage lens gear."
+            ],
+            "correct_answers": [
+              "He wants to advance beyond auto-mode settings."
+            ],
+            "explanation_id": "Liam menyatakan bosan memakai mode otomatis dan ingin memahami kontrol manual.",
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P3-07",
+            "question_type": "MCQ_SINGLE",
+            "skill": "LISTENING",
+            "prompt": "What time should attendees arrive for the morning session?",
+            "options": [
+              "9:00 am",
+              "9:30 am",
+              "10:00 am",
+              "10:30 am"
+            ],
+            "correct_answers": [
+              "9:30 am"
+            ],
+            "explanation_id": "Jadwal kelas dimulai pukul 10:00, namun registrasi dan briefing dimulai pukul 9:30 am.",
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P3-08",
+            "question_type": "MCQ_SINGLE",
+            "skill": "LISTENING",
+            "prompt": "Where will the lighting workshop occur this weekend?",
+            "options": [
+              "The basement darkroom",
+              "The Media Loft",
+              "Hall B",
+              "The library annex"
+            ],
+            "correct_answers": [
+              "The Media Loft"
+            ],
+            "explanation_id": "Praktek pencahayaan diadakan di Media Loft lantai dua.",
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P3-09",
+            "question_type": "MATCHING_DRAG",
+            "skill": "LISTENING",
+            "prompt": "Identify the campus location of each service:",
+            "matching": {
+              "left": [
+                "Information kiosk",
+                "Equipment checkout",
+                "Student lockers",
+                "The Media Loft"
+              ],
+              "right": [
+                "Directly opposite the revolving glass doors",
+                "Beside the main equipment counter",
+                "Underneath the central staircase",
+                "On the second floor mezzanine",
+                "Past the cafeteria courtyard"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "points": 4,
+            "explanation_id": "Kios info di depan pintu putar; checkout alat di samping counter; loker di bawah tangga; Media Loft di lantai mezzanine dua.",
+            "section_no": 1
+          },
+          {
+            "question_id": "Q-311-P3-10",
+            "question_type": "SHORT_ANSWER",
+            "skill": "LISTENING",
+            "prompt": "What item should be shown to obtain a student pass? (Maximum THREE words)",
+            "correct_answers": [
+              "photo identification",
+              "photo ID",
+              "national identity card"
+            ],
+            "max_words": 3,
+            "explanation_id": "Petugas meminta peserta memperlihatkan 'photo identification' resmi.",
             "section_no": 1
           }
         ]
@@ -424,7 +1071,7 @@
         "reading_passage_markdown": "## The Quiet Revival of Rooftop Farming\n\n[A] For most of the twentieth century, the flat roofs of city buildings were treated as wasted space. They held water tanks, ventilation units and little else. In recent years, however, a growing number of building owners have started to see them differently. Across many cities, roofs are being covered with soil, planted with vegetables and herbs, and managed as small farms. The movement, usually called rooftop farming, has attracted enthusiasts, investors and, increasingly, researchers who want to know whether it really delivers the benefits its supporters claim.\n\n[B] One of the earliest systematic studies was carried out by a team at the Harbour Institute of Urban Studies. Over three summers, the researchers measured temperatures on twelve roofs, six of them planted and six left bare. On the hottest afternoons, the surface of the bare roofs reached up to 62 degrees Celsius, while the planted roofs stayed at around 34 degrees. Rooms on the top floors beneath the planted roofs were, on average, four degrees cooler, and the tenants in those rooms used air conditioning far less often. The team cautioned, however, that the effect depended heavily on the depth of the soil and on regular watering. A thin layer of dry earth, they found, did almost nothing.\n\n[C] Food production is the second benefit usually claimed for rooftop farms. A typical commercial roof farm in the study area, covering about 400 square metres, produced between 2,000 and 3,000 kilograms of salad leaves, tomatoes and herbs each year. This is a small amount compared with a conventional farm, and nobody involved in the study suggested that roofs could feed a city. The produce does have one clear advantage, though. It can be delivered to nearby restaurants and shops within hours of harvest, which reduces transport costs and the amount of food that spoils on the way.\n\n[D] Water is a more complicated matter. Planted roofs absorb rainwater that would otherwise rush into the drains, and during heavy storms this slows the flow into the sewage system. In the Harbour Institute study, planted roofs held back around 60 percent of the rain that fell in an average storm, which meant that the drains below were less likely to overflow. Yet the gardens themselves need irrigation in dry months, and several of the early projects relied entirely on mains water. Later farms installed tanks that collect rainwater in winter and release it slowly in summer, a change that reduced their use of mains water by roughly half.\n\n[E] Cost is the main obstacle to wider adoption. Strengthening an old roof so that it can carry the weight of wet soil can cost more than the garden itself, and many buildings constructed before the 1970s simply cannot be adapted. For this reason, most successful projects so far have been on newer office blocks or on buildings that were designed with a planted roof in mind. Some city councils have offered tax reductions to owners who install planted roofs, but the researchers found no evidence that such incentives, on their own, persuaded owners who were unsure about the idea. Owners who did go ahead were usually motivated by lower energy bills or by the wish to make their building stand out to tenants.\n\n[F] The social benefits of roof farms are harder to measure, although they are mentioned often. Volunteers at three of the farms said that they had made new friends among their neighbours, and a nearby primary school now brings a class of pupils to one roof each month to learn how vegetables grow. The researchers pointed out, however, that these accounts came from people who had chosen to take part, so they may not represent the views of everyone who lives near a roof farm. A neighbour who is bothered by noise from the weekend work sessions, for example, was unlikely to volunteer an opinion.\n\n[G] The authors conclude that rooftop farming is neither a miracle nor a fashion that will soon pass. It is most convincing as a way of cooling buildings and managing rainwater, and less convincing as a source of food. They recommend that future studies follow roofs for at least ten years, because none of the farms in their sample had existed for longer than five. Until that evidence is available, they suggest, cities should support new projects but avoid promising residents more than the data can show.",
         "questions": [
           {
-            "question_id": "Q-321-01",
+            "question_id": "Q-321-P1-01",
             "question_type": "TFNG",
             "skill": "READING",
             "prompt": "On the hottest afternoons, the surface of the bare roofs was hotter than the surface of the planted roofs.",
@@ -435,65 +1082,64 @@
             "passage_no": 1
           },
           {
-            "question_id": "Q-321-02",
+            "question_id": "Q-321-P1-02",
             "question_type": "TFNG",
             "skill": "READING",
             "prompt": "The researchers measured roof temperatures over a period of five years.",
             "correct_answers": [
               "False"
             ],
-            "explanation_id": "Paragraf B menyebut 'over three summers'. Lima tahun muncul di paragraf G untuk usia farm tertua, bukan lama pengukuran. Teks bertentangan dengan pernyataan.",
+            "explanation_id": "Paragraf B menyebut 'over three summers'. Lima tahun muncul di paragraf G untuk usia farm tertua, bukan lama pengukuran.",
             "passage_no": 1
           },
           {
-            "question_id": "Q-321-03",
+            "question_id": "Q-321-P1-03",
             "question_type": "TFNG",
             "skill": "READING",
             "prompt": "The researchers believe that rooftop farms could supply most of the vegetables a city needs.",
             "correct_answers": [
               "False"
             ],
-            "explanation_id": "Paragraf C: 'nobody involved in the study suggested that roofs could feed a city'. Teks menyatakan hal yang berlawanan.",
+            "explanation_id": "Paragraf C: 'nobody involved in the study suggested that roofs could feed a city'. Teks bertentangan langsung.",
             "passage_no": 1
           },
           {
-            "question_id": "Q-321-04",
+            "question_id": "Q-321-P1-04",
             "question_type": "TFNG",
             "skill": "READING",
             "prompt": "Planted roofs held back more than half of the rain that fell in an average storm.",
             "correct_answers": [
               "True"
             ],
-            "explanation_id": "Paragraf D: planted roofs menahan sekitar 60 persen hujan pada badai rata-rata. 60 persen lebih dari setengah, sehingga pernyataan benar.",
+            "explanation_id": "Paragraf D: planted roofs menahan sekitar 60 persen hujan pada badai rata-rata. 60% > 50%.",
             "passage_no": 1
           },
           {
-            "question_id": "Q-321-05",
+            "question_id": "Q-321-P1-05",
             "question_type": "TFNG",
             "skill": "READING",
             "prompt": "Owners who received tax reductions were happier with their roof gardens than other owners.",
             "correct_answers": [
               "Not Given"
             ],
-            "explanation_id": "Paragraf E membahas keringanan pajak, tetapi hanya dari sisi pengaruhnya pada keputusan memasang atap tanam. Tingkat kepuasan pemilik tidak dibahas.",
+            "explanation_id": "Paragraf E membahas keringanan pajak, tetapi kepuasan komparatif pemilik tidak dibahas.",
             "passage_no": 1
           },
           {
-            "question_id": "Q-321-06",
+            "question_id": "Q-321-P1-06",
             "question_type": "TFNG",
             "skill": "READING",
             "prompt": "Most of the volunteers at the roof farms were retired people.",
             "correct_answers": [
               "Not Given"
             ],
-            "explanation_id": "Paragraf F menyebut relawan dan pertemanan, tetapi tidak menyebut usia atau status pensiun mereka.",
+            "explanation_id": "Paragraf F menyebut relawan, tetapi tidak merinci proporsi usia atau status pensiun.",
             "passage_no": 1
           },
           {
-            "question_id": "Q-321-07",
+            "question_id": "Q-321-P1-07",
             "question_type": "MCQ_MULTI",
             "skill": "READING",
-            "passage_no": 1,
             "prompt": "Pilih DUA manfaat rooftop farming yang menurut peneliti paling kuat didukung oleh bukti mereka.",
             "options": [
               "Cooling the buildings beneath them",
@@ -506,11 +1152,12 @@
               "Cooling the buildings beneath them",
               "Helping to manage rainwater"
             ],
-            "explanation_id": "Paragraf G: rooftop farming 'most convincing as a way of cooling buildings and managing rainwater'. Pilihan lain bertentangan dengan paragraf C (tidak bisa memberi makan kota) atau tidak dibahas sebagai manfaat.",
-            "points": 2
+            "explanation_id": "Paragraf G: rooftop farming 'most convincing as a way of cooling buildings and managing rainwater'.",
+            "points": 2,
+            "passage_no": 1
           },
           {
-            "question_id": "Q-321-08",
+            "question_id": "Q-321-P1-08",
             "question_type": "MATCHING_DROPDOWN",
             "skill": "READING",
             "prompt": "Pada paragraf mana (A-G) informasi berikut ditemukan?",
@@ -539,11 +1186,11 @@
               1
             ],
             "points": 4,
-            "explanation_id": "Biaya perkuatan atap ada di paragraf E; kehati-hatian terhadap pendapat relawan di F (mereka memilih ikut serta); saran lama penelitian (sepuluh tahun) di G; angka suhu atap kosong versus atap tanam di B.",
+            "explanation_id": "Biaya perkuatan di E; opini relawan di F; saran lama penelitian di G; angka suhu di B.",
             "passage_no": 1
           },
           {
-            "question_id": "Q-321-09",
+            "question_id": "Q-321-P1-09",
             "question_type": "SHORT_ANSWER",
             "skill": "READING",
             "prompt": "Apa yang dikumpulkan oleh farm yang lebih baru pada musim dingin untuk dipakai pada musim panas? (Maksimal TIGA kata)",
@@ -552,11 +1199,11 @@
               "rain water"
             ],
             "max_words": 3,
-            "explanation_id": "Paragraf D: 'tanks that collect rainwater in winter and release it slowly in summer'. Jawaban: rainwater.",
+            "explanation_id": "Paragraf D: 'tanks that collect rainwater in winter and release it slowly in summer'.",
             "passage_no": 1
           },
           {
-            "question_id": "Q-321-10",
+            "question_id": "Q-321-P1-10",
             "question_type": "SHORT_ANSWER",
             "skill": "READING",
             "prompt": "Siswa sekolah dasar mengunjungi salah satu atap setiap bulan untuk belajar tentang apa? (Maksimal TIGA kata)",
@@ -565,7 +1212,299 @@
               "vegetables growing"
             ],
             "max_words": 3,
-            "explanation_id": "Paragraf F: 'to learn how vegetables grow'. Jawaban terdiri dari tiga kata dan masih dalam batas yang diizinkan.",
+            "explanation_id": "Paragraf F: 'to learn how vegetables grow'.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P2-01",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "The maximum temperature recorded on bare concrete roofs exceeded 60 degrees Celsius.",
+            "correct_answers": [
+              "True"
+            ],
+            "explanation_id": "Paragraf B menyatakan 'bare roofs reached as high as 62 degrees', yang berarti melebihi 60 derajat Celcius.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P2-02",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "The research project observed the rooftop gardens continuously for a decade.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf B menyebut penelitian berlangsung 'over three summers', sedangkan 10 tahun di Paragraf G merupakan rekomendasi penelitian lanjutan di masa depan.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P2-03",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "Urban rooftop agriculture has the capacity to replace traditional rural farming entirely.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf C menegaskan rooftop farming tidak dimaksudkan menggantikan pertanian pedesaan dan tidak dapat memberi makan seluruh kota.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P2-04",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "During typical rainfall events, vegetated roofs absorb the majority of the precipitation.",
+            "correct_answers": [
+              "True"
+            ],
+            "explanation_id": "Paragraf D: 'absorbed approximately 60 percent of rainfall'. 60 persen merupakan mayoritas.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P2-05",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "Building owners in the municipal tax incentive program experienced fewer leaks than non-participants.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Paragraf E membahas insentif pajak dan kebocoran secara terpisah, namun perbandingan frekuensi kebocoran antar kelompok tidak disebutkan.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P2-06",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "Volunteers were paid an hourly stipend for participating in community garden maintenance.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Paragraf F membahas keterlibatan relawan tanpa menyebutkan adanya pembayaran uang saku.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P2-07",
+            "question_type": "MCQ_MULTI",
+            "skill": "READING",
+            "prompt": "Pilih DUA dampak positif lingkungan dari vegetasi atap yang divalidasi oleh data penelitian.",
+            "options": [
+              "Reduction of building cooling loads",
+              "Mitigation of stormwater runoff",
+              "Complete self-sufficiency in urban grain supply",
+              "Elimination of structural maintenance costs",
+              "Tripling the property resale value"
+            ],
+            "correct_answers": [
+              "Reduction of building cooling loads",
+              "Mitigation of stormwater runoff"
+            ],
+            "explanation_id": "Bukti empiris paling kuat dalam teks adalah pendinginan gedung dan retensi air hujan.",
+            "points": 2,
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P2-08",
+            "question_type": "MATCHING_DROPDOWN",
+            "skill": "READING",
+            "prompt": "Di paragraf manakah (A-G) poin-poin berikut disebutkan?",
+            "matching": {
+              "left": [
+                "Structural engineering challenges for older rooftops",
+                "Social and educational benefits for community members",
+                "Recommended timeline for long-term ecological evaluation",
+                "Specific heat absorption differences across roof surfaces"
+              ],
+              "right": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              4,
+              5,
+              6,
+              1
+            ],
+            "points": 4,
+            "explanation_id": "Tantangan struktur di E; manfaat sosial di F; rekomendasi timeline di G; data penyerapan panas di B.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P2-09",
+            "question_type": "SHORT_ANSWER",
+            "skill": "READING",
+            "prompt": "Material apa yang ditampung dalam tangki penyimpanan khusus saat musim dingin? (Maksimal DUA kata)",
+            "correct_answers": [
+              "rainwater",
+              "rain water"
+            ],
+            "max_words": 2,
+            "explanation_id": "Paragraf D menyebut penampungan 'rainwater' dalam tangki.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P2-10",
+            "question_type": "SHORT_ANSWER",
+            "skill": "READING",
+            "prompt": "Berapa tahun usia kebun atap tertua yang dianalisis dalam studi tersebut? (Maksimal DUA kata)",
+            "correct_answers": [
+              "five years",
+              "5 years",
+              "five"
+            ],
+            "max_words": 2,
+            "explanation_id": "Paragraf G mencatat bahwa farm tertua baru berusia 'five years'.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P3-01",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "Roofs covered with vegetation maintained significantly lower temperatures during peak heat periods.",
+            "correct_answers": [
+              "True"
+            ],
+            "explanation_id": "Paragraf B: planted roofs sekitar 34 derajat dibandingkan 62 derajat pada bare roofs.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P3-02",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "Data collection for surface temperatures was conducted over five consecutive calendar years.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf B: pengukuran dilakukan 'over three summers', bukan 5 tahun penuh.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P3-03",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "The authors argue that commercial rooftop farms will meet total urban dietary requirements.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf C menyatakan tidak ada peneliti yang beranggapan atap bisa memberi makan seluruh kota.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P3-04",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "Approximately sixty percent of stormwater was successfully retained by the green roofs.",
+            "correct_answers": [
+              "True"
+            ],
+            "explanation_id": "Paragraf D menyebutkan angka retensi air 'approximately 60 percent'.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P3-05",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "Commercial property tenants preferred working under green roofs compared to conventional asphalt roofs.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Teks tidak membahas preferensi psikologis atau kenyamanan para penyewa gedung komersial.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P3-06",
+            "question_type": "TFNG",
+            "skill": "READING",
+            "prompt": "All volunteer participants surveyed had previous formal training in horticulture.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Paragraf F tidak memberikan informasi mengenai latar belakang pelatihan berkebun para relawan.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P3-07",
+            "question_type": "MCQ_MULTI",
+            "skill": "READING",
+            "prompt": "Select TWO main advantages of rooftop farms emphasized in the conclusion of the research team.",
+            "options": [
+              "Thermal regulation of interior spaces",
+              "Stormwater volume retention",
+              "Total replacement of traditional agriculture",
+              "Guaranteed municipal tax exemptions",
+              "Immediate doubling of structural roof life"
+            ],
+            "correct_answers": [
+              "Thermal regulation of interior spaces",
+              "Stormwater volume retention"
+            ],
+            "explanation_id": "Dua manfaat inti yang divalidasi oleh tim peneliti adalah regulasi termal gedung dan retensi volume air badai.",
+            "points": 2,
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P3-08",
+            "question_type": "MATCHING_DROPDOWN",
+            "skill": "READING",
+            "prompt": "Match each statement to the correct paragraph (A-G):",
+            "matching": {
+              "left": [
+                "Financial calculations regarding weight reinforcement",
+                "Observations about volunteer enthusiasm and sampling bias",
+                "Advice for extending observation duration to ten years",
+                "Temperature measurements comparing bare and green surfaces"
+              ],
+              "right": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              4,
+              5,
+              6,
+              1
+            ],
+            "points": 4,
+            "explanation_id": "Perhitungan bobot/biaya di E; bias antusiasme relawan di F; durasi 10 tahun di G; perbandingan suhu di B.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P3-09",
+            "question_type": "SHORT_ANSWER",
+            "skill": "READING",
+            "prompt": "What resource do the insulated storage tanks retain during winter months? (Maximum TWO words)",
+            "correct_answers": [
+              "rainwater",
+              "rain water"
+            ],
+            "max_words": 2,
+            "explanation_id": "Paragraf D mengonfirmasi bahwa tangki menampung 'rainwater'.",
+            "passage_no": 1
+          },
+          {
+            "question_id": "Q-321-P3-10",
+            "question_type": "SHORT_ANSWER",
+            "skill": "READING",
+            "prompt": "Who visits the rooftop garden monthly as part of an environmental curriculum? (Maximum TWO words)",
+            "correct_answers": [
+              "schoolchildren",
+              "primary students",
+              "students"
+            ],
+            "max_words": 2,
+            "explanation_id": "Paragraf F menyebutkan 'primary school children' / 'schoolchildren' yang berkunjung setiap bulan.",
             "passage_no": 1
           }
         ]
@@ -1073,7 +2012,7 @@
       "source_code": "OWN",
       "questions": [
         {
-          "question_id": "Q-SK21-01",
+          "question_id": "Q-SK21-P1-01",
           "question_type": "MCQ_SINGLE",
           "skill": "GRAMMAR",
           "prompt": "_______ the weather was terrible, the match went ahead.",
@@ -1086,10 +2025,10 @@
           "correct_answers": [
             "Although"
           ],
-          "explanation_id": "'Although' diikuti klausa lengkap dan menyatakan kontras. 'Despite' membutuhkan kata benda/V-ing."
+          "explanation_id": "'Although' diikuti klausa lengkap dan menyatakan kontras."
         },
         {
-          "question_id": "Q-SK21-02",
+          "question_id": "Q-SK21-P1-02",
           "question_type": "MCQ_SINGLE",
           "skill": "GRAMMAR",
           "prompt": "She studied very hard; _______, she failed the exam.",
@@ -1105,7 +2044,7 @@
           "explanation_id": "Hasilnya berlawanan dengan harapan, sehingga dibutuhkan penanda kontras 'however'."
         },
         {
-          "question_id": "Q-SK21-03",
+          "question_id": "Q-SK21-P1-03",
           "question_type": "MCQ_SINGLE",
           "skill": "GRAMMAR",
           "prompt": "_______ his injury, he completed the race.",
@@ -1118,21 +2057,21 @@
           "correct_answers": [
             "Despite"
           ],
-          "explanation_id": "'Despite' diikuti kata benda ('his injury'). 'Although' memerlukan subjek + kata kerja."
+          "explanation_id": "'Despite' diikuti kata benda ('his injury')."
         },
         {
-          "question_id": "Q-SK21-04",
+          "question_id": "Q-SK21-P1-04",
           "question_type": "FILL_IN_BLANK",
           "skill": "GRAMMAR",
           "prompt": "The woman _______ car was stolen called the police.",
           "correct_answers": [
             "whose"
           ],
-          "explanation_id": "Relative pronoun kepemilikan: 'whose car' berarti 'her car'.",
+          "explanation_id": "Relative pronoun kepemilikan: 'whose car'.",
           "max_words": 1
         },
         {
-          "question_id": "Q-SK21-05",
+          "question_id": "Q-SK21-P1-05",
           "question_type": "MCQ_SINGLE",
           "skill": "GRAMMAR",
           "prompt": "This is the office _______ I work.",
@@ -1148,18 +2087,18 @@
           "explanation_id": "Antecedent adalah tempat dan klausa lengkap mengikuti, sehingga dipakai 'where'."
         },
         {
-          "question_id": "Q-SK21-06",
+          "question_id": "Q-SK21-P1-06",
           "question_type": "FILL_IN_BLANK",
           "skill": "GRAMMAR",
           "prompt": "The bridge _______ (build) in 1998.",
           "correct_answers": [
             "was built"
           ],
-          "explanation_id": "Past Simple Passive: was + V3. V3 'build' adalah 'built'.",
+          "explanation_id": "Past Simple Passive: was + V3 -> 'was built'.",
           "max_words": 2
         },
         {
-          "question_id": "Q-SK21-07",
+          "question_id": "Q-SK21-P1-07",
           "question_type": "ERROR_RECOGNITION",
           "skill": "GRAMMAR",
           "prompt": "Pilih kata yang membuat kalimat pasif ini salah.",
@@ -1174,10 +2113,10 @@
           "correct_answers": [
             3
           ],
-          "explanation_id": "Pasif future membutuhkan 'will be announced'; 'announce' seharusnya 'be announced'."
+          "explanation_id": "Pasif future membutuhkan 'will be announced'."
         },
         {
-          "question_id": "Q-SK21-08",
+          "question_id": "Q-SK21-P1-08",
           "question_type": "MCQ_SINGLE",
           "skill": "GRAMMAR",
           "prompt": "If I _______ you, I would accept the offer.",
@@ -1193,7 +2132,7 @@
           "explanation_id": "Second Conditional untuk situasi imajiner memakai 'were' setelah 'if I'."
         },
         {
-          "question_id": "Q-SK21-09",
+          "question_id": "Q-SK21-P1-09",
           "question_type": "MCQ_SINGLE",
           "skill": "GRAMMAR",
           "prompt": "If she had left earlier, she _______ the train.",
@@ -1209,7 +2148,7 @@
           "explanation_id": "Third Conditional: if + Past Perfect, would have + V3."
         },
         {
-          "question_id": "Q-SK21-10",
+          "question_id": "Q-SK21-P1-10",
           "question_type": "SENTENCE_REORDER",
           "skill": "GRAMMAR",
           "prompt": "Susun segmen menjadi kalimat yang benar.",
@@ -1218,10 +2157,10 @@
             "we decided",
             "to go for a walk."
           ],
-          "explanation_id": "Klausa dengan 'although' diletakkan lebih dulu dan dipisah koma, lalu klausa utama."
+          "explanation_id": "Klausa 'although' diletakkan di depan dipisah koma."
         },
         {
-          "question_id": "Q-SK21-11",
+          "question_id": "Q-SK21-P1-11",
           "question_type": "MATCHING_DROPDOWN",
           "skill": "GRAMMAR",
           "prompt": "Pasangkan penanda wacana dengan fungsinya.",
@@ -1248,17 +2187,401 @@
             3
           ],
           "points": 4,
-          "explanation_id": "However menyatakan kontras; therefore menyatakan hasil; moreover menambah poin; for instance memberi contoh. 'Gives a reason' adalah pengecoh."
+          "explanation_id": "However = kontras; therefore = hasil; moreover = penambahan; for instance = contoh."
         },
         {
-          "question_id": "Q-SK21-12",
+          "question_id": "Q-SK21-P1-12",
           "question_type": "FILL_IN_BLANK",
           "skill": "GRAMMAR",
           "prompt": "If the temperature _______ (drop) below zero, the water will freeze.",
           "correct_answers": [
             "drops"
           ],
-          "explanation_id": "First Conditional: if + Present Simple. Subjek 'the temperature' tunggal, maka 'drops'.",
+          "explanation_id": "First Conditional: if + Present Simple tunggal 'drops'.",
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-SK21-P2-01",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "_______ the train was delayed, we arrived at the venue on schedule.",
+          "options": [
+            "Although",
+            "Because",
+            "Since",
+            "Due to"
+          ],
+          "correct_answers": [
+            "Although"
+          ],
+          "explanation_id": "'Although' mengenalkan klausa kontras dengan subjek dan predikat lengkap."
+        },
+        {
+          "question_id": "Q-SK21-P2-02",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "The experimental data was inconclusive; _______, further funding was approved.",
+          "options": [
+            "nevertheless",
+            "consequently",
+            "similarly",
+            "such as"
+          ],
+          "correct_answers": [
+            "nevertheless"
+          ],
+          "explanation_id": "'Nevertheless' menghubungkan kontras antara hasil yang meragukan dengan persetujuan dana."
+        },
+        {
+          "question_id": "Q-SK21-P2-03",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "_______ the strict travel restrictions, the conference drew over 500 delegates.",
+          "options": [
+            "In spite of",
+            "Even though",
+            "Whereas",
+            "While"
+          ],
+          "correct_answers": [
+            "In spite of"
+          ],
+          "explanation_id": "'In spite of' diikuti frasa kata benda ('the strict travel restrictions')."
+        },
+        {
+          "question_id": "Q-SK21-P2-04",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "The author _______ latest monograph won the literary award gave a keynote speech.",
+          "correct_answers": [
+            "whose"
+          ],
+          "explanation_id": "Kepemilikan buku karya pengarang: 'whose latest monograph'.",
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-SK21-P2-05",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "The historical archive is an institution _______ researchers examine original manuscripts.",
+          "options": [
+            "where",
+            "which",
+            "when",
+            "that"
+          ],
+          "correct_answers": [
+            "where"
+          ],
+          "explanation_id": "Menunjukkan tempat terjadinya aktivitas penelitian: 'where researchers examine...'."
+        },
+        {
+          "question_id": "Q-SK21-P2-06",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "The international airport _______ (open) by the prime minister in 2012.",
+          "correct_answers": [
+            "was opened"
+          ],
+          "explanation_id": "Past Simple Passive tunggal: 'was opened'.",
+          "max_words": 2
+        },
+        {
+          "question_id": "Q-SK21-P2-07",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "GRAMMAR",
+          "prompt": "Pilih kata yang membuat kalimat ini salah secara tata bahasa.",
+          "tokens": [
+            "The",
+            "confidential",
+            "files",
+            "have",
+            "transfer",
+            "to",
+            "the",
+            "secure",
+            "server."
+          ],
+          "correct_answers": [
+            4
+          ],
+          "explanation_id": "Bentuk present perfect pasif membutuhkan V3 'been transferred'."
+        },
+        {
+          "question_id": "Q-SK21-P2-08",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "If our department _______ a larger budget, we would recruit additional specialists.",
+          "options": [
+            "had",
+            "has",
+            "will have",
+            "would have"
+          ],
+          "correct_answers": [
+            "had"
+          ],
+          "explanation_id": "Second conditional untuk kondisi hipotesis masa kini: if + Past Simple ('had')."
+        },
+        {
+          "question_id": "Q-SK21-P2-09",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Had the security alarm sounded, the residents _______ the building immediately.",
+          "options": [
+            "would have evacuated",
+            "would evacuate",
+            "will evacuate",
+            "evacuated"
+          ],
+          "correct_answers": [
+            "would have evacuated"
+          ],
+          "explanation_id": "Third conditional inversion: Had + S + V3 berpasangan dengan would have + V3."
+        },
+        {
+          "question_id": "Q-SK21-P2-10",
+          "question_type": "SENTENCE_REORDER",
+          "skill": "GRAMMAR",
+          "prompt": "Susun segmen menjadi kalimat kohesif akademik.",
+          "segments": [
+            "Despite initial public skepticism,",
+            "the renewable energy initiative",
+            "gained broad support across the region."
+          ],
+          "explanation_id": "Prepositional phrase 'Despite...' mengawali kalimat dan diikuti klausa inti."
+        },
+        {
+          "question_id": "Q-SK21-P2-11",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "GRAMMAR",
+          "prompt": "Pasangkan konjungsi logis berikut dengan relasi maknanya.",
+          "matching": {
+            "left": [
+              "on the contrary",
+              "as a consequence",
+              "furthermore",
+              "namely"
+            ],
+            "right": [
+              "indicates causal outcome",
+              "provides specific identification",
+              "presents an emphatic opposite",
+              "supplements with reinforcing info",
+              "expresses temporal sequence"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            2,
+            0,
+            3,
+            1
+          ],
+          "points": 4,
+          "explanation_id": "On the contrary = pertentangan; as a consequence = akibat; furthermore = penguatan; namely = spesifikasi nama."
+        },
+        {
+          "question_id": "Q-SK21-P2-12",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "If global carbon emissions _______ (continue) to climb, sea levels will rise significantly.",
+          "correct_answers": [
+            "continue"
+          ],
+          "explanation_id": "First conditional: if + Present Simple jamak ('continue').",
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-SK21-P3-01",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "_______ the economic downturn was severe, the technology sector continued to expand.",
+          "options": [
+            "Even though",
+            "Because",
+            "Owing to",
+            "In light of"
+          ],
+          "correct_answers": [
+            "Even though"
+          ],
+          "explanation_id": "'Even though' mengenalkan klausa kontras konsesi dengan klausa lengkap."
+        },
+        {
+          "question_id": "Q-SK21-P3-02",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "The team lacked access to cutting-edge equipment; _______, their findings were remarkably accurate.",
+          "options": [
+            "nonetheless",
+            "accordingly",
+            "in addition",
+            "for instance"
+          ],
+          "correct_answers": [
+            "nonetheless"
+          ],
+          "explanation_id": "Penanda kontras 'nonetheless' menghubungkan keterbatasan alat dengan akurasi tinggi."
+        },
+        {
+          "question_id": "Q-SK21-P3-03",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "_______ intense competition in the domestic market, the startup achieved profitability.",
+          "options": [
+            "Despite",
+            "Although",
+            "Even if",
+            "Whereas"
+          ],
+          "correct_answers": [
+            "Despite"
+          ],
+          "explanation_id": "'Despite' diikuti oleh noun phrase 'intense competition...''."
+        },
+        {
+          "question_id": "Q-SK21-P3-04",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "The scientist _______ hypothesis revolutionized astrophysics was honored internationally.",
+          "correct_answers": [
+            "whose"
+          ],
+          "explanation_id": "Kepemilikan hipotesis ilmiah: 'whose hypothesis'.",
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-SK21-P3-05",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "The research laboratory is a sterile environment _______ sensitive genetic experiments are performed.",
+          "options": [
+            "where",
+            "which",
+            "that",
+            "whom"
+          ],
+          "correct_answers": [
+            "where"
+          ],
+          "explanation_id": "Relative adverb tempat: 'where sensitive genetic experiments are performed'."
+        },
+        {
+          "question_id": "Q-SK21-P3-06",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "The new environmental legislation _______ (enact) by parliament earlier this year.",
+          "correct_answers": [
+            "was enacted"
+          ],
+          "explanation_id": "Past Simple Passive: 'was enacted'.",
+          "max_words": 2
+        },
+        {
+          "question_id": "Q-SK21-P3-07",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "GRAMMAR",
+          "prompt": "Pilih kata yang membuat kalimat pasif modal ini salah.",
+          "tokens": [
+            "The",
+            "hazardous",
+            "materials",
+            "must",
+            "dispose",
+            "of",
+            "in",
+            "designated",
+            "containers."
+          ],
+          "correct_answers": [
+            4
+          ],
+          "explanation_id": "Pasif modal: must + be + V3 -> 'be disposed'."
+        },
+        {
+          "question_id": "Q-SK21-P3-08",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "If the municipal council _______ more bus routes, fewer commuters would drive cars.",
+          "options": [
+            "provided",
+            "provides",
+            "will provide",
+            "would provide"
+          ],
+          "correct_answers": [
+            "provided"
+          ],
+          "explanation_id": "Second conditional: if + Past Simple ('provided') berpasangan dengan would + bare verb."
+        },
+        {
+          "question_id": "Q-SK21-P3-09",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "If the emergency brakes had failed, the locomotive _______ off the tracks.",
+          "options": [
+            "would have derailed",
+            "would derail",
+            "will derail",
+            "derailed"
+          ],
+          "correct_answers": [
+            "would have derailed"
+          ],
+          "explanation_id": "Third conditional: if + Past Perfect, would have + V3."
+        },
+        {
+          "question_id": "Q-SK21-P3-10",
+          "question_type": "SENTENCE_REORDER",
+          "skill": "GRAMMAR",
+          "prompt": "Susun segmen menjadi kalimat pasif proses yang efektif.",
+          "segments": [
+            "Unless properly maintained,",
+            "the filtration machinery",
+            "can be damaged by sediment buildup."
+          ],
+          "explanation_id": "Klausa kondisional 'Unless...' diletakkan di depan lalu diikuti subjek pasif."
+        },
+        {
+          "question_id": "Q-SK21-P3-11",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "GRAMMAR",
+          "prompt": "Pasangkan kata transisi berikut dengan fungsi wacananya.",
+          "matching": {
+            "left": [
+              "in contrast",
+              "hence",
+              "likewise",
+              "specifically"
+            ],
+            "right": [
+              "introduces a logical consequence",
+              "points to a detailed instance",
+              "highlights a direct difference",
+              "indicates similarity between ideas",
+              "signals chronological progression"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            2,
+            0,
+            3,
+            1
+          ],
+          "points": 4,
+          "explanation_id": "In contrast = perbedaan; hence = konsekuensi logis; likewise = kemiripan ide; specifically = contoh spesifik."
+        },
+        {
+          "question_id": "Q-SK21-P3-12",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "If the atmospheric pressure _______ (fall) rapidly, a severe storm is likely to develop.",
+          "correct_answers": [
+            "falls"
+          ],
+          "explanation_id": "First conditional: if + Present Simple tunggal 'falls'.",
           "max_words": 1
         }
       ]
@@ -1283,7 +2606,7 @@
       "source_code": "OWN",
       "questions": [
         {
-          "question_id": "Q-BR-01",
+          "question_id": "Q-BR-P1-01",
           "question_type": "MCQ_SINGLE",
           "skill": "READING",
           "prompt": "What time does the market close?",
@@ -1300,7 +2623,7 @@
           "passage_no": 1
         },
         {
-          "question_id": "Q-BR-02",
+          "question_id": "Q-BR-P1-02",
           "question_type": "MCQ_SINGLE",
           "skill": "READING",
           "prompt": "What do Maya and her husband do on Friday evening?",
@@ -1317,7 +2640,7 @@
           "passage_no": 1
         },
         {
-          "question_id": "Q-BR-03",
+          "question_id": "Q-BR-P1-03",
           "question_type": "MCQ_SINGLE",
           "skill": "READING",
           "prompt": "Why does Maya like working at the market?",
@@ -1330,11 +2653,11 @@
           "correct_answers": [
             "She enjoys talking to the customers."
           ],
-          "explanation_id": "Maya berkata 'I like to talk to the customers' dan itu membuat pekerjaannya lebih menarik.",
+          "explanation_id": "Maya berkata 'I like to talk to the customers'.",
           "passage_no": 1
         },
         {
-          "question_id": "Q-BR-04",
+          "question_id": "Q-BR-P1-04",
           "question_type": "TFNG",
           "skill": "READING",
           "prompt": "The market stays open when it rains heavily.",
@@ -1345,18 +2668,18 @@
           "passage_no": 1
         },
         {
-          "question_id": "Q-BR-05",
+          "question_id": "Q-BR-P1-05",
           "question_type": "TFNG",
           "skill": "READING",
           "prompt": "Visitors must pay an entrance fee.",
           "correct_answers": [
             "False"
           ],
-          "explanation_id": "Paragraf 3: 'There is no entrance fee'. Yang membayar adalah penjual.",
+          "explanation_id": "Paragraf 3: 'There is no entrance fee'.",
           "passage_no": 1
         },
         {
-          "question_id": "Q-BR-06",
+          "question_id": "Q-BR-P1-06",
           "question_type": "TFNG",
           "skill": "READING",
           "prompt": "The new cafe will open this year.",
@@ -1367,18 +2690,18 @@
           "passage_no": 1
         },
         {
-          "question_id": "Q-BR-07",
+          "question_id": "Q-BR-P1-07",
           "question_type": "TFNG",
           "skill": "READING",
           "prompt": "Mr Chen has lived in the town all his life.",
           "correct_answers": [
             "Not Given"
           ],
-          "explanation_id": "Teks hanya menyebut Mr Chen adalah guru pensiunan yang datang setiap minggu; lamanya ia tinggal di kota tidak dibahas.",
+          "explanation_id": "Lama waktu Mr Chen tinggal di kota tidak dibahas.",
           "passage_no": 1
         },
         {
-          "question_id": "Q-BR-08",
+          "question_id": "Q-BR-P1-08",
           "question_type": "FILL_IN_BLANK",
           "skill": "READING",
           "prompt": "Sellers pay the town council £ _______ each week.",
@@ -1392,7 +2715,7 @@
           "passage_no": 1
         },
         {
-          "question_id": "Q-BR-09",
+          "question_id": "Q-BR-P1-09",
           "question_type": "SHORT_ANSWER",
           "skill": "READING",
           "prompt": "Apa yang dibeli Mr Chen setiap minggu? (Maksimal DUA kata)",
@@ -1400,11 +2723,11 @@
             "flowers"
           ],
           "max_words": 2,
-          "explanation_id": "Paragraf 5: 'comes every week to buy flowers for his kitchen table'.",
+          "explanation_id": "Paragraf 5: 'buy flowers for his kitchen table'.",
           "passage_no": 1
         },
         {
-          "question_id": "Q-BR-10",
+          "question_id": "Q-BR-P1-10",
           "question_type": "SHORT_ANSWER",
           "skill": "READING",
           "prompt": "Di mana seorang pria muda memainkan gitar? (Maksimal TIGA kata)",
@@ -1414,7 +2737,278 @@
             "at the entrance"
           ],
           "max_words": 3,
-          "explanation_id": "Paragraf 3: 'a young man plays the guitar near the entrance'.",
+          "explanation_id": "Paragraf 3: 'plays the guitar near the entrance'.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P2-01",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "At what hour does trade officially conclude on market day?",
+          "options": [
+            "Midday",
+            "1:00 pm",
+            "2:00 pm",
+            "4:00 pm"
+          ],
+          "correct_answers": [
+            "2:00 pm"
+          ],
+          "explanation_id": "Paragraf 1: pasar tutup pukul dua siang ('two in the afternoon').",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P2-02",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Which task occupies Maya and her spouse on the eve of the market?",
+          "options": [
+            "Sorting cardboard boxes",
+            "Harvesting garden produce",
+            "Delivering to restaurants",
+            "Cleaning market stalls"
+          ],
+          "correct_answers": [
+            "Harvesting garden produce"
+          ],
+          "explanation_id": "Paragraf 2: mereka memetik sayuran ('pick the vegetables') pada Jumat malam.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P2-03",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "What is Maya principal reason for finding market work rewarding?",
+          "options": [
+            "The financial profit",
+            "Engaging in conversations with patrons",
+            "Working outdoors in all seasons",
+            "Receiving tips from locals"
+          ],
+          "correct_answers": [
+            "Engaging in conversations with patrons"
+          ],
+          "explanation_id": "Maya menyukai interaksi langsung dengan para pembeli.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P2-04",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Severe downpours cause the outdoor market to cancel trading.",
+          "correct_answers": [
+            "False"
+          ],
+          "explanation_id": "Paragraf 3 menyatakan pasar tetap beroperasi walau hujan deras ('market stays open').",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P2-05",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "General admission tickets are required to enter the town square market.",
+          "correct_answers": [
+            "False"
+          ],
+          "explanation_id": "Paragraf 3 menyatakan masuk gratis tanpa tiket ('no entrance fee').",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P2-06",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Construction of the proposed cafe will finish before winter this year.",
+          "correct_answers": [
+            "False"
+          ],
+          "explanation_id": "Paragraf 4 menyatakan kafe baru belum akan dibuka sampai tahun depan ('not open until next year').",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P2-07",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Mr Chen was a secondary school mathematics educator before retiring.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "explanation_id": "Mr Chen disebut sebagai pensiunan guru ('retired teacher'), tetapi bidang pelajarannya tidak disebutkan.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P2-08",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "The stallholder permit fee paid to local authorities is £ _______ weekly.",
+          "correct_answers": [
+            "8",
+            "eight",
+            "£8"
+          ],
+          "explanation_id": "Biaya sewa lapak pedagang adalah delapan pound (£8).",
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P2-09",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "What regular purchase does Mr Chen make for his home? (Maximum TWO words)",
+          "correct_answers": [
+            "flowers",
+            "fresh flowers"
+          ],
+          "max_words": 2,
+          "explanation_id": "Mr Chen rutin membeli 'flowers' untuk meja dapurnya.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P2-10",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Near which spot does the busker perform music? (Maximum THREE words)",
+          "correct_answers": [
+            "the entrance",
+            "near the entrance",
+            "market entrance"
+          ],
+          "max_words": 3,
+          "explanation_id": "Pemain gitar akustik tampil di dekat pintu masuk ('near the entrance').",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P3-01",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "When does the community farmers market end its operations?",
+          "options": [
+            "11:30 am",
+            "1:00 pm",
+            "2:00 pm",
+            "5:00 pm"
+          ],
+          "correct_answers": [
+            "2:00 pm"
+          ],
+          "explanation_id": "Penutupan pukul 2:00 pm.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P3-02",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "What preparation takes place on Friday afternoon and night?",
+          "options": [
+            "Baking bread loaves",
+            "Harvesting the vegetables",
+            "Painting display tables",
+            "Loading heavy machinery"
+          ],
+          "correct_answers": [
+            "Harvesting the vegetables"
+          ],
+          "explanation_id": "Memetik sayuran segar untuk persiapan besok pagi.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P3-03",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "What aspect of the weekly market gives Maya the most satisfaction?",
+          "options": [
+            "Negotiating bulk prices",
+            "Conversing with regular visitors",
+            "Setting up the canopy",
+            "Driving home early"
+          ],
+          "correct_answers": [
+            "Conversing with regular visitors"
+          ],
+          "explanation_id": "Interaksi ramah dengan para pelanggan lokal.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P3-04",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Inclement wet weather does not shut down the market activities.",
+          "correct_answers": [
+            "True"
+          ],
+          "explanation_id": "Pasar tetap buka meski hujan deras.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P3-05",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Customers have to pay an entry tariff to walk through the stalls.",
+          "correct_answers": [
+            "False"
+          ],
+          "explanation_id": "Pengunjung tidak dikenakan biaya masuk apa pun.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P3-06",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "The town council plans to inaugurate the new market cafe in the current calendar year.",
+          "correct_answers": [
+            "False"
+          ],
+          "explanation_id": "Kafe baru dijadwalkan tahun depan.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P3-07",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Mr Chen travels from an adjacent rural village every Saturday morning.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "explanation_id": "Asal tempat tinggal Mr Chen tidak dirinci dalam teks.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P3-08",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Merchants submit a weekly fee of £ _______ to municipal officials.",
+          "correct_answers": [
+            "8",
+            "eight",
+            "£8"
+          ],
+          "explanation_id": "Pedagang membayar delapan pound.",
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P3-09",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Which decorative item does Mr Chen acquire each Saturday? (Maximum TWO words)",
+          "correct_answers": [
+            "flowers"
+          ],
+          "max_words": 2,
+          "explanation_id": "Bunga ('flowers') untuk meja dapurnya.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-BR-P3-10",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Where does the musician station himself to play his acoustic instrument? (Maximum THREE words)",
+          "correct_answers": [
+            "near the entrance",
+            "at the entrance",
+            "by the entrance"
+          ],
+          "max_words": 3,
+          "explanation_id": "Di dekat pintu gerbang masuk pasar.",
           "passage_no": 1
         }
       ]
@@ -1429,14 +3023,34 @@
       "source_code": "OWN",
       "questions": [
         {
-          "question_id": "Q-BW-01",
+          "question_id": "Q-BW-P1-01",
           "question_type": "WRITING_TASK",
           "skill": "WRITING",
           "task_kind": "TASK2",
           "min_words": 150,
           "time_limit_minutes": 30,
           "prompt": "Some people think that children should help with household jobs such as cleaning and cooking. Other people think that children should spend their time only on study and play.\n\nDiscuss both views and give your own opinion.\n\nWrite at least 150 words.",
-          "explanation_id": "Cara menilai tulisanmu sendiri (parafrase orisinal; bukan teks resmi band descriptors).\n1. Menjawab soal: apakah kamu membahas KEDUA pandangan dan menyatakan pendapatmu sendiri dengan jelas? Apakah panjang tulisan minimal 150 kata?\n2. Alur dan koherensi: apakah ada pembuka, dua paragraf isi, dan penutup; apakah setiap paragraf punya satu ide utama dan kata penghubung sederhana (First, However, In conclusion)?\n3. Kosakata: apakah kata yang dipakai sesuai topik (household jobs, responsibility, homework) dan ejaannya benar? Hindari mengulang kata yang sama terus-menerus.\n4. Tata bahasa: apakah kamu memakai kalimat sederhana dan sebagian kalimat majemuk dengan because/but/so; apakah Present Simple dan modal (should, can) digunakan dengan benar?\nContoh kerangka: pembuka (parafrase soal + pendapat), isi 1 (alasan anak perlu membantu), isi 2 (alasan anak perlu fokus belajar), penutup (pendapatmu)."
+          "explanation_id": "Panduan penilaian mandiri IELTS Academic Writing Task 2:\n1. Task Achievement: Apakah esai minimal 150 kata? Apakah kedua pandangan dibahas dengan bobot seimbang dan pendapat pribadi dinyatakan jelas di pembuka dan penutup?\n2. Coherence & Cohesion: Apakah struktur paragraf jelas (Intro, Body 1, Body 2, Conclusion) dengan transisi logis?\n3. Lexical Resource: Variasi kosakata akademik sesuai topik, kolokasi natural, dan akurasi ejaan.\n4. Grammatical Range & Accuracy: Penggunaan perpaduan kalimat sederhana, majemuk, dan bentuk pasif/kondisional secara presisi."
+        },
+        {
+          "question_id": "Q-BW-P2-01",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "task_kind": "TASK2",
+          "min_words": 150,
+          "time_limit_minutes": 30,
+          "prompt": "Some educators argue that traditional face-to-face classroom teaching is the most effective way to learn. Others believe that online distance learning offers superior benefits for students today.\n\nDiscuss both views and give your own opinion.\n\nWrite at least 150 words.",
+          "explanation_id": "Panduan penilaian mandiri IELTS Academic Writing Task 2:\n1. Task Achievement: Apakah esai minimal 150 kata? Apakah kedua pandangan dibahas dengan bobot seimbang dan pendapat pribadi dinyatakan jelas di pembuka dan penutup?\n2. Coherence & Cohesion: Apakah struktur paragraf jelas (Intro, Body 1, Body 2, Conclusion) dengan transisi logis?\n3. Lexical Resource: Variasi kosakata akademik sesuai topik, kolokasi natural, dan akurasi ejaan.\n4. Grammatical Range & Accuracy: Penggunaan perpaduan kalimat sederhana, majemuk, dan bentuk pasif/kondisional secara presisi."
+        },
+        {
+          "question_id": "Q-BW-P3-01",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "task_kind": "TASK2",
+          "min_words": 150,
+          "time_limit_minutes": 30,
+          "prompt": "Some people argue that public transportation should be completely free of charge for all citizens, funded by general taxation. Others believe that passengers should pay for the services they use.\n\nDiscuss both views and give your own opinion.\n\nWrite at least 150 words.",
+          "explanation_id": "Panduan penilaian mandiri IELTS Academic Writing Task 2:\n1. Task Achievement: Apakah esai minimal 150 kata? Apakah kedua pandangan dibahas dengan bobot seimbang dan pendapat pribadi dinyatakan jelas di pembuka dan penutup?\n2. Coherence & Cohesion: Apakah struktur paragraf jelas (Intro, Body 1, Body 2, Conclusion) dengan transisi logis?\n3. Lexical Resource: Variasi kosakata akademik sesuai topik, kolokasi natural, dan akurasi ejaan.\n4. Grammatical Range & Accuracy: Penggunaan perpaduan kalimat sederhana, majemuk, dan bentuk pasif/kondisional secara presisi."
         }
       ]
     },
@@ -1450,7 +3064,7 @@
       "source_code": "OWN",
       "questions": [
         {
-          "question_id": "Q-BS-01",
+          "question_id": "Q-BS-P1-01",
           "question_type": "SPEAKING_TASK",
           "skill": "SPEAKING",
           "part": 2,
@@ -1462,7 +3076,37 @@
             "what you usually do there",
             "why you like to go there"
           ],
-          "explanation_id": "Cara menilai rekamanmu sendiri (parafrase orisinal; bukan teks resmi band descriptors).\n1. Kelancaran: apakah kamu terus berbicara hampir 2 menit tanpa jeda panjang, dan memakai penghubung seperti and, but, because, so?\n2. Isi: apakah ketiga poin kartu (lokasi dan tampilan, kegiatan, alasan) tercakup, ditambah perasaanmu?\n3. Kosakata dan tata bahasa: apakah kata benda dan kata sifat cukup beragam, dan tense (Present untuk kebiasaan, Past untuk pengalaman) konsisten?\n4. Pengucapan: apakah kata kunci terdengar jelas dan intonasi tidak datar?"
+          "explanation_id": "Panduan penilaian mandiri IELTS Speaking Part 2:\n1. Fluency & Coherence: Berbicara lancar selama 2 menit tanpa jeda panjang, alur runtut.\n2. Lexical Resource: Pilihan kata deskriptif, idiom kontekstual, dan parafrase.\n3. Grammatical Range: Konsistensi tenses (past simple untuk pengalaman lampau, present simple untuk fakta).\n4. Pronunciation: Artikulasi vokal/konsonan jelas, word stress tepat, dan intonasi bermakna."
+        },
+        {
+          "question_id": "Q-BS-P2-01",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "part": 2,
+          "prep_seconds": 60,
+          "record_seconds": 120,
+          "prompt": "Describe an important practical skill that you learned outside school.\nYou should say:\nwhat the skill is and who taught it to you\nhow long it took to learn it\nhow you use this skill in daily life\nand explain why this skill is valuable to you.",
+          "cue_points": [
+            "what the skill is and who taught it to you",
+            "how long it took to learn it",
+            "how you use this skill in daily life"
+          ],
+          "explanation_id": "Panduan penilaian mandiri IELTS Speaking Part 2:\n1. Fluency & Coherence: Berbicara lancar selama 2 menit tanpa jeda panjang, alur runtut.\n2. Lexical Resource: Pilihan kata deskriptif, idiom kontekstual, dan parafrase.\n3. Grammatical Range: Konsistensi tenses (past simple untuk pengalaman lampau, present simple untuk fakta).\n4. Pronunciation: Artikulasi vokal/konsonan jelas, word stress tepat, dan intonasi bermakna."
+        },
+        {
+          "question_id": "Q-BS-P3-01",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "part": 2,
+          "prep_seconds": 60,
+          "record_seconds": 120,
+          "prompt": "Describe a public park or green area in your city that you enjoy visiting.\nYou should say:\nwhere it is located and how to reach it\nwhat facilities and vegetation it features\nwhat people do when they visit it\nand explain why this public space is important to your community.",
+          "cue_points": [
+            "where it is located and how to reach it",
+            "what facilities and vegetation it features",
+            "what people do when they visit it"
+          ],
+          "explanation_id": "Panduan penilaian mandiri IELTS Speaking Part 2:\n1. Fluency & Coherence: Berbicara lancar selama 2 menit tanpa jeda panjang, alur runtut.\n2. Lexical Resource: Pilihan kata deskriptif, idiom kontekstual, dan parafrase.\n3. Grammatical Range: Konsistensi tenses (past simple untuk pengalaman lampau, present simple untuk fakta).\n4. Pronunciation: Artikulasi vokal/konsonan jelas, word stress tepat, dan intonasi bermakna."
         }
       ]
     }

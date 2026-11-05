@@ -171,3 +171,42 @@ export type Setting = z.infer<typeof SettingDTO>;
 export type Invite = z.infer<typeof InviteListItemDTO>;
 export type AuditLogEntry = z.infer<typeof AuditLogItemDTO>;
 export type UnlockLevel = z.infer<typeof UnlockLevelSchema>;
+
+/** Skema Poin Admin */
+export const AdminAdjustPointsRequestSchema = z.strictObject({
+  userId: Uuid,
+  points: z.number().int().refine((n) => n !== 0, { message: 'points_cannot_be_zero' }),
+  note: z.string().trim().min(1).max(200),
+});
+
+export const AdminPointLedgerItemSchema = z.strictObject({
+  id: z.number(),
+  userId: Uuid,
+  userEmail: z.string(),
+  userDisplayName: z.string(),
+  source: z.string(),
+  points: z.number(),
+  note: z.string().nullable(),
+  createdAt: z.string(),
+});
+
+export const AdminUserPointItemSchema = z.strictObject({
+  userId: Uuid,
+  email: z.string(),
+  displayName: z.string(),
+  role: z.string(),
+  totalPoints: z.number(),
+  dailyStreakDays: z.number(),
+  longestDailyStreak: z.number(),
+  lastActiveDate: z.string().nullable(),
+});
+
+export const AdminPointsOverviewResponseSchema = z.strictObject({
+  data: z.strictObject({
+    users: z.array(AdminUserPointItemSchema),
+    recentLedger: z.array(AdminPointLedgerItemSchema),
+  }),
+});
+export type AdminUserPointItem = z.infer<typeof AdminUserPointItemSchema>;
+export type AdminPointLedgerItem = z.infer<typeof AdminPointLedgerItemSchema>;
+

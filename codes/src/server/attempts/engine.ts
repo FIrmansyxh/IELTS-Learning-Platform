@@ -40,6 +40,61 @@ export interface SelectionOptions {
   seed?: string;
 }
 
+/**
+ * Deteksi slot soal jika menggunakan konvensi multi-paket variasi (misal Q-213-P1-01, Q-213-P2-01, Q-213-P3-01).
+ * Mengembalikan identifier slot unik untuk mengelompokkan variasi dari jenis soal yang sama.
+ */
+export function extractQuestionSlot(id: string): string | null {
+  const m1 = /^Q-(.+?)-(?:P|PKG|[A-C])(\d+)-(\d+)$/i.exec(id);
+  if (m1) return `${m1[1]}:slot-${m1[3]}`;
+  const m2 = /^Q-(.+?)-([A-C])-(\d+)$/i.exec(id);
+  if (m2) return `${m2[1]}:slot-${m2[3]}`;
+  const m3 = /^Q-(.+?)-(\d+)-(?:P|PKG|[A-C])(\d+)$/i.exec(id);
+  if (m3) return `${m3[1]}:slot-${m3[2]}`;
+  return null;
+}
+
+/**
+ * Memilih secara acak 1 variasi soal per slot dari pool 3 paket soal (atau N paket).
+ * Mempertahankan jenis dan jumlah soal yang sama, namun variasi soalnya teracak dari sumber paket.
+ */
+export function selectVariantQuestions(questions: readonly Question[], rng: () => number): Question[] {
+  if (questions.length <= 1) return [...questions];
+
+  // Kelompokkan soal berdasarkan slot
+  const slotMap = new Map<string, Question[]>();
+  const slotOrder: string[] = [];
+  let hasMultipleVariants = false;
+
+  for (let i = 0; i < questions.length; i++) {
+    const q = questions[i]!;
+    const slot = extractQuestionSlot(q.question_id) ?? `single-slot-${i}`;
+    const list = slotMap.get(slot);
+    if (!list) {
+      slotMap.set(slot, [q]);
+      slotOrder.push(slot);
+    } else {
+      list.push(q);
+      hasMultipleVariants = true;
+    }
+  }
+
+  // Jika tidak ada varian ganda, kembalikan pertanyaan asli
+  if (!hasMultipleVariants) {
+    return [...questions];
+  }
+
+  // Pilih secara acak 1 variasi dari masing-masing slot
+  const selected: Question[] = [];
+  for (const slot of slotOrder) {
+    const variants = slotMap.get(slot)!;
+    const chosenIdx = Math.floor(rng() * variants.length);
+    selected.push(variants[chosenIdx]!);
+  }
+
+  return selected;
+}
+
 export function buildInitialState(
   attemptId: string,
   questions: readonly Question[],
@@ -50,13 +105,21 @@ export function buildInitialState(
   void attemptId; // seed tidak lagi diturunkan dari id publik (F-06-01)
   const seed = opts.seed ?? newRngSeed();
   const rng = seededCsprng(seed);
-  let idx = questions.map((_, i) => i);
+
+  // 1. Pilih variasi soal dari paket jika tersedia (misal pool 3 paket)
+  const pool = selectVariantQuestions(questions, rng);
+
+  // 2. Tentukan indeks dan terapkan batas limit bila ada
+  let idx = pool.map((_, i) => i);
   if (opts.limit !== null && idx.length > opts.limit) idx = shuffled(idx, rng).slice(0, opts.limit);
+
+  // 3. Acak urutan susunan secara total bila keepOrder = false
   idx = opts.keepOrder ? [...idx].sort((a, b) => a - b) : shuffled(idx, rng);
+
   const served: Record<string, Served> = {};
   const order: string[] = [];
   for (const i of idx) {
-    const q = questions[i]!;
+    const q = pool[i]!;
     order.push(q.question_id);
     served[q.question_id] = serveQuestion(q, rng);
   }

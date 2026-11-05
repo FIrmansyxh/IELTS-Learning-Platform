@@ -7,7 +7,7 @@
     "node": ">=22.20.0 <23"
   },
   "scripts": {
-    "dev": "next dev --turbopack -H 127.0.0.1 -p 3000",
+    "dev": "next dev --turbopack -H 127.0.0.1 -p 3005",
     "build": "next build",
     "start": "node .next/standalone/server.js",
     "build:worker": "esbuild src/worker/index.ts src/worker/healthcheck.ts --bundle --platform=node --target=node22 --outdir=dist --packages=external --format=esm",

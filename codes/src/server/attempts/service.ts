@@ -1,17 +1,30 @@
 /**
- * AttemptService (SPEC-006): siklus attempt generik (mulai/lanjut, jawab, submit, hasil) untuk semua tipe set.
+ * AttemptService (SPEC-006, SPEC-014): siklus attempt generik (mulai/lanjut, jawab, submit, hasil) untuk semua tipe set.
  * Aturan per tipe ada di `assessmentTypeHandlers`. Semua tulis terjadi dalam satu transaksi per permintaan dengan
  * `SELECT ... FOR UPDATE` pada baris attempt; kegagalan hook membatalkan seluruh submit.
  */
 import { randomUUID } from 'node:crypto';
 import { and, asc, eq, sql } from 'drizzle-orm';
-import { assessmentSets, attemptAnswers, attempts, contentAssets } from '@/db/schema';
+import { assessmentSets, attemptAnswers, attempts, attemptSections, contentAssets } from '@/db/schema';
 import type { Attempt, AttemptResult } from '@/contracts/attempts';
+import type { BossResultDTO } from '@/contracts/exams';
 import type { Db, Tx } from '../db';
 import { nowDate } from '../clock';
 import { runActivityHooks } from '../activity/hooks';
 import { ApiError, notFound } from '../http/errors';
 import { getSetting } from '../settings/service';
+import { convertRawToBand, scaleToForty } from '../band/convert';
+import { getActiveTable } from '../band/service';
+import {
+  formatSectionDTO,
+  loadChildSections,
+  refreshBossResult,
+  type BossAttemptState,
+} from '../exams/boss';
+import {
+  pickNextPlacementQuestion,
+  type PlacementAttemptState,
+} from '../exams/placement';
 import {
   buildAttemptDTO,
   buildResultDTO,
@@ -35,6 +48,7 @@ import {
   percentHundredths,
   displayPercentHundredths,
   toNumeric,
+  toPublicQuestion,
   type AttemptState,
 } from './engine';
 import { assessmentTypeHandlers } from './handlers';
@@ -237,6 +251,27 @@ export async function startAttempt(db: Db, userId: string, assessmentSetId: stri
       const resumed = rebased
         ? (await tx.update(attempts).set({ state: rebased, updatedAt: now }).where(eq(attempts.id, existing.id)).returning())[0]!
         : existing;
+
+      if (set.assessmentType === 'TIER_BOSS_EXAM') {
+        const childSections = await loadChildSections(tx, set.id);
+        const bState = resumed.state as unknown as BossAttemptState;
+        const sectionDTOs = childSections.map((c) => formatSectionDTO(c, bState.sections?.[c.id], now));
+        const activeSec = childSections.find((c) => bState.sections?.[c.id]?.phase === 'ACTIVE');
+        const qs = activeSec ? parseQuestions(activeSec) : new Map();
+        const audio = activeSec ? await loadAudio(tx, activeSec) : null;
+        const dto = buildAttemptDTO({
+          attempt: resumed,
+          set,
+          questions: qs,
+          answers: existingAnswers,
+          resumed: true,
+          now,
+          audio,
+          sections: sectionDTOs,
+        });
+        return { created: false, attempt: dto };
+      }
+
       const dto = buildAttemptDTO({
         attempt: resumed,
         set,
@@ -252,7 +287,16 @@ export async function startAttempt(db: Db, userId: string, assessmentSetId: stri
     const plan = await handler.start({ tx, userId, set, now }); // gerbang: 403/404/409
     const questions = parseQuestions(set);
     const id = randomUUID();
-    const state = buildInitialState(id, [...questions.values()], { limit: plan.questionLimit, keepOrder: plan.keepOrder }, plan.passPercent, now);
+    const baseState = buildInitialState(id, [...questions.values()], { limit: plan.questionLimit, keepOrder: plan.keepOrder }, plan.passPercent, now);
+    if (set.assessmentType === 'PLACEMENT_TEST') {
+      const pData = (plan.state as Record<string, unknown> | undefined)?.placement as { served?: string[] } | undefined;
+      if (pData?.served?.length) {
+        baseState.order = [...pData.served];
+      }
+    }
+    const state = plan.state ? { ...baseState, ...plan.state } : baseState;
+    const deadlineAt = plan.deadlineAt !== undefined ? plan.deadlineAt : (plan.mode === 'EXAM' ? new Date(now.getTime() + set.timeLimitSeconds * 1000) : null);
+
     const [row] = await tx
       .insert(attempts)
       .values({
@@ -263,12 +307,34 @@ export async function startAttempt(db: Db, userId: string, assessmentSetId: stri
         mode: plan.mode,
         status: 'IN_PROGRESS',
         startedAt: now,
-        deadlineAt: plan.mode === 'EXAM' ? new Date(now.getTime() + set.timeLimitSeconds * 1000) : null,
+        deadlineAt,
         state,
         createdAt: now,
         updatedAt: now,
       })
       .returning();
+
+    if (plan.onCreated) {
+      await plan.onCreated({ tx, attemptId: id, now });
+    }
+
+    if (set.assessmentType === 'TIER_BOSS_EXAM') {
+      const childSections = await loadChildSections(tx, set.id);
+      const bState = state as unknown as BossAttemptState;
+      const sectionDTOs = childSections.map((c) => formatSectionDTO(c, bState.sections?.[c.id], now));
+      const dto = buildAttemptDTO({
+        attempt: row!,
+        set,
+        questions: new Map(),
+        answers: [],
+        resumed: false,
+        now,
+        audio: null,
+        sections: sectionDTOs,
+      });
+      return { created: true, attempt: dto };
+    }
+
     const dto = buildAttemptDTO({ attempt: row!, set, questions, answers: [], resumed: false, now, audio: await loadAudio(tx, set) });
     return { created: true, attempt: dto };
   });
@@ -283,6 +349,26 @@ export async function getAttempt(db: Db, userId: string, attemptId: string): Pro
       await expire(tx, attempt, set, userId);
       ({ attempt, set } = await loadLocked(tx, attemptId, userId));
     } // F-06-02: GET bebas efek samping (tidak menggeser last_resume_at maupun updated_at)
+
+    if (set.assessmentType === 'TIER_BOSS_EXAM') {
+      const childSections = await loadChildSections(tx, set.id);
+      const bState = attempt.state as unknown as BossAttemptState;
+      const sectionDTOs = childSections.map((c) => formatSectionDTO(c, bState.sections?.[c.id], now));
+      const activeSec = childSections.find((c) => bState.sections?.[c.id]?.phase === 'ACTIVE');
+      const qs = activeSec ? parseQuestions(activeSec) : new Map();
+      const audio = activeSec ? await loadAudio(tx, activeSec) : null;
+      return buildAttemptDTO({
+        attempt,
+        set,
+        questions: qs,
+        answers: await loadAnswers(tx, attempt.id),
+        resumed: true,
+        now,
+        audio,
+        sections: sectionDTOs,
+      });
+    }
+
     return buildAttemptDTO({
       attempt,
       set,
@@ -301,7 +387,7 @@ export interface AnswerOutcome {
   saved: true;
   answered_count: number;
   feedback: ReturnType<typeof feedbackFor> | null;
-  next_question: null;
+  next_question: unknown | null;
 }
 
 export async function submitAnswer(
@@ -321,9 +407,76 @@ export async function submitAnswer(
     if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
     const state = stateOf(attempt);
     if (!state.order.includes(questionId)) throw notFound();
-    const q = parseQuestions(set).get(questionId);
+
+    let targetSet = set;
+    if (set.assessmentType === 'TIER_BOSS_EXAM') {
+      const bState = state as unknown as BossAttemptState;
+      const sectionSetId = bState.question_section?.[questionId];
+      if (!sectionSetId) throw notFound();
+
+      const sec = bState.sections?.[sectionSetId];
+      if (!sec || sec.phase !== 'ACTIVE') {
+        throw new ApiError('SECTION_NOT_ACTIVE');
+      }
+
+      if (sec.deadline_at && now.getTime() > new Date(sec.deadline_at).getTime() + GRACE_MS) {
+        // Section expired! Auto-close section:
+        bState.sections[sectionSetId] = { ...sec, phase: 'DONE' };
+        await tx.update(attempts).set({ state: bState, updatedAt: now }).where(eq(attempts.id, attempt.id));
+
+        const [cSet] = await tx.select().from(assessmentSets).where(eq(assessmentSets.id, sectionSetId)).limit(1);
+        if (cSet && (cSet.skillCategory === 'LISTENING' || cSet.skillCategory === 'READING')) {
+          const qs = parseQuestions(cSet);
+          const ans = await tx
+            .select()
+            .from(attemptAnswers)
+            .where(and(eq(attemptAnswers.attemptId, attempt.id), eq(attemptAnswers.assessmentSetId, sectionSetId)));
+          const ansMap = new Map(ans.map((a) => [a.questionId, a]));
+          let raw = 0;
+          let max = 0;
+          for (const q of qs.values()) {
+            if (!isObjective(q)) continue;
+            max += q.points;
+            const a = ansMap.get(q.question_id);
+            if (a) raw += Number(a.score ?? 0);
+          }
+          const raw40 = max > 0 ? scaleToForty(raw, max) : 0;
+          const table = await getActiveTable(tx, cSet.skillCategory === 'LISTENING' ? 'LISTENING' : 'READING_ACADEMIC');
+          const band = convertRawToBand(table.rows, raw40);
+          await tx
+            .update(attemptSections)
+            .set({ rawScore: String(raw), maxScore: String(max), bandScore: String(band), status: 'EXPIRED' })
+            .where(and(eq(attemptSections.attemptId, attempt.id), eq(attemptSections.assessmentSetId, sectionSetId)));
+        } else {
+          await tx
+            .update(attemptSections)
+            .set({ status: 'EXPIRED' })
+            .where(and(eq(attemptSections.attemptId, attempt.id), eq(attemptSections.assessmentSetId, sectionSetId)));
+        }
+
+        throw new ApiError('SECTION_EXPIRED');
+      }
+
+      const [childSet] = await tx.select().from(assessmentSets).where(eq(assessmentSets.id, sectionSetId)).limit(1);
+      if (!childSet) throw notFound();
+      targetSet = childSet;
+    }
+
+    const q = parseQuestions(targetSet).get(questionId);
     if (!q) throw notFound();
     if (isAiTask(q)) throw new ApiError('QUESTION_REQUIRES_SUBMISSION');
+
+    if (set.assessmentType === 'PLACEMENT_TEST') {
+      const pState = (state as unknown as Record<string, unknown>).placement as PlacementAttemptState | undefined;
+      if (!pState) throw notFound();
+      if (!pState.served.includes(questionId)) throw notFound();
+      if (pState.history.some((h) => h.question_id === questionId)) {
+        throw new ApiError('QUESTION_ALREADY_ANSWERED');
+      }
+      if (questionId !== pState.pending) {
+        throw new ApiError('QUESTION_NOT_CURRENT');
+      }
+    }
 
     const shape = parseResponse(q, state.served[questionId] ?? {}, rawResponse);
     if (!shape.ok) throw new ApiError('VALIDATION_ERROR', { details: shape.issues });
@@ -356,7 +509,7 @@ export async function submitAnswer(
       .insert(attemptAnswers)
       .values({
         attemptId: attempt.id,
-        assessmentSetId: set.id,
+        assessmentSetId: targetSet.id,
         questionId,
         questionType: q.question_type,
         skill: q.skill,
@@ -382,12 +535,49 @@ export async function submitAnswer(
       });
     await tx.update(attempts).set({ updatedAt: now }).where(eq(attempts.id, attempt.id));
 
+    let nextQuestionDTO: unknown | null = null;
+    if (set.assessmentType === 'PLACEMENT_TEST') {
+      const pState = (state as unknown as Record<string, unknown>).placement as PlacementAttemptState;
+      const isCorrect = grade.isCorrect;
+      const qDiff = 'difficulty' in q && typeof (q as { difficulty?: unknown }).difficulty === 'number'
+        ? (q as { difficulty: number }).difficulty
+        : 3;
+      pState.history.push({
+        question_id: questionId,
+        difficulty: qDiff,
+        correct: isCorrect,
+      });
+
+      pState.d = isCorrect ? Math.min(5, pState.d + 1) : Math.max(1, pState.d - 1);
+
+      const qs = [...parseQuestions(set).values()];
+      const N = 25;
+
+      if (pState.served.length >= N) {
+        pState.pending = null;
+      } else {
+        const nextQ = pickNextPlacementQuestion(qs, pState.served, pState.d, attempt.id);
+        if (nextQ) {
+          pState.served.push(nextQ.question_id);
+          pState.pending = nextQ.question_id;
+          if (!state.order.includes(nextQ.question_id)) {
+            state.order.push(nextQ.question_id);
+          }
+          nextQuestionDTO = toPublicQuestion(nextQ, state.served[nextQ.question_id] ?? {});
+        } else {
+          pState.pending = null;
+        }
+      }
+
+      await tx.update(attempts).set({ state, updatedAt: now }).where(eq(attempts.id, attempt.id));
+    }
+
     return {
       question_id: questionId,
       saved: true,
       answered_count: others.length + 1,
       feedback: practice ? feedbackFor(q, grade) : null,
-      next_question: null,
+      next_question: nextQuestionDTO,
     };
   });
   if (out === 'expired') throw new ApiError('ATTEMPT_EXPIRED');
@@ -401,14 +591,19 @@ export async function submitAttempt(db: Db, userId: string, attemptId: string): 
     const { attempt, set } = await loadLocked(tx, attemptId, userId);
     if (attempt.status === 'GRADED' || attempt.status === 'SUBMITTED' || attempt.status === 'EXPIRED') {
       // Idempoten: hasil yang sama, tanpa efek ganda (hook tidak dijalankan lagi).
-      return buildResultDTO({ attempt, set, questions: parseQuestions(set), answers: await loadAnswers(tx, attempt.id) });
+      const resDto = buildResultDTO({ attempt, set, questions: parseQuestions(set), answers: await loadAnswers(tx, attempt.id) });
+      if (set.assessmentType === 'TIER_BOSS_EXAM' && resDto.boss) {
+        resDto.boss = await refreshBossResult(tx, attempt, resDto.boss as BossResultDTO);
+      }
+      return resDto;
     }
     if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
     if (isExpired(attempt, now)) {
       await expire(tx, attempt, set, userId);
       return 'expired';
     }
-    return finalize(tx, { attempt, set, userId, status: 'GRADED', submittedAt: now });
+    const resDto = await finalize(tx, { attempt, set, userId, status: 'GRADED', submittedAt: now });
+    return resDto;
   });
   if (out === 'expired') throw new ApiError('ATTEMPT_EXPIRED');
   return out;
@@ -424,6 +619,10 @@ export async function getAttemptResult(db: Db, userId: string, attemptId: string
       ({ attempt, set } = await loadLocked(tx, attemptId, userId));
     }
     if (attempt.status === 'IN_PROGRESS' || attempt.status === 'ABANDONED') throw new ApiError('ATTEMPT_NOT_FINISHED');
-    return buildResultDTO({ attempt, set, questions: parseQuestions(set), answers: await loadAnswers(tx, attempt.id) });
+    const resDto = buildResultDTO({ attempt, set, questions: parseQuestions(set), answers: await loadAnswers(tx, attempt.id) });
+    if (set.assessmentType === 'TIER_BOSS_EXAM' && resDto.boss) {
+      resDto.boss = await refreshBossResult(tx, attempt, resDto.boss as BossResultDTO);
+    }
+    return resDto;
   });
 }

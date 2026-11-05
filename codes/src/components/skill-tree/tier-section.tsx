@@ -94,7 +94,7 @@ export function TierSection({
         </header>
 
         {tier.modules.length > 0 ? (
-          <ol aria-label={fmt(id.tree.tierLabel, { n: tier.tier_number })} className="grid gap-4 xl:grid-cols-2">
+          <ol aria-label={fmt(id.tree.tierLabel, { n: tier.tier_number })} className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
             {tier.modules.map((m) => (
               <ModuleCard
                 key={m.id}

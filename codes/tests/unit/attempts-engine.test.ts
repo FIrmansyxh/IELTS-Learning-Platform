@@ -122,6 +122,38 @@ describe('PRNG dan pemilihan (D4, D5)', () => {
       expect(s.segment_orig_index!.every((v, j) => v === j)).toBe(false);
     }
   });
+
+  it('3 paket variasi: memilih 1 varian per slot dan mengacak susunan total', () => {
+    // 3 paket: P1, P2, P3 dengan 3 slot soal sejenis
+    const pool = [
+      parse({ ...Q.mcq(), question_id: 'Q-MOD-P1-01', prompt: 'P1 Soal 1' }),
+      parse({ ...Q.mcq(), question_id: 'Q-MOD-P2-01', prompt: 'P2 Soal 1' }),
+      parse({ ...Q.mcq(), question_id: 'Q-MOD-P3-01', prompt: 'P3 Soal 1' }),
+      parse({ ...Q.fill(), question_id: 'Q-MOD-P1-02', prompt: 'P1 Soal 2' }),
+      parse({ ...Q.fill(), question_id: 'Q-MOD-P2-02', prompt: 'P2 Soal 2' }),
+      parse({ ...Q.fill(), question_id: 'Q-MOD-P3-02', prompt: 'P3 Soal 2' }),
+      parse({ ...Q.short(), question_id: 'Q-MOD-P1-03', prompt: 'P1 Soal 3' }),
+      parse({ ...Q.short(), question_id: 'Q-MOD-P2-03', prompt: 'P2 Soal 3' }),
+      parse({ ...Q.short(), question_id: 'Q-MOD-P3-03', prompt: 'P3 Soal 3' }),
+    ];
+
+    const st = buildInitialState(randomUUID(), pool, { limit: null, keepOrder: false }, 75, NOW);
+    // Tepat 3 soal yang terpilih (1 per slot)
+    expect(st.order).toHaveLength(3);
+
+    // Pastikan tiap slot 01, 02, 03 terwakili tepat 1 soal
+    const slots = st.order.map((id) => id.split('-')[3]);
+    expect(new Set(slots)).toEqual(new Set(['01', '02', '03']));
+
+    // Uji dalam banyak attempt bahwa varian dari P1, P2, P3 terpilih secara acak
+    const selectedVariants = new Set<string>();
+    for (let i = 0; i < 30; i++) {
+      const s = buildInitialState(randomUUID(), pool, { limit: null, keepOrder: false }, 75, NOW);
+      for (const qid of s.order) selectedVariants.add(qid);
+    }
+    // Semua varian P1, P2, P3 dari pool harus pernah terpilih
+    expect(selectedVariants.size).toBeGreaterThanOrEqual(6);
+  });
 });
 
 describe('DTO publik tanpa kunci (D9)', () => {

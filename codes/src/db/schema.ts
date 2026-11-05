@@ -527,7 +527,12 @@ export const pointLedger = pgTable('point_ledger', {           // append-only
   points: integer('points').notNull(),
   note: varchar('note', { length: 200 }),
   createdAt: createdAt(),
-}, (t) => [index('point_ledger_user_idx').on(t.userId, t.createdAt.desc())]);
+}, (t) => [
+  index('point_ledger_user_idx').on(t.userId, t.createdAt.desc()),
+  uniqueIndex('point_ledger_once_uq')
+    .on(t.userId, t.source, t.sourceId)
+    .where(sql`${t.source} IN ('DRILL','SPEED_STREAK','CROWN','MINI_TASK','BOSS')`),
+]);
 
 export const userSkillScores = pgTable('user_skill_scores', {   // sumber radar 6 sumbu
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),

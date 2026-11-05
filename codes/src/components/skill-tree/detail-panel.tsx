@@ -12,7 +12,7 @@ export function DetailPanel({ selection }: { selection: Selection | null }) {
     <aside
       aria-label={id.tree.detailTitle}
       aria-live="polite"
-      className="sticky top-6 hidden rounded-lg border bg-card p-4 shadow-sm lg:block"
+      className="rounded-lg border bg-card p-4 shadow-sm"
     >
       <h2 className="mb-3 text-base font-semibold">{id.tree.detailTitle}</h2>
       {!selection ? (

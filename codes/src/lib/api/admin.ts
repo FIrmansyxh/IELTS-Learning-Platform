@@ -92,4 +92,51 @@ export const adminApi = {
     ).data,
 
   auditLog: (p: AuditParams) => apiFetch('/admin/audit-log', { query: p, schema: AuditLogResponseSchema }),
+
+  points: async () =>
+    (
+      await apiFetch('/admin/points', {
+        schema: z.object({
+          data: z.object({
+            users: z.array(
+              z.object({
+                userId: z.string(),
+                email: z.string(),
+                displayName: z.string(),
+                role: z.string(),
+                totalPoints: z.number(),
+                dailyStreakDays: z.number(),
+                longestDailyStreak: z.number(),
+                lastActiveDate: z.string().nullable(),
+              }),
+            ),
+            recentLedger: z.array(
+              z.object({
+                id: z.number(),
+                userId: z.string(),
+                userEmail: z.string(),
+                userDisplayName: z.string(),
+                source: z.string(),
+                points: z.number(),
+                note: z.string().nullable(),
+                createdAt: z.string(),
+              }),
+            ),
+          }),
+        }),
+      })
+    ).data,
+
+  adjustPoints: async (body: { userId: string; points: number; note: string }) =>
+    (
+      await apiFetch('/admin/points/adjust', {
+        method: 'POST',
+        body,
+        schema: z.object({
+          data: z.object({
+            totalPoints: z.number(),
+          }),
+        }),
+      })
+    ).data,
 };

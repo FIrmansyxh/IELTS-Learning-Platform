@@ -19,7 +19,7 @@ export type NavItem = {
 export const NAV_ITEMS: NavItem[] = [
   { href: '/', label: id.nav.home, icon: Home, enabled: true },
   { href: '/peta', label: id.nav.map, icon: Map, enabled: true, matchPrefix: '/peta' },
-  { href: '/riwayat', label: id.nav.history, icon: History, enabled: false, matchPrefix: '/riwayat' },
+  { href: '/riwayat', label: id.nav.history, icon: History, enabled: true, matchPrefix: '/riwayat' },
   { href: '/profil', label: id.nav.profile, icon: User, enabled: true, matchPrefix: '/profil' },
   { href: '/admin', label: id.nav.admin, icon: Shield, enabled: true, adminOnly: true, matchPrefix: '/admin' },
 ];

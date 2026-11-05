@@ -47,6 +47,7 @@ export function buildAttemptDTO(p: {
   resumed: boolean;
   now: Date;
   audio: AudioInfo | null;
+  sections?: unknown[] | null;
 }): Attempt {
   const { attempt, set, questions, answers, now } = p;
   const state = stateOf(attempt);
@@ -73,6 +74,11 @@ export function buildAttemptDTO(p: {
     answerList.push({ question_id: qid, response: (a.response ?? {}) as Record<string, unknown>, feedback });
   }
 
+  const isPlacement = set.assessmentType === 'PLACEMENT_TEST';
+  const pState = isPlacement ? ((state as unknown as Record<string, unknown>).placement as { served?: string[]; history?: unknown[] } | undefined) : undefined;
+  const questionCount = isPlacement ? 25 : state.order.length;
+  const currentIndex = isPlacement ? (pState?.history?.length ?? 0) : current;
+
   const remaining = attempt.deadlineAt ? Math.max(0, Math.ceil((attempt.deadlineAt.getTime() - now.getTime()) / 1000)) : null;
   return {
     id: attempt.id,
@@ -87,23 +93,23 @@ export function buildAttemptDTO(p: {
     remaining_seconds: remaining,
     time_limit_seconds: set.timeLimitSeconds,
     pass_percent: state.pass_percent,
-    question_count: state.order.length,
+    question_count: questionCount,
     answered_count: answers.length,
-    current_index: current,
+    current_index: currentIndex,
     passage_markdown: set.readingPassageMarkdown,
     listening:
       set.listeningAssetId && p.audio?.mimeType
         ? { audio_url: `/api/v1/attempts/${attempt.id}/audio`, mime_type: p.audio.mimeType, duration_sec: p.audio.durationSec ?? 0 }
         : null,
     questions: inProgress
-      ? state.order.flatMap((qid) => {
+      ? (isPlacement && pState?.served ? pState.served : state.order).flatMap((qid) => {
           const q = questions.get(qid);
           return q ? [toPublicQuestion(q, state.served[qid] ?? {})] : [];
         })
       : [],
     answers: answerList,
     resumed: p.resumed,
-    sections: null,
+    sections: (p.sections ?? null) as Attempt['sections'],
   };
 }
 
@@ -151,13 +157,32 @@ export function buildResultDTO(p: { attempt: AttemptRow; set: SetRow; questions:
     });
   }
 
-  const stored = (attempt.resultJson ?? {}) as { progress?: AttemptResult['progress']; skip?: unknown; boss?: unknown; placement?: unknown };
-  const perSkill = [...skillAgg.entries()].map(([skill, v]) => ({
+  const stored = (attempt.resultJson ?? {}) as {
+    progress?: AttemptResult['progress'];
+    skip?: unknown;
+    boss?: unknown;
+    placement?: unknown;
+    gamification?: AttemptResult['gamification'];
+  };
+  let perSkill = [...skillAgg.entries()].map(([skill, v]) => ({
     skill: skill as AttemptResult['per_skill'][number]['skill'],
     raw_score: hundredths(v.rawH),
     max_score: hundredths(v.maxH),
     score_percent: v.maxH === 0 ? 0 : Number((Math.floor((2 * v.rawH * 10000 + v.maxH) / (2 * v.maxH)) / 100).toFixed(2)),
   }));
+
+  if (perSkill.length === 0 && stored.boss && typeof stored.boss === 'object' && 'sections' in stored.boss) {
+    const bSections = (stored.boss as { sections?: Array<{ skill: string; raw_score: number | null; max_score: number | null }> }).sections ?? [];
+    perSkill = bSections
+      .filter((s) => s.raw_score !== null && s.max_score !== null)
+      .map((s) => ({
+        skill: s.skill as AttemptResult['per_skill'][number]['skill'],
+        raw_score: s.raw_score!,
+        max_score: s.max_score!,
+        score_percent: s.max_score! > 0 ? Number(((s.raw_score! * 100) / s.max_score!).toFixed(2)) : 0,
+      }));
+  }
+
   return {
     attempt: {
       id: attempt.id,
@@ -171,7 +196,7 @@ export function buildResultDTO(p: { attempt: AttemptRow; set: SetRow; questions:
       max_score: Number(attempt.maxScore ?? 0),
       score_percent: scoreForDisplay(attempt, state.pass_percent, practice),
       pass_percent: state.pass_percent,
-      passed: attempt.passed,
+      passed: set.assessmentType === 'PLACEMENT_TEST' ? null : attempt.passed,
       points_awarded: attempt.pointsAwarded,
       band_score: attempt.bandScore === null ? null : Number(attempt.bandScore),
     },
@@ -181,6 +206,6 @@ export function buildResultDTO(p: { attempt: AttemptRow; set: SetRow; questions:
     skip: stored.skip ?? null,
     boss: stored.boss ?? null,
     placement: stored.placement ?? null,
-    gamification: null,
+    gamification: stored.gamification ?? null,
   };
 }

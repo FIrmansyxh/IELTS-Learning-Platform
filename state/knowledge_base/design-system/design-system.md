@@ -427,11 +427,12 @@ Admin > Impor Konten      [1 Unggah][2 Validasi][3 Pratinjau][4 Publikasi]
   --color-text:#0F172A; --color-text-2:#475569; --color-text-muted:#64748B;
   --color-locked:#94A3B8; --color-progress:#4F46E5; --color-done:#16A34A; --color-done-text:#15803D;
   --color-error:#DC2626; --color-warning:#F59E0B; --color-info:#0EA5E9;
+  --color-highlight-yellow:#FDE68A; --color-highlight-green:#BBF7D0;
   --radius-sm:.5rem; --radius-md:.75rem; --radius-lg:1rem;
   --motion-fast:120ms; --motion-base:200ms; --motion-slow:300ms;
   --font-heading:"Plus Jakarta Sans",system-ui,sans-serif; --font-body:"Inter",system-ui,sans-serif; --font-mono:"JetBrains Mono",ui-monospace,monospace;
 }
-:root[data-theme="dark"], @media (prefers-color-scheme:dark) { /* nilai dark sesuai Bagian 2 */ }
+:root[data-theme="dark"], @media (prefers-color-scheme:dark) { /* nilai dark sesuai Bagian 2; highlight-yellow:#854D0E, highlight-green:#166534 */ }
 ```
 Pemetaan ke token shadcn/Tailwind 4 (`--primary`, `--background`, `--card`, `--muted`, `--destructive`, `--ring`) dilakukan Frontend dari tabel Bagian 2; jangan menambah token baru tanpa lewat change-management.
 
@@ -450,3 +451,4 @@ Pemetaan ke token shadcn/Tailwind 4 (`--primary`, `--background`, `--card`, `--m
 | Timestamp | Agen | Perubahan |
 |-----------|------|-----------|
 | 2026-11-03 | UX Designer | Initial design system (token, komponen, motion, a11y, wireframe) |
+| 2026-11-04 | Frontend | SPEC-010: Menambah token highlight-yellow dan highlight-green untuk Reading Workspace |

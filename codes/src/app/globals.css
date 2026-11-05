@@ -35,6 +35,8 @@
   --color-crown-silver: #94a3b8;
   --color-crown-silver-edge: #64748b;
   --color-streak: #f97316;
+  --color-highlight-yellow: #fde68a;
+  --color-highlight-green: #bbf7d0;
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
@@ -93,6 +95,8 @@
   --color-crown-silver: #cbd5e1;
   --color-crown-silver-edge: #cbd5e1;
   --color-streak: #fb923c;
+  --color-highlight-yellow: #854d0e;
+  --color-highlight-green: #166534;
 
   /* Tombol primary di dark tetap #4F46E5 + teks putih (design-system 2.1) */
   --primary: #4f46e5;
@@ -128,6 +132,8 @@
     --color-crown-silver: #cbd5e1;
     --color-crown-silver-edge: #cbd5e1;
     --color-streak: #fb923c;
+    --color-highlight-yellow: #854d0e;
+    --color-highlight-green: #166534;
     --primary: #4f46e5;
     --primary-foreground: #ffffff;
   }

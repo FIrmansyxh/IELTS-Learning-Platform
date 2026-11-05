@@ -8,3 +8,4 @@ import { Uuid } from '@/contracts/common';
 export const SubmitAnswerBodySchema = z.strictObject({ response: z.record(z.string(), z.unknown()) });
 export const AttemptIdParamSchema = z.strictObject({ attempt_id: Uuid });
 export const AnswerParamsSchema = z.strictObject({ attempt_id: Uuid, question_id: z.string().min(1).max(40) });
+export const SectionParamsSchema = z.strictObject({ attempt_id: Uuid, section_set_id: Uuid });

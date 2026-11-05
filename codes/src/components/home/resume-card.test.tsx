@@ -24,6 +24,26 @@ function serve(resume: { status?: number; body: unknown }) {
   return mockFetch((url) => {
     if (url.pathname === '/api/v1/me/last-learned') return resume;
     if (url.pathname === '/api/v1/auth/me') return { body: { data: { user: USER } } };
+    if (url.pathname === '/api/v1/me/skills/radar') {
+      return {
+        body: {
+          data: {
+            skills: [],
+            target_band: null,
+            prediction: {
+              complete: false,
+              overall_band: null,
+              indicative_band: null,
+              range_low: null,
+              range_high: null,
+              components: { LISTENING: null, READING: null, WRITING: null, SPEAKING: null },
+              basis_note: '',
+            },
+            disclaimer: '',
+          },
+        },
+      };
+    }
     return { status: 404, body: errorBody('NOT_FOUND', 'x') };
   });
 }

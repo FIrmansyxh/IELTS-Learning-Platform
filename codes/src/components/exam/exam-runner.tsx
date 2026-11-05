@@ -13,6 +13,10 @@ import { QuestionNavigatorGrid } from '@/components/quiz/question-navigator-grid
 import { QuestionRenderer } from '@/components/quiz/question-renderer';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { BossExamRunner } from './boss-exam-runner';
+import { PlacementRunner } from './placement-runner';
+import { ReadingWorkspace } from '@/components/reading/reading-workspace';
+import { ListeningPlayer } from '@/components/listening/listening-player';
 import type { AnswerResponse, Attempt } from '@/contracts/attempts';
 import { fmt, id } from '@/i18n/id';
 import { attemptsApi } from '@/lib/api/attempts';
@@ -31,7 +35,15 @@ const SUBMIT_FAIL_TOAST = 'exam-submit-failed';
  * Sesi ujian berjalan (mode EXAM): tanpa umpan balik/kunci, jawaban boleh diganti sampai submit,
  * timer dihitung dari `deadline_at` server (selisih jam server disesuaikan sekali saat dimuat).
  */
-export function ExamSession({ attempt }: { attempt: Attempt }) {
+export function ExamSession({
+  attempt,
+  onSectionSubmit,
+  submitLabel,
+}: {
+  attempt: Attempt;
+  onSectionSubmit?: () => Promise<void>;
+  submitLabel?: string;
+}) {
   const router = useRouter();
   const questions = attempt.questions;
   const total = questions.length;
@@ -55,6 +67,14 @@ export function ExamSession({ attempt }: { attempt: Attempt }) {
   const failedSaves = React.useRef(new Set<string>());
   const allowLeave = React.useRef(false);
   const nextAutoAt = React.useRef(0);
+
+  const sections = React.useMemo(() => {
+    const s = new Set<number>();
+    for (const qq of questions) {
+      if (typeof qq.section_no === 'number') s.add(qq.section_no);
+    }
+    return Array.from(s).sort((a, b) => a - b);
+  }, [questions]);
 
   /* ---------- timer berdasarkan deadline server ---------- */
   const skew = React.useRef(Date.parse(attempt.server_now) - Date.now());
@@ -125,6 +145,12 @@ export function ExamSession({ attempt }: { attempt: Attempt }) {
       return;
     }
     try {
+      if (onSectionSubmit) {
+        await onSectionSubmit();
+        toast.dismiss(SUBMIT_FAIL_TOAST);
+        allowLeave.current = true;
+        return;
+      }
       await attemptsApi.submit(attempt.id);
       toast.dismiss(SUBMIT_FAIL_TOAST);
       allowLeave.current = true;
@@ -140,7 +166,7 @@ export function ExamSession({ attempt }: { attempt: Attempt }) {
       setSubmitting(false);
       toast.error(apiErrorMessage(e), { id: SUBMIT_FAIL_TOAST });
     }
-  }, [flushPending, attempt.id, goResult]);
+  }, [flushPending, attempt.id, goResult, onSectionSubmit]);
 
   // Peringatan beforeunload selama ujian berjalan (hilang setelah submit/akhir sesi).
   React.useEffect(() => {
@@ -214,6 +240,7 @@ export function ExamSession({ attempt }: { attempt: Attempt }) {
       remainingSeconds={remaining}
       unansweredCount={total - answeredCount}
       onEnd={() => void finish()}
+      endLabel={submitLabel}
       navigator={
         <details className="rounded-lg border bg-card p-3 md:open:block">
           <summary className="min-h-11 cursor-pointer list-none text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -226,6 +253,37 @@ export function ExamSession({ attempt }: { attempt: Attempt }) {
       }
     >
       <section className="grid gap-4" aria-label={fmt(id.exam.run.questionOf, { n: index + 1, total })}>
+        {attempt.listening && (
+          <ListeningPlayer
+            mode={attempt.mode}
+            audioUrl={attempt.listening.audio_url}
+            durationSec={attempt.listening.duration_sec}
+            attemptId={attempt.id}
+          />
+        )}
+        {sections.length > 1 && (
+          <div className="flex flex-wrap gap-2 border-b pb-2" role="tablist" aria-label={id.listening.sectionAria}>
+            {sections.map((secNo) => {
+              const isCurrentSec = q.section_no === secNo;
+              return (
+                <Button
+                  key={secNo}
+                  type="button"
+                  variant={isCurrentSec ? 'default' : 'outline'}
+                  size="sm"
+                  role="tab"
+                  aria-selected={isCurrentSec}
+                  onClick={() => {
+                    const firstIdx = questions.findIndex((qq) => qq.section_no === secNo);
+                    if (firstIdx !== -1) void goTo(firstIdx);
+                  }}
+                >
+                  {fmt(id.listening.sectionTab, { n: secNo })}
+                </Button>
+              );
+            })}
+          </div>
+        )}
         <div className="flex items-center justify-between gap-3 text-sm">
           <p className="font-semibold" data-testid="question-counter">
             {fmt(id.exam.run.questionOf, { n: index + 1, total })}
@@ -304,6 +362,15 @@ export function ExamRunner({ attemptId }: { attemptId: string }) {
       );
     }
     return <ErrorState className="mx-auto mt-10 max-w-md" title={id.exam.run.loadFailed} onRetry={() => void q.refetch()} />;
+  }
+  if (q.data.assessment_type === 'TIER_BOSS_EXAM') {
+    return <BossExamRunner attempt={q.data} />;
+  }
+  if (q.data.assessment_type === 'PLACEMENT_TEST') {
+    return <PlacementRunner attempt={q.data} />;
+  }
+  if (q.data.passage_markdown) {
+    return <ReadingWorkspace attempt={q.data} />;
   }
   return <ExamSession attempt={q.data} />;
 }

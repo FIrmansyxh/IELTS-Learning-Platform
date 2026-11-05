@@ -14,6 +14,7 @@ const REGISTRY: Record<string, { status: number; message: string }> = {
   NOT_FOUND: { status: 404, message: 'Data tidak ditemukan.' },
   PAYLOAD_TOO_LARGE: { status: 413, message: 'Ukuran data terlalu besar.' },
   UNSUPPORTED_MEDIA_TYPE: { status: 415, message: 'Format permintaan tidak didukung.' },
+  RANGE_NOT_SATISFIABLE: { status: 416, message: 'Rentang byte yang diminta tidak valid.' },
   RATE_LIMITED: { status: 429, message: 'Terlalu banyak permintaan. Coba lagi sebentar lagi.' },
   INTERNAL_ERROR: { status: 500, message: 'Terjadi kesalahan pada server.' },
   SERVICE_UNAVAILABLE: { status: 503, message: 'Layanan belum siap.' },
@@ -52,6 +53,18 @@ const REGISTRY: Record<string, { status: number; message: string }> = {
   VERSION_LABEL_TAKEN: { status: 409, message: 'Label versi sudah dipakai pada keterampilan ini.' },
   ALREADY_ACTIVE: { status: 409, message: 'Tabel ini sudah aktif.' },
   BAND_TABLE_IN_USE: { status: 409, message: 'Tabel aktif atau sudah dipakai tidak dapat dihapus.' },
+  // SPEC-012 & SPEC-013 AI
+  UNSUPPORTED_AUDIO_TYPE: { status: 415, message: 'Format rekaman tidak didukung.' },
+  RECORDING_CONSENT_REQUIRED: { status: 409, message: 'Setujui pemberitahuan rekaman suara terlebih dahulu.' },
+  RECORDING_IN_USE: { status: 409, message: 'Rekaman sedang diproses.' },
+  RECORDING_UNAVAILABLE: { status: 409, message: 'Rekaman tidak tersedia.' },
+  AI_DAILY_LIMIT_REACHED: { status: 429, message: 'Batas harian pengiriman AI telah tercapai.' },
+  AI_QUEUE_FULL: { status: 503, message: 'Antrean AI sedang penuh, coba lagi nanti.' },
+  SUBMISSION_NOT_RETRYABLE: { status: 409, message: 'Tugas ini tidak dapat diulang.' },
+  SUBMISSION_ALREADY_EXISTS: { status: 409, message: 'Tugas ini sudah dikirimkan.' },
+  AI_SUBMISSION_IN_PROGRESS: { status: 409, message: 'Pengiriman sedang diproses.' },
+  QUESTION_TYPE_MISMATCH: { status: 409, message: 'Jenis soal tidak sesuai dengan tugas.' },
+  MINI_TASK_TYPE_MISMATCH: { status: 409, message: 'Jenis Mini-Task tidak sesuai.' },
 };
 
 export class ApiError extends Error {

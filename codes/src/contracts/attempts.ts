@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { AssessmentType, IsoDateTime, SkillCategory, Uuid } from './common';
 import { MasteryCrownLevel } from './player';
+import { AttemptGamificationSchema } from './gamification';
 
 /** Skema mesin soal & attempt (SPEC-006). Klien longgar terhadap kunci tambahan. */
 export const QuestionType = z.enum([
@@ -174,7 +175,7 @@ export const AttemptResultSchema = z.object({
   skip: z.unknown().nullable().optional(),
   boss: z.unknown().nullable().optional(),
   placement: z.unknown().nullable().optional(),
-  gamification: z.unknown().nullable().optional(),
+  gamification: AttemptGamificationSchema.nullable().optional(),
 });
 export type AttemptResult = z.infer<typeof AttemptResultSchema>;
 export const AttemptResultResponseSchema = z.object({ data: AttemptResultSchema });

@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useMe } from '@/hooks/use-auth';
 import { id } from '@/i18n/id';
 import { cn } from '@/lib/utils';
+import { HeaderChips } from '@/components/gamification/header-chips';
 
 function useVisibleItems(): NavItem[] {
   const me = useMe();
@@ -107,11 +108,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         ref={mainRef}
         tabIndex={-1}
         className={cn(
-          'mx-auto w-full max-w-6xl px-4 py-6 outline-none md:px-6 lg:px-8',
-          !hideNav && 'pb-24 lg:ml-64 lg:max-w-none lg:pb-8',
+          'w-full px-4 py-6 outline-none md:px-6 lg:px-8',
+          hideNav ? 'mx-auto max-w-xl' : 'pb-24 lg:ml-64 lg:pb-8',
         )}
       >
-        <div className={cn(!hideNav && 'lg:mx-auto lg:max-w-6xl')}>{children}</div>
+        <div className={cn('w-full', !hideNav && 'max-w-7xl 2xl:max-w-[1536px]')}>
+          {!hideNav && (
+            <div className="mb-4 flex items-center justify-end pb-1">
+              <HeaderChips />
+            </div>
+          )}
+          {children}
+        </div>
       </main>
       <RouteFocus target={mainRef} />
 

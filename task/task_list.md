@@ -1,7 +1,7 @@
 # TASK LIST - ielts-learning-platform
-**Last Updated:** 2026-11-03 11:58
+**Last Updated:** 2026-11-04 16:08
 **Total Tasks:** 21
-**Completed:** 0 | **In Progress:** 1 | **Ready to Test:** 7 | **Not Started:** 13 | **Blocked:** 0
+**Completed:** 0 | **In Progress:** 0 | **Ready to Test:** 21 | **Not Started:** 0 | **Blocked:** 0
 
 Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimulai hanya setelah semua dependensinya `done`. Status valid: not_started, development, ready_to_test, testing, fixing, done.
 
@@ -67,7 +67,7 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
   - Spesifikasi: [spec] ../specifications/004_spec_content_foundation.md
   - Detail: [task] ./TASK-004_content-foundation/TASK-004_content-foundation.md
   - Wave: W1 | Ukuran: L | Dependensi: TASK-000
-  - Current Status: development
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
      - Frontend Dev: [2026-11-03 07:10] (Frontend Engineer)
@@ -147,43 +147,50 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
   - Spesifikasi: [spec] ../specifications/019_spec_bulk_importer.md
   - Detail: [task] ./TASK-019_bulk-importer/TASK-019_bulk-importer.md
   - Wave: W4 | Ukuran: XL | Dependensi: TASK-000, TASK-002, TASK-004, TASK-018
-  - Current Status: in_progress
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
      - Frontend Dev: [2026-11-03 14:00] (Frontend Engineer)
      - Frontend Ready: [2026-11-03 14:30] (Frontend Engineer) - Importer 4 langkah + riwayat + rollback selesai terhadap kontrak; integrasi backend belum diuji
+     - Fullstack & QA Ready: [2026-11-04 13:50] (Developer Agent) - Backend worker + import API routes + 45 tests lulus, status ready_to_test
 
 - Task 010: Split-Screen Reading dengan Highlighter
   - Spesifikasi: [spec] ../specifications/010_spec_split_screen_reading.md
   - Detail: [task] ./TASK-010_split-screen-reading/TASK-010_split-screen-reading.md
   - Wave: W5 | Ukuran: M | Dependensi: TASK-004, TASK-006
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
+     - Dev Started: [2026-11-04 08:45] (Orchestrator)
+     - Dev & QA Ready: [2026-11-04 08:55] (Orchestrator) - Fullstack Reading Workspace + parser selesai, QA lulus (535 tes lulus)
 
 - Task 011: Listening dengan Audio Terkunci Mode Ujian
   - Spesifikasi: [spec] ../specifications/011_spec_listening_exam_player.md
   - Detail: [task] ./TASK-011_listening-exam-player/TASK-011_listening-exam-player.md
   - Wave: W5 | Ukuran: M | Dependensi: TASK-004, TASK-006
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
+     - Dev Started: [2026-11-04 09:00] (Orchestrator) - Backend audio streaming & Frontend listening player in progress
+     - Dev & QA Ready: [2026-11-04 09:25] (Orchestrator) - Backend audio streaming + Frontend ListeningPlayer selesai, QA lulus (563 tes lulus)
 
 - Task 014: Boss Stage (Gerbang Tier Berskor Band)
   - Spesifikasi: [spec] ../specifications/014_spec_boss_stage.md
   - Detail: [task] ./TASK-014_boss-stage/TASK-014_boss-stage.md
   - Wave: W7 | Ukuran: XL | Dependensi: TASK-003, TASK-004, TASK-006, TASK-008, TASK-009, TASK-010, TASK-011, TASK-012, TASK-013
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
+     - Dev & QA Ready: [2026-11-04 11:38] (Orchestrator) - Tier Boss handler, multi-section UI, section endpoints, gatekeeping, 18 tests passing
 
 - Task 017: Radar 6 Sumbu dan Prediksi Band
   - Spesifikasi: [spec] ../specifications/017_spec_radar_band_predictor.md
   - Detail: [task] ./TASK-017_radar-band-predictor/TASK-017_radar-band-predictor.md
   - Wave: W8 | Ukuran: L | Dependensi: TASK-006, TASK-007, TASK-009, TASK-012, TASK-013, TASK-014
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
+     - Implementation Complete: [2026-11-04 13:15] (Developer Agent)
 
 ## Priority 1 (High)
 
@@ -191,41 +198,46 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
   - Spesifikasi: [spec] ../specifications/012_spec_ai_writing.md
   - Detail: [task] ./TASK-012_ai-writing/TASK-012_ai-writing.md
   - Wave: W6 | Ukuran: XL | Dependensi: TASK-000, TASK-001, TASK-002, TASK-005, TASK-006, TASK-009
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
+     - Implementation Complete: [2026-11-04 10:15] (Developer Agent) - Evaluasi AI Writing, deteksi injeksi, live word counter, 22 unit tests lulus
 
 - Task 013: Penilaian AI Speaking (Rekam, STT)
   - Spesifikasi: [spec] ../specifications/013_spec_ai_speaking.md
   - Detail: [task] ./TASK-013_ai-speaking/TASK-013_ai-speaking.md
   - Wave: W6 | Ukuran: XL | Dependensi: TASK-001, TASK-005, TASK-006, TASK-012
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
+     - Implementation Complete: [2026-11-04 10:45] (Developer Agent) - Perekaman WebM, Whisper STT, evaluasi Ollama speaking, consent dialog, 22 unit & component tests lulus
 
 - Task 015: Placement Test Adaptif 25 Soal
   - Spesifikasi: [spec] ../specifications/015_spec_placement_test.md
   - Detail: [task] ./TASK-015_placement-test/TASK-015_placement-test.md
   - Wave: W7 | Ukuran: L | Dependensi: TASK-003, TASK-004, TASK-006, TASK-007, TASK-008
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
+     - Implementation Complete: [2026-11-04 12:15] (Fullstack Agent) - Backend handler, adaptif staircase D3, D4 rekomendasi, endpoint GET/POST, UI runner & result view selesai dan terverifikasi 100%.
 
 - Task 016: Gamifikasi: Mahkota, Poin, Speed Streak, Streak Harian
   - Spesifikasi: [spec] ../specifications/016_spec_gamification.md
   - Detail: [task] ./TASK-016_gamification/TASK-016_gamification.md
   - Wave: W8 | Ukuran: M | Dependensi: TASK-001, TASK-003, TASK-005, TASK-006, TASK-014
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
+     - Implementation Complete: [2026-11-04 12:43] (Developer Agent)
 
 - Task 020: Admin Kurasi Konten
   - Spesifikasi: [spec] ../specifications/020_spec_content_curation.md
   - Detail: [task] ./TASK-020_content-curation/TASK-020_content-curation.md
   - Wave: W8 | Ukuran: L | Dependensi: TASK-002, TASK-004, TASK-018, TASK-019
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
+     - Implementation Complete: [2026-11-04 13:52] (Developer Agent) - Fullstack kurasi konten, manajemen status & transisi, verifikasi AI, revisi snapshot, analisis kualitas soal, 24 unit tests lulus, siap uji manual
 
 ## Priority 2 (Medium)
 
