@@ -5,7 +5,7 @@
 **Size:** XL
 **Assigned To:** Developer Agent
 **Dependencies:** TASK-000, TASK-001, TASK-002, TASK-005, TASK-006, TASK-009
-**Current Status:** not_started
+**Current Status:** done
 
 ---
 
@@ -13,11 +13,11 @@
 Submission Writing, job pg-boss, penilaian Ollama (driver mock untuk uji), pasca-proses kode (rata-rata kriteria, kap panjang/bahasa/band >= 8), deteksi injeksi prompt, hasil terstruktur.
 
 ## Acceptance Criteria
-- [ ] `POST /submissions/writing` 202 (mock LLM) lalu GRADED dengan `evaluation` terstruktur
-- [ ] `overall_band` selalu dihitung ulang di kode; kap panjang (<50% -> 3.5), bahasa non-Inggris (<= 4.0), band >= 8.0 -> 7.5
-- [ ] Injeksi prompt ditandai (`injection_suspected`, audit `AI_INJECTION_SUSPECTED`)
-- [ ] `AI_ENABLED=false` ditangani; benchmark C-09 mengunci model
-- [ ] Seluruh AC SPEC-012 terpenuhi
+- [x] `POST /submissions/writing` 202 (mock LLM) lalu GRADED dengan `evaluation` terstruktur
+- [x] `overall_band` selalu dihitung ulang di kode; kap panjang (<50% -> 3.5), bahasa non-Inggris (<= 4.0), band >= 8.0 -> 7.5
+- [x] Injeksi prompt ditandai (`injection_suspected`, audit `AI_INJECTION_SUSPECTED`)
+- [x] `AI_ENABLED=false` ditangani; benchmark C-09 mengunci model
+- [x] Seluruh AC SPEC-012 terpenuhi
 
 ## Notes
 - Wave build: W6; ukuran estimasi: XL (backlog)
@@ -32,3 +32,4 @@ Submission Writing, job pg-boss, penilaian Ollama (driver mock untuk uji), pasca
 | Timestamp | Agent | Status | Notes |
 |-----------|-------|--------|-------|
 | 2026-11-03 18:30 | pm agent | task created | - |
+| 2026-11-04 10:15 | developer agent | done | Implementasi backend scoring, worker pipeline, 7 API routes, 4 frontend components, unit & component tests, 605 tests passed, typecheck & lint 0 warnings |

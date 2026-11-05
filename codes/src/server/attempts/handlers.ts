@@ -1,3 +1,5 @@
+import type { BossIntroDTO, ExamBlockedReasonType } from '@/contracts/exams';
+import type { PlacementBlockedReasonType } from '@/contracts/placement';
 import type { Tx } from '../db';
 import { assertSubModuleAccessible, applyDrillResult, recomputeStatuses } from '../gatekeeping/service';
 import { chainOf } from '../gatekeeping/rules';
@@ -6,6 +8,8 @@ import { getSetting } from '../settings/service';
 import type { AttemptRow, SetRow } from './dto';
 import type { ScoreSummary } from './hooks';
 import { skipModuleHandler, skipTierHandler } from '../exams/skip';
+import { tierBossHandler } from '../exams/boss';
+import { placementHandler } from '../exams/placement';
 
 export type AssessmentTypeName = SetRow['assessmentType'];
 
@@ -17,6 +21,9 @@ export interface StartPlan {
   questionLimit: number | null;
   /** Pertahankan urutan asli soal (set bacaan/audio). */
   keepOrder: boolean;
+  deadlineAt?: Date;
+  state?: Record<string, unknown>;
+  onCreated?: (ctx: { tx: Tx; attemptId: string; now: Date }) => Promise<void>;
 }
 export interface FinishOutcome {
   progress: {
@@ -36,10 +43,10 @@ export interface ExamIntroPart {
   scope: { kind: 'MODULE' | 'TIER'; id: string; label: string } | null;
   threshold: { kind: string; value: number } | null;
   rules: string[];
-  blocked_reason: 'SKIP_NOT_AVAILABLE' | 'COOLDOWN_ACTIVE' | 'DAILY_ATTEMPT_LIMIT' | null;
+  blocked_reason: ExamBlockedReasonType | PlacementBlockedReasonType | null;
   cooldown: { next_allowed_at: string | null; attempts_in_window: number; max_attempts: number };
-  boss: unknown;
-  placement: unknown;
+  boss?: BossIntroDTO | null;
+  placement?: unknown;
 }
 export interface AssessmentTypeHandler {
   /** Gerbang + rencana. Melempar ApiError (403/404/409) bila tidak boleh mulai. */
@@ -100,3 +107,5 @@ export const activeDrillHandler: AssessmentTypeHandler = {
 assessmentTypeHandlers.ACTIVE_DRILL = activeDrillHandler;
 assessmentTypeHandlers.SKIP_MODULE_TEST = skipModuleHandler; // SPEC-008
 assessmentTypeHandlers.SKIP_TIER_TEST = skipTierHandler;
+assessmentTypeHandlers.TIER_BOSS_EXAM = tierBossHandler; // SPEC-014
+assessmentTypeHandlers.PLACEMENT_TEST = placementHandler; // SPEC-015

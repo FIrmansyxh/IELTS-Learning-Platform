@@ -19,6 +19,8 @@ import { isApiError } from '@/lib/api/client';
 import { curriculumApi } from '@/lib/api/curriculum';
 import { formatScorePercent, formatTimeWib } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import { BossResultView } from './boss-result-view';
+import { PlacementResultView } from './placement-result-view';
 
 /** Sub-modul pertama (AVAILABLE) di bawah Modul/Tier target, untuk "Mulai Belajar dari Awal Modul". */
 export function firstSubModuleCode(tree: CurriculumTree | undefined, scope: SkipResult['scope']): string | null {
@@ -37,25 +39,36 @@ export function firstSubModuleCode(tree: CurriculumTree | undefined, scope: Skip
  * Hasil ujian mode EXAM: skor agregat, ambang, status, dan rincian per skill. TIDAK menampilkan benar/salah per
  * soal, kunci, maupun pembahasan (QA F-08-01, ADR-003 #27); `review` dari server diabaikan di sini.
  */
-export function ExamResultView({ result }: { result: AttemptResult }) {
+export function ExamResultView({ result, onRefetch }: { result: AttemptResult; onRefetch?: () => void }) {
   const skip = React.useMemo(() => {
     const p = SkipResultSchema.safeParse(result.skip);
     return p.success ? p.data : null;
   }, [result.skip]);
+
   const tree = useQuery({
     queryKey: CURRICULUM_TREE_KEY,
     queryFn: ({ signal }) => curriculumApi.tree(signal),
     enabled: skip !== null && !skip.passed,
     staleTime: 0,
   });
-  const { attempt } = result;
-  const passed = skip ? skip.passed : attempt.passed === true;
-  const threshold = skip?.threshold_percent ?? attempt.pass_percent;
-  const score = Math.max(0, Math.min(100, attempt.score_percent));
+
   const headingRef = React.useRef<HTMLHeadingElement | null>(null);
   React.useEffect(() => {
     headingRef.current?.focus();
   }, []);
+
+  if (result.boss) {
+    return <BossResultView result={result} onRefetch={onRefetch} />;
+  }
+
+  if (result.placement) {
+    return <PlacementResultView result={result} />;
+  }
+
+  const { attempt } = result;
+  const passed = skip ? skip.passed : attempt.passed === true;
+  const threshold = skip?.threshold_percent ?? attempt.pass_percent;
+  const score = Math.max(0, Math.min(100, attempt.score_percent));
 
   const title = skip
     ? skip.passed
@@ -192,5 +205,5 @@ export function ExamResult({ attemptId }: { attemptId: string }) {
     }
     return <ErrorState title={id.exam.result.loadFailed} onRetry={() => void q.refetch()} />;
   }
-  return <ExamResultView result={q.data} />;
+  return <ExamResultView result={q.data} onRefetch={() => void q.refetch()} />;
 }

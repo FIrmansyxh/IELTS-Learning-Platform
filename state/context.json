@@ -1,9 +1,9 @@
 {
   "project_name": "ielts-learning-platform",
-  "last_updated": "2026-11-03 18:00",
-  "last_agent": "analyst",
-  "current_sprint": null,
+  "last_updated": "2026-11-04 16:55",
+  "last_agent": "orchestrator",
+  "current_sprint": "Content Expansion & Admin Restructure",
   "active_tasks": [],
   "blocked_tasks": [],
-  "notes": "Fase 1 langkah 8 (Analyst) selesai: specifications/000..020 (21 spec atomic, Human Approval Status=approved via delegasi ADR-003) + _api-contract.md (API Contract FINAL: 98 endpoint, registri error, DTO Zod, hook, app_settings, delta skema) + _backlog.md (urutan build W0-W8, pekerjaan konten C-01..C-11, keputusan Analyst yang dikunci untuk ditinjau human setelah Fase 3). Delta skema security masuk spec: users.token_version/must_change_password/last_failed_login_at/consent_recording_at/keep_recordings + signup_invites (001), content_assets.asset_code (004), learn_* evidence (005), ai_evaluations.flags (012), point_ledger_once_uq (016), cooldown/ambang di app_settings (_api-contract.md bagian 8). Tidak ada commit. Lanjut: PM (task breakdown dari specs/_backlog.md), lalu GATE blueprint. Prasyarat build: C-09 benchmark AI (OQ-1) sebelum SPEC-012/013; versi paket SPEC-000 diverifikasi DevOps."
+  "notes": "Modul dan soal lengkap telah dibangun dengan 3 Paket Variasi (P1, P2, P3) per set/modul. Mesin pengacak di engine.ts mengacak varian dari 3 sumber soal per slot dan mengacak susunan urutan secara total (751 tests lulus 100%). Admin Panel telah disederhanakan total hanya untuk mengelola Pengguna, Poin & Gamifikasi, serta Pengaturan Waktu & Sistem. Konten kurikulum berstatus fixed via kode/paket AI."
 }

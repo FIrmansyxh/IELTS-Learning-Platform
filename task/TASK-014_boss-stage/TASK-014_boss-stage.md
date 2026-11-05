@@ -5,7 +5,7 @@
 **Size:** XL
 **Assigned To:** Developer Agent
 **Dependencies:** TASK-003, TASK-004, TASK-006, TASK-008, TASK-009, TASK-010, TASK-011, TASK-012, TASK-013
-**Current Status:** not_started
+**Current Status:** done
 
 ---
 
@@ -13,11 +13,11 @@
 Ujian multi-section berurutan (Listening/Reading/Writing/Speaking) dengan timer per section, gerbang persen (Tier 1) atau band (Tier 2-4), pembuka Tier berikutnya. Dapat dirilis dengan Listening+Reading saja bila 012/013 tertunda.
 
 ## Acceptance Criteria
-- [ ] Ketersediaan: semua modul Tier selesai/SKIPPED, else 409 `BOSS_NOT_AVAILABLE` `MODULES_INCOMPLETE`
-- [ ] Urutan section ditegakkan (`SECTION_ORDER_VIOLATION`, `SECTION_NOT_ACTIVE`, `SECTION_EXPIRED` setelah deadline + 5 dtk)
-- [ ] `start` idempoten; gerbang Tier 1 >= 80% (L+R), Tier 2-4 bossBand >= 5.0/6.0/7.0
-- [ ] Review tanpa kunci/pembahasan
-- [ ] Seluruh AC SPEC-014 terpenuhi
+- [x] Ketersediaan: semua modul Tier selesai/SKIPPED, else 409 `BOSS_NOT_AVAILABLE` `MODULES_INCOMPLETE`
+- [x] Urutan section ditegakkan (`SECTION_ORDER_VIOLATION`, `SECTION_NOT_ACTIVE`, `SECTION_EXPIRED` setelah deadline + 5 dtk)
+- [x] `start` idempoten; gerbang Tier 1 >= 80% (L+R), Tier 2-4 bossBand >= 5.0/6.0/7.0
+- [x] Review tanpa kunci/pembahasan
+- [x] Seluruh AC SPEC-014 terpenuhi
 
 ## Notes
 - Wave build: W7; ukuran estimasi: XL (backlog)
@@ -32,3 +32,4 @@ Ujian multi-section berurutan (Listening/Reading/Writing/Speaking) dengan timer 
 | Timestamp | Agent | Status | Notes |
 |-----------|-------|--------|-------|
 | 2026-11-03 18:30 | pm agent | task created | - |
+| 2026-11-04 11:38 | developer agent | done | TASK-014 tuntas (backend boss handler, section endpoints, gatekeeping, multi-section UI, 18 unit tests, typecheck & lint 0 error) |

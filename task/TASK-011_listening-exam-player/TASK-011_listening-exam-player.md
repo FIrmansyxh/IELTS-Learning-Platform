@@ -5,7 +5,7 @@
 **Size:** M
 **Assigned To:** Developer Agent
 **Dependencies:** TASK-004, TASK-006
-**Current Status:** not_started
+**Current Status:** done
 
 ---
 
@@ -13,10 +13,10 @@
 Endpoint audio ber-Range terotorisasi per attempt, pemutar terkunci (tanpa seek/jeda) pada mode ujian.
 
 ## Acceptance Criteria
-- [ ] Range 206 / tanpa Range 200 / di luar rentang 416 `RANGE_NOT_SATISFIABLE`
-- [ ] Attempt milik user lain 404; GRADED 409 `ATTEMPT_NOT_ACTIVE`; tanpa audio 404; berkas hilang 404 + log tanpa path
-- [ ] Kontrol pemutar terkunci pada EXAM, bebas pada PRACTICE
-- [ ] Seluruh AC SPEC-011 terpenuhi
+- [x] Range 206 / tanpa Range 200 / di luar rentang 416 `RANGE_NOT_SATISFIABLE`
+- [x] Attempt milik user lain 404; GRADED 409 `ATTEMPT_NOT_ACTIVE`; tanpa audio 404; berkas hilang 404 + log tanpa path
+- [x] Kontrol pemutar terkunci pada EXAM, bebas pada PRACTICE
+- [x] Seluruh AC SPEC-011 terpenuhi
 
 ## Notes
 - Wave build: W5; ukuran estimasi: M (backlog)
@@ -30,3 +30,6 @@ Endpoint audio ber-Range terotorisasi per attempt, pemutar terkunci (tanpa seek/
 | Timestamp | Agent | Status | Notes |
 |-----------|-------|--------|-------|
 | 2026-11-03 18:30 | pm agent | task created | - |
+| 2026-11-04 09:00 | orchestrator | in_progress | Development started |
+| 2026-11-04 09:25 | orchestrator | ready_to_test | Fullstack implementation complete; 563/563 tests passed |
+| 2026-11-04 09:30 | orchestrator | done | Approved at gate by human |

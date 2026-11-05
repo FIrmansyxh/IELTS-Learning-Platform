@@ -25,6 +25,7 @@ export function ExamShell({
   remainingSeconds,
   unansweredCount,
   onEnd,
+  endLabel,
   navigator,
   children,
 }: {
@@ -32,6 +33,7 @@ export function ExamShell({
   remainingSeconds: number | null;
   unansweredCount: number;
   onEnd: () => void;
+  endLabel?: string;
   navigator?: React.ReactNode;
   children: React.ReactNode;
 }) {
@@ -70,7 +72,7 @@ export function ExamShell({
             </p>
           ) : null}
           <Button variant="outline" size="sm" onClick={() => setConfirmOpen(true)}>
-            {id.quiz.exam.end}
+            {endLabel ?? id.quiz.exam.end}
           </Button>
         </div>
       </header>

@@ -2,9 +2,24 @@ import type { Logger } from 'pino';
 import type { QueueName } from './queues';
 import { purgeTasks } from './purge';
 import { runImportPublish, runImportValidate } from '../server/import/jobs';
+import { processWritingEvaluation } from '../server/ai/pipeline';
+import {
+  processSpeakingEvaluation,
+  processSttTranscription,
+} from '../server/ai/speaking-pipeline';
 
 interface ImportJobData {
   batch_id?: string;
+  async_job_id?: string;
+}
+
+interface WritingJobData {
+  submission_id?: string;
+  async_job_id?: string;
+}
+
+interface SpeakingJobData {
+  submission_id?: string;
   async_job_id?: string;
 }
 
@@ -16,19 +31,34 @@ export interface JobLike {
 
 export type Handler = (jobs: JobLike[], ctx: { log: Logger }) => Promise<void>;
 
-/** Handler kosong SPEC-000: mencatat warn lalu job dianggap selesai. Spec lain mengganti entri ini. */
-function notImplemented(): Handler {
-  return async (jobs, { log }) => {
-    for (const job of jobs) {
-      log.warn({ jobId: job.id }, 'handler belum diimplementasikan');
-    }
-  };
-}
-
 export const jobHandlers: Record<QueueName, Handler> = {
-  'stt-transcribe': notImplemented(),
-  'ai-grade-writing': notImplemented(),
-  'ai-grade-speaking': notImplemented(),
+  'stt-transcribe': async (jobs, { log }) => {
+    for (const job of jobs) {
+      const d = job.data as SpeakingJobData;
+      if (d.submission_id) {
+        log.info({ jobId: job.id, submissionId: d.submission_id }, 'menjalankan stt-transcribe');
+        await processSttTranscription(d.submission_id, d.async_job_id);
+      }
+    }
+  },
+  'ai-grade-writing': async (jobs, { log }) => {
+    for (const job of jobs) {
+      const d = job.data as WritingJobData;
+      if (d.submission_id) {
+        log.info({ jobId: job.id, submissionId: d.submission_id }, 'menjalankan ai-grade-writing');
+        await processWritingEvaluation(d.submission_id, d.async_job_id);
+      }
+    }
+  },
+  'ai-grade-speaking': async (jobs, { log }) => {
+    for (const job of jobs) {
+      const d = job.data as SpeakingJobData;
+      if (d.submission_id) {
+        log.info({ jobId: job.id, submissionId: d.submission_id }, 'menjalankan ai-grade-speaking');
+        await processSpeakingEvaluation(d.submission_id, d.async_job_id);
+      }
+    }
+  },
   'import-validate': async (jobs, { log }) => {
     for (const job of jobs) {
       const d = job.data as ImportJobData;

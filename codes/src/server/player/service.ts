@@ -216,3 +216,17 @@ export async function completeMiniTask(tx: Tx, userId: string, subModuleId: stri
   await runActivityHooks(tx, { userId, kind: 'MINI_TASK_COMPLETE', subModuleId });
   return { mini_task_completed_at: now.toISOString() };
 }
+
+
+/** Menandai penyelesaian Mini-Task AI (Writing/Speaking) dan menjalankan hook aktivitas. Idempoten. */
+export async function completeAiMiniTask(tx: Tx, userId: string, subModuleId: string): Promise<void> {
+  const row = await loadLearnRow(tx, userId, subModuleId, true);
+  if (!row.miniTaskCompletedAt) {
+    const now = nowDate();
+    await tx
+      .update(usmp)
+      .set({ miniTaskCompletedAt: now, updatedAt: now })
+      .where(and(eq(usmp.userId, userId), eq(usmp.subModuleId, subModuleId)));
+    await runActivityHooks(tx, { userId, kind: 'MINI_TASK_COMPLETE', subModuleId });
+  }
+}

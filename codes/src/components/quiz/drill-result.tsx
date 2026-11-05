@@ -73,7 +73,53 @@ export function DrillResult({
         <p className="text-sm text-muted-foreground">
           {fmt(id.quiz.result.rawScore, { raw: attempt.raw_score, max: attempt.max_score })}
         </p>
-        {crown !== 'NONE' ? <CrownBadge crown={crown} scorePercent={Math.round(progress?.best_score_percent ?? score)} /> : null}
+        {crown !== 'NONE' && !result.gamification ? (
+          <CrownBadge crown={crown} scorePercent={Math.round(progress?.best_score_percent ?? score)} />
+        ) : null}
+
+        {/* Gamifikasi: Mahkota, Poin & Streak */}
+        {result.gamification && (
+          <div className="rounded-lg border bg-accent/20 p-3 sm:p-4 grid gap-2" data-testid="drill-gamification">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CrownBadge
+                  crown={result.gamification.crown?.current ?? crown}
+                  size={24}
+                  scorePercent={score}
+                />
+                {result.gamification.crown?.changed && (
+                  <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">
+                    {result.gamification.crown.current === 'GOLD' ? 'Mahkota Emas Diraih!' : 'Mahkota Perak Diraih!'}
+                  </span>
+                )}
+              </div>
+              <span className="text-base font-bold text-amber-600 dark:text-amber-400 tabular-nums">
+                +{result.gamification.points.total} Poin
+              </span>
+            </div>
+
+            {/* Rincian Poin */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t text-xs text-muted-foreground">
+              {result.gamification.points.drill > 0 && (
+                <div>Latihan: <strong className="text-foreground">+{result.gamification.points.drill}</strong></div>
+              )}
+              {result.gamification.points.speed_streak > 0 && (
+                <div>Speed: <strong className="text-foreground">+{result.gamification.points.speed_streak}</strong></div>
+              )}
+              {result.gamification.points.crown > 0 && (
+                <div>Mahkota: <strong className="text-foreground">+{result.gamification.points.crown}</strong></div>
+              )}
+              {result.gamification.points.daily > 0 && (
+                <div>Harian: <strong className="text-foreground">+{result.gamification.points.daily}</strong></div>
+              )}
+              {result.gamification.daily_streak_days > 0 && (
+                <div className="col-span-2 sm:col-span-4 flex items-center gap-1 pt-1 text-orange-600 dark:text-orange-400 font-medium">
+                  Streak Belajar: {result.gamification.daily_streak_days} hari berturut-turut!
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         <p className="text-sm">{passed ? id.quiz.result.passedMessage : id.quiz.result.failedMessage}</p>
         {passed && unlocked.length > 0 ? (
           <p className="text-sm font-medium">{fmt(id.quiz.result.unlocked, { list: unlocked.map((u) => u.label).join(', ') })}</p>

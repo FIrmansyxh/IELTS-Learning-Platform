@@ -49,7 +49,7 @@ describe('AuthenticatedLayout (AuthGate + AppShell)', () => {
     expect(screen.queryByText('Rahasia')).not.toBeInTheDocument();
   });
 
-  it('learner: navigasi 4 item, Riwayat disabled (Segera hadir), tanpa item Admin', async () => {
+  it('learner: navigasi 4 item, Riwayat aktif (SPEC-017), tanpa item Admin', async () => {
     mockFetch(() => me(USER));
     renderWithProviders(
       <AuthenticatedLayout>
@@ -61,7 +61,7 @@ describe('AuthenticatedLayout (AuthGate + AppShell)', () => {
     expect(nav).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: 'Peta' }).length).toBeGreaterThan(0);
     const riwayat = screen.getAllByRole('link', { name: 'Riwayat' })[0];
-    expect(riwayat).toHaveAttribute('aria-disabled', 'true');
+    expect(riwayat).toHaveAttribute('href', '/riwayat');
     expect(screen.queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument();
     const profil = screen.getAllByRole('link', { name: 'Profil' })[0];
     expect(profil).toHaveAttribute('aria-current', 'page');

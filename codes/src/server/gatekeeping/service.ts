@@ -3,9 +3,8 @@
  * best_score_percent/attempts_count/skip_best_percent/boss_* pada tabel progres.
  * Semua fungsi dipanggil di dalam transaksi pemanggil dan bersifat idempoten dan monoton.
  */
-import { sql } from 'drizzle-orm';
-import { users } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
+import { userSubModuleProgress, users } from '@/db/schema';
 import { writeAudit } from '../audit';
 import type { DbOrTx, Tx } from '../db';
 import { ApiError } from '../http/errors';
@@ -486,3 +485,56 @@ export async function adminOverride(
 
 // Ekspor tipe untuk pembangun pohon.
 export type { Snapshot, TierNode, ModuleNode, SubNode };
+
+export async function getSubModuleCrown(
+  tx: DbOrTx,
+  userId: string,
+  subModuleId: string,
+): Promise<'NONE' | 'SILVER' | 'GOLD'> {
+  const [row] = await tx
+    .select({ masteryCrown: userSubModuleProgress.masteryCrown })
+    .from(userSubModuleProgress)
+    .where(
+      and(
+        eq(userSubModuleProgress.userId, userId),
+        eq(userSubModuleProgress.subModuleId, subModuleId),
+      ),
+    )
+    .limit(1);
+  return (row?.masteryCrown as 'NONE' | 'SILVER' | 'GOLD') ?? 'NONE';
+}
+
+export async function updateSubModuleCrown(
+  tx: DbOrTx,
+  userId: string,
+  subModuleId: string,
+  crown: 'SILVER' | 'GOLD',
+  now = new Date(),
+): Promise<void> {
+  await tx
+    .update(userSubModuleProgress)
+    .set({ masteryCrown: crown, updatedAt: now })
+    .where(
+      and(
+        eq(userSubModuleProgress.userId, userId),
+        eq(userSubModuleProgress.subModuleId, subModuleId),
+      ),
+    );
+}
+
+export async function getCrownCounts(
+  tx: DbOrTx,
+  userId: string,
+): Promise<{ gold: number; silver: number }> {
+  const [crownCountRow] = await tx
+    .select({
+      gold: sql<number>`count(*) filter (where mastery_crown = 'GOLD')::int`,
+      silver: sql<number>`count(*) filter (where mastery_crown = 'SILVER')::int`,
+    })
+    .from(userSubModuleProgress)
+    .where(eq(userSubModuleProgress.userId, userId));
+  return {
+    gold: crownCountRow?.gold ?? 0,
+    silver: crownCountRow?.silver ?? 0,
+  };
+}

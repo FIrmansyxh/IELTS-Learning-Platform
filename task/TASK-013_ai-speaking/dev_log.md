@@ -1,0 +1,31 @@
+# Dev Log - TASK-013: Penilaian AI Speaking (Rekam, STT)
+
+## Implementation Summary
+- **Backend & Storage:**
+  - Added `private/recordings` directory with strict `0700` permissions.
+  - Implemented `detectAudioMime` with magic bytes header validation (WebM EBML `1A 45 DF A3`, Ogg `4F 67 67 53`, MP4/M4A `ftyp`).
+  - Implemented `SttClient` interface, `MockSttClient` (deterministic 60-word transcript with word/segment timestamps), and `WhisperCppClient` connecting to `/inference`.
+  - Implemented `probeAudioDuration` (ffprobe) and `convertAudioToWav` (ffmpeg 16kHz mono) with safe array spawn without shell interpolation.
+  - Implemented `postProcessSpeakingScores` with deterministic rules:
+    - Duration caps for Part 2 & Mini-Task: `< 30s` -> capped to 4.0; `30s <= dur < 60s` -> capped to 5.5 (`cap_reason = 'duration'`).
+    - Word count cap: `< 15 words` -> capped to 4.0 (`cap_reason = 'word_count'`).
+    - Non-English ratio cap: `>= 15% ID stopwords` -> capped to 4.0 (`cap_reason = 'non_english'`).
+    - High band cap: `>= 8.0` -> capped to 7.5.
+    - Flags: `pronunciation_estimated = true` (always), `low_audio_quality = true` if `confidence < 0.5`.
+  - Implemented `processSttTranscription` and `processSpeakingEvaluation` background pipelines with `pg_advisory_lock(727001)`, immediate purge if `keep_recordings = false`, and auto-grade chaining.
+  - Implemented `recordConsent`, `updateRecordingPreferences`, `createSpeakingSubmission`, `getRecordingStream` (with byte range 206 support), and `deleteRecording`.
+  - Added API endpoints:
+    - `POST /api/v1/me/recording-consent`
+    - `PATCH /api/v1/me/recording-preferences`
+    - `POST /api/v1/submissions/speaking`
+    - `GET /api/v1/submissions/[submission_id]/recording`
+    - `DELETE /api/v1/submissions/[submission_id]/recording`
+    - `GET /api/v1/admin/submissions/[submission_id]/recording`
+- **Frontend Components:**
+  - `RecordingConsentDialog`: explicit consent explanation, retention days dynamic value, settings link to `/profil`.
+  - `SpeakingRecorder`: 3-phase stepper (PREP with scratch notes & early jump -> COUNTDOWN 3-2-1 -> RECORDING with 72px button, live sound level meter, quiet detection -> REVIEW & SUBMIT with audio player, re-record counter, submission handling).
+  - Enhanced `EvaluationCard`: added pronunciation estimated badge, low audio quality alert, duration cap reason, and audio playback & deletion.
+  - `RecordingPreferencesCard` in `/profil`: toggle `keep_recordings` switch with retention explanation.
+- **Verification:**
+  - Unit tests: `tests/unit/ai-speaking.test.ts` (13 tests), `tests/unit/ai-speaking-routes.test.ts` (9 tests), `tests/unit/speaking-recorder.test.tsx` (5 tests).
+  - All 45 test files passing (637/637 tests total), `tsc --noEmit` 0 errors, `eslint` 0 errors/warnings.

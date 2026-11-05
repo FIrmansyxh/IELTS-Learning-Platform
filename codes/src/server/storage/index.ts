@@ -1,6 +1,8 @@
 import { randomUUID } from 'node:crypto';
+import { createReadStream } from 'node:fs';
 import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { Readable } from 'node:stream';
 import { config } from '../config';
 
 /** Abstraksi penyimpanan aset (security-standards 4). Hanya driver `fs` yang diimplementasikan; `s3` menyusul (profil minio). */
@@ -10,11 +12,20 @@ export interface StorageDriver {
   put(data: Buffer, ext: string, dir?: StorageDir): Promise<string>;
   get(key: string): Promise<Buffer>;
   exists(key: string): Promise<boolean>;
+  stat(key: string): Promise<{ size: number } | null>;
+  readStream(key: string, range?: { start: number; end: number }): Promise<ReadableStream<Uint8Array>>;
   remove(key: string): Promise<void>;
 }
 
-/** Direktori berprefiks yang diizinkan (matriks unggah SPEC-018; impor privat SPEC-019). */
-export const STORAGE_DIRS = ['public/slides', 'public/images', 'public/documents', 'public/audio', 'private/imports'] as const;
+/** Direktori berprefiks yang diizinkan (matriks unggah SPEC-018; impor privat SPEC-019; rekaman SPEC-013). */
+export const STORAGE_DIRS = [
+  'public/slides',
+  'public/images',
+  'public/documents',
+  'public/audio',
+  'private/imports',
+  'private/recordings',
+] as const;
 export type StorageDir = (typeof STORAGE_DIRS)[number];
 
 const SHARD_RE = /^[0-9a-f]{2}$/;
@@ -44,7 +55,8 @@ export class FsStorageDriver implements StorageDriver {
     const id = randomUUID();
     const key = `${dir ?? id.slice(0, 2)}/${id}${cleanExt ? `.${cleanExt}` : ''}`;
     const full = this.resolve(key);
-    await mkdir(path.dirname(full), { recursive: true, mode: dir === 'private/imports' ? 0o700 : undefined });
+    const isPrivate = dir === 'private/imports' || dir === 'private/recordings';
+    await mkdir(path.dirname(full), { recursive: true, mode: isPrivate ? 0o700 : undefined });
     try {
       await writeFile(full, data, { flag: 'wx' });
     } catch (e) {
@@ -65,6 +77,21 @@ export class FsStorageDriver implements StorageDriver {
     } catch {
       return false;
     }
+  }
+
+  async stat(key: string): Promise<{ size: number } | null> {
+    try {
+      const s = await stat(this.resolve(key));
+      return { size: s.size };
+    } catch {
+      return null;
+    }
+  }
+
+  async readStream(key: string, range?: { start: number; end: number }): Promise<ReadableStream<Uint8Array>> {
+    const full = this.resolve(key);
+    const nodeStream = createReadStream(full, range ? { start: range.start, end: range.end } : undefined);
+    return Readable.toWeb(nodeStream) as ReadableStream<Uint8Array>;
   }
 
   async remove(key: string): Promise<void> {

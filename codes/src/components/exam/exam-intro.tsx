@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { FastForward, Headphones, Info, Mic } from 'lucide-react';
+import { FastForward, Headphones, Info, Mic, Volume2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
@@ -37,14 +37,44 @@ function blockedText(intro: ExamIntroData): string | null {
   return fmt(tpl, { time: at ? formatTimeWib(at) : '' }).trim();
 }
 
+/** Putar nada uji 440 Hz selama 1 detik menggunakan Web Audio API tanpa berkas. */
+export function playWebAudioTone() {
+  try {
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, ctx.currentTime);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 1);
+    setTimeout(() => {
+      ctx.close().catch(() => {});
+    }, 1100);
+  } catch {
+    // Abaikan jika Web Audio tidak didukung atau diblokir kebijakan autoplay
+  }
+}
+
 /** Layar pra-ujian generik (Skip; dipakai juga Boss/Placement). Tombol "Mulai Ujian" memanggil POST /attempts. */
 export function ExamIntroView({ intro }: { intro: ExamIntroData }) {
   const router = useRouter();
   const [starting, setStarting] = React.useState(false);
   const [dialog, setDialog] = React.useState<StartBlock>(null);
+  const [audioConfirmed, setAudioConfirmed] = React.useState(false);
   const resumeId = intro.active_attempt_id;
   const reason = blockedText(intro);
-  const disabled = !intro.available && !resumeId;
+
+  const audioCheckRequired = intro.requires_audio && !resumeId;
+  const audioCheckPassed = !audioCheckRequired || audioConfirmed;
+  const disabled = (!intro.available && !resumeId) || !audioCheckPassed;
 
   async function start() {
     if (resumeId) {
@@ -107,11 +137,37 @@ export function ExamIntroView({ intro }: { intro: ExamIntroData }) {
               <h2 id="exam-device" className="mb-2 text-sm font-semibold">
                 {id.exam.intro.deviceTitle}
               </h2>
-              <ul className="grid gap-2 text-sm">
+              <ul className="grid gap-3 text-sm">
                 {intro.requires_audio ? (
-                  <li className="flex items-center gap-2">
-                    <Headphones className="size-4" aria-hidden="true" />
-                    {id.exam.intro.audio}
+                  <li className="grid gap-2">
+                    <div className="flex items-center gap-2 font-medium">
+                      <Headphones className="size-4 shrink-0" aria-hidden="true" />
+                      <span>{id.exam.intro.audio}</span>
+                    </div>
+                    {!resumeId && (
+                      <div className="rounded-lg border bg-muted/40 p-3 grid gap-3">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={playWebAudioTone}
+                          >
+                            <Volume2 className="size-4 mr-1.5" aria-hidden="true" />
+                            {id.listening.precheckToneBtn}
+                          </Button>
+                        </div>
+                        <label className="flex items-center gap-2 cursor-pointer text-sm">
+                          <input
+                            type="checkbox"
+                            checked={audioConfirmed}
+                            onChange={(e) => setAudioConfirmed(e.target.checked)}
+                            className="size-4 rounded border-gray-300 text-primary focus:ring-primary"
+                          />
+                          <span>{id.listening.precheckConfirm}</span>
+                        </label>
+                      </div>
+                    )}
                   </li>
                 ) : null}
                 {intro.requires_microphone ? (
@@ -133,11 +189,16 @@ export function ExamIntroView({ intro }: { intro: ExamIntroData }) {
               disabled={disabled}
               loading={starting}
               onClick={() => void start()}
-              aria-describedby={reason ? 'exam-blocked' : undefined}
+              aria-describedby={reason ? 'exam-blocked' : !audioCheckPassed ? 'audio-check-warning' : undefined}
             >
               {starting ? id.exam.intro.starting : resumeId ? id.exam.intro.resume : id.exam.intro.start}
             </Button>
-            {reason && disabled ? (
+            {!audioCheckPassed && (
+              <p id="audio-check-warning" className="text-sm text-muted-foreground">
+                {id.listening.precheckWarning}
+              </p>
+            )}
+            {reason && disabled && audioCheckPassed ? (
               <p id="exam-blocked" className="text-sm text-muted-foreground">
                 {reason}
               </p>

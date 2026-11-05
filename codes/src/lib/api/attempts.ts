@@ -4,6 +4,10 @@ import {
   SubmitAnswerResponseSchema,
   type AnswerResponse,
 } from '@/contracts/attempts';
+import {
+  BossSectionStartResponseSchema,
+  BossSectionSubmitResponseSchema,
+} from '@/contracts/exams';
 import { apiFetch } from './client';
 
 export const attemptsApi = {
@@ -18,6 +22,22 @@ export const attemptsApi = {
 
   get: async (attemptId: string, signal?: AbortSignal) =>
     (await apiFetch(`/attempts/${attemptId}`, { schema: AttemptResponseSchema, signal })).data,
+
+  startSection: async (attemptId: string, sectionSetId: string) =>
+    (
+      await apiFetch(`/attempts/${attemptId}/sections/${sectionSetId}/start`, {
+        method: 'POST',
+        schema: BossSectionStartResponseSchema,
+      })
+    ).data,
+
+  submitSection: async (attemptId: string, sectionSetId: string) =>
+    (
+      await apiFetch(`/attempts/${attemptId}/sections/${sectionSetId}/submit`, {
+        method: 'POST',
+        schema: BossSectionSubmitResponseSchema,
+      })
+    ).data,
 
   /** Hanya `response`; waktu, skor, dan kebenaran dihitung server. */
   answer: async (attemptId: string, questionId: string, response: AnswerResponse) =>
