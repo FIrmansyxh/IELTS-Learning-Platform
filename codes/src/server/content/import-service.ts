@@ -13,6 +13,7 @@ import { planContentPackage, summarize } from './plan';
 import { publish, type Blocker, type PublishEntityType } from './publish';
 import { parseAssetManifest, parseContentPackage, type ParseContext, type SourceInfo } from './validate';
 import { MODULE_SEEDS } from './curriculum-structure';
+import { findBankFiles, runBankImport, type BankImportRow } from './bank-import';
 
 const NIL_UUID = '00000000-0000-4000-8000-000000000000';
 export const MAX_PACKAGE_BYTES = 5 * 1_048_576;
@@ -129,13 +130,42 @@ export interface ImportOutcome {
   lines: string[];
   result?: ApplyResult;
   blockers?: Blocker[];
+  /** SPEC-022: hasil impor bank soal (`*.json` ber-`bank_contract_version` di folder yang sama). */
+  banks?: BankImportRow[];
+}
+
+const hasContentJson = (dir: string) =>
+  stat(path.join(dir, 'content.json')).then(
+    () => true,
+    () => false,
+  );
+
+/**
+ * Titik masuk `content:import`: paket konten (`content.json`) dan/atau bank soal (SPEC-022 D8) dalam satu folder.
+ * Folder tanpa `content.json` tetapi berisi berkas bank (mis. `content/gt-bank`) hanya mengimpor bank.
+ */
+export async function runImport(db: Db, o: ImportOptions): Promise<ImportOutcome> {
+  const found = await findBankFiles(o.dir);
+  if (found.files.length === 0 && found.issues.length === 0) return runContentImport(db, o);
+  const content = await hasContentJson(o.dir);
+  let first: ImportOutcome | null = null;
+  if (content) {
+    // Folder gabungan TIDAK atomik (dua transaksi). Agar kegagalan validasi bank tidak meninggalkan impor sebagian,
+    // bank divalidasi/direncanakan dulu lewat dry-run sebelum paket konten ditulis.
+    const pre = await runBankImport(db, { ...o, dryRun: true }, found);
+    if (pre.exitCode !== 0) return { exitCode: pre.exitCode, lines: pre.lines, banks: pre.banks };
+    first = await runContentImport(db, o);
+    if (first.exitCode !== 0) return first;
+  }
+  const b = await runBankImport(db, o, found);
+  return { exitCode: b.exitCode, lines: [...(first?.lines ?? []), ...b.lines], result: first?.result, banks: b.banks };
 }
 
 const PUBLISH_ORDER = (t: { kind: string; setType?: string }) =>
   t.kind === 'ASSESSMENT_SET' ? (t.setType === 'TIER_BOSS_EXAM' ? 1 : 0) : t.kind === 'SUB_MODULE' ? 2 : 3;
 
 /** import: validate -> rencana -> satu transaksi (aset, modul, sub-modul, set) -> opsional publish. */
-export async function runImport(db: Db, o: ImportOptions): Promise<ImportOutcome> {
+export async function runContentImport(db: Db, o: ImportOptions): Promise<ImportOutcome> {
   const lines: string[] = [];
   const ctx = await contextFromDb(db);
   const v = await validatePackage(o.dir, ctx);

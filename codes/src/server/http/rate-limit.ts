@@ -13,6 +13,8 @@ export const BUCKETS = {
   general_user: { limit: 300, windowMs: 60_000 },
   answer_submit: { limit: 60, windowMs: 60_000 },
   attempt_start: { limit: 30, windowMs: 3_600_000 },
+  // SPEC-022: bucket tersendiri agar sesi campur tidak menghabiskan kuota memulai drill/ujian (dan sebaliknya)
+  mix_start: { limit: 30, windowMs: 3_600_000 },
   heartbeat: { limit: 30, windowMs: 60_000 },
   job_poll: { limit: 1, windowMs: 1_000 },
   upload_recording: { limit: 10, windowMs: 3_600_000 },

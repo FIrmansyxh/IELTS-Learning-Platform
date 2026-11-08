@@ -258,8 +258,8 @@ describe('activateTable (band:activate)', () => {
       INSERT INTO assessment_sets (assessment_type, title, tier_id, time_limit_seconds, origin, status)
       VALUES ('TIER_BOSS_EXAM', 'Boss uji band', (SELECT id FROM tiers WHERE tier_number = 1), 600, 'ORIGINAL_AUTHORED', 'DRAFT') RETURNING id`)).rows[0] as any;
     await execute(db, sql`
-      INSERT INTO attempts (user_id, assessment_set_id, assessment_version, mode, status, band_score, band_table_id, state)
-      VALUES (${u.user.id}, ${set.id}, 1, 'EXAM', 'GRADED', 6.5, ${oldId}, '{}')`);
+      INSERT INTO attempts (user_id, assessment_set_id, assessment_type, assessment_version, mode, status, band_score, band_table_id, state)
+      VALUES (${u.user.id}, ${set.id}, 'TIER_BOSS_EXAM', 1, 'EXAM', 'GRADED', 6.5, ${oldId}, '{}')`);
     const id = (await create(a.cookie, VALID)).json.data.id;
     expect((await activate(a.cookie, id)).status).toBe(200);
     const att = (await execute(db, sql`SELECT band_score AS b, band_table_id FROM attempts WHERE user_id = ${u.user.id}`)).rows[0] as any;
@@ -283,8 +283,8 @@ describe('activateTable (band:activate)', () => {
       INSERT INTO assessment_sets (assessment_type, title, tier_id, time_limit_seconds, origin, status)
       VALUES ('TIER_BOSS_EXAM', 'Boss uji band 2', (SELECT id FROM tiers WHERE tier_number = 1), 600, 'ORIGINAL_AUTHORED', 'DRAFT') RETURNING id`)).rows[0] as any;
     await execute(db, sql`
-      INSERT INTO attempts (user_id, assessment_set_id, assessment_version, mode, status, state, result_json)
-      VALUES (${u.user.id}, ${set.id}, 1, 'EXAM', 'GRADED', '{}', ${JSON.stringify({ boss: { band_table_ids: [id] } })})`);
+      INSERT INTO attempts (user_id, assessment_set_id, assessment_type, assessment_version, mode, status, state, result_json)
+      VALUES (${u.user.id}, ${set.id}, 'TIER_BOSS_EXAM', 1, 'EXAM', 'GRADED', '{}', ${JSON.stringify({ boss: { band_table_ids: [id] } })})`);
     const r = await del(a.cookie, id);
     expect(r.status).toBe(409);
     expect(r.json.error.code).toBe('BAND_TABLE_IN_USE');

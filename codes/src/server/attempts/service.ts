@@ -55,6 +55,8 @@ import {
 import { assessmentTypeHandlers } from './handlers';
 import { attemptCompletedHooks, type ScoreSummary } from './hooks';
 import { execute } from '@/server/db';
+import { buildMixResult } from '../mix/service';
+import { isMixAttempt, mixEntries, mixStateOf, STATE_ONLY_TYPES, virtualSetFor } from '../mix/state';
 
 const toH = (numeric: string | number | null): number => Math.round(Number(numeric ?? 0) * 100);
 
@@ -65,6 +67,8 @@ async function loadLocked(tx: Tx, attemptId: string, userId: string): Promise<{ 
     .where(and(eq(attempts.id, attemptId), eq(attempts.userId, userId)))
     .limit(1);
   if (!attempt) throw notFound(); // bukan milik pengguna = tidak ada (tidak pernah 403)
+  // SPEC-022: attempt tanpa set (MIX_PRACTICE) membaca soal dari `attempts.state` lewat "set" maya.
+  if (attempt.assessmentSetId === null) return { attempt, set: virtualSetFor(attempt) };
   const [set] = await tx.select().from(assessmentSets).where(eq(assessmentSets.id, attempt.assessmentSetId)).limit(1);
   if (!set) throw notFound();
   return { attempt, set };
@@ -72,6 +76,12 @@ async function loadLocked(tx: Tx, attemptId: string, userId: string): Promise<{ 
 
 const loadAnswers = (tx: Tx, attemptId: string): Promise<AnswerRow[]> =>
   tx.select().from(attemptAnswers).where(eq(attemptAnswers.attemptId, attemptId)).orderBy(asc(attemptAnswers.answeredAt), asc(attemptAnswers.id));
+
+/** Tambahkan `data.mix` (SPEC-022) pada hasil attempt `MIX_PRACTICE`; tipe lain tidak berubah. */
+async function withMix(tx: Tx, attempt: AttemptRow, answers: AnswerRow[], dto: AttemptResult): Promise<AttemptResult> {
+  if (!isMixAttempt(attempt)) return dto;
+  return { ...dto, mix: await buildMixResult(tx, { id: attempt.id, userId: attempt.userId }, mixStateOf(attempt), answers) };
+}
 
 async function loadAudio(tx: Tx, set: SetRow) {
   if (!set.listeningAssetId) return null;
@@ -178,7 +188,8 @@ async function finalize(
     .where(eq(attempts.id, attempt.id))
     .returning();
 
-  const handler = assessmentTypeHandlers[set.assessmentType];
+  // Handler dipilih dari attempts.assessment_type (bukan dari set; attempt tanpa set tidak punya set).
+  const handler = assessmentTypeHandlers[attempt.assessmentType];
   if (!handler) throw new ApiError('ASSESSMENT_TYPE_NOT_ENABLED');
   const outcome = await handler.onFinish({ tx, userId, attempt: updated!, set, result });
   const [withResult] = await tx
@@ -187,10 +198,13 @@ async function finalize(
     .where(eq(attempts.id, attempt.id))
     .returning();
 
-  await runActivityHooks(tx, { userId, kind: 'DRILL_SUBMIT', subModuleId: set.subModuleId });
+  // Tipe berbasis state (SPEC-022): tanpa poin/mahkota/streak harian, sehingga hook aktivitas dilewati.
+  if (!STATE_ONLY_TYPES.has(attempt.assessmentType)) {
+    await runActivityHooks(tx, { userId, kind: 'DRILL_SUBMIT', subModuleId: set.subModuleId });
+  }
   for (const hook of attemptCompletedHooks) await hook({ tx, userId, attempt: withResult!, set, result });
 
-  return buildResultDTO({ attempt: withResult!, set, questions, answers });
+  return withMix(tx, withResult!, answers, buildResultDTO({ attempt: withResult!, set, questions, answers }));
 }
 
 /** D3: nilai jawaban tersimpan, tetapkan EXPIRED dengan submitted_at = deadline_at. */
@@ -301,6 +315,7 @@ export async function startAttempt(db: Db, userId: string, assessmentSetId: stri
         id,
         userId,
         assessmentSetId: set.id,
+        assessmentType: set.assessmentType,
         assessmentVersion: set.version,
         mode: plan.mode,
         status: 'IN_PROGRESS',
@@ -463,6 +478,9 @@ export async function submitAnswer(
     const q = parseQuestions(targetSet).get(questionId);
     if (!q) throw notFound();
     if (isAiTask(q)) throw new ApiError('QUESTION_REQUIRES_SUBMISSION');
+    // attempt_answers.assessment_set_id = set soal; untuk attempt campuran = bank_set_id asal soal (SPEC-022 Technical Flow 4).
+    const answerSetId = isMixAttempt(attempt) ? mixEntries(mixStateOf(attempt)).get(questionId)?.bank_set_id : targetSet.id;
+    if (!answerSetId) throw notFound();
 
     if (set.assessmentType === 'PLACEMENT_TEST') {
       const pState = (state as unknown as Record<string, unknown>).placement as PlacementAttemptState | undefined;
@@ -507,7 +525,7 @@ export async function submitAnswer(
       .insert(attemptAnswers)
       .values({
         attemptId: attempt.id,
-        assessmentSetId: targetSet.id,
+        assessmentSetId: answerSetId,
         questionId,
         questionType: q.question_type,
         skill: q.skill,
@@ -589,11 +607,12 @@ export async function submitAttempt(db: Db, userId: string, attemptId: string): 
     const { attempt, set } = await loadLocked(tx, attemptId, userId);
     if (attempt.status === 'GRADED' || attempt.status === 'SUBMITTED' || attempt.status === 'EXPIRED') {
       // Idempoten: hasil yang sama, tanpa efek ganda (hook tidak dijalankan lagi).
-      const resDto = buildResultDTO({ attempt, set, questions: parseQuestions(set), answers: await loadAnswers(tx, attempt.id) });
+      const answers = await loadAnswers(tx, attempt.id);
+      const resDto = buildResultDTO({ attempt, set, questions: parseQuestions(set), answers });
       if (set.assessmentType === 'TIER_BOSS_EXAM' && resDto.boss) {
         resDto.boss = await refreshBossResult(tx, attempt, resDto.boss as BossResultDTO);
       }
-      return resDto;
+      return withMix(tx, attempt, answers, resDto);
     }
     if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
     if (isExpired(attempt, now)) {
@@ -617,10 +636,11 @@ export async function getAttemptResult(db: Db, userId: string, attemptId: string
       ({ attempt, set } = await loadLocked(tx, attemptId, userId));
     }
     if (attempt.status === 'IN_PROGRESS' || attempt.status === 'ABANDONED') throw new ApiError('ATTEMPT_NOT_FINISHED');
-    const resDto = buildResultDTO({ attempt, set, questions: parseQuestions(set), answers: await loadAnswers(tx, attempt.id) });
+    const answers = await loadAnswers(tx, attempt.id);
+    const resDto = buildResultDTO({ attempt, set, questions: parseQuestions(set), answers });
     if (set.assessmentType === 'TIER_BOSS_EXAM' && resDto.boss) {
       resDto.boss = await refreshBossResult(tx, attempt, resDto.boss as BossResultDTO);
     }
-    return resDto;
+    return withMix(tx, attempt, answers, resDto);
   });
 }

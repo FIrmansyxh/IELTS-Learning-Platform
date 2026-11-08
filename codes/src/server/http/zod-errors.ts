@@ -32,6 +32,13 @@ const CUSTOM_MESSAGES: Record<string, string> = {
   csv_kind_not_allowed: 'csv_kind dilarang untuk format JSON.',
   file_required: 'Berkas wajib diunggah.',
   multiple_files: 'Hanya satu berkas yang diizinkan.',
+  // SPEC-022 (kode galat kontrak mix-sessions)
+  too_small: 'Nilai terlalu kecil.',
+  too_big: 'Nilai terlalu besar.',
+  invalid_value: 'Nilai tidak valid.',
+  difficulty_range_invalid: 'difficulty_max harus lebih besar atau sama dengan difficulty_min.',
+  // SPEC-021
+  invalid_format: 'Format tidak valid.',
 };
 
 function pathToString(p: ReadonlyArray<PropertyKey>): string {

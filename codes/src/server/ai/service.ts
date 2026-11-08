@@ -2,7 +2,6 @@ import { createHash, randomUUID } from 'node:crypto';
 import { and, count, desc, eq, gte, inArray, sql } from 'drizzle-orm';
 import {
   aiEvaluations,
-  assessmentSets,
   asyncJobs,
   attempts,
   learningMaterials,
@@ -37,6 +36,7 @@ import type {
   SubmissionQuotaDTO,
 } from '@/contracts/ai';
 import { assertSubModuleAccessible } from '../gatekeeping/service';
+import { attemptQuestionList } from './attempt-questions';
 import { completeAiMiniTask } from '../player/service';
 import { getStorage } from '../storage';
 import {
@@ -124,6 +124,7 @@ export async function createWritingSubmission(
         userId: attempts.userId,
         status: attempts.status,
         assessmentSetId: attempts.assessmentSetId,
+        state: attempts.state,
       })
       .from(attempts)
       .where(eq(attempts.id, input.attempt_id))
@@ -132,11 +133,8 @@ export async function createWritingSubmission(
     if (!attempt || attempt.userId !== userId) throw notFound();
     if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
 
-    const [setRow] = await db
-      .select({ questionsJson: assessmentSets.questionsJson })
-      .from(assessmentSets)
-      .where(eq(assessmentSets.id, attempt.assessmentSetId))
-      .limit(1);
+    // SPEC-022: attempt tanpa set (MIX_PRACTICE) membaca soal dari attempts.state.
+    const setRow = { questionsJson: await attemptQuestionList(db, attempt) };
 
     // Soal tersimpan dalam bentuk kontrak konten (`question_id`, `task_kind` = TASK1|TASK2).
     const questions = (setRow?.questionsJson ?? []) as Array<{ question_id?: string; id?: string; question_type: string; task_kind?: string; prompt?: string; part?: number }>;
@@ -426,6 +424,7 @@ export async function createSpeakingSubmission(
         userId: attempts.userId,
         status: attempts.status,
         assessmentSetId: attempts.assessmentSetId,
+        state: attempts.state,
       })
       .from(attempts)
       .where(eq(attempts.id, input.attempt_id))
@@ -434,11 +433,8 @@ export async function createSpeakingSubmission(
     if (!attempt || attempt.userId !== userId) throw notFound();
     if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
 
-    const [setRow] = await db
-      .select({ questionsJson: assessmentSets.questionsJson })
-      .from(assessmentSets)
-      .where(eq(assessmentSets.id, attempt.assessmentSetId))
-      .limit(1);
+    // SPEC-022: attempt tanpa set (MIX_PRACTICE) membaca soal dari attempts.state.
+    const setRow = { questionsJson: await attemptQuestionList(db, attempt) };
 
     const questions = (setRow?.questionsJson ?? []) as Array<{ question_id?: string; id?: string; question_type: string; part?: number; prompt?: string }>;
     const foundQuestion = questions.find((q) => (q.question_id ?? q.id) === input.question_id) ?? null;
@@ -1266,17 +1262,16 @@ export async function recordExternalSpeakingEvaluation(
     }
 
     const [attempt] = await db
-      .select({ userId: attempts.userId, assessmentSetId: attempts.assessmentSetId })
+      .select({ userId: attempts.userId, status: attempts.status, assessmentSetId: attempts.assessmentSetId, state: attempts.state })
       .from(attempts)
       .where(eq(attempts.id, input.attempt_id))
       .limit(1);
     if (!attempt || attempt.userId !== userId) throw notFound();
+    // SPEC-022: pada attempt campuran, pengiriman hanya diterima selama attempt IN_PROGRESS.
+    if (attempt.assessmentSetId === null && attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
 
-    const [setRow] = await db
-      .select({ questionsJson: assessmentSets.questionsJson })
-      .from(assessmentSets)
-      .where(eq(assessmentSets.id, attempt.assessmentSetId))
-      .limit(1);
+    // SPEC-022: attempt tanpa set (MIX_PRACTICE) membaca soal dari attempts.state.
+    const setRow = { questionsJson: await attemptQuestionList(db, attempt) };
     const questions = (setRow?.questionsJson ?? []) as Array<{ question_id?: string; id?: string; question_type: string; part?: number; prompt?: string }>;
     const found = questions.find((q) => (q.question_id ?? q.id) === input.question_id) ?? null;
     if (!found) throw notFound();

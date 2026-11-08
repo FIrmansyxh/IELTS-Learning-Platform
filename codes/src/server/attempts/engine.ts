@@ -127,7 +127,7 @@ export function buildInitialState(
   return { v: 1, rng_seed: seed, order, last_resume_at: now.toISOString(), pass_percent: passPercent, served };
 }
 
-function serveQuestion(q: Question, rng: () => number): Served {
+export function serveQuestion(q: Question, rng: () => number): Served {
   const taken = new Set<string>();
   switch (q.question_type) {
     case 'MCQ_SINGLE':

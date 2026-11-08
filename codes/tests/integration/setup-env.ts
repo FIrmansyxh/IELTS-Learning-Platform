@@ -10,4 +10,5 @@ process.env.ALLOWED_HOSTS = 'localhost:3000,127.0.0.1:3000';
 process.env.IP_HMAC_SECRET = 'integration-ip-hmac-secret-0123456789abcdef';
 process.env.AUTH_TRUST_HOST = 'true';
 process.env.LOG_LEVEL = 'silent';
-process.env.ASSETS_DIR ??= mkdtempSync(path.join(tmpdir(), 'ielts-assets-'));
+// Selalu folder temp (jangan ikut ASSETS_DIR dari codes/.env, yang menunjuk ke data lokal pengembang).
+process.env.ASSETS_DIR = mkdtempSync(path.join(tmpdir(), 'ielts-assets-'));

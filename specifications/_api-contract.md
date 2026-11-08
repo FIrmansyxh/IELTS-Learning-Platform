@@ -41,6 +41,7 @@ Kontrak NORMATIF per endpoint ada di bagian "API Contract" spec masing-masing; b
 | `POST /api/v1/tracks/{track_code}/checkpoints/{item_id}/attempts` | 021 | 201 | `CHECKPOINT_NOT_READY` 409, `CHECKPOINT_NOT_ENOUGH_QUESTIONS` 422 |
 | `GET /api/v1/banks` | 022 | 200 | hanya bank `PUBLISHED`, tanpa kunci |
 | `POST /api/v1/mix-sessions` | 022 | 201 | `MIX_NOT_ENOUGH_QUESTIONS` 422 |
+| `GET /api/v1/mix-sessions/active` | 022 | 200 | `data` = `{ attempt_id, mode, question_count, answered_count, started_at }` atau `null` (tidak ada sesi `MIX_PRACTICE` `IN_PROGRESS`); ditambahkan 2026-11-08 atas permintaan Frontend |
 | `GET /api/v1/simulations/options` | 023 | 200 | |
 | `POST /api/v1/simulations` | 023 | 201 | `SIMULATION_IN_PROGRESS` 409, `SIMULATION_NOT_ENOUGH_CONTENT` 422 |
 | `GET /api/v1/simulations/{attempt_id}` | 023 | 200 | |
@@ -58,6 +59,7 @@ Kontrak NORMATIF per endpoint ada di bagian "API Contract" spec masing-masing; b
 | `GET /api/v1/me/last-learned` | `data.active_track` ditambahkan | 021 |
 | `GET /api/v1/attempts/{id}` | untuk `MIX_PRACTICE`/`TRACK_CHECKPOINT`/`MOCK_TEST` soal diambil dari `attempts.state`; `passages[]` untuk `MIX_PRACTICE`; `listening.note` | 022, 023, 024 |
 | `GET /api/v1/attempts/{id}/result` | `data.mix` untuk `MIX_PRACTICE` | 022 |
+| `GET /api/v1/attempts/{id}` (`MIX_PRACTICE`) | `assessment_set_id` NULLABLE; `title` bermakna ("Latihan campur: N soal (Skill, ...)" / "Latihan campur otomatis: N soal"); `time_limit_seconds` selalu `0` (tanpa batas); tiap soal membawa `bank_code` dan `passage_index` (indeks 0-based ke `passages[]`, null bila bukan Reading); urutan `passages[]` = urutan kemunculan pertama pada `questions[]` | 022 |
 | `POST /api/v1/submissions/writing`, `/submissions/speaking-external` | `attempt_id` boleh milik attempt tanpa set (`MIX_PRACTICE`, `MOCK_TEST`); soal dibaca dari `attempts.state` | 022, 023 |
 | `GET /api/v1/me/exam-history` | entri tipe `MOCK_TEST` | 023 |
 
@@ -227,6 +229,7 @@ Kode galat job (bukan HTTP; ada di `JobDTO.error_code`): `LLM_UNREACHABLE`, `LLM
 | `general_user` | user | 300/menit | semua endpoint terautentikasi (default) |
 | `answer_submit` | user | 60/menit | `PUT /attempts/{id}/answers/{qid}` |
 | `attempt_start` | user | 30/jam | `POST /attempts` |
+| `mix_start` | user | 30/jam | `POST /mix-sessions` (SPEC-022; bucket tersendiri) |
 | `heartbeat` | user + endpoint | 30/menit | `POST .../learn-progress`, `PUT /me/last-learned` |
 | `job_poll` | user | 1/detik | `GET /submissions/{id}` |
 | `upload_recording` | user | 10/jam | `POST /submissions/speaking` |

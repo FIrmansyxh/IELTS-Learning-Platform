@@ -70,6 +70,8 @@ const REGISTRY: Record<string, { status: number; message: string }> = {
   AI_SUBMISSION_IN_PROGRESS: { status: 409, message: 'Pengiriman sedang diproses.' },
   QUESTION_TYPE_MISMATCH: { status: 409, message: 'Jenis soal tidak sesuai dengan tugas.' },
   MINI_TASK_TYPE_MISMATCH: { status: 409, message: 'Jenis Mini-Task tidak sesuai.' },
+  // SPEC-022
+  MIX_NOT_ENOUGH_QUESTIONS: { status: 422, message: 'Soal yang tersedia untuk pilihan ini tidak cukup.' },
 };
 
 export class ApiError extends Error {

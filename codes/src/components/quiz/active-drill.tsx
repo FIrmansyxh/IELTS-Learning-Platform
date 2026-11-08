@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
-import type { AnswerResponse, Attempt, AttemptResult, Feedback } from '@/contracts/attempts';
+import type { AnswerResponse, Attempt, AttemptResult, Feedback, QuestionPublic } from '@/contracts/attempts';
 import { useShortcutPref } from '@/hooks/use-shortcut-pref';
 import { fmt, id } from '@/i18n/id';
 import { attemptsApi } from '@/lib/api/attempts';
@@ -63,11 +63,14 @@ export function ActiveDrill({
   startIndex,
   onFinished,
   onIndexChange,
+  contextSlot,
 }: {
   attempt: Attempt;
   startIndex?: number | null;
   onFinished: (result: AttemptResult) => void;
   onIndexChange?: (index: number, attemptId: string) => void;
+  /** Konten pendamping di atas kartu soal (mis. teks bacaan pada Latihan Campur). */
+  contextSlot?: (question: QuestionPublic) => React.ReactNode;
 }) {
   const questions = attempt.questions;
   const total = questions.length;
@@ -248,13 +251,17 @@ export function ActiveDrill({
               <Timer className="size-4" aria-hidden="true" />
               {formatClock(qElapsed)}
             </span>
-            <span role="timer" aria-label={id.quiz.timerTotal}>
-              {formatClock(totalRemaining)}
-            </span>
+            {attempt.time_limit_seconds > 0 ? (
+              <span role="timer" aria-label={id.quiz.timerTotal}>
+                {formatClock(totalRemaining)}
+              </span>
+            ) : null}
           </div>
         </div>
         <Progress value={progressValue} aria-label={id.quiz.progress} className="h-1.5" />
       </div>
+
+      {contextSlot?.(q)}
 
       <div className="rounded-xl border bg-card p-4 sm:p-6">
         <QuestionRenderer

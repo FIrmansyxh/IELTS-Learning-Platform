@@ -36,7 +36,7 @@ describe('AuthenticatedLayout (AuthGate + AppShell)', () => {
     expect(screen.queryByText('Rahasia')).not.toBeInTheDocument();
   });
 
-  it('learner: navigasi 4 item, Riwayat aktif (SPEC-017), tanpa item Admin', async () => {
+  it('learner: navigasi 5 item (termasuk Latihan campur, SPEC-022), Riwayat aktif (SPEC-017), tanpa item Admin', async () => {
     mockFetch(() => me(USER));
     renderWithProviders(
       <AuthenticatedLayout>
@@ -47,6 +47,7 @@ describe('AuthenticatedLayout (AuthGate + AppShell)', () => {
     const nav = screen.getAllByRole('navigation', { name: 'Navigasi utama' })[0];
     expect(nav).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: 'Peta' }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('link', { name: 'Latihan campur' })[0]).toHaveAttribute('href', '/latihan/campur');
     const riwayat = screen.getAllByRole('link', { name: 'Riwayat' })[0];
     expect(riwayat).toHaveAttribute('href', '/riwayat');
     expect(screen.queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument();

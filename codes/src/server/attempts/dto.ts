@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { assessmentSets, attemptAnswers, attempts } from '@/db/schema';
 import { QuestionSchema, type Question } from '@/contracts/content';
+import type { MixState } from '@/contracts/mix';
 import type { Attempt, AttemptResult, Feedback } from '@/contracts/attempts';
 import { logger } from '../logger';
 import { ApiError } from '../http/errors';
@@ -74,6 +75,14 @@ export function buildAttemptDTO(p: {
     answerList.push({ question_id: qid, response: (a.response ?? {}) as Record<string, unknown>, feedback });
   }
 
+  // SPEC-022: attempt campuran membawa teks Reading per paket dan kode bank per soal (tanpa kunci, tanpa rng_seed).
+  const mixState = attempt.assessmentType === 'MIX_PRACTICE' ? (attempt.state as unknown as MixState) : null;
+  const mixBank = mixState ? new Map(mixState.questions.map((e) => [e.question_id, e.bank_code])) : null;
+  const passageIdx = mixState
+    ? new Map(mixState.passages.map((p, i) => [`${p.bank_set_id}#${p.passage_no}`, i]))
+    : null;
+  const mixEntry = mixState ? new Map(mixState.questions.map((e) => [e.question_id, e])) : null;
+
   const isPlacement = set.assessmentType === 'PLACEMENT_TEST';
   const pState = isPlacement ? ((state as unknown as Record<string, unknown>).placement as { served?: string[]; history?: unknown[] } | undefined) : undefined;
   const questionCount = isPlacement ? 25 : state.order.length;
@@ -83,7 +92,7 @@ export function buildAttemptDTO(p: {
   return {
     id: attempt.id,
     assessment_set_id: attempt.assessmentSetId,
-    assessment_type: set.assessmentType,
+    assessment_type: attempt.assessmentType,
     mode: attempt.mode,
     status: attempt.status === 'AWAITING_GRADING' ? 'SUBMITTED' : attempt.status,
     title: set.title,
@@ -97,6 +106,7 @@ export function buildAttemptDTO(p: {
     answered_count: answers.length,
     current_index: currentIndex,
     passage_markdown: set.readingPassageMarkdown,
+    ...(mixState ? { passages: mixState.passages.map((p) => ({ passage_no: p.passage_no, bank_set_id: p.bank_set_id, markdown: p.markdown })) } : {}),
     listening:
       set.listeningAssetId && p.audio?.mimeType
         ? { audio_url: `/api/v1/attempts/${attempt.id}/audio`, mime_type: p.audio.mimeType, duration_sec: p.audio.durationSec ?? 0 }
@@ -104,7 +114,12 @@ export function buildAttemptDTO(p: {
     questions: inProgress
       ? (isPlacement && pState?.served ? pState.served : state.order).flatMap((qid) => {
           const q = questions.get(qid);
-          return q ? [toPublicQuestion(q, state.served[qid] ?? {})] : [];
+          if (!q) return [];
+          const pub = toPublicQuestion(q, state.served[qid] ?? {});
+          if (!mixState) return [pub];
+          const e = mixEntry?.get(qid);
+          const pi = e && e.passage_no !== null && e.skill === 'READING' ? (passageIdx?.get(`${e.bank_set_id}#${e.passage_no}`) ?? null) : null;
+          return [{ ...pub, bank_code: mixBank?.get(qid) ?? null, passage_index: pi }];
         })
       : [],
     answers: answerList,
@@ -187,7 +202,7 @@ export function buildResultDTO(p: { attempt: AttemptRow; set: SetRow; questions:
     attempt: {
       id: attempt.id,
       assessment_set_id: attempt.assessmentSetId,
-      assessment_type: set.assessmentType,
+      assessment_type: attempt.assessmentType,
       mode: attempt.mode,
       status: attempt.status === 'AWAITING_GRADING' ? 'SUBMITTED' : attempt.status,
       started_at: attempt.startedAt.toISOString(),

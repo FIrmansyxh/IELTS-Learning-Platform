@@ -76,6 +76,8 @@ export const activeTab = enumOf(['LEARN', 'DRILL', 'MINI_TASK'] as const);
 export const learnSubtab = enumOf(['ARTICLE', 'VIDEO', 'SLIDES'] as const);
 export const assessmentType = enumOf([
   'ACTIVE_DRILL', 'SKIP_MODULE_TEST', 'SKIP_TIER_TEST', 'TIER_BOSS_EXAM', 'PLACEMENT_TEST', 'BOSS_SECTION',
+  // SPEC-022: didaftarkan sekali (tanpa DDL); MOCK_TEST/TRACK_CHECKPOINT dipakai SPEC-023/021.
+  'QUESTION_BANK', 'MIX_PRACTICE', 'MOCK_TEST', 'TRACK_CHECKPOINT',
 ] as const);
 export const reviewStatus = enumOf(['DRAFT', 'IN_REVIEW', 'APPROVED', 'PUBLISHED', 'ARCHIVED'] as const);
 /** Sengaja TIDAK ada nilai 'COPYRIGHTED_COPY': materi berhak cipta tidak boleh disalin ke DB. */
@@ -266,9 +268,17 @@ export const assessmentSets = sqliteTable('assessment_sets', {
   reviewedAt: ts('reviewed_at'),
   version: integer('version').notNull().default(1),
   contentHash: varchar('content_hash', { length: 64 }),
+  // SPEC-022: bank soal (assessment_type = 'QUESTION_BANK'); NULL untuk tipe lain.
+  bankCode: varchar('bank_code', { length: 40 }),
+  bankKind: varchar('bank_kind', { length: 40 }),
+  /** Bermakna hanya untuk QUESTION_BANK. */
+  examModule: examModule('exam_module').notNull().default('GENERAL_TRAINING'),
+  tags: textArray('tags').notNull().default(sql`'[]'`),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 }, (t) => [
+  uniqueIndex('assessment_sets_bank_code_uq').on(t.bankCode).where(sql`${t.bankCode} IS NOT NULL`),
+  index('assessment_sets_bank_idx').on(t.bankKind, t.status).where(sql`${t.bankKind} IS NOT NULL`),
   index('assessment_sets_sub_idx').on(t.subModuleId, t.assessmentType),
   index('assessment_sets_module_idx').on(t.moduleId, t.assessmentType),
   index('assessment_sets_tier_idx').on(t.tierId, t.assessmentType),
@@ -278,7 +288,8 @@ export const assessmentSets = sqliteTable('assessment_sets', {
     (${t.assessmentType} = 'SKIP_MODULE_TEST'  AND ${t.moduleId}    IS NOT NULL AND ${t.subModuleId} IS NULL AND ${t.tierId} IS NULL) OR
     (${t.assessmentType} IN ('SKIP_TIER_TEST','TIER_BOSS_EXAM') AND ${t.tierId} IS NOT NULL AND ${t.subModuleId} IS NULL AND ${t.moduleId} IS NULL) OR
     (${t.assessmentType} = 'BOSS_SECTION'      AND ${t.parentSetId} IS NOT NULL) OR
-    (${t.assessmentType} = 'PLACEMENT_TEST'    AND ${t.subModuleId} IS NULL AND ${t.moduleId} IS NULL)`),
+    (${t.assessmentType} = 'PLACEMENT_TEST'    AND ${t.subModuleId} IS NULL AND ${t.moduleId} IS NULL) OR
+    (${t.assessmentType} = 'QUESTION_BANK'     AND ${t.bankCode} IS NOT NULL AND ${t.bankKind} IS NOT NULL AND ${t.subModuleId} IS NULL AND ${t.moduleId} IS NULL AND ${t.tierId} IS NULL AND ${t.parentSetId} IS NULL)`),
 ]);
 
 // ───────────────────────────── PROGRES & RESUME ─────────────────────────────
@@ -370,8 +381,11 @@ export const bandConversionRows = sqliteTable('band_conversion_rows', {
 export const attempts = sqliteTable('attempts', {
   id: id(),
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  assessmentSetId: uuid('assessment_set_id').notNull().references(() => assessmentSets.id, { onDelete: 'restrict' }),
-  assessmentVersion: integer('assessment_version').notNull(),   // snapshot versi soal saat mulai
+  // SPEC-022: NULL untuk attempt tanpa set (MIX_PRACTICE, MOCK_TEST, TRACK_CHECKPOINT); soal ada di `state`.
+  assessmentSetId: uuid('assessment_set_id').references(() => assessmentSets.id, { onDelete: 'restrict' }),
+  /** Tipe attempt (dulu diturunkan dari set). Handler dipilih dari kolom ini. */
+  assessmentType: assessmentType('assessment_type').notNull(),
+  assessmentVersion: integer('assessment_version').notNull(),   // snapshot versi soal saat mulai (0 bila tanpa set)
   mode: attemptMode('mode').notNull().default('PRACTICE'),
   status: attemptStatus('status').notNull().default('IN_PROGRESS'),
   startedAt: tsNow('started_at'),
@@ -391,19 +405,32 @@ export const attempts = sqliteTable('attempts', {
 }, (t) => [
   index('attempts_user_started_idx').on(t.userId, sql`${t.startedAt} desc`),
   index('attempts_user_set_idx').on(t.userId, t.assessmentSetId),
-  uniqueIndex('attempts_one_active_uq').on(t.userId, t.assessmentSetId).where(sql`${t.status} = 'IN_PROGRESS'`),
+  uniqueIndex('attempts_one_active_uq').on(t.userId, t.assessmentSetId).where(sql`${t.status} = 'IN_PROGRESS' AND ${t.assessmentSetId} IS NOT NULL`),
+  uniqueIndex('attempts_one_active_mix_uq').on(t.userId).where(sql`${t.status} = 'IN_PROGRESS' AND ${t.assessmentType} = 'MIX_PRACTICE'`),
+  uniqueIndex('attempts_one_active_mock_uq').on(t.userId).where(sql`${t.status} = 'IN_PROGRESS' AND ${t.assessmentType} = 'MOCK_TEST'`),
+  uniqueIndex('attempts_one_active_checkpoint_uq').on(t.userId).where(sql`${t.status} = 'IN_PROGRESS' AND ${t.assessmentType} = 'TRACK_CHECKPOINT'`),
+  check('attempts_set_required_chk', sql`${t.assessmentSetId} IS NOT NULL OR ${t.assessmentType} IN ('MIX_PRACTICE','MOCK_TEST','TRACK_CHECKPOINT')`),
   bandCheck('attempts_band_chk', t.bandScore),
 ]);
 
 export const attemptSections = sqliteTable('attempt_sections', {
+  id: id(),
   attemptId: uuid('attempt_id').notNull().references(() => attempts.id, { onDelete: 'cascade' }),
-  assessmentSetId: uuid('assessment_set_id').notNull().references(() => assessmentSets.id, { onDelete: 'restrict' }),
+  // SPEC-022: NULL untuk section tanpa set (SPEC-023, simulasi).
+  assessmentSetId: uuid('assessment_set_id').references(() => assessmentSets.id, { onDelete: 'restrict' }),
   skill: skillCategory('skill').notNull(),
   rawScore: numeric('raw_score', { scale: 2 }),
   maxScore: numeric('max_score', { scale: 2 }),
   bandScore: band('band_score'),
   status: attemptStatus('status').notNull().default('IN_PROGRESS'),
-}, (t) => [primaryKey({ columns: [t.attemptId, t.assessmentSetId] })]);
+  timeLimitSeconds: integer('time_limit_seconds'),
+  startedAt: ts('started_at'),
+  deadlineAt: ts('deadline_at'),
+  submittedAt: ts('submitted_at'),
+}, (t) => [
+  uniqueIndex('attempt_sections_set_uq').on(t.attemptId, t.assessmentSetId).where(sql`${t.assessmentSetId} IS NOT NULL`),
+  uniqueIndex('attempt_sections_skill_uq').on(t.attemptId, t.skill).where(sql`${t.assessmentSetId} IS NULL`),
+]);
 
 export const attemptAnswers = sqliteTable('attempt_answers', {
   id: id(),

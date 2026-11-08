@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { AssessmentType, IsoDateTime, SkillCategory, Uuid } from './common';
 import { MasteryCrownLevel } from './player';
 import { AttemptGamificationSchema } from './gamification';
+import { MixResultSchema } from './mix';
 
 /** Skema mesin soal & attempt (SPEC-006). Klien longgar terhadap kunci tambahan. */
 export const QuestionType = z.enum([
@@ -28,6 +29,10 @@ export const QuestionPublicSchema = z.object({
   points: z.number(),
   target_time_ms: z.number().int().nullable(),
   passage_no: z.number().int().nullable().optional(),
+  /** SPEC-022: kode bank asal soal (hanya attempt MIX_PRACTICE). */
+  bank_code: z.string().nullable().optional(),
+  /** SPEC-022: indeks (0-based) paket teks pada `Attempt.passages[]` untuk soal Reading campuran; null bila bukan Reading. */
+  passage_index: z.number().int().nullable().optional(),
   section_no: z.number().int().nullable().optional(),
   options: z.array(z.object({ option_id: z.string(), text: z.string() })).nullable(),
   choose_count: z.number().int().nullable(),
@@ -87,7 +92,8 @@ export const AttemptStatus = z.enum(['IN_PROGRESS', 'SUBMITTED', 'GRADED', 'EXPI
 
 export const AttemptSchema = z.object({
   id: Uuid,
-  assessment_set_id: Uuid,
+  /** NULL untuk attempt tanpa set (MIX_PRACTICE, MOCK_TEST, TRACK_CHECKPOINT). */
+  assessment_set_id: Uuid.nullable(),
   assessment_type: AssessmentType,
   mode: z.enum(['PRACTICE', 'EXAM']),
   status: AttemptStatus,
@@ -96,12 +102,15 @@ export const AttemptSchema = z.object({
   server_now: IsoDateTime,
   deadline_at: IsoDateTime.nullable(),
   remaining_seconds: z.number().int().nullable(),
+  /** 0 = tanpa batas waktu (MIX_PRACTICE selalu 0). */
   time_limit_seconds: z.number().int(),
   pass_percent: z.number().nullable(),
   question_count: z.number().int(),
   answered_count: z.number().int(),
   current_index: z.number().int(),
   passage_markdown: z.string().nullable(),
+  /** SPEC-022: teks Reading per paket (MIX_PRACTICE); null/absen untuk tipe lain. */
+  passages: z.array(z.object({ passage_no: z.number().int(), bank_set_id: Uuid, markdown: z.string() })).nullable().optional(),
   listening: z
     .object({ audio_url: z.string(), mime_type: z.string(), duration_sec: z.number().int() })
     .nullable(),
@@ -133,7 +142,7 @@ export const UnlockedItemSchema = z.object({ kind: z.string(), id: z.string(), l
 export const AttemptResultSchema = z.object({
   attempt: z.object({
     id: Uuid,
-    assessment_set_id: Uuid,
+    assessment_set_id: Uuid.nullable(),
     assessment_type: AssessmentType,
     mode: z.enum(['PRACTICE', 'EXAM']),
     status: AttemptStatus,
@@ -178,6 +187,8 @@ export const AttemptResultSchema = z.object({
   boss: z.unknown().nullable().optional(),
   placement: z.unknown().nullable().optional(),
   gamification: AttemptGamificationSchema.nullable().optional(),
+  /** SPEC-022: hanya attempt MIX_PRACTICE. */
+  mix: MixResultSchema.nullable().optional(),
 });
 export type AttemptResult = z.infer<typeof AttemptResultSchema>;
 export const AttemptResultResponseSchema = z.object({ data: AttemptResultSchema });

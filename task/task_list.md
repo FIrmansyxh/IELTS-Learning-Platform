@@ -1,4 +1,4 @@
-# TASK LIST - ielts-learning-platform
+﻿# TASK LIST - ielts-learning-platform
 **Last Updated:** 2026-11-08
 **Total Tasks:** 30 (21 awal + 5 dari ADR-004/005 + 4 task fitur pasca-MVP TASK-021..024)
 **Completed:** 0 | **In Progress:** 0 | **Ready to Test:** 18 | **Superseded:** 4 | **Not Started:** 8 (4 lama + 4 baru: 021-024; 025d termasuk hitungan lama) | **Blocked:** 0
@@ -260,9 +260,15 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
   - Spesifikasi: [spec] ../specifications/022_spec_question_bank_mix_builder.md
   - Detail: [task] ./TASK-022_question-bank-mix-builder/TASK-022_question-bank-mix-builder.md
   - Wave: W9 (ke-2) | Ukuran: L | Dependensi: TASK-025d, TASK-004, TASK-006, TASK-017 (019/020 SUPERSEDED, diganti CLI)
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-08 12:00] (PM Agent)
+     - Backend Dev: [2026-11-08 17:00] (Backend Engineer)
+     - Backend Ready: [2026-11-08 18:30] (Backend Engineer) - AC otomatis hijau; E2E Playwright (AC-15) belum, status tetap in_progress
+     - Frontend Dev: [2026-11-08 17:05] (Frontend Engineer)
+     - Frontend Ready: [2026-11-08 17:20] (Frontend Engineer)
+     - QA Review: [2026-11-08 20:33] (QA Agent) - PASS-WITH-FIXES, unit 780/782, integrasi 269/269, next build OK
+     - Human Gate: [2026-11-08 21:15] (Orchestrator) - Disetujui human, status ready_to_test
 
 - Task 021: Jalur Belajar (Learning Track) dan Gaya Penyampaian Materi
   - Spesifikasi: [spec] ../specifications/021_spec_learning_tracks.md

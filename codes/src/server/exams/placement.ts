@@ -399,7 +399,7 @@ export async function applyPlacement(
       .where(and(eq(attempts.id, attemptId), eq(attempts.userId, userId)))
       .limit(1);
 
-    if (!attempt) throw notFound();
+    if (!attempt?.assessmentSetId) throw notFound();
 
     const [set] = await tx
       .select()

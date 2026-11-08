@@ -10,6 +10,7 @@ import type { ScoreSummary } from './hooks';
 import { skipModuleHandler, skipTierHandler } from '../exams/skip';
 import { tierBossHandler } from '../exams/boss';
 import { placementHandler } from '../exams/placement';
+import { mixPracticeHandler } from '../mix/handler';
 
 export type AssessmentTypeName = SetRow['assessmentType'];
 
@@ -109,3 +110,4 @@ assessmentTypeHandlers.SKIP_MODULE_TEST = skipModuleHandler; // SPEC-008
 assessmentTypeHandlers.SKIP_TIER_TEST = skipTierHandler;
 assessmentTypeHandlers.TIER_BOSS_EXAM = tierBossHandler; // SPEC-014
 assessmentTypeHandlers.PLACEMENT_TEST = placementHandler; // SPEC-015
+assessmentTypeHandlers.MIX_PRACTICE = mixPracticeHandler; // SPEC-022

@@ -41,7 +41,8 @@ export const GET = withApi(
       throw new ApiError('ATTEMPT_NOT_ACTIVE'); // 409
     }
 
-    // 3. Muat assessment set
+    // 3. Muat assessment set (attempt tanpa set, mis. MIX_PRACTICE, tidak punya audio ujian)
+    if (!attempt.assessmentSetId) throw notFound();
     const [set] = await db
       .select()
       .from(assessmentSets)

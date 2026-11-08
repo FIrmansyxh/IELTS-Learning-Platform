@@ -5,7 +5,7 @@
 **Size:** L
 **Assigned To:** Developer Agent (Backend + Frontend + Konten)
 **Dependencies:** TASK-025d (fondasi lokal); TASK-004 (kontrak konten), TASK-006 (mesin soal), TASK-017 (radar; bobot AUTO_WEAKNESS). Pengganti SPEC-019/020 (importer/kurasi UI) = CLI `bank:validate` + `content:import` (TASK-019/020 SUPERSEDED).
-**Current Status:** not_started
+**Current Status:** in_progress
 
 ---
 
@@ -71,3 +71,7 @@ Catatan keadaan awal: berkas `codes/content/gt-bank/` (grammar-register, reading
 | Timestamp | Agent | Status | Notes |
 |-----------|-------|--------|-------|
 | 2026-11-08 12:00 | pm agent | task created | - |
+| 2026-11-08 17:00 | backend | development started | - |
+| 2026-11-08 18:30 | backend | backend implemented; AC otomatis hijau kecuali E2E Playwright (AC-15) | status tetap in_progress; lihat dev_log |
+| 2026-11-08 17:05 | frontend | development started | - |
+| 2026-11-08 17:20 | frontend | ready for QA/integration | UI Mix Builder, sesi, hasil, nav, i18n, 33 tes; uji FE-BE nyata dan E2E belum (lihat dev_log bagian Frontend) |

@@ -14,6 +14,11 @@ export const AssessmentType = z.enum([
   'TIER_BOSS_EXAM',
   'PLACEMENT_TEST',
   'BOSS_SECTION',
+  // SPEC-022 (didaftarkan sekali di sini; MOCK_TEST dan TRACK_CHECKPOINT dipakai SPEC-023/021)
+  'QUESTION_BANK',
+  'MIX_PRACTICE',
+  'MOCK_TEST',
+  'TRACK_CHECKPOINT',
 ]);
 
 export const ErrorBodySchema = z.strictObject({

@@ -91,8 +91,8 @@ describe('validateBankPackage menolak bank rusak', () => {
     expect(codes(validateBankPackage(pkg([mcq('Q-GTX-001', { correct_answers: ['Yo,'] })])))).toContain('answer_not_in_options');
   });
   it('ID yang terbaca sebagai slot variasi paket', () => {
-    expect(codes(validateBankPackage(pkg([mcq('Q-GTX-P1-001')])))).toContain('variant_slot_id');
-    expect(codes(validateBankPackage(pkg([mcq('Q-GTX-A-001')])))).toContain('variant_slot_id');
+    expect(codes(validateBankPackage(pkg([mcq('Q-GTX-P1-001')])))).toContain('id_reads_as_variant_slot');
+    expect(codes(validateBankPackage(pkg([mcq('Q-GTX-A-001')])))).toContain('id_reads_as_variant_slot');
   });
   it('skill soal tidak sama dengan skill bank', () => {
     expect(codes(validateBankPackage(pkg([mcq('Q-GTX-001', { skill: 'VOCAB' })])))).toContain('question_skill_mismatch');

@@ -2,7 +2,7 @@
  * Validasi Bank Soal (SPEC-022): skema Zod + aturan silang bank. Murni (tanpa DB) agar dapat dipakai CLI,
  * importer, dan tes. Aturan per soal memakai `checkQuestion` kontrak konten 1.1.
  */
-import { QuestionBankPackageSchema, BANK_KIND_SKILL, type QuestionBankPackage } from '@/contracts/question-bank';
+import { QuestionBankPackageSchema, BANK_KIND_SKILL, isListeningBankKind, type QuestionBankPackage } from '@/contracts/question-bank';
 import type { ContentIssue } from '@/contracts/content';
 import { extractQuestionSlot } from '../attempts/engine';
 import { splitPassages } from './passages';
@@ -40,7 +40,21 @@ function kindRule(kind: string, q: BankQuestion): { code: string; message: strin
   return null;
 }
 
-export function validateBankPackage(raw: unknown, seenIds: Set<string> = new Set()): BankValidation {
+/** Aset Listening yang sudah dikenal (manifest paket dan/atau `content_assets`), kunci = `asset_code`. */
+export type KnownAssets = ReadonlyMap<string, { kind: string; rights?: string }>;
+/** Hak yang cukup untuk aset DB (D7): hanya OWN_ORIGINAL atau VERIFIED_OPEN. */
+const OK_DB_RIGHTS = new Set(['OWN_ORIGINAL', 'VERIFIED_OPEN']);
+
+export interface BankValidationContext {
+  /**
+   * Aset terdaftar. `undefined` = pemeriksaan `listening_asset_unregistered` dilewati (pemanggil tidak punya konteks aset);
+   * `bank:validate` dan `content:import` selalu mengisinya.
+   */
+  manifestAssets?: KnownAssets;
+  dbAssets?: KnownAssets;
+}
+
+export function validateBankPackage(raw: unknown, seenIds: Set<string> = new Set(), ctx: BankValidationContext = {}): BankValidation {
   const parsed = QuestionBankPackageSchema.safeParse(raw);
   if (!parsed.success) return { ok: false, errors: zodIssues(parsed.error), warnings: [] };
 
@@ -63,13 +77,34 @@ export function validateBankPackage(raw: unknown, seenIds: Set<string> = new Set
       issues.push(err(`${bp}.reading_passage_markdown`, 'passage_not_allowed', 'Teks bacaan hanya untuk bank Reading.'));
     }
 
+    // D7: kontrak Listening. Tepat satu dari listening_asset_code / pending_audio; bank lain tidak boleh memuatnya.
+    const isListening = isListeningBankKind(bank.bank_kind);
+    if (isListening) {
+      if (Boolean(bank.listening_asset_code) === bank.pending_audio) {
+        issues.push(err(`${bp}.listening_asset_code`, 'listening_asset_required', 'Bank Listening wajib memuat tepat satu dari listening_asset_code atau pending_audio: true.'));
+      }
+      if (bank.listening_asset_code && (ctx.manifestAssets || ctx.dbAssets)) {
+        const m = ctx.manifestAssets?.get(bank.listening_asset_code);
+        const d = ctx.dbAssets?.get(bank.listening_asset_code);
+        const ok = (m && m.kind === 'AUDIO_LISTENING') || (d && d.kind === 'AUDIO_LISTENING' && OK_DB_RIGHTS.has(d.rights ?? ''));
+        if (!ok) {
+          issues.push(err(`${bp}.listening_asset_code`, 'listening_asset_unregistered', `Aset '${bank.listening_asset_code}' belum terdaftar sebagai AUDIO_LISTENING (manifest paket atau content_assets OWN_ORIGINAL/VERIFIED_OPEN).`));
+        }
+      }
+    } else if (bank.listening_asset_code !== undefined || bank.pending_audio) {
+      issues.push(err(`${bp}.${bank.listening_asset_code !== undefined ? 'listening_asset_code' : 'pending_audio'}`, 'listening_field_not_allowed', 'listening_asset_code dan pending_audio hanya untuk bank Listening.'));
+    }
+
     bank.questions.forEach((q, qi) => {
       const qp = `${bp}.questions[${qi}]`;
       if (seenIds.has(q.question_id)) issues.push(err(`${qp}.question_id`, 'duplicate_question_id', 'question_id ganda.'));
       seenIds.add(q.question_id);
 
       if (extractQuestionSlot(q.question_id) !== null) {
-        issues.push(err(`${qp}.question_id`, 'variant_slot_id', 'ID terbaca sebagai slot variasi paket (P<n> atau segmen A-C); ubah polanya.'));
+        issues.push(err(`${qp}.question_id`, 'id_reads_as_variant_slot', 'ID terbaca sebagai slot variasi paket (P<n> atau segmen A-C); ubah polanya.'));
+      }
+      if (q.passage_no !== undefined && !bank.reading_passage_markdown) {
+        issues.push(err(`${qp}.passage_no`, 'passage_without_text', 'Soal ber-passage_no pada bank tanpa reading_passage_markdown.'));
       }
       if (q.skill !== bank.skill) issues.push(err(`${qp}.skill`, 'question_skill_mismatch', `skill soal harus ${bank.skill}.`));
 

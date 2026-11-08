@@ -699,7 +699,7 @@ export async function buildBossResultDTO(p: BuildBossResultParams): Promise<Boss
 
 // ------------------------------------------------------------------ REFRESH BOSS RESULT (GET /result)
 export async function refreshBossResult(db: DbOrTx, attempt: AttemptRow, existingBoss: BossResultDTO): Promise<BossResultDTO> {
-  const childSections = await loadChildSections(db, attempt.assessmentSetId);
+  const childSections = await loadChildSections(db, attempt.assessmentSetId!);
   const attemptSubs = await db.select().from(submissions).where(eq(submissions.attemptId, attempt.id));
 
   let wBand: number | null = null;
@@ -793,11 +793,11 @@ export async function startBossSection(
     const [child] = await tx
       .select()
       .from(assessmentSets)
-      .where(and(eq(assessmentSets.id, sectionSetId), eq(assessmentSets.parentSetId, attempt.assessmentSetId)))
+      .where(and(eq(assessmentSets.id, sectionSetId), eq(assessmentSets.parentSetId, attempt.assessmentSetId!)))
       .limit(1);
     if (!child) throw notFound();
 
-    const childSections = await loadChildSections(tx, attempt.assessmentSetId);
+    const childSections = await loadChildSections(tx, attempt.assessmentSetId!);
     const state = attempt.state as BossAttemptState;
     const sectionsState = state.sections ?? {};
 
@@ -945,11 +945,11 @@ export async function submitBossSection(
     const [child] = await tx
       .select()
       .from(assessmentSets)
-      .where(and(eq(assessmentSets.id, sectionSetId), eq(assessmentSets.parentSetId, attempt.assessmentSetId)))
+      .where(and(eq(assessmentSets.id, sectionSetId), eq(assessmentSets.parentSetId, attempt.assessmentSetId!)))
       .limit(1);
     if (!child) throw notFound();
 
-    const childSections = await loadChildSections(tx, attempt.assessmentSetId);
+    const childSections = await loadChildSections(tx, attempt.assessmentSetId!);
     const state = attempt.state as BossAttemptState;
     const sectionsState = state.sections ?? {};
     const curSecState = sectionsState[sectionSetId];

@@ -26,6 +26,28 @@ async function main(): Promise<number> {
   const { CONTENT_SOURCES } = await import('./seed');
 
   if (command === 'validate') {
+    // SPEC-022: folder bank soal tanpa content.json divalidasi sebagai bank.
+    const bank = await import('../src/server/content/bank-import');
+    const { existsSync } = await import('node:fs');
+    const found = await bank.findBankFiles(dir);
+    if (found.issues.length > 0 && !existsSync(path.join(dir, 'content.json'))) {
+      for (const i of found.issues) console.error(bank.formatBankIssue(i));
+      return 1;
+    }
+    if (found.issues.length === 0 && found.files.length > 0 && !existsSync(path.join(dir, 'content.json'))) {
+      const staticSources = new Map(
+        CONTENT_SOURCES.map((s) => [s.code, { licenseType: s.licenseType, shareAlike: s.shareAlike ?? false, mayStoreCopy: s.mayStoreCopy ?? false }]),
+      );
+      const ctx = await bank.bankContextReadonly(dbMod.databasePath(), staticSources);
+      const r = await bank.validateBankDir(dir, ctx, found.files);
+      for (const w of r.warnings) console.warn(bank.formatBankIssue(w));
+      if (r.errors.length) {
+        for (const e of r.errors) console.error(bank.formatBankIssue(e));
+        return 1;
+      }
+      console.log(`OK: valid | banks ${r.banks.length} | soal ${r.banks.reduce((s, b) => s + b.questions.length, 0)}`);
+      return 0;
+    }
     // Coba konteks DB; bila DB tidak tersedia, pakai struktur statis (validasi tetap tanpa menulis).
     let ctx;
     try {

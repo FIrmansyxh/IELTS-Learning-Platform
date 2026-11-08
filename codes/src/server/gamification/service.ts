@@ -5,7 +5,6 @@ import {
   attemptAnswers,
   pointLedger,
   userStats,
-  users,
 } from '@/db/schema';
 import {
   getCrownCounts,
@@ -22,6 +21,7 @@ import type {
   StatsDTO,
 } from '@/contracts/gamification';
 import { getSetting } from '../settings/service';
+import { STATE_ONLY_TYPES } from '../mix/state';
 
 const CROWN_RANK: Record<MasteryCrownType, number> = {
   NONE: 0,
@@ -282,6 +282,9 @@ export async function handleMiniTaskGamification(
 export async function gamificationHook(ctx: AttemptCompletedContext): Promise<void> {
   const { tx, userId, set } = ctx;
   const now = new Date();
+
+  // SPEC-022 (+ 021/023): attempt berbasis state tidak memberi poin, mahkota, speed streak, maupun streak harian.
+  if (STATE_ONLY_TYPES.has(ctx.attempt.assessmentType)) return;
 
   if (set.assessmentType === 'ACTIVE_DRILL') {
     await handleDrillGamification(ctx, now);

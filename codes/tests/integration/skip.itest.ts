@@ -301,8 +301,8 @@ describe('POST /attempts (Skip)', () => {
     const first = (await start(u, set.id)).json.data;
     // Seolah ada percobaan lain yang baru gagal (cooldown aktif) -> resume tetap diizinkan (D5 langkah 2).
     await execute(db, sql`
-      INSERT INTO attempts (user_id, assessment_set_id, assessment_version, mode, status, started_at, submitted_at, passed, state)
-      VALUES (${u.user.id}, ${set.id}, 1, 'EXAM', 'GRADED', ${new Date(clock - 5 * MIN)}, ${new Date(clock - MIN)}, false, '{}')`);
+      INSERT INTO attempts (user_id, assessment_set_id, assessment_type, assessment_version, mode, status, started_at, submitted_at, passed, state)
+      VALUES (${u.user.id}, ${set.id}, 'SKIP_MODULE_TEST', 1, 'EXAM', 'GRADED', ${new Date(clock - 5 * MIN)}, ${new Date(clock - MIN)}, false, '{}')`);
     const r = await start(u, set.id);
     expect(r.status).toBe(200);
     expect(r.json.data).toMatchObject({ id: first.id, resumed: true });

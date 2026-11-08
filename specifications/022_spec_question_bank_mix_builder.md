@@ -3,7 +3,7 @@
 ## Metadata
 - **Author:** Orchestrator (atas permintaan human, ADR-004); direvisi teknis oleh Analyst 2026-11-08 (menyelaraskan dengan SPEC-025/ADR-005)
 - **Created:** 2026-11-08
-- **Status:** approved (human, 2026-11-08, via /build-feature: disetujui apa adanya); revisi teknis 2026-11-08 menunggu konfirmasi human pada butir "Keputusan Analyst"
+- **Status:** approved (human, 2026-11-08, via /build-feature: disetujui apa adanya); revisi teknis 2026-11-08: butir Keputusan Analyst 1, 2, 3, 5 dikonfirmasi human; butir 4 dan 6 menunggu konfirmasi
 - **Depends on:** SPEC-004, SPEC-006, SPEC-017, SPEC-025. (SPEC-019/020 SUPERSEDED oleh SPEC-025: pengganti = CLI `bank:validate` dan `content:import`.) Dependensi berstatus `ready_to_test` dianggap cukup (dispensasi human).
 - **Prioritas:** P1
 - **Urutan build:** KE-1 dari 4 (022 -> 021 -> 024 -> 023). Spec ini memiliki SATU-SATUNYA migrasi pembangunan-ulang tabel (`0002`), dipakai juga oleh 021, 023.
@@ -47,11 +47,11 @@ Sebagai Learner IELTS General Training (profil lokal), saya ingin latihan dari b
 Aturan seleksi (deterministik; fungsi murni `selectMix(pool, request, radar, history, rng)` di `src/server/mix/select.ts`):
 1. **Kumpulan kandidat (pool).** Soal dari bank berstatus `PUBLISHED` dan `exam_module='GENERAL_TRAINING'`, tidak termasuk skill `LISTENING`, yang cocok DENGAN SEMUA filter yang diberikan (AND): `skills` (default: GRAMMAR, VOCAB, READING, WRITING, SPEAKING), `bank_kinds` (default: semua), `question_types` (default: semua), `difficulty_min..difficulty_max` (default 1..5; soal tanpa `difficulty` dianggap 3).
 2. **Batas AI.** Writing dan Speaking masing-masing maksimal 1 soal per sesi (dijawab lewat submission, bukan drill). Kapasitas efektif pool = jumlah soal objektif + min(1, jumlah soal Writing) + min(1, jumlah soal Speaking). Bila kapasitas efektif < `count` -> `422 MIX_NOT_ENOUGH_QUESTIONS`.
-3. **Penarikan tanpa pengembalian,** satu soal per iterasi sampai terkumpul tepat `count` soal. Tanpa duplikat `question_id` dalam satu sesi.
+3. **Penarikan tanpa pengembalian,** satu soal per iterasi sampai terkumpul `count` soal (atau lebih, hanya karena paket Reading utuh, butir 4). Tanpa duplikat `question_id` dalam satu sesi.
    - `MANUAL`: soal ditarik acak seragam dari sisa pool.
    - `AUTO_WEAKNESS`: dua tahap. Tahap skill: bobot `W_skill = max(gap, 0.5)` dengan `gap = 9.0 - user_skill_scores.estimated_band` skill itu. Skill tanpa baris `user_skill_scores` atau dengan `estimated_band` NULL memakai `gap` = rata-rata `gap` skill-skill yang punya nilai; bila tidak ada satu pun yang punya nilai, semua skill berbobot 1 (seragam). Tahap soal dalam skill terpilih: bobot `T_q = (1 + salah_tipe_30h) x (0.3 jika benar 2x berturut-turut else 1)`. `salah_tipe_30h` = (jawaban salah)/(jawaban berisi `is_correct` non-NULL) pada `attempt_answers` profil ini dengan `question_type` sama, `answered_at` dalam 30 hari terakhir, attempt berstatus `GRADED`/`EXPIRED`; 0 bila tidak ada jawaban. "Benar 2x berturut-turut" = dua baris `attempt_answers` terbaru (urut `answered_at` menurun) profil ini untuk `question_id` itu keduanya `is_correct=true`. Untuk skill WRITING dan SPEAKING (tanpa `is_correct`), `T_q = 1`. Skill yang kandidatnya habis dikeluarkan dari tahap skill.
    - Pengguna tanpa riwayat apa pun: semua bobot 1 (seragam).
-4. **Paket Reading.** Bila soal terpilih adalah soal Reading, seluruh paket teksnya (D4) ikut dimasukkan berurutan (soal terpilih dan sisanya) sampai `count` tercapai; bila sisa kapasitas lebih kecil dari ukuran paket, hanya `sisa kapasitas` soal pertama paket (urutan bank) yang dimasukkan, TETAPI teks tetap dibawa utuh. Soal paket yang sudah masuk tidak ditarik lagi. Paket yang sama tidak dimasukkan dua kali.
+4. **Paket Reading.** Bila soal terpilih adalah soal Reading, seluruh paket teksnya (D4: teks utuh + SEMUA soal `passage_no` itu, berurutan) ikut dimasukkan; paket tidak pernah dipotong atau dipisah dari teksnya (D4 menang). Akibatnya jumlah soal akhir = `count` bila tidak ada paket Reading; bila ada paket Reading, jumlah soal akhir = jumlah soal yang terkumpul saat `count` tercapai atau terlampaui oleh paket terakhir yang masuk (jadi dapat melebihi `count` paling banyak ukuran paket - 1). Soal paket yang sudah masuk tidak ditarik lagi. Paket yang sama tidak dimasukkan dua kali. Hitungan Writing/Speaking maksimal 1 tetap berlaku.
 5. **Urutan akhir** = urutan penarikan; soal satu paket Reading selalu berurutan.
 6. **Seed.** `seed` (opsional, string `^[A-Za-z0-9_-]{1,64}$`) HANYA menentukan penarikan (PRNG `mulberry32` dari hash SHA-256 `seed` dipotong 32 bit); tanpa `seed`, server memakai angka acak CSPRNG. Urutan opsi jawaban selalu diacak dengan seed CSPRNG rahasia (`newRngSeed()`, disimpan di `attempts.state.rng_seed`, tidak pernah dikirim ke klien), seperti SPEC-006.
 
@@ -126,7 +126,7 @@ Semua rute `auth: 'user'`, envelope `{ data }` / `{ error }` sesuai `_api-contra
 | Field | Tipe | Keterangan |
 |---|---|---|
 | `data.attempt_id` | uuid | attempt `MIX_PRACTICE` baru |
-| `data.question_count` | int | selalu sama dengan `count` |
+| `data.question_count` | int | sama dengan `count`, kecuali ada paket Reading: jumlah soal sebenarnya (>= `count`, D5.4) |
 | `data.mode` | string | `MANUAL`\|`AUTO_WEAKNESS` |
 | `data.passage_count` | int | jumlah paket teks Reading yang dibawa (>= 0) |
 | `data.ai_item_count` | int | 0-2 (Writing + Speaking) |
@@ -141,8 +141,11 @@ Semua rute `auth: 'user'`, envelope `{ data }` / `{ error }` sesuai `_api-contra
 | 415 | `UNSUPPORTED_MEDIA_TYPE` | Bukan `application/json` |
 | 422 | `MIX_NOT_ENOUGH_QUESTIONS` | Kapasitas efektif pool (D5.2) < `count`; `details[0] = { path: "count", code: "max_available:<n>", message: "Hanya <n> soal tersedia untuk filter ini." }` |
 
+### GET /api/v1/mix-sessions/active (ditambahkan 2026-11-08, atas permintaan Frontend)
+- **Auth:** user. **Sukses:** 200. `data` = `{ attempt_id: uuid, mode: "MANUAL"|"AUTO_WEAKNESS", question_count: int, answered_count: int, started_at: ISO }` bila profil punya attempt `MIX_PRACTICE` `IN_PROGRESS`, selain itu `data: null`. Skema Zod: `ActiveMixSessionResponseSchema` (`src/contracts/mix.ts`).
+
 ### Endpoint attempt yang ada (perilaku tambahan untuk `MIX_PRACTICE`)
-- `GET /api/v1/attempts/{attempt_id}`: respons sama dengan SPEC-006, ditambah `passages[]` (`{ passage_no, bank_set_id, markdown }`) bila ada soal Reading, dan tiap soal membawa `bank_code`. Tanpa `rng_seed`, tanpa kunci.
+- `GET /api/v1/attempts/{attempt_id}`: respons sama dengan SPEC-006, ditambah `passages[]` (`{ passage_no, bank_set_id, markdown }`) bila ada soal Reading, dan tiap soal membawa `bank_code` serta `passage_index` (indeks 0-based ke `passages[]`; null bila bukan Reading). `passages[]` berurutan menurut kemunculan pertama pada `questions[]`. `assessment_set_id` NULL, `time_limit_seconds` = 0, `title` = "Latihan campur: N soal (Skill, ...)" atau "Latihan campur otomatis: N soal". Tanpa `rng_seed`, tanpa kunci.
 - `GET /api/v1/attempts/{attempt_id}/result`: untuk `MIX_PRACTICE` menambah `data.mix`:
 | Field | Tipe | Keterangan |
 |---|---|---|
@@ -207,7 +210,7 @@ Dibuktikan sekarang = dapat diuji otomatis dengan konten yang sudah ada (`codes/
 - [ ] **AC-6** **Given** `selectMix` dengan pool berisi 1 soal Writing dan 1 Speaking lagi banyak soal objektif, `count=40` **Then** hasil memuat maksimal 1 soal `WRITING_TASK` dan maksimal 1 `SPEAKING_TASK`; **Given** pool hanya berisi 5 soal Writing dan `count=5` **Then** `422 MIX_NOT_ENOUGH_QUESTIONS` dengan `details[0].code = "max_available:1"`.
 - [ ] **AC-7** **Given** profil dengan status gatekeeping tertentu (snapshot `user_*_progress`) **When** attempt `MIX_PRACTICE` dibuat, dijawab, dan di-submit **Then** seluruh baris `user_tier_progress`, `user_module_progress`, `user_sub_module_progress` identik dengan sebelumnya, `points_awarded=0`, `passed` NULL, `user_skill_scores` untuk skill yang dijawab (>= 1 soal objektif) terbarui.
 - [ ] **AC-8** **Given** respons `GET /api/v1/banks`, `POST /mix-sessions`, `GET /attempts/{id}` (soal belum dijawab) **Then** teks JSON respons tidak memuat string `correct_answers`, `explanation_id`, atau `rng_seed` (tes negatif pada teks JSON respons); `explanation_id` dan hasil benar/salah baru muncul pada respons `PUT .../answers/{question_id}` setelah soal itu dijawab.
-- [ ] **AC-9** **Given** bank Reading terpilih dengan 8 soal dan `count=5` **When** sesi dibuat **Then** attempt berisi 5 soal pertama paket dan `passages[]` memuat teks utuh paket itu (pemisah `===PASSAGE===` tidak ikut tampil); `passage_count=1`.
+- [ ] **AC-9** **Given** pool hanya berisi bank Reading `GT-RD-S1-EVERYDAY` (satu paket, 8 soal) dan `count=5` **When** sesi dibuat **Then** attempt berisi SEMUA 8 soal paket itu (`question_count=8`, lebih besar dari `count` karena paket tidak dipotong, D4) dan `passages[]` memuat teks utuh paket (pemisah `===PASSAGE===` tidak ikut tampil); `passage_count=1`. **Given** pool berisi dua paket Reading (8 + 8 soal) dan `count=12` **Then** paket ke-2 masuk utuh bila soalnya terpilih, `question_count` ∈ {8, 16} sesuai paket yang terbawa, dan `passage_count` = jumlah paket terbawa (1 atau 2); setiap `question_id` Reading dalam attempt memiliki teks paketnya di `passages[]`.
 - [ ] **AC-10** **Given** bank berstatus `DRAFT`, atau bank Listening berstatus `PUBLISHED` **When** `GET /banks` dan `POST /mix-sessions` **Then** bank `DRAFT` tidak muncul/tidak terpilih; bank Listening muncul dengan `selectable_in_mix=false` dan tidak pernah terpilih.
 - [ ] **AC-11** **Given** fixture bank Listening **When** `bank:validate` **Then** (a) tanpa `listening_asset_code` dan tanpa `pending_audio` -> `listening_asset_required`; (b) `listening_asset_code` tak terdaftar -> `listening_asset_unregistered`; (c) `pending_audio:true` valid dan setelah `content:import --publish` barisnya `status='DRAFT'`; (d) bank non-Listening ber-`pending_audio` -> `listening_field_not_allowed`.
 - [ ] **AC-12** **Given** `content:import` dijalankan dua kali tanpa perubahan berkas **Then** run kedua melaporkan semua bank `NOOP`; **Given** satu soal diubah **Then** bank itu `UPDATE` dan `assessment_sets.version` naik 1.
@@ -221,7 +224,7 @@ Dibuktikan sekarang = dapat diuji otomatis dengan konten yang sudah ada (`codes/
 - `skills` memuat `LISTENING` atau `bank_kinds` memuat `LISTENING_GT_S*`: `400 VALIDATION_ERROR`, `details[].code = "invalid_value"`.
 - `difficulty_min > difficulty_max`: `400 VALIDATION_ERROR`, `details[0].code = "difficulty_range_invalid"`.
 - `count` di luar 5-40 atau non-integer: `400 VALIDATION_ERROR`, `details[0].code = "too_small"`/`"too_big"`/`"invalid_type"`.
-- Bank Reading terpilih tetapi tidak muat dalam `count`: teks dibawa utuh dan soal dipotong per paket (D5.4).
+- Bank Reading terpilih tetapi tidak muat dalam `count`: paket tetap dibawa utuh (teks + semua soal paketnya) dan jumlah soal akhir dapat melebihi `count` (D5.4); paket tidak pernah dipotong.
 - Bank non-`PUBLISHED` atau `pending_audio` tidak pernah terpilih.
 - Pengguna tanpa riwayat/radar: `AUTO_WEAKNESS` memakai bobot seragam (D5.3).
 - Attempt `MIX_PRACTICE` milik profil lain diakses: `404 NOT_FOUND`.
@@ -242,21 +245,24 @@ Dibuktikan sekarang = dapat diuji otomatis dengan konten yang sudah ada (`codes/
 | Konten bank awal (AC-2) | in_progress | berkas ada dari ADR-004; belum diaudit terhadap AC-2 |
 | Tes (unit, integrasi, guards, E2E) | not_started | |
 
-## Keputusan Analyst — perlu konfirmasi human
+## Keputusan Analyst (butir 1, 2, 3, 5 disetujui human 2026-11-08; butir 4 dan 6 MENUNGGU konfirmasi human)
 1. Sesi `MIX_PRACTICE` tidak memberi poin/mahkota/streak (`points_awarded=0`).
 2. Memulai sesi campuran baru otomatis mem-`ABANDON` sesi campuran `IN_PROGRESS` lama (bukan error).
 3. Bank Listening tidak dapat dipilih di Mix Builder pada versi ini.
-4. Bobot `AUTO_WEAKNESS`: `W_skill = max(9.0 - estimated_band, 0.5)`; skill tanpa skor memakai rata-rata gap skill lain; tipe non-objektif (Writing/Speaking) berbobot tipe 1.
+4. [menunggu konfirmasi human] Bobot `AUTO_WEAKNESS`: `W_skill = max(9.0 - estimated_band, 0.5)`; skill tanpa skor memakai rata-rata gap skill lain; tipe non-objektif (Writing/Speaking) berbobot tipe 1.
 5. Soal tanpa `difficulty` dianggap tingkat 3 untuk filter kesulitan.
-6. Kolom `attempts.assessment_type` ditambahkan (draf lama menganggapnya sudah ada), dan `attempt_sections.section_name` tidak dibuat (diganti `skill`).
+6. [menunggu konfirmasi human; konsekuensi teknis] Kolom `attempts.assessment_type` ditambahkan (draf lama menganggapnya sudah ada), dan `attempt_sections.section_name` tidak dibuat (diganti `skill`).
 
 ## Human Approval
 - [x] Disetujui human (2026-11-08) — substansi produk
-- [ ] Konfirmasi human atas revisi teknis 2026-11-08 (butir "Keputusan Analyst")
+- [x] Human mengonfirmasi butir "Keputusan Analyst" apa adanya (2026-11-08, via AskUserQuestion); koreksi AC-9 vs D4: D4 menang
 
 ## Revision History
 | Timestamp | Agen | Perubahan |
 |-----------|------|-----------|
 | 2026-11-08 | Orchestrator | Draft awal |
 | 2026-11-08 | Human | Draf disetujui apa adanya (build-feature, depth standard) |
+| 2026-11-08 | Backend | Aditif (permintaan Frontend, change-management): `GET /mix-sessions/active`; `passage_index` pada soal publik; judul bermakna dan `time_limit_seconds = 0` terdokumentasi pada `GET /attempts/{id}` `MIX_PRACTICE`; kode galat validasi `mix-sessions` dipetakan ke token spec (`too_small`/`too_big`/`invalid_value`/`difficulty_range_invalid`); kode validator `variant_slot_id` diganti `id_reads_as_variant_slot` dan ditambah `passage_without_text` (AC-1) |
 | 2026-11-08 | Analyst | Revisi teknis menyelaraskan SPEC-025/ADR-005 (niat produk tidak diubah): hapus rujukan `/admin/*` dan importer admin (diganti CLI `bank:validate` + `content:import`); `Depends on` SPEC-019/020 diganti SPEC-025; migrasi Postgres `0009` diganti `0002` SQLite dengan rebuild tabel `assessment_sets`, `attempts`, `attempt_sections` (dijadwalkan SEKALI di sini untuk 021/023) dan aturan migrator `foreign_keys=off`; tipe Postgres (`text[]`, enum) dipetakan ke SQLite; tambah `attempts.assessment_type`; definisi AUTO_WEAKNESS lengkap (bobot skill tanpa skor, tipe non-objektif), paket Reading, batas Writing/Speaking, skema `state` `mix.v1`; API Contract penuh (`GET /banks`, `POST /mix-sessions`, perluasan attempt); kontrak bank Listening (`listening_asset_code`, `pending_audio`) untuk SPEC-024; AC diperluas dari 6 ke 16 (pemetaan: AC lama 1 -> AC-1, 2 -> AC-2, 3 -> AC-3/4/6, 4 -> AC-7, 5 -> AC-8, 6 -> AC-15); tambah Status Implementasi dan "Keputusan Analyst" |
+| 2026-11-08 | Analyst | Atas keputusan human: butir "Keputusan Analyst" disetujui apa adanya (label diubah); AC-9 vs D4 diselesaikan dengan D4 menang: paket Reading selalu utuh (teks + semua soal `passage_no`), tidak dipotong; jumlah soal akhir dapat melebihi `count`, `passage_count` = jumlah paket terbawa; D5.4, `question_count` pada respons, AC-9, dan edge case disesuaikan. Tidak ada perubahan path/field pada `_api-contract.md` (hanya semantik `question_count`) |
+| 2026-11-08 | Orchestrator | Koreksi catatan persetujuan: hanya butir 1, 2, 3, 5 yang ditampilkan dan disetujui human; butir 4 (bobot AUTO_WEAKNESS) dan 6 (skema) menunggu konfirmasi |
