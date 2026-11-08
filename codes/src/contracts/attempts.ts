@@ -52,6 +52,8 @@ export const QuestionPublicSchema = z.object({
       prep_seconds: z.number().int().optional(),
       record_seconds: z.number().int().optional(),
       cue_points: z.array(z.string()).optional(),
+      /** Prompt siap-salin untuk AI suara pihak ketiga (hanya soal Speaking). */
+      external_prompt: z.string().optional(),
       stimulus_url: z.string().optional(),
     })
     .nullable(),

@@ -39,8 +39,9 @@ export async function getActiveTable(db: DbOrTx, skill: BandSkillName): Promise<
 export async function getActiveTables(db: DbOrTx) {
   const listening = await getActiveTable(db, 'LISTENING');
   const reading = await getActiveTable(db, 'READING_ACADEMIC');
+  const general = await getActiveTable(db, 'READING_GENERAL');
   const dto = (t: BandTable) => ({ table_id: t.tableId, version_label: t.versionLabel, source_note: t.sourceNote, rows: t.rows });
-  return { listening: dto(listening), reading_academic: dto(reading), disclaimer: 'Perkiraan latihan, bukan skor resmi IELTS.' };
+  return { listening: dto(listening), reading_academic: dto(reading), reading_general: dto(general), disclaimer: 'Perkiraan latihan, bukan skor resmi IELTS.' };
 }
 
 const usedCount = sql<number>`(SELECT count(*)::int FROM attempts a WHERE a.band_table_id = "band_conversion_tables"."id")`;

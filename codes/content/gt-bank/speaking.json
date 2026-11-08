@@ -1,0 +1,254 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-SPK-P1",
+      "bank_kind": "SPEAKING_P1",
+      "title": "Speaking Part 1: Wawancara (topik sehari-hari)",
+      "skill": "SPEAKING",
+      "tags": [
+        "interview",
+        "familiar-topics"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTSPK1-001",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about your hometown. Where is your hometown, and what do you like most about living there?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-002",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about your work or studies. What do you do, and what do you enjoy most about it?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-003",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about your home. What type of accommodation do you live in, and which room do you spend most time in?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-004",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about your daily routine. What does a typical weekday look like for you?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-005",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about food. What kinds of food do you like to cook or eat at home?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-006",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about transport. How do you usually travel around your town or city, and why?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-007",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about shopping. Do you prefer shopping in stores or online? Why?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-008",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about free time. What do you like to do in your free time, and has this changed since you were a child?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-009",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about the weather. What is the weather usually like where you live, and how does it affect what you do?",
+          "part": 1,
+          "difficulty": 1
+        }
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN"
+    },
+    {
+      "bank_code": "GT-SPK-P2",
+      "bank_kind": "SPEAKING_P2",
+      "title": "Speaking Part 2: Cue Card",
+      "skill": "SPEAKING",
+      "tags": [
+        "cue-card",
+        "long-turn"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTSPK2-001",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a person who has helped you in your life.",
+          "part": 2,
+          "difficulty": 2,
+          "cue_points": [
+            "who this person is",
+            "how you know them",
+            "how they helped you",
+            "and explain why you are grateful to them"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-002",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a place you visited that you would recommend to others.",
+          "part": 2,
+          "difficulty": 2,
+          "cue_points": [
+            "where it is",
+            "when you went there",
+            "what you did there",
+            "and explain why you would recommend it"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-003",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a time when you had to wait for something important.",
+          "part": 2,
+          "difficulty": 3,
+          "cue_points": [
+            "what you were waiting for",
+            "how long you waited",
+            "what you did while waiting",
+            "and explain how you felt about it"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-004",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a useful object you have at home.",
+          "part": 2,
+          "difficulty": 2,
+          "cue_points": [
+            "what it is",
+            "how long you have had it",
+            "how you use it",
+            "and explain why it is useful to you"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-005",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe an event in your community that you enjoyed.",
+          "part": 2,
+          "difficulty": 3,
+          "cue_points": [
+            "what the event was",
+            "where and when it took place",
+            "who you went with",
+            "and explain why you enjoyed it"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-006",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a skill you would like to learn in the future.",
+          "part": 2,
+          "difficulty": 3,
+          "cue_points": [
+            "what the skill is",
+            "why you want to learn it",
+            "how you would learn it",
+            "and explain how it would help you"
+          ]
+        }
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN"
+    },
+    {
+      "bank_code": "GT-SPK-P3",
+      "bank_kind": "SPEAKING_P3",
+      "title": "Speaking Part 3: Diskusi",
+      "skill": "SPEAKING",
+      "tags": [
+        "discussion",
+        "abstract"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTSPK3-001",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Why do some people find it difficult to ask other people for help?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-002",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "How has the way people travel for holidays changed over the last few decades?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-003",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Do you think people have become less patient than in the past? Why?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-004",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "What role do local events play in bringing a community together?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-005",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Should schools teach practical skills, such as cooking or managing money? Why?",
+          "part": 3,
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-GTSPK3-006",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "How do you think technology will change the way people work in the future?",
+          "part": 3,
+          "difficulty": 5
+        }
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN"
+    }
+  ]
+}

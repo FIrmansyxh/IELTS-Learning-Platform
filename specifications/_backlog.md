@@ -32,6 +32,10 @@
 | 016 | Learner dapat mahkota, poin, speed streak, streak harian | TRK-03 | P1 | Should | 001, 003, 005, 006, 014 | M |
 | 017 | Learner lihat radar 6 sumbu, prediksi band, riwayat ujian | TRK-02 | P0 | Must | 006, 007, 009, 012, 013, 014 | L |
 | 020 | Admin kurasi status, sunting konten, revisi, kualitas soal | Review (OQ konten AI) | P1 | Should | 002, 004, 018, 019 | L |
+| 021 | Learner pilih jalur belajar (susunan + gaya penyampaian berbeda) | ADR-004 (draft, menunggu approval) | P1 | Should | 003, 004, 005, 007 | L |
+| 022 | Learner latihan dari banyak bank soal yang dicampur (manual/otomatis) | ADR-004 (draft, menunggu approval) | P1 | Should | 004, 006, 017, 019, 020 | L |
+| 023 | Learner memilih section (L/R/W/S) untuk simulasi tes IELTS GT dengan band per section | ADR-004 (draft, menunggu approval) | P1 | Should | 006, 009, 011, 012, 014, 022, 024 | XL |
+| 024 | Konten Listening GT: skrip, audio TTS lokal, aset audio | ADR-004 (draft, menunggu approval) | P1 | Should | 004, 011, 018, 022 | L |
 
 Catatan prioritas: 014 berlabel P0 (gerbang Tier) tetapi bergantung pada 012/013 (P1) hanya untuk section Writing/Speaking; Boss tetap dapat dirilis dengan set yang berisi hanya Listening + Reading (SPEC-014 Edge Case). Bila jadwal terdesak, 012/013 dapat bergeser setelah 014 tanpa mengubah kontrak.
 
@@ -47,6 +51,7 @@ Catatan prioritas: 014 berlabel P0 (gerbang Tier) tetapi bergantung pada 012/013
 | W6 | 7-8 | 012, 013 | AI Writing dan Speaking (setelah benchmark C-09) |
 | W7 | 8-9 | 014, 015 | Boss Stage dan Placement |
 | W8 | 9-10 | 016, 017, 020 | Gamifikasi, radar + prediksi, kurasi |
+| W9 | pasca-MVP | 022 (kontrak + bank konten), 024, 023, 021 | Bank soal GT modular lebih dulu (konten dapat divalidasi tanpa DB), lalu Mix Builder dan jalur belajar. Keduanya draft sampai disetujui human (ADR-004) |
 Urutan nomor spec = urutan penerbitan; urutan build memajukan 018 dan 019 (W4) tetapi tetap sesudah dependensinya (001, 002, 004). Konten Tier 1-4 massal (C-01..C-04) berjalan paralel mulai W4.
 
 ## 3. Pekerjaan Non-Kode (Konten dan Ops)

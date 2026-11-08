@@ -15,15 +15,15 @@ const db = getDb();
 /* eslint-disable @typescript-eslint/no-explicit-any */
 afterAll(async () => {
   await db.execute(sql`DELETE FROM attempts WHERE band_table_id IS NOT NULL`);
-  await db.execute(sql`DELETE FROM band_conversion_tables WHERE version_label <> 'v1-umum-2026-11'`);
-  await db.execute(sql`UPDATE band_conversion_tables SET is_active = (version_label = 'v1-umum-2026-11')`);
+  await db.execute(sql`DELETE FROM band_conversion_tables WHERE version_label NOT IN ('v1-umum-2026-11', 'v1-gt-2026-11')`);
+  await db.execute(sql`UPDATE band_conversion_tables SET is_active = (version_label IN ('v1-umum-2026-11', 'v1-gt-2026-11'))`);
   await closeDb();
 });
 beforeEach(async () => {
   resetRateLimits();
   await db.execute(sql`DELETE FROM attempts WHERE band_table_id IS NOT NULL`);
-  await db.execute(sql`DELETE FROM band_conversion_tables WHERE version_label <> 'v1-umum-2026-11'`);
-  await db.execute(sql`UPDATE band_conversion_tables SET is_active = (version_label = 'v1-umum-2026-11')`);
+  await db.execute(sql`DELETE FROM band_conversion_tables WHERE version_label NOT IN ('v1-umum-2026-11', 'v1-gt-2026-11')`);
+  await db.execute(sql`UPDATE band_conversion_tables SET is_active = (version_label IN ('v1-umum-2026-11', 'v1-gt-2026-11'))`);
 });
 
 const create = (cookie: string | null, body: unknown) => call(createRoute, 'POST', '/api/v1/admin/band-tables', { cookie, body });
@@ -37,11 +37,11 @@ const activeCount = async (skill: string) => Number((await db.execute(sql`SELECT
 const audit = async (action: string, id: string) => Number((await db.execute(sql`SELECT count(*)::int AS n FROM audit_log WHERE action = ${action} AND entity_id = ${id}`)).rows[0]!.n);
 
 describe('seed', () => {
-  it('tepat 1 tabel aktif per skill berlabel v1-umum-2026-11, 17 baris menutup 0..40 tanpa celah', async () => {
-    for (const skill of ['LISTENING', 'READING_ACADEMIC']) {
+  it('tepat 1 tabel aktif per skill (Listening/Academic v1-umum, General v1-gt), 17 baris menutup 0..40 tanpa celah', async () => {
+    for (const skill of ['LISTENING', 'READING_ACADEMIC', 'READING_GENERAL']) {
       const t = (await db.execute(sql`SELECT id, version_label, is_active, source_note, effective_from FROM band_conversion_tables WHERE skill = ${skill}::band_table_skill AND is_active`)).rows as any[];
       expect(t).toHaveLength(1);
-      expect(t[0].version_label).toBe('v1-umum-2026-11');
+      expect(t[0].version_label).toBe(skill === 'READING_GENERAL' ? 'v1-gt-2026-11' : 'v1-umum-2026-11');
       expect(t[0].source_note).toContain('Perkiraan');
       expect(t[0].effective_from).not.toBeNull();
       const rows = (await db.execute(sql`SELECT raw_min, raw_max FROM band_conversion_rows WHERE table_id = ${t[0].id}::uuid ORDER BY raw_min`)).rows as any[];
@@ -66,8 +66,8 @@ describe('seed', () => {
     const { seedModules } = await import('../../scripts/seed');
     const mod = seedModules.find((m) => m.name === 'band-tables')!;
     await db.transaction(async (tx) => mod.run(tx as never));
-    expect(Number((await db.execute(sql`SELECT count(*)::int AS n FROM band_conversion_tables`)).rows[0]!.n)).toBe(2);
-    expect(Number((await db.execute(sql`SELECT count(*)::int AS n FROM band_conversion_rows`)).rows[0]!.n)).toBe(34);
+    expect(Number((await db.execute(sql`SELECT count(*)::int AS n FROM band_conversion_tables`)).rows[0]!.n)).toBe(3);
+    expect(Number((await db.execute(sql`SELECT count(*)::int AS n FROM band_conversion_rows`)).rows[0]!.n)).toBe(51);
   });
 });
 
@@ -80,6 +80,8 @@ describe('GET /band-tables/active', () => {
     const d = r.json.data;
     expect(d.listening.rows).toHaveLength(17);
     expect(d.reading_academic.rows).toHaveLength(17);
+    expect(d.reading_general.rows).toHaveLength(17);
+    expect(d.reading_general.version_label).toBe('v1-gt-2026-11');
     expect(d.listening.rows.map((x: any) => x.raw_min)).toEqual([...d.listening.rows.map((x: any) => x.raw_min)].sort((a, b) => a - b));
     expect(d.listening.version_label).toBe('v1-umum-2026-11');
     expect(d.disclaimer).toBe('Perkiraan latihan, bukan skor resmi IELTS.');
@@ -147,7 +149,7 @@ describe('POST /admin/band-tables', () => {
     expect(r.status).toBe(400);
     expect(r.json.error.code).toBe('VALIDATION_ERROR');
     expect(r.json.error.details.map((d: any) => d.code)).toContain(code);
-    expect(Number((await db.execute(sql`SELECT count(*)::int AS n FROM band_conversion_tables`)).rows[0]!.n)).toBe(2);
+    expect(Number((await db.execute(sql`SELECT count(*)::int AS n FROM band_conversion_tables`)).rows[0]!.n)).toBe(3);
   });
 
   it('kunci tak dikenal -> unrecognized_key; label hanya spasi -> 400; skill tak valid -> 400', async () => {
@@ -180,7 +182,7 @@ describe('GET /admin/band-tables', () => {
     const all = await list(a.cookie);
     expect(all.status).toBe(200);
     expect(BandTableListResponseSchema.safeParse(all.json).success).toBe(true);
-    expect(all.json.data).toHaveLength(3);
+    expect(all.json.data).toHaveLength(4);
     const reading = await list(a.cookie, '?skill=READING_ACADEMIC');
     expect(reading.json.data).toHaveLength(2);
     expect(reading.json.data.find((t: any) => t.version_label === 'v2-contoh')).toMatchObject({ is_active: false, row_count: 3, used_by_attempts: 0 });

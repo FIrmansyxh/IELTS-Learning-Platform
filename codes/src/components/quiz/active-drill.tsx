@@ -265,6 +265,7 @@ export function ActiveDrill({
           onChange={setResponse}
           disabled={isAnswered || busy !== null}
           feedback={feedback}
+          attemptId={attempt.id}
         />
       </div>
 

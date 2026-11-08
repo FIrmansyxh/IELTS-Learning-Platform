@@ -84,7 +84,7 @@ export function EvaluationCard({
           <span className="font-medium">{disclaimer || id.ai.disclaimer}</span>
         </div>
         <span className="text-[11px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded bg-amber-200/60 dark:bg-amber-900/60">
-          {isSelf ? 'Self-Assessment' : 'AI Local'}
+          {method === 'EXTERNAL_AI' ? 'AI Eksternal (input manual)' : isSelf ? 'Self-Assessment' : 'AI Local'}
         </span>
       </div>
 

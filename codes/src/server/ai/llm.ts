@@ -1,5 +1,5 @@
 /**
- * Klien LLM untuk penilaian AI lokal (Ollama / Mock) (SPEC-012).
+ * Klien LLM untuk penilaian AI lokal (llama.cpp / Ollama / Mock) (SPEC-012, ADR-004).
  */
 
 export interface LlmRequest {
@@ -84,6 +84,72 @@ export class OllamaClient implements LlmClient {
   }
 }
 
+/**
+ * Klien llama.cpp `llama-server` (ADR-004): API OpenAI-compatible di loopback.
+ * Keluaran terstruktur dipaksa lewat `response_format.json_schema` (grammar bawaan llama.cpp).
+ */
+export class LlamaCppClient implements LlmClient {
+  readonly name: string;
+  private readonly baseUrl: string;
+  private readonly model: string;
+
+  constructor(opts?: { baseUrl?: string; model?: string }) {
+    this.baseUrl = opts?.baseUrl ?? process.env.LLAMACPP_BASE_URL ?? 'http://127.0.0.1:8080';
+    // llama-server melayani satu model; nama hanya label di log/audit.
+    this.model = opts?.model ?? process.env.LLAMACPP_MODEL_WRITING ?? 'qwen2.5-7b-instruct-q4_k_m';
+    this.name = this.model;
+  }
+
+  async ping(): Promise<boolean> {
+    try {
+      const res = await fetch(new URL('/health', this.baseUrl), { signal: AbortSignal.timeout(2000) });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  async generate(req: LlmRequest): Promise<LlmResponse> {
+    const started = Date.now();
+    const timeout = req.timeoutMs ?? Number(process.env.AI_JOB_TIMEOUT_SEC ?? 120) * 1000;
+
+    const payload: Record<string, unknown> = {
+      model: this.model,
+      stream: false,
+      temperature: req.temperature ?? 0.2,
+      max_tokens: req.numPredict ?? 1500,
+      messages: [
+        { role: 'system', content: req.systemPrompt },
+        { role: 'user', content: req.userPrompt },
+      ],
+    };
+
+    if (req.schema) {
+      payload.response_format = {
+        type: 'json_schema',
+        json_schema: { name: 'evaluation', strict: true, schema: req.schema },
+      };
+    }
+
+    const res = await fetch(new URL('/v1/chat/completions', this.baseUrl), {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(timeout),
+    });
+
+    if (!res.ok) {
+      throw new Error(`llama.cpp API error: ${res.status} ${res.statusText}`);
+    }
+
+    const body = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+    return {
+      content: body?.choices?.[0]?.message?.content ?? '',
+      latencyMs: Date.now() - started,
+    };
+  }
+}
+
 export class MockLlmClient implements LlmClient {
   readonly name = 'mock-llm-model';
 
@@ -155,11 +221,14 @@ let activeLlmClient: LlmClient | undefined;
 
 export function getLlmClient(): LlmClient {
   if (activeLlmClient) return activeLlmClient;
-  const driver = process.env.LLM_DRIVER ?? (process.env.NODE_ENV === 'test' ? 'mock' : 'ollama');
+  const driver = process.env.LLM_DRIVER ?? (process.env.NODE_ENV === 'test' ? 'mock' : 'llamacpp');
   if (driver === 'mock') {
     return new MockLlmClient();
   }
-  return new OllamaClient();
+  if (driver === 'ollama') {
+    return new OllamaClient();
+  }
+  return new LlamaCppClient();
 }
 
 export function setLlmClient(client: LlmClient | undefined): void {

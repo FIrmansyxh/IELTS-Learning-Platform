@@ -12,6 +12,7 @@ import {
   users,
 } from '@/db/schema';
 import type { Db } from '../db';
+import { config } from '../config';
 import { ApiError, notFound } from '../http/errors';
 import { logger } from '../logger';
 import { writeAudit } from '../audit';
@@ -20,6 +21,7 @@ import { safeErr } from '../safe-error';
 import { getLlmClient } from './llm';
 import { countWords, roundToHalfBand } from './scoring';
 import { processWritingEvaluation } from './pipeline';
+import { evaluationGradedHooks } from './hooks';
 import {
   processSpeakingEvaluation,
   processSttTranscription,
@@ -27,6 +29,7 @@ import {
 import type {
   CreateWritingSubmissionRequest,
   EvaluationDTO,
+  ExternalSpeakingEvaluationRequest,
   JobDTO,
   RecordingDTO,
   SubmissionDTO,
@@ -135,14 +138,15 @@ export async function createWritingSubmission(
       .where(eq(assessmentSets.id, attempt.assessmentSetId))
       .limit(1);
 
-    const questions = (setRow?.questionsJson ?? []) as Array<{ id: string; question_type: string; task_kind?: string; prompt?: string; part?: number }>;
-    const foundQuestion = questions.find((q) => q.id === input.question_id) ?? null;
+    // Soal tersimpan dalam bentuk kontrak konten (`question_id`, `task_kind` = TASK1|TASK2).
+    const questions = (setRow?.questionsJson ?? []) as Array<{ question_id?: string; id?: string; question_type: string; task_kind?: string; prompt?: string; part?: number }>;
+    const foundQuestion = questions.find((q) => (q.question_id ?? q.id) === input.question_id) ?? null;
 
     if (!foundQuestion) throw notFound();
     if (foundQuestion.question_type !== 'WRITING_TASK') {
       throw new ApiError('QUESTION_TYPE_MISMATCH');
     }
-    if (foundQuestion.task_kind && foundQuestion.task_kind !== input.kind) {
+    if (foundQuestion.task_kind && `WRITING_${foundQuestion.task_kind}` !== input.kind) {
       throw new ApiError('QUESTION_TYPE_MISMATCH');
     }
     promptSnapshot = foundQuestion.prompt ?? 'Writing Task Prompt';
@@ -329,6 +333,14 @@ export async function createSpeakingSubmission(
   input: CreateSpeakingSubmissionInput,
   audioBuffer: Buffer,
 ): Promise<{ submission: SubmissionDTO; quota: SubmissionQuotaDTO }> {
+  // 0. MVP (ADR-004): penilaian Speaking otomatis dimatikan; latihan Speaking memakai prompt AI eksternal.
+  if (!config.speakingAiEnabled()) {
+    throw new ApiError('AI_DISABLED', {
+      status: 409,
+      message: 'Penilaian Speaking otomatis belum aktif. Gunakan prompt latihan untuk AI suara (Claude, GPT, atau Gemini).',
+    });
+  }
+
   // 1. Periksa consent rekaman
   const [userRow] = await db
     .select({
@@ -428,8 +440,8 @@ export async function createSpeakingSubmission(
       .where(eq(assessmentSets.id, attempt.assessmentSetId))
       .limit(1);
 
-    const questions = (setRow?.questionsJson ?? []) as Array<{ id: string; question_type: string; part?: number; prompt?: string }>;
-    const foundQuestion = questions.find((q) => q.id === input.question_id) ?? null;
+    const questions = (setRow?.questionsJson ?? []) as Array<{ question_id?: string; id?: string; question_type: string; part?: number; prompt?: string }>;
+    const foundQuestion = questions.find((q) => (q.question_id ?? q.id) === input.question_id) ?? null;
 
     if (!foundQuestion) throw notFound();
     if (foundQuestion.question_type !== 'SPEAKING_TASK') {
@@ -950,6 +962,12 @@ export async function getSubmission(
         low_audio_quality: false,
       },
       model_name: evalRow.modelName,
+      ...(evalRow.method === 'EXTERNAL_AI'
+        ? {
+            external_tool: (feedback?.external_tool as string | undefined) ?? null,
+            external_feedback: (feedback?.external_feedback_text as string | undefined) ?? null,
+          }
+        : {}),
       disclaimer: 'Perkiraan latihan, bukan skor resmi IELTS.',
       created_at: evalRow.createdAt.toISOString(),
     };
@@ -1213,6 +1231,172 @@ export async function selfAssessSubmission(
     submission: updatedSub,
     evaluation: updatedSub.evaluation!,
   };
+}
+
+/**
+ * ADR-004 / SPEC-013 addendum: mencatat skor Speaking yang dinilai AI pihak ketiga (Claude/GPT/Gemini) dan
+ * dimasukkan manual oleh pengguna. Overall SELALU dihitung server dari 4 kriteria. Tanpa berkas audio dan tanpa
+ * kuota AI. Mengirim ulang untuk konteks yang sama menambah `run_number` (nilai terbaru dipakai).
+ */
+export async function recordExternalSpeakingEvaluation(
+  db: Db,
+  userId: string,
+  input: ExternalSpeakingEvaluationRequest,
+): Promise<{ submission: SubmissionDTO; evaluation: EvaluationDTO }> {
+  const isMini = input.kind === 'MINI_TASK_SPEAKING';
+  let promptSnapshot = '';
+  let existingId: string | null = null;
+
+  if (isMini) {
+    if (!input.sub_module_id) {
+      throw new ApiError('VALIDATION_ERROR', { details: [{ path: 'sub_module_id', code: 'sub_module_required', message: 'Sub-modul wajib untuk Mini-Task.' }] });
+    }
+    if (input.attempt_id || input.question_id) {
+      throw new ApiError('VALIDATION_ERROR', { details: [{ path: 'attempt_id', code: 'unexpected_field', message: 'Attempt tidak boleh diisi untuk Mini-Task.' }] });
+    }
+    const [subMod] = await db.select({ id: subModules.id }).from(subModules).where(eq(subModules.id, input.sub_module_id)).limit(1);
+    if (!subMod) throw notFound();
+
+    const [mat] = await db
+      .select({ miniTaskJson: learningMaterials.miniTaskJson })
+      .from(learningMaterials)
+      .where(eq(learningMaterials.subModuleId, input.sub_module_id))
+      .limit(1);
+    const miniTask = mat?.miniTaskJson as { task_type?: string; prompt?: string } | null;
+    if (!miniTask || miniTask.task_type !== 'AI_SHORT_SPEAKING') throw new ApiError('MINI_TASK_TYPE_MISMATCH');
+    promptSnapshot = miniTask.prompt ?? 'Mini-Task Speaking';
+
+    const access = await assertSubModuleAccessible(db, userId, input.sub_module_id);
+    if (!access.progress.learnCompleted) throw new ApiError('LEARN_NOT_COMPLETED');
+
+    const [prev] = await db
+      .select({ id: submissions.id })
+      .from(submissions)
+      .where(and(eq(submissions.userId, userId), eq(submissions.subModuleId, input.sub_module_id), eq(submissions.kind, 'MINI_TASK_SPEAKING'), sql`${submissions.status} <> 'FAILED'`))
+      .orderBy(desc(submissions.createdAt))
+      .limit(1);
+    existingId = prev?.id ?? null;
+  } else {
+    if (!input.attempt_id) {
+      throw new ApiError('VALIDATION_ERROR', { details: [{ path: 'attempt_id', code: 'attempt_required', message: 'Attempt wajib untuk tugas speaking.' }] });
+    }
+    if (!input.question_id) {
+      throw new ApiError('VALIDATION_ERROR', { details: [{ path: 'question_id', code: 'question_required', message: 'Soal wajib untuk tugas speaking.' }] });
+    }
+    if (input.sub_module_id) {
+      throw new ApiError('VALIDATION_ERROR', { details: [{ path: 'sub_module_id', code: 'unexpected_field', message: 'Sub-modul tidak boleh diisi untuk tugas speaking.' }] });
+    }
+
+    const [attempt] = await db
+      .select({ userId: attempts.userId, assessmentSetId: attempts.assessmentSetId })
+      .from(attempts)
+      .where(eq(attempts.id, input.attempt_id))
+      .limit(1);
+    if (!attempt || attempt.userId !== userId) throw notFound();
+
+    const [setRow] = await db
+      .select({ questionsJson: assessmentSets.questionsJson })
+      .from(assessmentSets)
+      .where(eq(assessmentSets.id, attempt.assessmentSetId))
+      .limit(1);
+    const questions = (setRow?.questionsJson ?? []) as Array<{ question_id?: string; id?: string; question_type: string; part?: number; prompt?: string }>;
+    const found = questions.find((q) => (q.question_id ?? q.id) === input.question_id) ?? null;
+    if (!found) throw notFound();
+    if (found.question_type !== 'SPEAKING_TASK') throw new ApiError('QUESTION_TYPE_MISMATCH');
+    const expectedPart = parseInt(input.kind.replace('SPEAKING_PART', ''), 10);
+    if (found.part && found.part !== expectedPart) throw new ApiError('QUESTION_TYPE_MISMATCH');
+    promptSnapshot = found.prompt ?? 'Speaking Task Prompt';
+
+    const [prev] = await db
+      .select({ id: submissions.id })
+      .from(submissions)
+      .where(and(eq(submissions.userId, userId), eq(submissions.attemptId, input.attempt_id), eq(submissions.questionId, input.question_id), sql`${submissions.status} <> 'FAILED'`))
+      .orderBy(desc(submissions.createdAt))
+      .limit(1);
+    existingId = prev?.id ?? null;
+  }
+
+  const scores = input.criteria_scores;
+  const overallBand = roundToHalfBand((scores.fluency + scores.lexical + scores.grammar + scores.pronunciation) / 4);
+  const now = new Date();
+  const submissionId = existingId ?? randomUUID();
+  const evalId = randomUUID();
+
+  await db.transaction(async (tx) => {
+    if (!existingId) {
+      await tx.insert(submissions).values({
+        id: submissionId,
+        userId,
+        kind: input.kind,
+        status: 'GRADED',
+        attemptId: input.attempt_id ?? null,
+        subModuleId: input.sub_module_id ?? null,
+        questionId: input.question_id ?? null,
+        promptSnapshot,
+        responseText: null,
+        wordCount: null,
+        durationSec: null,
+        createdAt: now,
+        updatedAt: now,
+      });
+    } else {
+      await tx.update(submissions).set({ status: 'GRADED', updatedAt: now }).where(eq(submissions.id, submissionId));
+    }
+
+    const [latest] = await tx
+      .select({ runNumber: aiEvaluations.runNumber })
+      .from(aiEvaluations)
+      .where(eq(aiEvaluations.submissionId, submissionId))
+      .orderBy(desc(aiEvaluations.runNumber))
+      .limit(1);
+
+    await tx.insert(aiEvaluations).values({
+      id: evalId,
+      submissionId,
+      runNumber: (latest?.runNumber ?? 0) + 1,
+      method: 'EXTERNAL_AI',
+      rubricId: null,
+      modelName: `external:${input.tool.toLowerCase()}`,
+      promptVersion: 'ext-speaking.v1',
+      outputSchemaVersion: '1',
+      overallBand: String(overallBand),
+      criteriaScores: scores,
+      feedbackJson: {
+        strengths_id: [],
+        improvements_id: [],
+        corrections: [],
+        band7_rewrite: null,
+        task_requirement_met: true,
+        external_tool: input.tool,
+        external_feedback_text: input.feedback_text ?? null,
+        flags: {
+          injection_suspected: false,
+          score_capped: false,
+          cap_reason: null,
+          high_band_capped: false,
+          non_english_suspected: false,
+          overall_recomputed: true,
+          pronunciation_estimated: false,
+          low_audio_quality: false,
+        },
+      },
+      rawOutput: null,
+      latencyMs: 0,
+      disclaimerAcknowledged: true,
+      createdAt: now,
+    });
+
+    if (isMini && input.sub_module_id) {
+      await completeAiMiniTask(tx, userId, input.sub_module_id);
+    }
+
+    for (const hook of evaluationGradedHooks) {
+      await hook({ tx, userId, submissionId, evaluationId: evalId, kind: 'SPEAKING' });
+    }
+  });
+
+  const updated = await getSubmission(db, userId, submissionId);
+  return { submission: updated, evaluation: updated.evaluation! };
 }
 
 export async function getAiStatus(db: Db, userId: string) {

@@ -1,0 +1,1 @@
+ALTER TYPE "public"."band_table_skill" ADD VALUE 'READING_GENERAL';

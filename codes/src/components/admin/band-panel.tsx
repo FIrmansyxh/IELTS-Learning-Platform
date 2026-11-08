@@ -56,7 +56,7 @@ function CreateSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: 
   const copy = useMutation({
     mutationFn: () => bandApi.active(),
     onSuccess: (data) => {
-      const table = skill === 'LISTENING' ? data.listening : data.reading_academic;
+      const table = skill === 'LISTENING' ? data.listening : skill === 'READING_GENERAL' ? data.reading_general : data.reading_academic;
       setRows(table.rows.map((r) => ({ raw_min: String(r.raw_min), raw_max: String(r.raw_max), band: String(r.band) })));
     },
     onError: () => toast.error(t.copyFailed),
@@ -105,6 +105,7 @@ function CreateSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: 
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="LISTENING">{t.skills.LISTENING}</SelectItem>
+                <SelectItem value="READING_GENERAL">{t.skills.READING_GENERAL}</SelectItem>
                 <SelectItem value="READING_ACADEMIC">{t.skills.READING_ACADEMIC}</SelectItem>
               </SelectContent>
             </Select>

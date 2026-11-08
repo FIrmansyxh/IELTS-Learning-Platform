@@ -25,6 +25,8 @@
     "user:reset-password": "tsx scripts/reset-password.ts --email",
     "content:validate": "tsx scripts/content-import.ts validate --dir",
     "content:import": "tsx scripts/content-import.ts import --dir",
+    "bank:validate": "tsx scripts/bank-validate.ts --dir",
+    "bench:gt": "tsx scripts/bench-gt-writing.mts",
     "bench:ai": "node scripts/bench-ai.mjs",
     "format": "prettier --write ."
   },

@@ -1,0 +1,297 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-GR-REGISTER",
+      "bank_kind": "GRAMMAR_GT_REGISTER",
+      "title": "Grammar GT: Register & Frasa Surat",
+      "skill": "GRAMMAR",
+      "tags": [
+        "register",
+        "letter-phrases",
+        "formal-informal"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTGR-001",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Anda menulis kepada manajer hotel yang belum pernah Anda temui. Salam pembuka yang paling tepat adalah...",
+          "difficulty": 1,
+          "explanation_id": "Penerima tidak dikenal namanya, jadi register formal: 'Dear Sir or Madam,'. 'Hi there' dan 'Hey manager' terlalu santai.",
+          "options": [
+            "Hi there,",
+            "Dear Sir or Madam,",
+            "Hey manager,",
+            "To whom I like,"
+          ],
+          "correct_answers": [
+            "Dear Sir or Madam,"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-002",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Surat dibuka dengan 'Dear Mr Patel,'. Penutup yang paling tepat adalah...",
+          "difficulty": 1,
+          "explanation_id": "Aturan Inggris Britania: nama penerima diketahui -> 'Yours sincerely,'. 'Cheers' dan 'Love' terlalu informal untuk atasan atau kenalan formal.",
+          "options": [
+            "Yours faithfully,",
+            "Yours sincerely,",
+            "Cheers,",
+            "Love,"
+          ],
+          "correct_answers": [
+            "Yours sincerely,"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-003",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Surat dibuka dengan 'Dear Sir or Madam,'. Penutup yang paling tepat adalah...",
+          "difficulty": 1,
+          "explanation_id": "Penerima tanpa nama -> 'Yours faithfully,'. Pasangan salam-penutup harus konsisten.",
+          "options": [
+            "Yours sincerely,",
+            "Best wishes,",
+            "Yours faithfully,",
+            "See you soon,"
+          ],
+          "correct_answers": [
+            "Yours faithfully,"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-004",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Anda menulis surat kepada teman dekat. Penutup yang paling wajar adalah...",
+          "difficulty": 1,
+          "explanation_id": "Surat informal cocok dengan 'Best wishes,', 'Take care,' atau 'All the best,'. Pilihan lain terlalu kaku.",
+          "options": [
+            "Yours faithfully,",
+            "Best wishes,",
+            "Respectfully yours,",
+            "Yours obediently,"
+          ],
+          "correct_answers": [
+            "Best wishes,"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-005",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Kalimat mana yang paling tepat untuk menyatakan tujuan surat keluhan formal?",
+          "difficulty": 2,
+          "explanation_id": "Pembuka formal: 'I am writing to + verba'. Pilihan lain memakai bahasa lisan/slang.",
+          "options": [
+            "I'm writing 'cause I want to complain.",
+            "I am writing to complain about the service I received.",
+            "Just wanted to moan about your shop.",
+            "So, about your service, it was bad."
+          ],
+          "correct_answers": [
+            "I am writing to complain about the service I received."
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-006",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Permintaan pengembalian uang yang paling sopan dalam surat formal adalah...",
+          "difficulty": 2,
+          "explanation_id": "Permintaan sopan memakai 'I would be grateful if you could...' atau 'Could you please...'. Bentuk perintah langsung terdengar kasar.",
+          "options": [
+            "Give me my money back now.",
+            "I would be grateful if you could refund my money.",
+            "Refund me.",
+            "You must refund me."
+          ],
+          "correct_answers": [
+            "I would be grateful if you could refund my money."
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-007",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Anda mengundang teman dekat makan malam. Kalimat mana yang paling alami?",
+          "difficulty": 2,
+          "explanation_id": "Undangan untuk teman memakai bahasa akrab ('Do you fancy...?', 'Would you like to...?'). Tiga pilihan lain terlalu resmi.",
+          "options": [
+            "I would like to extend an invitation for you to attend.",
+            "Do you fancy coming over for dinner on Saturday?",
+            "You are cordially requested to attend.",
+            "Your presence is required."
+          ],
+          "correct_answers": [
+            "Do you fancy coming over for dinner on Saturday?"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-008",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Dalam surat kepada manajer bank, kalimat mana yang TIDAK pantas karena terlalu santai?",
+          "difficulty": 2,
+          "explanation_id": "'Thanks a bunch, talk soon!' adalah bahasa percakapan antarteman. Tiga lainnya adalah frasa surat formal baku.",
+          "options": [
+            "I would like to enquire about opening an account.",
+            "I look forward to hearing from you.",
+            "Thanks a bunch, talk soon!",
+            "Please find enclosed my documents."
+          ],
+          "correct_answers": [
+            "Thanks a bunch, talk soon!"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-009",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Pada surat formal, bentuk mana yang lebih tepat?",
+          "difficulty": 2,
+          "explanation_id": "Surat formal menghindari kontraksi (can't, don't) dan kalimat tanpa subjek. 'I cannot' lebih tepat; 'ain't' tidak baku.",
+          "options": [
+            "I can't attend the meeting.",
+            "I cannot attend the meeting.",
+            "I ain't going to the meeting.",
+            "Can't come to the meeting."
+          ],
+          "correct_answers": [
+            "I cannot attend the meeting."
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-010",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Anda terlambat membayar sewa dan menulis kepada pemilik rumah yang Anda kenal (semi-formal). Pilihan terbaik adalah...",
+          "difficulty": 3,
+          "explanation_id": "Semi-formal ke pemilik rumah: sopan dan jelas ('I apologise for...'). Ungkapan 'my bad', 'whoops', 'mate' terlalu santai.",
+          "options": [
+            "Sorry about the late rent, my bad.",
+            "I apologise for the delay in paying the rent.",
+            "Whoops, forgot the rent!",
+            "Rent is late, sorry mate."
+          ],
+          "correct_answers": [
+            "I apologise for the delay in paying the rent."
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-011",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Kalimat penutup yang paling pantas untuk surat formal adalah...",
+          "difficulty": 2,
+          "explanation_id": "'I look forward to hearing from you...' adalah penutup baku. Tiga lainnya santai atau terlalu pendek.",
+          "options": [
+            "I look forward to hearing from you at your earliest convenience.",
+            "Write back asap lol.",
+            "Bye.",
+            "See ya."
+          ],
+          "correct_answers": [
+            "I look forward to hearing from you at your earliest convenience."
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-012",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Cara paling tepat membuka surat permintaan informasi kepada sebuah perusahaan adalah...",
+          "difficulty": 2,
+          "explanation_id": "'I am writing to enquire about + hal' adalah pola formal baku (enquire/inquire sama-sama benar).",
+          "options": [
+            "I am writing to enquire about your evening courses.",
+            "Tell me about your courses.",
+            "I wanna know about your courses.",
+            "What's up with your courses?"
+          ],
+          "correct_answers": [
+            "I am writing to enquire about your evening courses."
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-013",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Lengkapi penutup surat:\n'Dear Sir or Madam, ... I look forward to your reply.\nYours _______,'",
+          "difficulty": 1,
+          "explanation_id": "Salam 'Dear Sir or Madam,' dipasangkan dengan penutup 'Yours faithfully,'.",
+          "correct_answers": [
+            "faithfully"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGR-014",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Lengkapi kalimat pembuka surat formal:\n'I am writing to _______ about the damaged package that I received yesterday.'",
+          "difficulty": 2,
+          "explanation_id": "Konteks 'damaged package' menuntut tujuan keluhan: 'I am writing to complain about...'.",
+          "correct_answers": [
+            "complain"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGR-015",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "GRAMMAR",
+          "prompt": "Pilih kata yang SALAH secara tata bahasa:",
+          "difficulty": 3,
+          "explanation_id": "Setelah 'will not' kata kerja berbentuk dasar: 'will not attend', bukan 'attending'.",
+          "tokens": [
+            "I",
+            "am",
+            "writing",
+            "to",
+            "inform",
+            "you",
+            "that",
+            "I",
+            "will",
+            "not",
+            "attending",
+            "the",
+            "meeting."
+          ],
+          "correct_answers": [
+            10
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-016",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "GRAMMAR",
+          "prompt": "Pilih kata yang SALAH secara tata bahasa:",
+          "difficulty": 3,
+          "explanation_id": "Setelah 'Could you please' kata kerja berbentuk dasar: 'Could you please send', bukan 'sending'.",
+          "tokens": [
+            "Could",
+            "you",
+            "please",
+            "sending",
+            "me",
+            "the",
+            "details",
+            "before",
+            "Monday?"
+          ],
+          "correct_answers": [
+            3
+          ]
+        }
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN"
+    }
+  ]
+}

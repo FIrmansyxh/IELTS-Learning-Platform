@@ -229,12 +229,24 @@ describe('SubModulePlayer', () => {
     expect(calls.some((c) => c.url.pathname.endsWith('/mini-task/complete'))).toBe(true);
   });
 
-  it('Terapkan tipe AI: slot "Segera hadir" dinonaktifkan', async () => {
+  it('Terapkan Mini-Task Writing: panel penulisan tampil bila materi sudah selesai (ADR-004)', async () => {
     const d = makeDetail();
     d.material = { ...d.material, mini_task: { task_type: 'AI_SHORT_WRITING', prompt: 'Tulis.', success_criteria: null } };
+    d.progress = { ...d.progress, learn_completed_at: '2026-11-08T10:00:00.000Z' };
     serve(d);
     renderWithProviders(<SubModulePlayer code="2.1.3" initial={parsePlayerQuery({ tab: 'terapkan' })} />);
-    expect(await screen.findByRole('button', { name: 'Segera hadir' })).toBeDisabled();
+    expect(await screen.findByTestId('writing-task-panel')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Segera hadir' })).not.toBeInTheDocument();
+  });
+
+  it('Terapkan Mini-Task Writing: tertahan dengan pesan bila materi belum selesai', async () => {
+    const d = makeDetail();
+    d.material = { ...d.material, mini_task: { task_type: 'AI_SHORT_WRITING', prompt: 'Tulis.', success_criteria: null } };
+    d.progress = { ...d.progress, learn_completed_at: null };
+    serve(d);
+    renderWithProviders(<SubModulePlayer code="2.1.3" initial={parsePlayerQuery({ tab: 'terapkan' })} />);
+    await screen.findByText('Tulis.');
+    expect(screen.queryByTestId('writing-task-panel')).not.toBeInTheDocument();
   });
 });
 

@@ -180,3 +180,32 @@ describe('validateBandRows', () => {
     expect(codes([[0, 20, 6], [21, 40, 5]])).toEqual(['non_monotonic']);
   });
 });
+
+describe('tabel Reading General Training (ADR-004)', () => {
+  it('menutup 0..40 tanpa celah dan menaik', async () => {
+    const { READING_GENERAL_SEED_ROWS } = await import('@/server/band/seed-data');
+    let next = 0;
+    let prev = -1;
+    for (const r of READING_GENERAL_SEED_ROWS) {
+      expect(r.raw_min).toBe(next);
+      expect(r.band).toBeGreaterThan(prev);
+      next = r.raw_max + 1;
+      prev = r.band;
+    }
+    expect(next).toBe(41);
+    expect(READING_GENERAL_SEED_ROWS).toHaveLength(17);
+  });
+  it('jangkar publik: 30/40 = 6.0, 34/40 = 7.0, 40/40 = 9.0', async () => {
+    const { READING_GENERAL_SEED_ROWS } = await import('@/server/band/seed-data');
+    const at = (n: number) => convertRawToBand(READING_GENERAL_SEED_ROWS, n);
+    expect(at(30)).toBe(6);
+    expect(at(34)).toBe(7);
+    expect(at(40)).toBe(9);
+  });
+  it('General lebih ketat daripada Academic pada skor sama (kecuali tepi)', async () => {
+    const { READING_GENERAL_SEED_ROWS, READING_ACADEMIC_SEED_ROWS } = await import('@/server/band/seed-data');
+    for (const raw of [20, 25, 28, 30, 32, 34]) {
+      expect(convertRawToBand(READING_GENERAL_SEED_ROWS, raw)).toBeLessThanOrEqual(convertRawToBand(READING_ACADEMIC_SEED_ROWS, raw));
+    }
+  });
+});

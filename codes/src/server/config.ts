@@ -19,5 +19,7 @@ export const config = {
   secureCookie: () => (process.env.AUTH_URL ?? '').startsWith('https://'),
   assetsDir: () => process.env.ASSETS_DIR ?? './.local-pg/assets',
   aiEnabled: () => process.env.AI_ENABLED === 'true',
+  /** Penilaian Speaking otomatis (STT+LLM). Default aktif; MVP (ADR-004) mematikannya lewat `.env` (false). */
+  speakingAiEnabled: () => process.env.SPEAKING_AI_ENABLED !== 'false',
   isProd: () => process.env.NODE_ENV === 'production',
 };

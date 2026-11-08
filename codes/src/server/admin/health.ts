@@ -85,15 +85,18 @@ export async function getAdminHealth(): Promise<AdminHealth> {
   })();
 
   const llmCheck = (async (): Promise<AdminHealth['llm']> => {
+    const driver = process.env.LLM_DRIVER ?? 'llamacpp';
+    const isOllama = driver === 'ollama';
     const base = {
       enabled: aiEnabled,
-      driver: process.env.LLM_DRIVER ?? 'ollama',
-      model_writing: process.env.OLLAMA_MODEL_WRITING ?? null,
-      model_speaking: process.env.OLLAMA_MODEL_SPEAKING ?? null,
+      driver,
+      model_writing: (isOllama ? process.env.OLLAMA_MODEL_WRITING : process.env.LLAMACPP_MODEL_WRITING) ?? null,
+      model_speaking: isOllama ? (process.env.OLLAMA_MODEL_SPEAKING ?? null) : null,
     };
     if (!aiEnabled) return { ...base, status: 'disabled' };
-    const url = process.env.OLLAMA_BASE_URL;
-    return { ...base, status: url ? await probe(`${url.replace(/\/$/, '')}/api/tags`) : 'down' };
+    const url = isOllama ? process.env.OLLAMA_BASE_URL : (process.env.LLAMACPP_BASE_URL ?? 'http://127.0.0.1:8080');
+    const path = isOllama ? '/api/tags' : '/health';
+    return { ...base, status: url ? await probe(`${url.replace(/\/$/, '')}${path}`) : 'down' };
   })();
 
   const sttCheck = (async (): Promise<AdminHealth['stt']> => {

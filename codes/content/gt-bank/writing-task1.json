@@ -1,0 +1,154 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-W-T1-FORMAL",
+      "bank_kind": "WRITING_GT_T1_FORMAL",
+      "title": "Writing Task 1 GT: Surat Formal",
+      "skill": "WRITING",
+      "tags": [
+        "letter",
+        "formal",
+        "complaint",
+        "application"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTWF-001",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You ordered a jacket from an online clothing store, but it did not fit, so you sent it back six weeks ago. You have not received your refund.\n\nWrite a letter to the customer service manager. In your letter:\n- explain what you ordered and why you returned it\n- describe what has happened since you returned it\n- say what you want the company to do\n\nBegin your letter: Dear Sir or Madam,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 2,
+          "explanation_id": "Register FORMAL (penerima tidak dikenal): buka 'Dear Sir or Madam,' dan tutup 'Yours faithfully,'. Ketiga poin wajib dikembangkan dengan detail (nama barang, tanggal kirim, nomor pesanan). Hindari singkatan (don't, can't) dan bahasa santai. Tujuan surat harus jelas di kalimat pertama."
+        },
+        {
+          "question_id": "Q-GTWF-002",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Building work next to your home starts very early every morning and continues late at night. The noise is making it difficult to sleep and work.\n\nWrite a letter to the local council. In your letter:\n- describe the problem and how long it has been happening\n- explain how the noise affects you and your neighbours\n- suggest what the council should do\n\nBegin your letter: Dear Sir or Madam,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 3,
+          "explanation_id": "Register FORMAL kepada instansi. Gunakan 'I am writing to complain about...' lalu pisahkan paragraf per poin. Saran harus konkret (mis. batasi jam kerja pukul 8.00-18.00), dan nada tetap sopan walau mengeluh. Tutup dengan 'Yours faithfully,'."
+        },
+        {
+          "question_id": "Q-GTWF-003",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You have seen an advertisement for a part-time job at a local library.\n\nWrite a letter to the library manager applying for the job. In your letter:\n- say which job you are applying for and where you saw the advertisement\n- describe your experience and skills\n- explain when you can start and when you are available for an interview\n\nBegin your letter: Dear Sir or Madam,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 3,
+          "explanation_id": "Register FORMAL untuk surat lamaran. Sebut posisi dan sumber iklan di paragraf pertama, jelaskan pengalaman yang RELEVAN dengan contoh, dan beri tanggal/jam konkret. Tutup dengan 'I look forward to hearing from you.' dan 'Yours faithfully,'."
+        }
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN"
+    },
+    {
+      "bank_code": "GT-W-T1-SEMI",
+      "bank_kind": "WRITING_GT_T1_SEMI",
+      "title": "Writing Task 1 GT: Surat Semi-Formal",
+      "skill": "WRITING",
+      "tags": [
+        "letter",
+        "semi-formal",
+        "landlord",
+        "work"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTWS-001",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "The heating in the flat you rent has not worked for ten days, and the weather is very cold. You have already telephoned your landlord, Mr Harris, but nothing has happened.\n\nWrite a letter to Mr Harris. In your letter:\n- remind him about the problem and your earlier phone call\n- explain how the situation is affecting you\n- say what you would like him to do and by when\n\nBegin your letter: Dear Mr Harris,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 3,
+          "explanation_id": "Register SEMI-FORMAL (penerima dikenal namanya): 'Dear Mr Harris,' ... 'Yours sincerely,'. Nada sopan tetapi tegas, boleh sedikit lebih hangat daripada surat formal ('I hope you are well'). Sebut tenggat waktu yang jelas."
+        },
+        {
+          "question_id": "Q-GTWS-002",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You are taking an evening English course, but you could not finish an important assignment because you were ill last week.\n\nWrite a letter to your tutor, Ms Collins. In your letter:\n- explain why you have not finished the assignment\n- ask for more time\n- say how you will make sure it is completed\n\nBegin your letter: Dear Ms Collins,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 2,
+          "explanation_id": "Register SEMI-FORMAL kepada pengajar. Mulailah dengan permintaan maaf singkat, beri alasan yang masuk akal, ajukan tenggat baru yang spesifik, dan tunjukkan rencana. Tutup 'Yours sincerely,'. Hindari alasan yang bertele-tele."
+        },
+        {
+          "question_id": "Q-GTWS-003",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You would like to attend a three-day training course next month, but it takes place on working days.\n\nWrite a letter to your manager, Mr Evans. In your letter:\n- describe the course and why you want to attend\n- explain how it would help you in your job\n- say how you will make sure your work is covered while you are away\n\nBegin your letter: Dear Mr Evans,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 3,
+          "explanation_id": "Register SEMI-FORMAL ke atasan. Tonjolkan manfaat bagi perusahaan, bukan hanya diri sendiri, dan tawarkan solusi nyata untuk pekerjaan Anda selama cuti. Gunakan 'I would be grateful if...' lalu tutup 'Yours sincerely,'."
+        }
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN"
+    },
+    {
+      "bank_code": "GT-W-T1-INFORMAL",
+      "bank_kind": "WRITING_GT_T1_INFORMAL",
+      "title": "Writing Task 1 GT: Surat Informal",
+      "skill": "WRITING",
+      "tags": [
+        "letter",
+        "informal",
+        "friend"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTWI-001",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "A friend from another country is coming to visit your town for a long weekend and has asked you for advice.\n\nWrite a letter to your friend, Sam. In your letter:\n- say what the weather is usually like and what to pack\n- suggest places to visit and things to do\n- offer to meet at the station and say when you are free\n\nBegin your letter: Dear Sam,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 2,
+          "explanation_id": "Register INFORMAL (teman dekat): boleh pakai singkatan (I'd, it's), frasa akrab ('It'd be great to see you'), dan tanda seru secukupnya. Tutup 'Best wishes,' atau 'Take care,'. Tetap tata bahasa benar dan semua poin dikembangkan, bukan sekadar daftar."
+        },
+        {
+          "question_id": "Q-GTWI-002",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You promised to go to your friend Alex's birthday party but you did not go, and you did not call to explain.\n\nWrite a letter to Alex. In your letter:\n- apologise and explain why you could not come\n- say how you feel about missing the party\n- suggest something you could do together to make up for it\n\nBegin your letter: Dear Alex,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 3,
+          "explanation_id": "Register INFORMAL, nada tulus. Permintaan maaf harus terasa personal (bukan hanya 'sorry'), alasan jelas, dan usulan pengganti spesifik (hari, tempat). Variasikan kosakata perasaan (embarrassed, disappointed, guilty)."
+        },
+        {
+          "question_id": "Q-GTWI-003",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You have recently moved to a new town for a new job. You want to tell an old friend about it.\n\nWrite a letter to your friend, Chris. In your letter:\n- describe your new job and your new home\n- say what you like and dislike about the town\n- invite your friend to visit and suggest when\n\nBegin your letter: Dear Chris,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 2,
+          "explanation_id": "Register INFORMAL. Ceritakan dengan detail yang hidup (bukan daftar fakta), seimbangkan hal yang disukai dan tidak disukai, dan beri undangan dengan tanggal konkret. Kohesi: gunakan 'Anyway,', 'By the way,', 'Speaking of which,' secara wajar."
+        }
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN"
+    }
+  ]
+}

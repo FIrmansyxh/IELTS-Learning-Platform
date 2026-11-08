@@ -5,7 +5,15 @@ import { and, eq, sql } from 'drizzle-orm';
 import pg from 'pg';
 import * as schema from '../src/db/schema';
 import { MODULE_SEEDS, SUB_MODULE_SEEDS, TIER_SEEDS } from '../src/server/content/curriculum-structure';
-import { BAND_SEED_LABEL, BAND_SEED_NOTE, LISTENING_SEED_ROWS, READING_ACADEMIC_SEED_ROWS } from '../src/server/band/seed-data';
+import {
+  BAND_SEED_LABEL,
+  BAND_SEED_LABEL_GT,
+  BAND_SEED_NOTE,
+  BAND_SEED_NOTE_GT,
+  LISTENING_SEED_ROWS,
+  READING_ACADEMIC_SEED_ROWS,
+  READING_GENERAL_SEED_ROWS,
+} from '../src/server/band/seed-data';
 
 type Tx = NodePgDatabase<typeof schema>;
 export interface SeedModule {
@@ -143,6 +151,7 @@ export const seedModules: SeedModule[] = [
               passingScorePercent: 75,
               orderIndex: Number(parts[2]),
               status: 'DRAFT' as const,
+              examModule: s.exam ?? ('COMMON' as const),
               contentVersion: 1,
             };
           }),
@@ -155,18 +164,19 @@ export const seedModules: SeedModule[] = [
     name: 'band-tables',
     run: async (tx) => {
       const defs = [
-        { skill: 'LISTENING' as const, rows: LISTENING_SEED_ROWS },
-        { skill: 'READING_ACADEMIC' as const, rows: READING_ACADEMIC_SEED_ROWS },
+        { skill: 'LISTENING' as const, rows: LISTENING_SEED_ROWS, label: BAND_SEED_LABEL, note: BAND_SEED_NOTE },
+        { skill: 'READING_ACADEMIC' as const, rows: READING_ACADEMIC_SEED_ROWS, label: BAND_SEED_LABEL, note: BAND_SEED_NOTE },
+        { skill: 'READING_GENERAL' as const, rows: READING_GENERAL_SEED_ROWS, label: BAND_SEED_LABEL_GT, note: BAND_SEED_NOTE_GT },
       ];
       for (const d of defs) {
         await tx
           .insert(schema.bandConversionTables)
-          .values({ skill: d.skill, versionLabel: BAND_SEED_LABEL, sourceNote: BAND_SEED_NOTE, isActive: true, effectiveFrom: new Date(), createdBy: null })
+          .values({ skill: d.skill, versionLabel: d.label, sourceNote: d.note, isActive: true, effectiveFrom: new Date(), createdBy: null })
           .onConflictDoNothing();
         const [t] = await tx
           .select({ id: schema.bandConversionTables.id })
           .from(schema.bandConversionTables)
-          .where(and(eq(schema.bandConversionTables.skill, d.skill), eq(schema.bandConversionTables.versionLabel, BAND_SEED_LABEL)));
+          .where(and(eq(schema.bandConversionTables.skill, d.skill), eq(schema.bandConversionTables.versionLabel, d.label)));
         if (!t) continue;
         await tx
           .insert(schema.bandConversionRows)

@@ -34,9 +34,9 @@ async function getNumSetting(tx: DbOrTx, key: string, fallback: number): Promise
   return typeof v === 'number' ? v : (v !== undefined ? Number(v) : fallback);
 }
 
-async function getStrSetting(tx: DbOrTx, key: string, fallback: string): Promise<string> {
-  const v = await getSetting(tx, key);
-  return typeof v === 'string' ? v : fallback;
+/** Zona waktu batas hari (streak/poin harian). Variabel lingkungan (SPEC-000), bukan pengaturan database. */
+function appTimezone(): string {
+  return process.env.APP_TIMEZONE || 'Asia/Jakarta';
 }
 
 /** Format Date ke tanggal kalender YYYY-MM-DD pada zona waktu tertentu. */
@@ -85,7 +85,7 @@ export async function getUserStats(tx: DbOrTx, userId: string, now = new Date())
     };
   }
 
-  const tz = await getStrSetting(tx, 'APP_TIMEZONE', 'Asia/Jakarta');
+  const tz = appTimezone();
   const today = formatDateInTz(now, tz);
   const yesterday = getYesterdayDateStr(today);
 
@@ -185,7 +185,7 @@ export async function recordActivity(
     return { daily_points_awarded: 0, daily_streak_days: 0 };
   }
 
-  const tz = await getStrSetting(tx, 'APP_TIMEZONE', 'Asia/Jakarta');
+  const tz = appTimezone();
   const dailyPointsSetting = await getNumSetting(tx, 'points.daily_activity', 5);
 
   const today = formatDateInTz(now, tz);

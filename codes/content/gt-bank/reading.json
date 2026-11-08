@@ -1,0 +1,272 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-RD-S1-EVERYDAY",
+      "bank_kind": "READING_GT_S1",
+      "title": "Reading GT Section 1: Teks Sehari-hari (kolam renang, sewa flat, perpustakaan)",
+      "skill": "READING",
+      "tags": [
+        "notices",
+        "advertisements",
+        "everyday"
+      ],
+      "reading_passage_markdown": "Riverside Community Pool: Opening Hours and Rules\n\nRiverside Community Pool is open to all residents of Riverside and neighbouring districts.\n\nOpening hours: Monday to Friday 6.30 a.m. to 9.00 p.m.; Saturday 8.00 a.m. to 6.00 p.m.; Sunday 9.00 a.m. to 4.00 p.m. The pool closes for cleaning every Wednesday between 1.00 p.m. and 3.00 p.m.\n\nEntry fees: Adults pay $6 per visit. Children under 12 swim for $3 and must be accompanied by an adult at all times. Senior citizens aged 65 and over pay $4. A monthly pass costs $40 and allows unlimited entry.\n\nRules: All swimmers must shower before entering the pool. Swimming caps are required for people with long hair and can be borrowed at reception for a deposit of $2. Food and drink are not allowed on the pool deck, but a cafe is located on the first floor. Lockers are free, but swimmers must bring their own padlock.\n===PASSAGE===\nFlat to Rent: Maple Street\n\nBright two-bedroom flat to rent on Maple Street, ten minutes' walk from Central Station. The flat is on the third floor of a quiet building with a lift. It has a large living room, a modern kitchen with a dishwasher, and a small balcony facing the park.\n\nRent is $950 per month, including water but not electricity or internet. A deposit equal to one month's rent is required before moving in. The flat is available from 1 March, and the minimum rental period is six months.\n\nPets are not allowed. Parking is available in the building's garage for an extra $60 per month. To arrange a viewing, call Ms Dalton on 555-0142 after 5 p.m. on weekdays or at any time on Saturday.\n===PASSAGE===\nGreenfield Public Library: Membership\n\nJoining Greenfield Public Library is free for anyone who lives, works or studies in the Greenfield area. To register, bring one form of photo identification and a document showing your address, such as a utility bill.\n\nMembers can borrow up to eight books at a time for three weeks. DVDs and audiobooks can be borrowed for one week, with a maximum of two items. Books can be renewed twice online or by telephone, unless another member has reserved them. A fine of 20 cents per day is charged for overdue items, up to a maximum of $5 per item.\n\nThe library also offers free computer use for up to one hour a day and a weekly reading group for children on Saturday mornings. Study rooms can be booked in advance at the front desk.",
+      "questions": [
+        {
+          "question_id": "Q-GTRS1-001",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "On which day is the pool closed for part of the afternoon?",
+          "passage_no": 1,
+          "difficulty": 1,
+          "explanation_id": "Teks 1: 'The pool closes for cleaning every Wednesday between 1.00 p.m. and 3.00 p.m.' Hari lain tidak disebut tutup sebagian.",
+          "options": [
+            "Monday",
+            "Wednesday",
+            "Saturday",
+            "Sunday"
+          ],
+          "correct_answers": [
+            "Wednesday"
+          ]
+        },
+        {
+          "question_id": "Q-GTRS1-002",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "How much does a child under 12 pay for one visit?",
+          "passage_no": 1,
+          "difficulty": 1,
+          "explanation_id": "Teks 1: 'Children under 12 swim for $3'. Jawaban dalam batas dua kata.",
+          "correct_answers": [
+            "$3",
+            "3 dollars",
+            "three dollars"
+          ],
+          "max_words": 2
+        },
+        {
+          "question_id": "Q-GTRS1-003",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Swimmers must pay to use a locker.",
+          "passage_no": 1,
+          "difficulty": 2,
+          "explanation_id": "Teks 1: 'Lockers are free'. Pernyataan bertentangan dengan teks, jadi False.",
+          "correct_answers": [
+            "False"
+          ]
+        },
+        {
+          "question_id": "Q-GTRS1-004",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "The flat is on the _______ floor.",
+          "passage_no": 2,
+          "difficulty": 1,
+          "explanation_id": "Teks 2: 'The flat is on the third floor'.",
+          "correct_answers": [
+            "third",
+            "3rd"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTRS1-005",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Which of the following is included in the rent?",
+          "passage_no": 2,
+          "difficulty": 2,
+          "explanation_id": "Teks 2: rent 'including water but not electricity or internet'; parkir dikenai biaya tambahan $60.",
+          "options": [
+            "Electricity",
+            "Water",
+            "Internet",
+            "Parking"
+          ],
+          "correct_answers": [
+            "Water"
+          ]
+        },
+        {
+          "question_id": "Q-GTRS1-006",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Tenants may keep a small pet if they pay an extra deposit.",
+          "passage_no": 2,
+          "difficulty": 2,
+          "explanation_id": "Teks 2: 'Pets are not allowed.' Tidak ada pengecualian, jadi False.",
+          "correct_answers": [
+            "False"
+          ]
+        },
+        {
+          "question_id": "Q-GTRS1-007",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "How many books can a member borrow at the same time?",
+          "passage_no": 3,
+          "difficulty": 1,
+          "explanation_id": "Teks 3: 'borrow up to eight books at a time'. Angka maupun kata diterima.",
+          "correct_answers": [
+            "eight",
+            "8",
+            "eight books",
+            "8 books"
+          ],
+          "max_words": 2
+        },
+        {
+          "question_id": "Q-GTRS1-008",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Members have to pay a small fee to book a study room.",
+          "passage_no": 3,
+          "difficulty": 3,
+          "explanation_id": "Teks 3 hanya menyatakan study room dapat dipesan di meja depan; biaya tidak disebut sama sekali, jadi Not Given.",
+          "correct_answers": [
+            "Not Given"
+          ]
+        }
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN"
+    },
+    {
+      "bank_code": "GT-RD-S2-WORK",
+      "bank_kind": "READING_GT_S2",
+      "title": "Reading GT Section 2: Teks Pekerjaan (lowongan, kebijakan cuti)",
+      "skill": "READING",
+      "tags": [
+        "workplace",
+        "job-advert",
+        "policy"
+      ],
+      "reading_passage_markdown": "Warehouse Team Leader: Eastside Logistics\n\nEastside Logistics is looking for an experienced Warehouse Team Leader to join our distribution centre. You will supervise a team of twelve staff, organise daily shift schedules and make sure all orders leave the warehouse on time.\n\nRequirements: at least two years' experience in a warehouse or similar environment, a valid forklift licence, and good communication skills. Experience of using stock-control software is an advantage, but full training will be provided.\n\nThe position is full-time, working five days out of seven on a rotating shift system (early, late and night shifts). The salary is $42,000 per year, with an additional bonus of up to 10 per cent for meeting monthly targets. Staff receive 25 days of paid holiday a year and free parking on site.\n\nTo apply, send your CV and a covering letter to the HR Department before 30 April. Interviews will be held in the first week of May.\n===PASSAGE===\nStaff Leave Policy: Brightway Services\n\nAll full-time employees of Brightway Services are entitled to 20 days of paid annual leave in each calendar year. Part-time employees receive leave in proportion to the hours they work. Leave that has not been used by 31 December cannot be carried over to the following year, except in special circumstances approved by a manager.\n\nTo request annual leave, employees must complete the online form at least two weeks in advance. Requests for more than five consecutive days must also be discussed in person with the department manager. During the busy period from 1 to 24 December, no more than two members of any team may be on leave at the same time.\n\nSick leave is paid for up to ten days per year. After three consecutive days of absence, employees must provide a medical certificate. Employees who become ill should telephone their manager before 9.00 a.m. on the first day of absence. Employees are encouraged to take their holidays in shorter breaks throughout the year to avoid tiredness.",
+      "questions": [
+        {
+          "question_id": "Q-GTRS2-001",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "How many people will the Warehouse Team Leader supervise?",
+          "passage_no": 1,
+          "difficulty": 1,
+          "explanation_id": "Teks 1: 'You will supervise a team of twelve staff'.",
+          "options": [
+            "Eight",
+            "Ten",
+            "Twelve",
+            "Fifteen"
+          ],
+          "correct_answers": [
+            "Twelve"
+          ]
+        },
+        {
+          "question_id": "Q-GTRS2-002",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Applicants must have a valid _______ licence.",
+          "passage_no": 1,
+          "difficulty": 1,
+          "explanation_id": "Teks 1: 'a valid forklift licence'.",
+          "correct_answers": [
+            "forklift"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTRS2-003",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Experience with stock-control software is essential for the job.",
+          "passage_no": 1,
+          "difficulty": 3,
+          "explanation_id": "Teks 1: pengalaman software stok disebut 'an advantage' dan pelatihan penuh disediakan, jadi bukan syarat wajib: False.",
+          "correct_answers": [
+            "False"
+          ]
+        },
+        {
+          "question_id": "Q-GTRS2-004",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "What is the maximum bonus a team leader can earn?",
+          "passage_no": 1,
+          "difficulty": 2,
+          "explanation_id": "Teks 1: 'a bonus of up to 10 per cent'. Jawaban singkat '10 per cent' (tiga kata) diterima.",
+          "correct_answers": [
+            "10 per cent",
+            "10%",
+            "10 percent"
+          ],
+          "max_words": 3
+        },
+        {
+          "question_id": "Q-GTRS2-005",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "How far in advance must annual leave be requested?",
+          "passage_no": 2,
+          "difficulty": 1,
+          "explanation_id": "Teks 2: 'at least two weeks in advance'.",
+          "options": [
+            "Three days",
+            "One week",
+            "Two weeks",
+            "One month"
+          ],
+          "correct_answers": [
+            "Two weeks"
+          ]
+        },
+        {
+          "question_id": "Q-GTRS2-006",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Unused annual leave can usually be carried over to the next year.",
+          "passage_no": 2,
+          "difficulty": 3,
+          "explanation_id": "Teks 2: 'cannot be carried over to the following year, except in special circumstances'. Kata 'usually' membuat pernyataan bertentangan dengan aturan umum: False.",
+          "correct_answers": [
+            "False"
+          ]
+        },
+        {
+          "question_id": "Q-GTRS2-007",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "After how many consecutive days of absence is a medical certificate needed?",
+          "passage_no": 2,
+          "difficulty": 2,
+          "explanation_id": "Teks 2: 'After three consecutive days of absence'.",
+          "correct_answers": [
+            "three",
+            "3",
+            "three days",
+            "3 days"
+          ],
+          "max_words": 2
+        },
+        {
+          "question_id": "Q-GTRS2-008",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Employees receive extra paid leave on their birthday.",
+          "passage_no": 2,
+          "difficulty": 2,
+          "explanation_id": "Teks 2 tidak membahas cuti ulang tahun sama sekali: Not Given.",
+          "correct_answers": [
+            "Not Given"
+          ]
+        }
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN"
+    }
+  ]
+}

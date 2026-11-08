@@ -61,6 +61,8 @@ export type RendererProps = {
   disabled: boolean;
   /** Umpan balik soal ini (hanya mode Latihan, setelah diperiksa). */
   feedback: Feedback | null;
+  /** Attempt berjalan; dipakai soal Speaking untuk mencatat skor AI eksternal (ADR-004). */
+  attemptId?: string;
 };
 
 export const letter = (i: number) => String.fromCharCode(65 + i);

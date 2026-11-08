@@ -4,7 +4,10 @@ import { CheckCircle2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { SubModuleDetail } from '@/contracts/player';
+import { SpeakingExternalPromptCard } from '@/components/speaking/external-prompt-card';
+import { WritingTaskPanel } from '@/components/writing/writing-task-panel';
 import { id } from '@/i18n/id';
+import { buildSpeakingExternalPrompt } from '@/lib/speaking-external-prompt';
 
 /** Slot Mini-Task AI (SPEC-012/013). Sebelum spec itu selesai: "Segera hadir" dinonaktifkan. */
 export function MiniTaskAi({ taskType }: { taskType: 'AI_SHORT_WRITING' | 'AI_SHORT_SPEAKING' }) {
@@ -78,6 +81,20 @@ export function ApplyTab({
                 </p>
               ) : null}
             </div>
+          )
+        ) : task.task_type === 'AI_SHORT_SPEAKING' ? (
+          <SpeakingExternalPromptCard
+            prompt={buildSpeakingExternalPrompt({ part: 1, prompt: task.prompt })}
+            context={learnDone ? { kind: 'MINI_TASK_SPEAKING', sub_module_id: detail.sub_module.id } : undefined}
+          />
+        ) : task.task_type === 'AI_SHORT_WRITING' ? (
+          learnDone ? (
+            <WritingTaskPanel
+              context={{ kind: 'MINI_TASK_WRITING', sub_module_id: detail.sub_module.id }}
+              storageKey={`writing-draft:mini:${detail.sub_module.id}`}
+            />
+          ) : (
+            <p className="text-sm text-muted-foreground">{id.player.apply.needLearn}</p>
           )
         ) : (
           <MiniTaskAi taskType={task.task_type} />

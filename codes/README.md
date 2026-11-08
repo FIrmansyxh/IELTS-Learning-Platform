@@ -45,7 +45,23 @@ npm run user:reset-password -- user@example.test                  # password sem
 ```
 Tanpa `ffprobe`, durasi audio hanya terbaca untuk WAV (peringatan `ffprobe_unavailable`).
 
+### Jenis ujian dan modul General Training (ADR-004)
+`EXAM_MODULE=GENERAL_TRAINING` (default) menyembunyikan sub-modul bertag `ACADEMIC` dari learner; `ACADEMIC` membaliknya. Konten General Training:
+```bash
+npm run bank:validate -- content/gt-bank                 # bank soal (Writing/Speaking/Reading/Grammar)
+npm run content:validate -- content/gt-modules/3.3.3     # modul ajar surat
+npm run content:import -- content/gt-modules/3.3.3 --publish
+```
+
 ## Perintah utama
 `npm run lint | typecheck | test | test:integration | test:e2e | build | build:worker | bench:ai`
 
-`npm run bench:ai -- --models qwen2.5:3b-instruct,qwen2.5:7b-instruct` (Ollama harus berjalan di 127.0.0.1:11434).
+`npm run bench:ai -- --models qwen2.5:3b-instruct,qwen2.5:7b-instruct` (khusus driver Ollama; harus berjalan di 127.0.0.1:11434).
+
+### LLM lokal (ADR-004): llama.cpp
+Driver default `LLM_DRIVER=llamacpp` memakai `llama-server` (winget: `winget install ggml.llamacpp`). Contoh untuk RTX 3060 6 GB:
+```powershell
+$env:LLAMA_CACHE = 'G:\llm-models'   # lokasi model GGUF
+llama-server -hf bartowski/Qwen2.5-7B-Instruct-GGUF:Q4_K_M --device Vulkan0 -ngl 99 -c 4096 --parallel 1 --host 127.0.0.1 --port 8080
+```
+Lalu di `.env`: `AI_ENABLED=true`, `LLAMACPP_BASE_URL=http://127.0.0.1:8080`, `SPEAKING_AI_ENABLED=false`. LLM hanya menilai Writing; Speaking dilatih lewat prompt AI suara pihak ketiga (tombol "Salin prompt" pada soal Speaking).

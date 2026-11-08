@@ -4,6 +4,7 @@
  */
 import { AI_TASK_TYPES, OBJECTIVE_TYPES, type Question } from '@/contracts/content';
 import type { Feedback, QuestionPublic } from '@/contracts/attempts';
+import { buildSpeakingExternalPrompt } from '@/lib/speaking-external-prompt';
 import { newRngSeed, randomOpaqueId, seededCsprng, shuffled } from './prng';
 
 // ------------------------------------------------------------------ state
@@ -221,6 +222,15 @@ export function toPublicQuestion(q: Question, s: Served): QuestionPublic {
         ...(q.prep_seconds !== undefined ? { prep_seconds: q.prep_seconds } : {}),
         ...(q.record_seconds !== undefined ? { record_seconds: q.record_seconds } : {}),
         cue_points: q.cue_points,
+        external_prompt:
+          q.external_eval_prompt ??
+          buildSpeakingExternalPrompt({
+            part: q.part,
+            prompt: q.prompt,
+            cuePoints: q.cue_points,
+            prepSeconds: q.prep_seconds,
+            recordSeconds: q.record_seconds,
+          }),
       };
       break;
   }

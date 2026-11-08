@@ -30,6 +30,7 @@ import { ApiError, notFound } from '../http/errors';
 import { logger } from '../logger';
 import { bossBand, convertRawToBand, overallBand, scaleToForty } from '../band/convert';
 import { getActiveTable } from '../band/service';
+import { READING_BAND_SKILL, bandSkillFor } from '../band/skills';
 import { applyBossResult, recomputeStatuses } from '../gatekeeping/service';
 import { isDone, isTerminal, moduleAvailable } from '../gatekeeping/rules';
 import { countAttemptsInWindow, loadAttemptGate, secondsUntil, type AttemptGate } from './gate';
@@ -324,7 +325,7 @@ export const tierBossHandler: AssessmentTypeHandler = {
   async onFinish({ tx, userId, attempt, set }): Promise<FinishOutcome> {
     const childSections = await loadChildSections(tx, set.id);
     const listeningTable = await getActiveTable(tx, 'LISTENING');
-    const readingTable = await getActiveTable(tx, 'READING_ACADEMIC');
+    const readingTable = await getActiveTable(tx, READING_BAND_SKILL);
 
     const [tier] = await tx.select().from(tiers).where(eq(tiers.id, set.tierId!)).limit(1);
     if (!tier) throw new Error('Tier tidak ditemukan untuk set boss');
@@ -992,7 +993,7 @@ export async function submitBossSection(
       }
 
       const raw40 = max > 0 ? scaleToForty(raw, max) : 0;
-      const table = await getActiveTable(tx, skill === 'LISTENING' ? 'LISTENING' : 'READING_ACADEMIC');
+      const table = await getActiveTable(tx, bandSkillFor(skill));
       const band = convertRawToBand(table.rows, raw40);
 
       await tx

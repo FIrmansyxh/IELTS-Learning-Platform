@@ -8,6 +8,7 @@ export const SubmissionKind = z.enum([
   'SPEAKING_PART1',
   'SPEAKING_PART2',
   'SPEAKING_PART3',
+  'MINI_TASK_SPEAKING',
 ]);
 export type SubmissionKindName = z.infer<typeof SubmissionKind>;
 
@@ -81,7 +82,7 @@ export type EvaluationFlagsDTO = z.infer<typeof EvaluationFlagsSchema>;
 export const EvaluationSchema = z.object({
   id: Uuid,
   run_number: z.number().int(),
-  method: z.enum(['AI_LOCAL', 'SELF_ASSESSMENT']),
+  method: z.enum(['AI_LOCAL', 'SELF_ASSESSMENT', 'EXTERNAL_AI']),
   overall_band: Band,
   criteria: z.array(EvaluationCriteriaSchema),
   strengths_id: z.array(z.string()),
@@ -91,6 +92,9 @@ export const EvaluationSchema = z.object({
   task_requirement_met: z.boolean().nullable(),
   flags: EvaluationFlagsSchema,
   model_name: z.string().nullable(),
+  /** Hanya untuk method EXTERNAL_AI: alat yang dipakai dan umpan balik yang ditempel pengguna. */
+  external_tool: z.string().nullable().optional(),
+  external_feedback: z.string().nullable().optional(),
   disclaimer: z.string(),
   created_at: IsoDateTime,
 });
@@ -150,6 +154,19 @@ export const SelfAssessmentRequestSchema = z.strictObject({
   criteria_scores: z.record(z.string(), Band),
 });
 export type SelfAssessmentRequest = z.infer<typeof SelfAssessmentRequestSchema>;
+
+/** Skor Speaking yang dimasukkan manual dari AI pihak ketiga (ADR-004, SPEC-013 addendum). Overall dihitung server. */
+export const EXTERNAL_TOOLS = ['CLAUDE', 'CHATGPT', 'GEMINI', 'OTHER'] as const;
+export const ExternalSpeakingEvaluationRequestSchema = z.strictObject({
+  kind: z.enum(['SPEAKING_PART1', 'SPEAKING_PART2', 'SPEAKING_PART3', 'MINI_TASK_SPEAKING']),
+  attempt_id: Uuid.optional(),
+  question_id: z.string().min(1).max(40).optional(),
+  sub_module_id: Uuid.optional(),
+  tool: z.enum(EXTERNAL_TOOLS),
+  criteria_scores: z.strictObject({ fluency: Band, lexical: Band, grammar: Band, pronunciation: Band }),
+  feedback_text: z.string().max(4000).optional(),
+});
+export type ExternalSpeakingEvaluationRequest = z.infer<typeof ExternalSpeakingEvaluationRequestSchema>;
 
 const bandNum = z
   .number()
@@ -239,7 +256,7 @@ export const SubmissionListItemSchema = z.object({
   kind: SubmissionKind,
   status: SubmissionStatus,
   overall_band: Band.nullable(),
-  method: z.enum(['AI_LOCAL', 'SELF_ASSESSMENT']).nullable(),
+  method: z.enum(['AI_LOCAL', 'SELF_ASSESSMENT', 'EXTERNAL_AI']).nullable(),
   word_count: z.number().int().nullable(),
   prompt_excerpt: z.string(),
   created_at: IsoDateTime,

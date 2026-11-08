@@ -1,0 +1,223 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 3,
+      "module_code": "3.3",
+      "module_category": "WRITING",
+      "sub_module_code": "3.3.3",
+      "sub_module_title": "Task 1 General Training: Menulis Surat Formal, Semi-Formal, dan Informal",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Apa yang Diminta Writing Task 1 General Training?\n\nDi IELTS General Training, **Task 1 selalu berupa surat**, bukan deskripsi grafik. Kamu diberi satu situasi nyata (misalnya laptop yang rusak, tetangga yang berisik, atau teman yang akan berkunjung) dan **tiga poin** yang wajib dibahas. Tulis **minimal 150 kata** dalam sekitar **20 menit**. Task 1 bernilai **sepertiga** dari skor Writing; Task 2 (esai) bernilai dua kali lipatnya, jadi jangan menghabiskan waktu lebih dari 20 menit di Task 1.\n\nPenilai melihat empat hal: **Task Achievement** (semua poin tercakup dan nada tepat), **Coherence and Cohesion**, **Lexical Resource**, dan **Grammatical Range and Accuracy**. Kesalahan paling mahal di Task 1 bukan tata bahasa, melainkan **melewatkan satu poin** atau **memakai nada yang salah**.\n\n## Tiga Langkah Sebelum Menulis (2 Menit)\n\n1. **Tandai penerima.** Apakah kamu tahu namanya? Seberapa dekat hubunganmu?\n2. **Tandai tujuan dan tiga poin.** Garis bawahi kata kerja pada tiap poin (*explain, describe, suggest, say*). Tiap poin butuh minimal 2 sampai 3 kalimat.\n3. **Pilih register.** Register menentukan salam, penutup, dan gaya bahasa seluruh surat.\n\n## Tiga Register Surat\n\n| | Formal | Semi-formal | Informal |\n|---|---|---|---|\n| Penerima | Tidak dikenal / lembaga | Dikenal namanya (atasan, pemilik rumah, guru) | Teman, keluarga |\n| Salam | Dear Sir or Madam, | Dear Mr Harris, / Dear Ms Collins, | Dear Sam, |\n| Penutup | Yours faithfully, | Yours sincerely, | Best wishes, / Take care, |\n| Bahasa | Tanpa singkatan, kalimat lengkap, sopan | Sopan dan jelas, boleh sedikit hangat | Singkatan boleh, frasa akrab |\n| Contoh permintaan | I would be grateful if you could... | Could you possibly...? | Could you...? / Can you...? |\n\n**Aturan emas:** satu surat, satu register. Jangan membuka dengan *Dear Sir or Madam* lalu menutup dengan *See ya!*.\n\n## Kerangka 4 Paragraf\n\n1. **Pembuka:** siapa kamu (jika perlu) dan **tujuan surat** dalam satu kalimat. *I am writing to complain about...* / *I am writing to ask whether...* / *I just wanted to tell you about...*\n2. **Poin 1:** jelaskan dengan detail konkret (kapan, apa, di mana).\n3. **Poin 2 dan 3:** satu paragraf per poin, atau gabungkan bila pendek. Tambahkan alasan atau contoh.\n4. **Penutup:** satu kalimat tindak lanjut + salam penutup. *I look forward to hearing from you.* / *Hope to see you soon!*\n\n## Frasa Berguna\n\n- **Tujuan:** *I am writing to enquire about...*, *I am writing to apply for...*, *I am writing to apologise for...*\n- **Menjelaskan masalah:** *Unfortunately...*, *To make matters worse...*, *As a result...*\n- **Meminta tindakan:** *I would be grateful if you could...* (formal), *It would be great if you could...* (informal)\n- **Menutup:** *Thank you for your attention to this matter.* (formal), *Write back soon!* (informal)\n\n## Contoh Surat Model (Formal)\n\n> **Soal:** Kamu membeli laptop daring tetapi layarnya rusak saat tiba. Tulis kepada manajer toko: jelaskan yang terjadi, katakan yang kamu inginkan, dan ceritakan dampaknya.\n\nDear Sir or Madam,\n\nI am writing to complain about a laptop that I bought from your website last week. When the parcel arrived on Monday, the screen was cracked, and I cannot use the computer at all.\n\nI ordered the laptop on 3 November, and the box looked damaged on the outside. I have taken photographs of both the box and the screen, which I can send to you as evidence.\n\nI would be grateful if you could send me a replacement as soon as possible, or give me a full refund if you do not have one in stock. Please also tell me how to return the damaged laptop.\n\nThis problem has caused me a great deal of inconvenience because I need the laptop for my online course, and I have already missed two lessons. I look forward to hearing from you.\n\nYours faithfully,\nRina Putri\n\nPerhatikan: **tiga poin tercakup**, tujuan jelas di kalimat pertama, tidak ada singkatan, salam dan penutup konsisten.\n\n## Kesalahan yang Paling Sering Menurunkan Skor\n\n- **Poin terlewat atau hanya disebut sekilas.** Pada rubrik platform ini, satu poin yang hilang membatasi Task Achievement di band 5.0.\n- **Register campur aduk** (salam formal, isi slang).\n- **Menyalin kalimat soal** mentah-mentah sebagai kalimat pembuka.\n- **Menulis alamat panjang.** Tidak diperlukan dan tidak menambah kata yang dihitung.\n- **Terlalu pendek** (di bawah 150 kata) atau menghabiskan 35 menit untuk satu surat.\n",
+        "mini_task": {
+          "task_type": "AI_SHORT_WRITING",
+          "prompt": "Tulis surat SEMI-FORMAL pendek (sekitar 100 sampai 120 kata) kepada tetanggamu, Ms Rivera. Tetangga itu sering memutar musik keras pada malam hari.\n\nDalam suratmu:\n- jelaskan masalahnya dan sejak kapan terjadi\n- katakan bagaimana hal itu memengaruhimu\n- sarankan solusi yang sopan\n\nMulai dengan: Dear Ms Rivera,",
+          "ai_rubric_criteria": "Task Achievement: ketiga poin tercakup dengan detail dan tujuan surat jelas sejak kalimat pertama. Register SEMI-FORMAL konsisten (Dear Ms Rivera, ... Yours sincerely,), sopan tetapi tidak kaku. Coherence: paragraf teratur dan penghubung tepat. Lexical Resource dan Grammar: kosakata sesuai situasi dan kalimat akurat."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 600,
+        "pass_percent": 75,
+        "questions": [
+          {
+            "question_id": "Q-GT333-001",
+            "question_type": "MCQ_SINGLE",
+            "skill": "WRITING",
+            "prompt": "Apa yang harus ditulis pada Writing Task 1 IELTS General Training?",
+            "explanation_id": "Task 1 General Training selalu berupa surat dengan tiga poin wajib. Deskripsi grafik adalah Task 1 Academic.",
+            "options": [
+              "Surat berdasarkan situasi dengan tiga poin",
+              "Deskripsi grafik atau diagram",
+              "Esai opini 250 kata",
+              "Ringkasan sebuah artikel"
+            ],
+            "correct_answers": [
+              "Surat berdasarkan situasi dengan tiga poin"
+            ]
+          },
+          {
+            "question_id": "Q-GT333-002",
+            "question_type": "MCQ_SINGLE",
+            "skill": "WRITING",
+            "prompt": "Berapa jumlah kata minimum untuk Task 1?",
+            "explanation_id": "Task 1 minimal 150 kata; 250 kata adalah minimum Task 2.",
+            "options": [
+              "100 kata",
+              "150 kata",
+              "200 kata",
+              "250 kata"
+            ],
+            "correct_answers": [
+              "150 kata"
+            ]
+          },
+          {
+            "question_id": "Q-GT333-003",
+            "question_type": "MCQ_SINGLE",
+            "skill": "WRITING",
+            "prompt": "Berapa bobot Task 1 terhadap skor Writing?",
+            "explanation_id": "Task 2 dihitung dua kali lipat Task 1, sehingga Task 1 hanya sepertiga. Karena itu Task 1 dikerjakan sekitar 20 menit.",
+            "options": [
+              "Sepertiga (Task 2 bernilai dua kali lipat)",
+              "Setengah",
+              "Dua pertiga",
+              "Sama dengan Task 2"
+            ],
+            "correct_answers": [
+              "Sepertiga (Task 2 bernilai dua kali lipat)"
+            ]
+          },
+          {
+            "question_id": "Q-GT333-004",
+            "question_type": "MCQ_SINGLE",
+            "skill": "WRITING",
+            "prompt": "Kamu menulis kepada pemilik rumahmu, Mr Harris, tentang pemanas yang rusak. Register yang paling tepat adalah...",
+            "explanation_id": "Penerima dikenal namanya tetapi bukan teman dekat: semi-formal, salam 'Dear Mr Harris,' dan penutup 'Yours sincerely,'.",
+            "options": [
+              "Formal (Dear Sir or Madam)",
+              "Semi-formal (Dear Mr Harris)",
+              "Informal (Hi Harris!)",
+              "Bebas, tidak berpengaruh"
+            ],
+            "correct_answers": [
+              "Semi-formal (Dear Mr Harris)"
+            ]
+          },
+          {
+            "question_id": "Q-GT333-005",
+            "question_type": "MCQ_SINGLE",
+            "skill": "WRITING",
+            "prompt": "Surat dibuka dengan 'Dear Sir or Madam,'. Penutup yang konsisten adalah...",
+            "explanation_id": "Salam tanpa nama dipasangkan dengan 'Yours faithfully,'. Nama diketahui memakai 'Yours sincerely,'.",
+            "options": [
+              "Yours sincerely,",
+              "Yours faithfully,",
+              "Cheers,",
+              "Love,"
+            ],
+            "correct_answers": [
+              "Yours faithfully,"
+            ]
+          },
+          {
+            "question_id": "Q-GT333-006",
+            "question_type": "FILL_IN_BLANK",
+            "skill": "WRITING",
+            "prompt": "Lengkapi penutup surat:\n'Dear Mr Evans, ... I look forward to your reply.\nYours _______,'",
+            "explanation_id": "Salam memakai nama penerima (Mr Evans), jadi penutupnya 'Yours sincerely,'.",
+            "correct_answers": [
+              "sincerely"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GT333-007",
+            "question_type": "MCQ_SINGLE",
+            "skill": "WRITING",
+            "prompt": "Soal memuat tiga poin, tetapi suratmu hanya membahas dua poin dengan detail. Dampak utamanya adalah...",
+            "explanation_id": "Poin yang terlewat atau hanya disebut sekilas membatasi Task Achievement. Tata bahasa yang bagus tidak menutupi poin yang hilang.",
+            "options": [
+              "Task Achievement turun (dibatasi sekitar band 5.0)",
+              "Tidak ada dampak bila tata bahasa bagus",
+              "Skor naik karena suratmu lebih ringkas",
+              "Hanya Lexical Resource yang berubah"
+            ],
+            "correct_answers": [
+              "Task Achievement turun (dibatasi sekitar band 5.0)"
+            ]
+          },
+          {
+            "question_id": "Q-GT333-008",
+            "question_type": "MCQ_SINGLE",
+            "skill": "WRITING",
+            "prompt": "Kalimat pembuka mana yang paling tepat untuk surat lamaran kerja yang formal?",
+            "explanation_id": "Pembuka formal menyatakan tujuan, posisi, dan sumber iklan dalam satu kalimat: 'I am writing to apply for...'.",
+            "options": [
+              "I'm writing 'cause I need a job.",
+              "I am writing to apply for the position of library assistant advertised on your website.",
+              "Hi! Got a job opening?",
+              "Your advertisement was seen by me."
+            ],
+            "correct_answers": [
+              "I am writing to apply for the position of library assistant advertised on your website."
+            ]
+          },
+          {
+            "question_id": "Q-GT333-009",
+            "question_type": "ERROR_RECOGNITION",
+            "skill": "WRITING",
+            "prompt": "Pilih kata yang SALAH secara tata bahasa:",
+            "explanation_id": "Kejadian lampau yang jelas memakai Past Simple: 'which I saw advertised', bukan 'seen' tanpa 'have'.",
+            "tokens": [
+              "I",
+              "am",
+              "writing",
+              "to",
+              "apply",
+              "for",
+              "the",
+              "position",
+              "which",
+              "I",
+              "seen",
+              "advertised",
+              "online."
+            ],
+            "correct_answers": [
+              10
+            ]
+          },
+          {
+            "question_id": "Q-GT333-010",
+            "question_type": "SENTENCE_REORDER",
+            "skill": "WRITING",
+            "prompt": "Susun menjadi permintaan formal yang sopan:",
+            "explanation_id": "Urutan benar: 'I would be grateful if you could send me a replacement as soon as possible.' Pola: I would be grateful if you could + kata kerja dasar.",
+            "segments": [
+              "I would be grateful",
+              "if you could",
+              "send me",
+              "a replacement",
+              "as soon as possible."
+            ]
+          },
+          {
+            "question_id": "Q-GT333-011",
+            "question_type": "MCQ_SINGLE",
+            "skill": "WRITING",
+            "prompt": "Surat untuk teman dekat. Kalimat mana yang paling wajar?",
+            "explanation_id": "Surat informal memakai bahasa akrab dan singkatan (I'm). Tiga pilihan lain adalah bahasa surat resmi.",
+            "options": [
+              "I would like to inform you that I shall be visiting.",
+              "Guess what? I'm coming to visit next month!",
+              "I hereby notify you of my intended arrival.",
+              "Please be advised of my visit."
+            ],
+            "correct_answers": [
+              "Guess what? I'm coming to visit next month!"
+            ]
+          },
+          {
+            "question_id": "Q-GT333-012",
+            "question_type": "MCQ_SINGLE",
+            "skill": "WRITING",
+            "prompt": "Susunan paragraf yang paling tepat untuk Task 1 dengan tiga poin adalah...",
+            "explanation_id": "Kerangka 4 paragraf: tujuan surat, poin 1, poin 2 dan 3, lalu penutup. Ini membuat alur mudah diikuti (Coherence).",
+            "options": [
+              "Pembuka tujuan, paragraf per poin, penutup",
+              "Satu paragraf panjang tanpa jeda",
+              "Daftar butir tanpa kalimat utuh",
+              "Esai dengan pendahuluan dan kesimpulan argumen"
+            ],
+            "correct_answers": [
+              "Pembuka tujuan, paragraf per poin, penutup"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

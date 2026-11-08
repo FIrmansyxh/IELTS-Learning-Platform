@@ -118,6 +118,8 @@ const SpeakingTask = z.strictObject({
   prep_seconds: intRange(0, 120).optional(),
   record_seconds: intRange(15, 180).optional(),
   cue_points: z.array(text(1, 200)).max(6).default([]),
+  /** Opsional: prompt kustom untuk AI pihak ketiga. Bila kosong, dibuat otomatis (ADR-004). */
+  external_eval_prompt: text(1, 4000).optional(),
 });
 
 export const QuestionSchema = z.discriminatedUnion('question_type', [

@@ -3,6 +3,7 @@
  * best_score_percent/attempts_count/skip_best_percent/boss_* pada tabel progres.
  * Semua fungsi dipanggil di dalam transaksi pemanggil dan bersifat idempoten dan monoton.
  */
+import { activeExamModule } from './exam-module';
 import { and, eq, sql } from 'drizzle-orm';
 import { userSubModuleProgress, users } from '@/db/schema';
 import { writeAudit } from '../audit';
@@ -83,6 +84,7 @@ export async function loadSnapshot(tx: DbOrTx, userId: string): Promise<Snapshot
     LEFT JOIN modules m ON m.tier_id = t.id AND m.status <> 'ARCHIVED'
     LEFT JOIN user_module_progress ump ON ump.module_id = m.id AND ump.user_id = ${userId}::uuid
     LEFT JOIN sub_modules s ON s.module_id = m.id AND s.status <> 'ARCHIVED'
+      AND s.exam_module IN ('COMMON', ${activeExamModule()}::exam_module)
     LEFT JOIN user_sub_module_progress usp ON usp.sub_module_id = s.id AND usp.user_id = ${userId}::uuid
     LEFT JOIN learning_materials lm ON lm.sub_module_id = s.id
     ORDER BY t.tier_number, m.order_index, m.id, s.order_index, s.id

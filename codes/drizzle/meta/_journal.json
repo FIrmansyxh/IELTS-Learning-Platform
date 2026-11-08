@@ -50,6 +50,27 @@
       "when": 1793683851927,
       "tag": "0006_spec_019_import_entity_code_band_fk_restrict",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794116872831,
+      "tag": "0007_spec_013_external_speaking_eval",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794118165930,
+      "tag": "0008_spec_023_reading_general_band",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794118480695,
+      "tag": "0009_spec_004_exam_module_tag",
+      "breakpoints": true
     }
   ]
 }

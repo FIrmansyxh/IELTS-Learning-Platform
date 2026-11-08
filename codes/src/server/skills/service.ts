@@ -17,6 +17,7 @@ import {
   scaleToForty,
 } from '../band/convert';
 import { getActiveTable } from '../band/service';
+import { bandSkillFor } from '../band/skills';
 import { logger } from '../logger';
 import { safeErr } from '../safe-error';
 import type { AttemptCompletedContext } from '../attempts/hooks';
@@ -92,7 +93,7 @@ export async function recalculateObjectiveSkill(
   if (sampleSize >= 5) {
     try {
       const raw40 = scaleToForty(correctCount, sampleSize);
-      const bandSkill = skill === 'LISTENING' ? 'LISTENING' : 'READING_ACADEMIC';
+      const bandSkill = bandSkillFor(skill);
       const table = await getActiveTable(tx, bandSkill);
       estimatedBand = convertRawToBand(table.rows, raw40);
     } catch (err) {
@@ -156,7 +157,8 @@ export async function recalculateAISkill(
       .limit(1);
 
     if (!evalRow) continue;
-    if (evalRow.method !== 'AI_LOCAL') continue;
+    // ADR-004: skor AI pihak ketiga (EXTERNAL_AI, diinput manual) dihitung; nilai sendiri tetap tidak.
+    if (evalRow.method !== 'AI_LOCAL' && evalRow.method !== 'EXTERNAL_AI') continue;
     if (evalRow.overallBand === null || evalRow.overallBand === undefined) continue;
 
     const feedback = (evalRow.feedbackJson ?? {}) as Record<string, unknown>;

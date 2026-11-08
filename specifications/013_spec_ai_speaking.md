@@ -189,6 +189,20 @@ Rujukan: `design-system.md` 5.16 Perekam Speaking, 5.4 Dialog, 5.7 Progress/Toas
 
 ---
 
+## Addendum 2026-11-08: Penilaian Speaking oleh AI Pihak Ketiga (ADR-004)
+
+Status: draft (menunggu persetujuan human). Berlaku selama `SPEAKING_AI_ENABLED=false` (MVP). Pipeline STT + LLM di atas tidak dihapus.
+
+**Alur.** (1) Pada soal Speaking, learner menekan "Salin prompt" (prompt lengkap: soal, alur wawancara, rubrik platform band 4-8 untuk 4 kriteria, aturan kalibrasi, format keluaran baku). (2) Learner menjalankan sesi suara di Claude, ChatGPT, atau Gemini. (3) AI menutup dengan blok `HASIL UNTUK PLATFORM` berisi 4 skor. (4) Learner menempel blok itu (atau mengisi 4 kolom manual) di platform dan menyimpan. (5) Platform menghitung Overall (rata-rata 4 kriteria dibulatkan ke 0,5 terdekat; 0,25 naik ke 0,5, 0,75 naik ke 1,0) dan memperlakukannya sebagai skor Speaking untuk radar dan prediksi band (SPEC-017).
+
+**Rubrik platform (paraphrase orisinal, C-05).** Fluency and Coherence, Lexical Resource, Grammatical Range and Accuracy, Pronunciation; deskriptor per band 4, 5, 6, 7, 8 ada di prompt. Aturan kalibrasi: Part 2 < 60 detik membatasi Fluency maksimal 5,5; jawaban di luar topik membatasi Fluency 5,0; tidak ada inflasi skor.
+
+**API baru.** `POST /api/v1/submissions/speaking-external` (auth `user`). Body (strictObject): `kind` (SPEAKING_PART1|2|3|MINI_TASK_SPEAKING), `attempt_id?`, `question_id?`, `sub_module_id?` (aturan konteks sama dengan `POST /submissions/speaking`, tanpa berkas audio), `tool` (CLAUDE|CHATGPT|GEMINI|OTHER), `criteria_scores` {fluency, lexical, grammar, pronunciation}, tiap nilai kelipatan 0,5 dalam 0-9, `feedback_text?` (<= 4000, catatan umpan balik yang ditempel). Respons `201 { submission, evaluation }`. `overall_band` selalu dihitung server; klien tidak mengirimnya.
+
+**Keputusan data.** Skor dimasukkan manual sehingga tidak terverifikasi. `ai_evaluations.method` mendapat nilai `EXTERNAL_AI` (migrasi 0007). Radar/prediksi menghitung `AI_LOCAL` dan `EXTERNAL_AI` (tidak menghitung `SELF_ASSESSMENT`). Antarmuka menandai "Dinilai AI eksternal (input manual)". Mengirim ulang untuk (attempt, soal) yang sama menambah `run_number` (nilai terbaru dipakai).
+
+**Kriteria penerimaan tambahan.** (a) Prompt memuat soal, rubrik 4 kriteria, dan format keluaran; (b) parser menerima blok hasil dengan koma/titik desimal dan menolak nilai bukan kelipatan 0,5; (c) skor tersimpan menggerakkan skill SPEAKING di radar; (d) kegagalan validasi konteks mengembalikan kode yang sama dengan `POST /submissions/speaking`.
+
 ## Human Approval
 
 **Human Approval Status:** approved
@@ -200,3 +214,4 @@ Rujukan: `design-system.md` 5.16 Perekam Speaking, 5.4 Dialog, 5.7 Progress/Toas
 | Date | Author | Changes |
 |------|--------|---------|
 | 2026-11-03 | Analyst Agent | Initial draft; persetujuan rekaman dan opsi tanpa simpan (ADR-003 #19), retensi 90 hari |
+| 2026-11-08 | Orchestrator | Addendum: penilaian Speaking via AI pihak ketiga + input skor manual (ADR-004) |

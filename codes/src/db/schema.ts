@@ -54,14 +54,15 @@ export const submissionKind = pgEnum('submission_kind', [
 export const submissionStatus = pgEnum('submission_status', ['RECEIVED', 'TRANSCRIBING', 'GRADING', 'GRADED', 'FALLBACK_SELF_ASSESSMENT', 'FAILED']);
 export const asyncJobKind = pgEnum('async_job_kind', ['STT_TRANSCRIBE', 'GRADE_WRITING', 'GRADE_SPEAKING', 'IMPORT_VALIDATE', 'IMPORT_PUBLISH', 'RETENTION_PURGE']);
 export const asyncJobStatus = pgEnum('async_job_status', ['QUEUED', 'RUNNING', 'SUCCEEDED', 'FAILED', 'CANCELLED']);
-export const evalMethod = pgEnum('eval_method', ['AI_LOCAL', 'SELF_ASSESSMENT']);
+export const examModule = pgEnum('exam_module', ['COMMON', 'GENERAL_TRAINING', 'ACADEMIC']);
+export const evalMethod = pgEnum('eval_method', ['AI_LOCAL', 'SELF_ASSESSMENT', 'EXTERNAL_AI']);
 export const importFormat = pgEnum('import_format', ['JSON', 'CSV']);
 export const importStatus = pgEnum('import_status', [
   'UPLOADED', 'VALIDATING', 'PREVIEW_READY', 'PUBLISHING', 'PUBLISHED', 'FAILED', 'CANCELLED', 'ROLLED_BACK',
 ]);
 export const importItemStatus = pgEnum('import_item_status', ['VALID', 'INVALID', 'APPLIED', 'SKIPPED']);
 export const importAction = pgEnum('import_action', ['CREATE', 'UPDATE', 'NOOP']);
-export const bandTableSkill = pgEnum('band_table_skill', ['LISTENING', 'READING_ACADEMIC']);
+export const bandTableSkill = pgEnum('band_table_skill', ['LISTENING', 'READING_ACADEMIC', 'READING_GENERAL']);
 export const pointSource = pgEnum('point_source', ['DRILL', 'SPEED_STREAK', 'CROWN', 'MINI_TASK', 'BOSS', 'DAILY', 'ADJUSTMENT']);
 
 // ───────────────────────────── AUTH ─────────────────────────────
@@ -200,6 +201,8 @@ export const subModules = pgTable('sub_modules', {
   passingScorePercent: smallint('passing_score_percent').notNull().default(75),
   orderIndex: integer('order_index').notNull(),
   status: reviewStatus('status').notNull().default('DRAFT'),
+  /** ADR-004: COMMON dipakai kedua ujian; GENERAL_TRAINING/ACADEMIC hanya tampil bila sesuai EXAM_MODULE. */
+  examModule: examModule('exam_module').notNull().default('COMMON'),
   contentVersion: integer('content_version').notNull().default(1),
   createdAt: createdAt(),
   updatedAt: updatedAt(),

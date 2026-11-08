@@ -1,0 +1,121 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-W-T2-ESSAY",
+      "bank_kind": "WRITING_GT_T2",
+      "title": "Writing Task 2 GT: Esai (opinion, discussion, problem-solution, two-part)",
+      "skill": "WRITING",
+      "tags": [
+        "essay",
+        "opinion",
+        "discussion",
+        "problem-solution"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTWE-001",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some people think that children should start learning a foreign language at primary school rather than secondary school.\n\nTo what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 2,
+          "explanation_id": "Tipe OPINION. Tentukan posisi jelas di pembukaan dan pertahankan. Kerangka 4 paragraf: pembukaan + posisi, alasan 1 (mis. otak anak lebih mudah menyerap bahasa), alasan 2 + contoh, kesimpulan. Jangan menyalin ulang soal kata demi kata."
+        },
+        {
+          "question_id": "Q-GTWE-002",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some people prefer to work for a large company, while others prefer to work for a small business.\n\nDiscuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 3,
+          "explanation_id": "Tipe DISCUSSION + OPINION. Bahas KEDUA sisi di paragraf tubuh terpisah (perusahaan besar: gaji, karier; usaha kecil: suasana, tanggung jawab), lalu nyatakan pendapat sendiri dan konsisten di kesimpulan."
+        },
+        {
+          "question_id": "Q-GTWE-003",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Many people spend several hours a day on their mobile phones, and this is causing problems for individuals and families.\n\nWhat problems does this cause? What can be done to solve them?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 3,
+          "explanation_id": "Tipe PROBLEM-SOLUTION. Sebutkan dua masalah (mis. kurang tidur, berkurangnya interaksi tatap muka) dan solusi yang MENJAWAB masing-masing masalah. Pastikan solusi realistis dan dikembangkan, bukan sekadar disebut."
+        },
+        {
+          "question_id": "Q-GTWE-004",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "More and more people in cities are choosing to live alone.\n\nWhy is this happening? Is this a positive or negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 3,
+          "explanation_id": "Tipe TWO-PART. Jawab kedua pertanyaan secara terpisah: penyebab (karier, kemandirian, menikah lebih lambat) lalu penilaian positif/negatif dengan alasan. Berikan posisi yang jelas pada pertanyaan kedua."
+        },
+        {
+          "question_id": "Q-GTWE-005",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some people believe that first aid should be a compulsory subject in all secondary schools.\n\nDo you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 2,
+          "explanation_id": "Tipe OPINION. Argumen kuat: keterampilan menyelamatkan nyawa, jumlah kecelakaan di rumah. Antisipasi sanggahan (kurikulum sudah padat) lalu jawab. Contoh konkret meningkatkan Task Response."
+        },
+        {
+          "question_id": "Q-GTWE-006",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some people think that governments should spend more public money on the arts, while others believe it should be spent on healthcare.\n\nDiscuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 4,
+          "explanation_id": "Tipe DISCUSSION. Berikan bobot adil untuk kedua sisi dan sebutkan prioritas pribadi dengan alasan. Hindari generalisasi tanpa dukungan; gunakan contoh seperti perpustakaan umum atau rumah sakit daerah."
+        },
+        {
+          "question_id": "Q-GTWE-007",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "In many cities, young people find it very difficult to afford their own home.\n\nWhat are the causes of this problem, and what can be done to solve it?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 4,
+          "explanation_id": "Tipe PROBLEM-SOLUTION (sebab dan solusi). Kaitkan solusi dengan sebab (harga tanah, upah rendah -> perumahan terjangkau, subsidi sewa). Kohesi: gunakan penghubung sebab-akibat yang bervariasi (as a result, owing to)."
+        },
+        {
+          "question_id": "Q-GTWE-008",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Many people now buy things online instead of going to shops.\n\nDo the advantages of this trend outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 3,
+          "explanation_id": "Tipe ADVANTAGES/DISADVANTAGES. Putuskan sisi mana yang lebih berat DI PEMBUKAAN. Bahas keunggulan (harga, kenyamanan) dan kelemahan (penipuan, matinya toko lokal) secara seimbang, lalu simpulkan konsisten."
+        },
+        {
+          "question_id": "Q-GTWE-009",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some employers allow their staff to work from home for part of the week.\n\nDo you think this is a good idea?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 2,
+          "explanation_id": "Tipe OPINION. Pertimbangkan sisi karyawan (waktu, biaya) dan perusahaan (produktivitas, kerja tim). Berikan satu contoh nyata. Pastikan jumlah kata >= 250; tulisan di bawah batas dikenai penalti Task Response."
+        }
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN"
+    }
+  ]
+}

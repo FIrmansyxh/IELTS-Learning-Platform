@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { IsoDateTime, Uuid } from './common';
 
 /** Skema konverter band (SPEC-009). */
-export const BandSkill = z.enum(['LISTENING', 'READING_ACADEMIC']);
+export const BandSkill = z.enum(['LISTENING', 'READING_ACADEMIC', 'READING_GENERAL']);
 export type BandSkillName = z.infer<typeof BandSkill>;
 
 export const BandRowSchema = z.object({
@@ -19,7 +19,7 @@ const ActiveTable = z.object({
   rows: z.array(BandRowSchema),
 });
 export const ActiveBandTablesResponseSchema = z.object({
-  data: z.object({ listening: ActiveTable, reading_academic: ActiveTable, disclaimer: z.string() }),
+  data: z.object({ listening: ActiveTable, reading_academic: ActiveTable, reading_general: ActiveTable, disclaimer: z.string() }),
 });
 export type ActiveBandTables = z.infer<typeof ActiveBandTablesResponseSchema>['data'];
 

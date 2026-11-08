@@ -15,6 +15,7 @@ import { ApiError, notFound } from '../http/errors';
 import { getSetting } from '../settings/service';
 import { convertRawToBand, scaleToForty } from '../band/convert';
 import { getActiveTable } from '../band/service';
+import { bandSkillFor } from '../band/skills';
 import {
   formatSectionDTO,
   loadChildSections,
@@ -441,7 +442,7 @@ export async function submitAnswer(
             if (a) raw += Number(a.score ?? 0);
           }
           const raw40 = max > 0 ? scaleToForty(raw, max) : 0;
-          const table = await getActiveTable(tx, cSet.skillCategory === 'LISTENING' ? 'LISTENING' : 'READING_ACADEMIC');
+          const table = await getActiveTable(tx, bandSkillFor(cSet.skillCategory));
           const band = convertRawToBand(table.rows, raw40);
           await tx
             .update(attemptSections)

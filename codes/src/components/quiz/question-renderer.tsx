@@ -2,6 +2,8 @@
 
 import { Sparkles } from 'lucide-react';
 import * as React from 'react';
+import { SpeakingExternalPromptCard } from '@/components/speaking/external-prompt-card';
+import { WritingTaskPanel } from '@/components/writing/writing-task-panel';
 import { id } from '@/i18n/id';
 import type { RendererProps } from './answer-utils';
 import { ErrorRecognitionRenderer } from './renderers/error-recognition-renderer';
@@ -38,10 +40,30 @@ function Body(props: RendererProps) {
       return <ReorderRenderer {...props} />;
     case 'ERROR_RECOGNITION':
       return <ErrorRecognitionRenderer {...props} />;
-    case 'WRITING_TASK':
-      return <AiTaskSlot kind="WRITING" />;
-    case 'SPEAKING_TASK':
-      return <AiTaskSlot kind="SPEAKING" />;
+    case 'WRITING_TASK': {
+      const taskKind = props.question.ai_task?.task_kind;
+      if (!props.attemptId || !taskKind) return <AiTaskSlot kind="WRITING" />;
+      return (
+        <WritingTaskPanel
+          context={{
+            kind: taskKind === 'TASK1' ? 'WRITING_TASK1' : 'WRITING_TASK2',
+            attempt_id: props.attemptId,
+            question_id: props.question.question_id,
+          }}
+          minWords={props.question.ai_task?.min_words}
+          storageKey={`writing-draft:${props.attemptId}:${props.question.question_id}`}
+        />
+      );
+    }
+    case 'SPEAKING_TASK': {
+      const external = props.question.ai_task?.external_prompt;
+      const part = props.question.ai_task?.part;
+      const context =
+        props.attemptId && (part === 1 || part === 2 || part === 3)
+          ? ({ kind: `SPEAKING_PART${part}`, attempt_id: props.attemptId, question_id: props.question.question_id } as const)
+          : undefined;
+      return external ? <SpeakingExternalPromptCard prompt={external} context={context} /> : <AiTaskSlot kind="SPEAKING" />;
+    }
   }
 }
 

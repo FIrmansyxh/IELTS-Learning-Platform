@@ -301,6 +301,7 @@ export function ExamSession({
             onChange={onChange}
             disabled={submitting}
             feedback={null}
+            attemptId={attempt.id}
           />
         </div>
         <div className="flex flex-wrap items-center justify-between gap-2">

@@ -39,8 +39,13 @@ const baseSchema = z.object({
   UPLOAD_MAX_MB_DOCUMENT: intRange(25, 1, 1024),
   UPLOAD_MAX_MB_IMPORT: intRange(5, 1, 1024),
 
+  /** Jenis ujian yang dilayani (ADR-004): menentukan sub-modul bertag yang tampil bagi learner. */
+  EXAM_MODULE: z.enum(['GENERAL_TRAINING', 'ACADEMIC']).default('GENERAL_TRAINING'),
   AI_ENABLED: bool(false),
-  LLM_DRIVER: z.enum(['ollama', 'mock']).default('ollama'),
+  LLM_DRIVER: z.enum(['llamacpp', 'ollama', 'mock']).default('llamacpp'),
+  LLAMACPP_BASE_URL: z.string().url().optional(),
+  LLAMACPP_MODEL_WRITING: z.string().optional(),
+  SPEAKING_AI_ENABLED: bool(true),
   OLLAMA_BASE_URL: z.string().url().optional(),
   OLLAMA_MODEL_WRITING: z.string().optional(),
   OLLAMA_MODEL_SPEAKING: z.string().optional(),
