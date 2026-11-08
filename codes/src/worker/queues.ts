@@ -3,8 +3,6 @@ export const QUEUE_NAMES = [
   'stt-transcribe',
   'ai-grade-writing',
   'ai-grade-speaking',
-  'import-validate',
-  'import-publish',
   'retention-purge',
 ] as const;
 

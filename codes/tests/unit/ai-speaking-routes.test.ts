@@ -6,7 +6,6 @@ import {
   GET as getRecording,
   DELETE as deleteRecordingRoute,
 } from '@/app/api/v1/submissions/[submission_id]/recording/route';
-import { GET as adminGetRecording } from '@/app/api/v1/admin/submissions/[submission_id]/recording/route';
 import type {
   RecordingDTO,
   SubmissionDTO,
@@ -316,34 +315,6 @@ describe('AI Speaking Endpoints (SPEC-013)', () => {
       });
 
       expect(res.status).toBe(204);
-    });
-  });
-
-  describe('GET /api/v1/admin/submissions/[submission_id]/recording', () => {
-    it('mengembalikan audio stream dan mencatat audit saat admin mendengarkan', async () => {
-      const stream = Readable.from([Buffer.from('admin listening audio')]);
-      vi.mocked(getRecordingStream).mockResolvedValueOnce({
-        status: 200,
-        headers: {
-          'Content-Type': 'audio/webm',
-          'Accept-Ranges': 'bytes',
-        },
-        stream: stream as unknown as NodeJS.ReadableStream,
-      } as unknown as Awaited<ReturnType<typeof getRecordingStream>>);
-
-      const req = new Request(
-        'http://localhost:3000/api/v1/admin/submissions/a1b2c3d4-9999-4000-8000-0000000000a1/recording',
-        { method: 'GET' }
-      );
-
-      const res = await adminGetRecording(req, {
-        params: Promise.resolve({
-          submission_id: 'a1b2c3d4-9999-4000-8000-0000000000a1',
-        }),
-      });
-
-      expect(res.status).toBe(200);
-      expect(res.headers.get('Content-Type')).toBe('audio/webm');
     });
   });
 });

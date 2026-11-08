@@ -3,7 +3,7 @@
 ## Metadata
 - **Author:** Orchestrator (atas permintaan human, ADR-005)
 - **Created:** 2026-11-08
-- **Status:** approved (human, 2026-11-08); Fase 1 SELESAI, Fase 2-4 belum
+- **Status:** approved (human, 2026-11-08); Fase 1-2 SELESAI, Fase 3-4 belum
 - **Supersedes:** SPEC-001 (auth), SPEC-002 (admin) seluruhnya; SPEC-018/019/020 pada bagian UI admin
 - **Depends on:** SPEC-000, SPEC-003, SPEC-007
 - **Prioritas:** P1
@@ -73,6 +73,13 @@ Sebagai pemilik yang belajar di laptop sendiri, saya ingin membuka aplikasi tanp
 - Dihapus: halaman `/masuk`, `/daftar`, `/ganti-password`; endpoint login, register, logout, change-password, signup-config; undangan (API, UI, tabel `signup_invites`), buat-pengguna-dengan-password, reset password, bootstrap admin, modul password/argon2, bendera `must_change_password` pada guard, pengaturan `signup.mode`.
 - Migrasi `0010_spec_025_local_profiles`: hapus `signup_invites`, reset `must_change_password`, beri akhiran pada nama kembar lama, indeks unik `lower(display_name)` (profil belum dihapus).
 - Sengaja ditunda ke Fase 2: panel admin lainnya (pengguna, poin, pengaturan, band, aset, impor, kurasi, audit, kesehatan) dan peran `admin` masih ada tetapi tak terjangkau karena tidak ada lagi cara menjadi admin; kolom `users.email/password_hash/role` tetap sampai skema ditulis ulang (Fase 3).
+
+**Fase 2 (selesai 2026-11-08):**
+- Dihapus: seluruh `/admin/*` (halaman), `api/v1/admin/*` (rute), `components/admin/*`, `server/admin/*`, pipeline impor batch (`server/import/*`, job `import-validate`/`import-publish`, purge impor), manajemen aset berlisensi via UI (`server/assets/*`), kurasi konten (`curation-service`), kontrak dan klien API admin, tingkat `auth: 'admin'`, `requireAdmin`, menu Admin, blok teks i18n admin (±600 baris), komponen UI yang hanya dipakai admin, serta tes terkait.
+- CLI pengganti (`npm run cli -- <area> <perintah>` dan alias): `profile:list|create|rename|delete`, `progress:unlock|reset`, `points:show|adjust`, `settings:list|get|set`, `band:list|activate|import`, `doctor`. Logika di `src/server/cli/*` (dapat diuji); `content:validate|import` dan `bank:validate` sudah ada.
+- `doctor` memeriksa Node, `.env`, binding loopback, DB, migrasi (butuh `DATABASE_MIGRATOR_URL`), seed, tabel band aktif, profil, folder aset, LLM; juga mencetak daftar kebutuhan internet.
+- Disengaja tetap ada sampai Fase 3: kolom `users.role/email/password_hash`, tabel `import_batches`, `import_batch_items`, `content_revisions` (tak terpakai), peran di JWT, UI perekam Speaking lama (pipeline STT dorman).
+- Catatan: `progress:reset --sub` tidak menurunkan status Modul/Tier yang sudah selesai (status monoton, SPEC-003).
 
 ## Human Approval
 - [x] Disetujui human (2026-11-08, "Setujui, mulai Fase 1")

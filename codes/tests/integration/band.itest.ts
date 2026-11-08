@@ -6,10 +6,12 @@ import { resetRateLimits } from '@/server/http/rate-limit';
 import { convertRawToBand } from '@/server/band/convert';
 import { getActiveTable } from '@/server/band/service';
 import { GET as activeRoute } from '@/app/api/v1/band-tables/active/route';
-import { GET as listRoute, POST as createRoute } from '@/app/api/v1/admin/band-tables/route';
-import { GET as detailRoute, DELETE as deleteRoute } from '@/app/api/v1/admin/band-tables/[table_id]/route';
-import { POST as activateRoute } from '@/app/api/v1/admin/band-tables/[table_id]/activate/route';
-import { adminSession, call, learnerSession } from './helpers';
+import { activateTable, createTable, deleteTable, getTable, listTables } from '@/server/band/service';
+import { ApiError } from '@/server/http/errors';
+import { zodDetails } from '@/server/http/zod-errors';
+import { BandSkill, CreateBandTableBodySchema } from '@/contracts/band';
+import { Uuid } from '@/contracts/common';
+import { call, learnerSession } from './helpers';
 
 const db = getDb();
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -26,11 +28,39 @@ beforeEach(async () => {
   await db.execute(sql`UPDATE band_conversion_tables SET is_active = (version_label IN ('v1-umum-2026-11', 'v1-gt-2026-11'))`);
 });
 
-const create = (cookie: string | null, body: unknown) => call(createRoute, 'POST', '/api/v1/admin/band-tables', { cookie, body });
-const activate = (cookie: string | null, id: string) => call(activateRoute, 'POST', `/api/v1/admin/band-tables/${id}/activate`, { cookie, params: { table_id: id } });
-const del = (cookie: string | null, id: string) => call(deleteRoute, 'DELETE', `/api/v1/admin/band-tables/${id}`, { cookie, params: { table_id: id } });
-const detail = (cookie: string | null, id: string) => call(detailRoute, 'GET', `/api/v1/admin/band-tables/${id}`, { cookie, params: { table_id: id } });
-const list = (cookie: string | null, qs = '') => call(listRoute, 'GET', `/api/v1/admin/band-tables${qs}`, { cookie });
+/** Pembungkus tipis: layanan dipanggil langsung (CLI memakai fungsi yang sama); hasil dibentuk ala respons. */
+interface R { status: number; json: any }
+async function run(fn: () => Promise<unknown>, okStatus: number): Promise<R> {
+  try {
+    const data = await fn();
+    return { status: okStatus, json: okStatus === 204 ? null : { data } };
+  } catch (e) {
+    if (e instanceof ApiError) return { status: e.status, json: { error: { code: e.code, message: e.message, details: e.details } } };
+    throw e;
+  }
+}
+const invalid = (details: Array<{ path: string; code: string }>): R => ({ status: 400, json: { error: { code: 'VALIDATION_ERROR', details } } });
+const checkId = (id: string): R | null => {
+  const ok = Uuid.safeParse(id);
+  return ok.success ? null : invalid([{ path: 'table_id', code: 'invalid_uuid' }]);
+};
+type Cookie = unknown;
+const create = async (_c: Cookie, body: unknown): Promise<R> => {
+  const parsed = CreateBandTableBodySchema.safeParse(body);
+  if (!parsed.success) return invalid(zodDetails(parsed.error));
+  return run(() => createTable(null, parsed.data), 201);
+};
+const activate = async (_c: Cookie, id: string): Promise<R> => checkId(id) ?? run(() => activateTable(null, id), 200);
+const del = async (_c: Cookie, id: string): Promise<R> => checkId(id) ?? run(() => deleteTable(null, id), 204);
+const detail = async (_c: Cookie, id: string): Promise<R> => checkId(id) ?? run(() => getTable(id), 200);
+const list = async (_c: Cookie, qs = ''): Promise<R> => {
+  const raw = new URLSearchParams(qs).get('skill');
+  if (raw === null) return run(() => listTables(), 200);
+  const skill = BandSkill.safeParse(raw);
+  return skill.success ? run(() => listTables(skill.data), 200) : invalid([{ path: 'skill', code: 'invalid_enum' }]);
+};
+/** Tanpa login/admin (SPEC-025): hanya cookie kosong yang dioper ke pembungkus. */
+const adminSession = async () => ({ cookie: null as string | null });
 
 const VALID = { skill: 'READING_ACADEMIC', version_label: 'v2-contoh', source_note: 'Revisi uji', rows: [{ raw_min: 0, raw_max: 14, band: 4.0 }, { raw_min: 15, raw_max: 29, band: 6.0 }, { raw_min: 30, raw_max: 40, band: 7.5 }] };
 const activeCount = async (skill: string) => Number((await db.execute(sql`SELECT count(*)::int AS n FROM band_conversion_tables WHERE skill = ${skill}::band_table_skill AND is_active`)).rows[0]!.n);
@@ -98,19 +128,7 @@ describe('GET /band-tables/active', () => {
   });
 });
 
-describe('admin: otorisasi', () => {
-  it('learner -> 403 FORBIDDEN pada semua endpoint admin; tanpa sesi 401', async () => {
-    const u = await learnerSession();
-    expect((await create(u.cookie, VALID)).json.error.code).toBe('FORBIDDEN');
-    expect((await list(u.cookie)).status).toBe(403);
-    expect((await detail(u.cookie, '11111111-1111-4111-8111-111111111111')).status).toBe(403);
-    expect((await activate(u.cookie, '11111111-1111-4111-8111-111111111111')).status).toBe(403);
-    expect((await del(u.cookie, '11111111-1111-4111-8111-111111111111')).status).toBe(403);
-    expect((await create(null, VALID)).status).toBe(401);
-  });
-});
-
-describe('POST /admin/band-tables', () => {
+describe('createTable (band:import)', () => {
   it('201 tidak aktif, row_count 3, tabel aktif lama tidak berubah, audit BAND_TABLE_CREATED', async () => {
     const a = await adminSession();
     const before = (await db.execute(sql`SELECT id FROM band_conversion_tables WHERE skill = 'READING_ACADEMIC' AND is_active`)).rows[0] as any;
@@ -175,7 +193,7 @@ describe('POST /admin/band-tables', () => {
   });
 });
 
-describe('GET /admin/band-tables', () => {
+describe('listTables / getTable (band:list)', () => {
   it('daftar sesuai kontrak, filter skill, row_count dan used_by_attempts', async () => {
     const a = await adminSession();
     await create(a.cookie, VALID);
@@ -199,7 +217,7 @@ describe('GET /admin/band-tables', () => {
   });
 });
 
-describe('POST activate', () => {
+describe('activateTable (band:activate)', () => {
   it('200, tepat 1 aktif per skill (lama nonaktif), audit; ulang -> 409 ALREADY_ACTIVE; skill lain tidak terpengaruh', async () => {
     const a = await adminSession();
     const id = (await create(a.cookie, VALID)).json.data.id;
@@ -275,7 +293,7 @@ describe('POST activate', () => {
   });
 });
 
-describe('DELETE /admin/band-tables/{id}', () => {
+describe('deleteTable', () => {
   it('tabel nonaktif tak terpakai: 204 + baris ikut terhapus + audit; aktif -> 409; tidak ada -> 404', async () => {
     const a = await adminSession();
     const id = (await create(a.cookie, VALID)).json.data.id;

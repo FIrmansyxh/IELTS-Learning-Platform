@@ -1,5 +1,7 @@
 # SPEC-019: Admin Bulk Importer JSON/CSV (Unggah, Validasi, Pratinjau, Publikasi, Rollback)
 
+> **DIGANTIKAN sebagian oleh SPEC-025 / ADR-005 (2026-11-08).** UI dan API admin untuk fitur ini dihapus. Konten diimpor lewat CLI (`npm run content:validate|import`, `bank:validate`); pipeline impor batch, manajemen aset via UI, dan kurasi via UI tidak ada lagi. Dokumen dipertahankan sebagai riwayat.
+
 ## Metadata
 - **Author:** Analyst Agent
 - **Created:** 2026-11-03

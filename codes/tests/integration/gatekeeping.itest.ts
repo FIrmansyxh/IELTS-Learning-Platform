@@ -15,8 +15,7 @@ import {
 import { closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { GET as treeGet } from '@/app/api/v1/curriculum/tree/route';
-import { POST as unlockPost } from '@/app/api/v1/admin/users/[user_id]/progress/unlock/route';
-import { adminSession, call, learnerSession, makeUser } from './helpers';
+import { call, learnerSession, makeUser } from './helpers';
 
 const db = getDb();
 afterAll(closeDb);
@@ -350,42 +349,34 @@ describe('Boss, Skip, Placement', () => {
   });
 });
 
-describe('override admin', () => {
-  it('sub-modul LOCKED -> 200 UNLOCKED(ADMIN) + audit; sudah terbuka 409; learner 403; COMING_SOON 409; target/user tak ada 404', async () => {
+describe('override progres (CLI progress:unlock memakai fungsi ini)', () => {
+  const override = (userId: string, level: 'TIER' | 'MODULE' | 'SUB_MODULE', targetId: string) =>
+    db.transaction((tx) => adminOverride(tx, null, userId, { level, targetId }));
+
+  it('sub-modul LOCKED -> UNLOCKED(ADMIN) + audit; sudah terbuka ALREADY_UNLOCKED; COMING_SOON NOT_AVAILABLE; target/user tak ada NOT_FOUND', async () => {
     await publish('1.1.1', '1.1.2');
-    const admin = await adminSession();
-    const learner = await learnerSession();
     const l = await newUser();
     await getTree(l.id);
     const target = await subId('1.1.2');
-    const url = (id: string) => `/api/v1/admin/users/${id}/progress/unlock`;
-    const post = (userId: string, body: unknown, cookie = admin.cookie) => call(unlockPost, 'POST', url(userId), { cookie, params: { user_id: userId }, body });
 
-    const forbidden = await post(l.id, { level: 'SUB_MODULE', target_id: target }, learner.cookie);
-    expect(forbidden.status).toBe(403);
-    const ok = await post(l.id, { level: 'SUB_MODULE', target_id: target });
-    expect(ok.status).toBe(200);
-    expect(ok.json.data).toEqual({ level: 'SUB_MODULE', target_id: target, status: 'UNLOCKED', unlock_source: 'ADMIN' });
+    const ok = await override(l.id, 'SUB_MODULE', target);
+    expect(ok).toEqual({ level: 'SUB_MODULE', targetId: target, status: 'UNLOCKED', unlockSource: 'ADMIN' });
     expect((await progressRow(l.id, '1.1.2')).unlock_source).toBe('ADMIN');
     const logs = await db.select().from(auditLog).where(sql`${auditLog.action} = 'PROGRESS_OVERRIDE' AND ${auditLog.entityId} = ${l.id}`);
     expect(logs).toHaveLength(1);
-    const again = await post(l.id, { level: 'SUB_MODULE', target_id: target });
-    expect(again.status).toBe(409);
-    expect(again.json.error.code).toBe('ALREADY_UNLOCKED');
-    const coming = await post(l.id, { level: 'SUB_MODULE', target_id: await subId('1.1.3') });
-    expect(coming.json.error.code).toBe('NOT_AVAILABLE');
-    expect((await post(l.id, { level: 'SUB_MODULE', target_id: '7a1b2c3d-0000-4000-8000-000000000000' })).status).toBe(404);
-    expect((await post('7a1b2c3d-0000-4000-8000-000000000000', { level: 'SUB_MODULE', target_id: target })).status).toBe(404);
-    expect((await post(l.id, { level: 'SUB_MODULE', target_id: target, status: 'COMPLETED' })).json.error.details[0].code).toBe('unrecognized_key');
+    expect(logs[0]!.actorUserId).toBeNull();
+    await expect(override(l.id, 'SUB_MODULE', target)).rejects.toMatchObject({ code: 'ALREADY_UNLOCKED' });
+    await expect(override(l.id, 'SUB_MODULE', await subId('1.1.3'))).rejects.toMatchObject({ code: 'NOT_AVAILABLE' });
+    await expect(override(l.id, 'SUB_MODULE', '7a1b2c3d-0000-4000-8000-000000000000')).rejects.toMatchObject({ code: 'NOT_FOUND' });
+    await expect(override('7a1b2c3d-0000-4000-8000-000000000000', 'SUB_MODULE', target)).rejects.toMatchObject({ code: 'NOT_FOUND' });
   });
 
   it('override Tier: Tier UNLOCKED(ADMIN) dan sub pertama chain ikut terbuka', async () => {
     await publish('1.1.1', '2.1.1', '2.1.2');
-    const admin = await adminSession();
     const l = await newUser();
     await getTree(l.id);
     const tid = await tierId(2);
-    await db.transaction((tx) => adminOverride(tx, admin.user.id, l.id, { level: 'TIER', targetId: tid }));
+    await override(l.id, 'TIER', tid);
     const t = await getTree(l.id);
     expect(tier(t, 2)).toMatchObject({ status: 'UNLOCKED', unlock_source: 'ADMIN' });
     expect(sub(t, '2.1.1').status).toBe('UNLOCKED');

@@ -5,7 +5,6 @@ import { POST as retryRoute } from '@/app/api/v1/submissions/[submission_id]/ret
 import { POST as selfAssessRoute } from '@/app/api/v1/submissions/[submission_id]/self-assessment/route';
 import { GET as listRoute } from '@/app/api/v1/submissions/route';
 import { GET as statusRoute } from '@/app/api/v1/ai/status/route';
-import { GET as adminGetRoute } from '@/app/api/v1/admin/submissions/[submission_id]/route';
 import type {
   EvaluationDTO,
   JobDTO,
@@ -241,17 +240,5 @@ describe('AI Writing Endpoints (SPEC-012)', () => {
     const body = await res.json();
     expect(body.data.enabled).toBe(true);
     expect(body.data.available).toBe(true);
-  });
-
-  it('GET /api/v1/admin/submissions/{id}: admin bisa melihat submission user mana pun', async () => {
-    vi.mocked(getSubmission).mockResolvedValue(dummySubmission);
-
-    const req = new Request('http://localhost/api/v1/admin/submissions/d4c3b2a1-1111-4000-8000-0000000000f1');
-    const res = await adminGetRoute(req, {
-      params: Promise.resolve({ submission_id: 'd4c3b2a1-1111-4000-8000-0000000000f1' }),
-    });
-
-    expect(res.status).toBe(200);
-    expect(getSubmission).toHaveBeenCalledWith(expect.anything(), '11111111-1111-4111-8111-111111111111', 'd4c3b2a1-1111-4000-8000-0000000000f1', true);
   });
 });

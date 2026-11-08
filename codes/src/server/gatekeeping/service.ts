@@ -435,7 +435,7 @@ export interface OverrideInput {
 /** Override admin: entitas LOCKED -> UNLOCKED (unlock_source=ADMIN) + audit PROGRESS_OVERRIDE. */
 export async function adminOverride(
   tx: Tx,
-  adminId: string,
+  adminId: string | null,
   userId: string,
   input: OverrideInput,
   ipHash?: string,

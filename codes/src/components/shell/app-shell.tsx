@@ -5,16 +5,9 @@ import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { isNavActive, NAV_ITEMS, type NavItem } from '@/app/nav.config';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useMe } from '@/hooks/use-auth';
 import { id } from '@/i18n/id';
 import { cn } from '@/lib/utils';
 import { HeaderChips } from '@/components/gamification/header-chips';
-
-function useVisibleItems(): NavItem[] {
-  const me = useMe();
-  const isAdmin = me.data?.role === 'admin';
-  return NAV_ITEMS.filter((i) => !i.adminOnly || isAdmin);
-}
 
 function DisabledItem({ item, variant }: { item: NavItem; variant: 'side' | 'bottom' }) {
   const Icon = item.icon;
@@ -84,7 +77,7 @@ function RouteFocus({ target }: { target: React.RefObject<HTMLElement | null> })
  */
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const items = useVisibleItems();
+  const items: NavItem[] = NAV_ITEMS;
   const mainRef = React.useRef<HTMLElement | null>(null);
 
   return (

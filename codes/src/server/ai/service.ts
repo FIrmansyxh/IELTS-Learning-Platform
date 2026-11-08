@@ -744,7 +744,6 @@ export async function getRecordingStream(
   userId: string,
   submissionId: string,
   rangeHeader: string | null,
-  isAdmin = false,
 ) {
   const [sub] = await db
     .select({ id: submissions.id, userId: submissions.userId })
@@ -753,7 +752,7 @@ export async function getRecordingStream(
     .limit(1);
 
   if (!sub) throw notFound();
-  if (!isAdmin && sub.userId !== userId) throw notFound();
+  if (sub.userId !== userId) throw notFound();
 
   const [rec] = await db
     .select()
@@ -767,16 +766,6 @@ export async function getRecordingStream(
   const storage = getStorage();
   const fileStat = await storage.stat(rec.storageKey);
   if (!fileStat) throw notFound();
-
-  if (isAdmin) {
-    await writeAudit(db, {
-      actorUserId: userId,
-      action: 'ADMIN_PLAYED_RECORDING',
-      entityType: 'recording',
-      entityId: rec.id,
-      metadata: { submission_id: submissionId, owner_user_id: sub.userId },
-    });
-  }
 
   const range = parseByteRange(rangeHeader, fileStat.size);
   if (range.type === 'invalid') {
@@ -862,7 +851,6 @@ export async function getSubmission(
   db: Db,
   userId: string,
   submissionId: string,
-  isAdmin = false,
 ): Promise<SubmissionDTO> {
   const [sub] = await db
     .select()
@@ -871,17 +859,7 @@ export async function getSubmission(
     .limit(1);
 
   if (!sub) throw notFound();
-  if (!isAdmin && sub.userId !== userId) throw notFound();
-
-  if (isAdmin) {
-    await writeAudit(db, {
-      actorUserId: userId,
-      action: 'ADMIN_VIEWED_SUBMISSION',
-      entityType: 'submission',
-      entityId: submissionId,
-      metadata: { owner_user_id: sub.userId },
-    });
-  }
+  if (sub.userId !== userId) throw notFound();
 
   const [jobRow] = await db
     .select()

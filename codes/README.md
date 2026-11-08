@@ -37,11 +37,23 @@ npm run dev                      # http://127.0.0.1:3005 -> pilih/buat profil di
 Database `ielts` (dev) dan `ielts_test` (`TEST_DATABASE_URL`; dipakai `npm run test:integration` tanpa Docker/Testcontainers). Hanya untuk dev/test lokal: `app_migrator` diberi keanggotaan `app_rw` agar tes hak akses `SET ROLE app_rw` berjalan.
 Jangan menjalankan `next build` dengan `NODE_ENV=development` di environment (mis. setelah `source .env`); biarkan Next yang memuat `.env`.
 
-### Profil lokal dan CLI konten (SPEC-025/004)
-Tanpa login atau daftar: layar `/pilih-profil` memilih atau membuat profil (maks. 10, tanpa password). Server hanya melayani loopback (`Host` asing ditolak 403); jangan membuka port ke jaringan.
+### Profil lokal dan perintah pemeliharaan (SPEC-025)
+Tanpa login atau daftar: layar `/pilih-profil` memilih atau membuat profil (maks. 10, tanpa password). Server hanya melayani loopback (`Host` asing ditolak 403); jangan membuka port ke jaringan. Panel admin sudah dihapus; gunakan perintah berikut (`<profil>` = nama atau id):
+```bash
+npm run doctor                                                       # periksa kesiapan (DB, migrasi, seed, band, LLM, internet)
+npm run profile:list | profile:create -- "Nama" | profile:rename -- <profil> "Nama baru" | profile:delete -- <profil> --yes
+npm run progress:unlock -- <profil> 3.3.2                            # buka kunci Tier (3), Modul (3.3), atau Sub-modul (3.3.3)
+npm run progress:reset  -- <profil> --sub 3.3.3 --yes                # atau --all
+npm run points:show | points:adjust -- <profil> 50 --reason "bonus"  # selisih negatif juga boleh: -20
+npm run settings:list | settings:get -- <kunci> | settings:set -- <kunci> <nilai>
+npm run band:list | band:activate -- <id-tabel> | band:import -- tabel.json [--activate]
+npm run cli -- --help                                                # bantuan lengkap
+```
+Konten ditambahkan lewat berkas di repo:
 ```bash
 npm run content:validate -- --dir content/golden-sample           # exit 0 valid, 1 ada galat
 npm run content:import   -- --dir content/golden-sample [--dry-run] [--publish]   # exit 0/1/2 (publikasi terhalang)/3
+npm run bank:validate    -- content/gt-bank                       # bank soal General Training
 ```
 Tanpa `ffprobe`, durasi audio hanya terbaca untuk WAV (peringatan `ffprobe_unavailable`).
 

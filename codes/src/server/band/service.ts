@@ -105,7 +105,7 @@ const isUniqueViolation = (err: unknown): boolean => {
   return e?.code === '23505' || e?.cause?.code === '23505';
 };
 
-export async function createTable(actorId: string, body: CreateBandTableBody, ipHash?: string) {
+export async function createTable(actorId: string | null, body: CreateBandTableBody, ipHash?: string) {
   const issues = validateBandRows(body.rows);
   if (issues.length > 0) {
     const details: ErrorDetail[] = issues.map((i) => ({ path: i.path, code: i.code, message: i.message }));
@@ -143,7 +143,7 @@ export async function createTable(actorId: string, body: CreateBandTableBody, ip
   }
 }
 
-export async function activateTable(actorId: string, tableId: string, ipHash?: string) {
+export async function activateTable(actorId: string | null, tableId: string, ipHash?: string) {
   return getDb().transaction(async (tx) => {
     const [probe] = await tx.select({ skill: bandConversionTables.skill }).from(bandConversionTables).where(eq(bandConversionTables.id, tableId)).limit(1);
     if (!probe) throw notFound();
@@ -174,7 +174,7 @@ export async function activateTable(actorId: string, tableId: string, ipHash?: s
   });
 }
 
-export async function deleteTable(actorId: string, tableId: string, ipHash?: string): Promise<void> {
+export async function deleteTable(actorId: string | null, tableId: string, ipHash?: string): Promise<void> {
   await getDb().transaction(async (tx) => {
     const [t] = await tx.select().from(bandConversionTables).where(eq(bandConversionTables.id, tableId)).limit(1).for('update');
     if (!t) throw notFound();

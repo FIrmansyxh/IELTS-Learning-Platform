@@ -9,7 +9,7 @@ import { ApiError } from './errors';
 import { consume, type BucketName } from './rate-limit';
 import { zodDetails } from './zod-errors';
 
-export type AuthLevel = 'public' | 'user' | 'admin';
+export type AuthLevel = 'public' | 'user';
 const MAX_BODY_BYTES = 1_048_576;
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
 
@@ -218,7 +218,7 @@ export function withApi<
 
       if (opts.auth !== 'public') {
         sawAuth = true;
-        const auth = await requireUser(req, { requireAdmin: opts.auth === 'admin' });
+        const auth = await requireUser(req);
         ctx.user = auth.user;
         if (auth.refreshedCookie) cookies.push(auth.refreshedCookie);
         limit('general_user', auth.user.id);

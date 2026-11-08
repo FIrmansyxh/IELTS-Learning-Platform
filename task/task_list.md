@@ -1,7 +1,9 @@
 # TASK LIST - ielts-learning-platform
-**Last Updated:** 2026-11-04 16:08
-**Total Tasks:** 21
-**Completed:** 0 | **In Progress:** 0 | **Ready to Test:** 21 | **Not Started:** 0 | **Blocked:** 0
+**Last Updated:** 2026-11-08
+**Total Tasks:** 26 (21 awal + 5 dari ADR-004/005)
+**Completed:** 0 | **In Progress:** 0 | **Ready to Test:** 17 | **Superseded:** 4 | **Not Started:** 5 | **Blocked:** 0
+
+> Pembaruan 2026-11-08: arah produk berubah (ADR-004 General Training + LLM lokal; ADR-005 aplikasi lokal satu perangkat). Task 001, 002, 018, 019, 020 digantikan; lihat bagian "Tambahan ADR-004/005" di bawah.
 
 Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimulai hanya setelah semua dependensinya `done`. Status valid: not_started, development, ready_to_test, testing, fixing, done.
 
@@ -43,7 +45,7 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
      - Frontend Dev: [2026-11-03 07:10] (Frontend Engineer)
      - Frontend Ready: [2026-11-03 07:25] (Frontend Engineer) - UI/klien selesai terhadap kontrak; integrasi dengan backend belum diuji
 
-- Task 002: Admin Dasar: Pengguna, Undangan, Pengaturan, Audit, Kesehatan
+- Task 002: Admin Dasar: Pengguna, Undangan, Pengaturan, Audit, Kesehatan  [SUPERSEDED oleh SPEC-025 / ADR-005; UI+API admin dihapus, diganti CLI]
   - Spesifikasi: [spec] ../specifications/002_spec_admin_users_invites.md
   - Detail: [task] ./TASK-002_admin-users-invites/TASK-002_admin-users-invites.md
   - Wave: W1 | Ukuran: M | Dependensi: TASK-000, TASK-001
@@ -133,7 +135,7 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
      - Backend Dev: [2026-11-03 12:30] (Backend Engineer)
      - Backend Ready: [2026-11-03 12:30] (Backend Engineer) - API server selesai + unit/integration lulus; E2E belum diuji
 
-- Task 018: Admin Sumber Konten dan Aset Berlisensi
+- Task 018: Admin Sumber Konten dan Aset Berlisensi  [SUPERSEDED oleh SPEC-025 / ADR-005; UI+API admin dihapus, diganti CLI]
   - Spesifikasi: [spec] ../specifications/018_spec_asset_license_management.md
   - Detail: [task] ./TASK-018_asset-license-management/TASK-018_asset-license-management.md
   - Wave: W4 | Ukuran: L | Dependensi: TASK-001, TASK-002, TASK-004
@@ -143,7 +145,7 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
      - Frontend Dev: [2026-11-03 14:00] (Frontend Engineer)
      - Frontend Ready: [2026-11-03 14:30] (Frontend Engineer) - Admin Sumber & Aset (daftar, unggah, tautan eksternal, detail, verifikasi hak, banner lisensi) selesai terhadap kontrak; integrasi backend belum diuji
 
-- Task 019: Admin Bulk Importer JSON/CSV
+- Task 019: Admin Bulk Importer JSON/CSV  [SUPERSEDED oleh SPEC-025 / ADR-005; UI+API admin dihapus, diganti CLI]
   - Spesifikasi: [spec] ../specifications/019_spec_bulk_importer.md
   - Detail: [task] ./TASK-019_bulk-importer/TASK-019_bulk-importer.md
   - Wave: W4 | Ukuran: XL | Dependensi: TASK-000, TASK-002, TASK-004, TASK-018
@@ -230,7 +232,7 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
      - Task Created: [2026-11-03 18:30] (PM Agent)
      - Implementation Complete: [2026-11-04 12:43] (Developer Agent)
 
-- Task 020: Admin Kurasi Konten
+- Task 020: Admin Kurasi Konten  [SUPERSEDED oleh SPEC-025 / ADR-005; UI+API admin dihapus, diganti CLI]
   - Spesifikasi: [spec] ../specifications/020_spec_content_curation.md
   - Detail: [task] ./TASK-020_content-curation/TASK-020_content-curation.md
   - Wave: W8 | Ukuran: L | Dependensi: TASK-002, TASK-004, TASK-018, TASK-019
@@ -254,3 +256,17 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
      - Backend Ready: [2026-11-03 07:55] (Backend Engineer) - GatekeepingService + tree + override; 24 tes integrasi lulus; FE+BE siap QA
      - Backend Dev: [2026-11-03 07:55] (Backend Engineer)
      - Backend Partial: [2026-11-03 07:55] (Backend Engineer) - seed/kontrak/validator/CLI/publish selesai dan teruji; Golden Sample (GS-1..6) belum dibuat sehingga task belum ready_to_test
+
+---
+
+## Tambahan ADR-004/005 (2026-11-08)
+
+Pekerjaan berikut dikerjakan Orchestrator langsung (tanpa `/build-feature`), dengan tes dan peninjauan di sesi yang sama. Belum melewati gerbang QA formal.
+
+- Task 001 (Auth) [SUPERSEDED oleh SPEC-025]: login/daftar/ganti-password/undangan dihapus; diganti profil lokal.
+- Task 025a: SPEC-025 Fase 1 - Profil lokal tanpa login. Status: **ready_to_test** (commit e8bc1e0).
+- Task 025b: SPEC-025 Fase 2 - Hapus admin, ganti CLI (`profile:*`, `progress:*`, `points:*`, `settings:*`, `band:*`, `doctor`). Status: **ready_to_test**.
+- Task 025c: SPEC-025 Fase 3 - SQLite + antrean dalam proses. Status: **not_started**.
+- Task 025d: SPEC-025 Fase 4 - Satu perintah menjalankan (`start:local`). Status: **not_started**.
+- ADR-004 (selesai, ready_to_test): driver llama.cpp, prompt Writing General Training, UI Writing, Speaking via prompt eksternal + input skor, bank soal GT (71 soal), tag `exam_module`, tabel band `READING_GENERAL`, modul ajar 3.3.3.
+- SPEC-021 Jalur Belajar: **not_started** (draf). SPEC-022 Bank Soal + Mix Builder: **not_started** (draf). SPEC-023 Simulasi Tes per section: **not_started** (draf). SPEC-024 Listening (skrip + TTS lokal): **not_started** (draf).

@@ -24,6 +24,8 @@ Endpoint baru (semua `public`; satu-satunya yang tanpa sesi selain `GET /api/hea
 
 Kode error baru: `PROFILE_NAME_TAKEN` (409), `PROFILE_LIMIT_REACHED` (409), `CONFIRM_NAME_MISMATCH` (400), `HOST_NOT_ALLOWED` (403: header `Host` bukan localhost/127.0.0.1/[::1]). Cookie sesi kini `SameSite=Strict`. `PATCH /api/v1/me/profile` dengan nama kembar mengembalikan `409 PROFILE_NAME_TAKEN`. Bagian tabel di bawah yang masih menyebut endpoint lama dipertahankan sebagai riwayat.
 
+**Fase 2 (2026-11-08):** SEMUA endpoint `/api/v1/admin/*` dihapus (pengguna, poin, pengaturan, audit, kesehatan, band-tables, aset, sumber, impor, kurasi, submissions admin). Tingkat auth `admin` tidak ada lagi: hanya `public` dan `user`. Fungsinya pindah ke CLI (lihat SPEC-025 D7). Endpoint publik untuk learner (mis. `GET /band-tables/active`) tetap.
+
 ---
 
 ## 1. Konvensi Bersama

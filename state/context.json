@@ -1,9 +1,11 @@
 {
   "project_name": "ielts-learning-platform",
-  "last_updated": "2026-11-04 16:55",
+  "last_updated": "2026-11-08",
   "last_agent": "orchestrator",
-  "current_sprint": "Content Expansion & Admin Restructure",
-  "active_tasks": [],
+  "current_sprint": "Pivot General Training + Aplikasi Lokal Satu Perangkat (ADR-004/005)",
+  "active_tasks": [
+    "SPEC-025 Fase 3 (SQLite + antrean dalam proses) - belum dimulai"
+  ],
   "blocked_tasks": [],
-  "notes": "Modul dan soal lengkap telah dibangun dengan 3 Paket Variasi (P1, P2, P3) per set/modul. Mesin pengacak di engine.ts mengacak varian dari 3 sumber soal per slot dan mengacak susunan urutan secara total (751 tests lulus 100%). Admin Panel telah disederhanakan total hanya untuk mengelola Pengguna, Poin & Gamifikasi, serta Pengaturan Waktu & Sistem. Konten kurikulum berstatus fixed via kode/paket AI."
+  "notes": "2026-11-08: ADR-004 (IELTS General Training, LLM lokal llama.cpp untuk Writing, Speaking via prompt AI eksternal + input skor, bank soal GT, tag exam_module, tabel band READING_GENERAL) dan ADR-005 Fase 1-2 (profil lokal tanpa login; panel admin dihapus, diganti CLI: npm run profile:*, progress:*, points:*, settings:*, band:*, doctor) selesai dan teruji. Draf menunggu: SPEC-021 jalur belajar, 022 bank soal+mix, 023 simulasi tes per section, 024 Listening TTS. Berikutnya: SPEC-025 Fase 3 (SQLite) lalu Fase 4 (satu perintah). Model LLM belum dikunci (Qwen3-8B menjanjikan, perlu uji ulang). Satu tes integrasi lama usang (Placement tanpa handler). Rujukan: state/knowledge_base/decisions/ADR-004*, ADR-005*."
 }

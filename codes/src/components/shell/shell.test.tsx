@@ -2,7 +2,6 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ProfileCard } from '@/components/auth/profile-card';
 import { errorBody, mockFetch, renderWithProviders, USER } from '@/components/test-utils';
-import { AdminGuard } from '@/components/admin/admin-guard';
 import { AuthenticatedLayout } from './authenticated-layout';
 
 const replace = vi.fn();
@@ -53,30 +52,6 @@ describe('AuthenticatedLayout (AuthGate + AppShell)', () => {
     expect(screen.queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument();
     const profil = screen.getAllByRole('link', { name: 'Profil' })[0];
     expect(profil).toHaveAttribute('aria-current', 'page');
-  });
-
-  it('admin melihat item Admin', async () => {
-    mockFetch(() => me({ ...USER, role: 'admin' }));
-    renderWithProviders(
-      <AuthenticatedLayout>
-        <p>Isi</p>
-      </AuthenticatedLayout>,
-    );
-    await screen.findByText('Isi');
-    expect(screen.getAllByRole('link', { name: 'Admin' }).length).toBeGreaterThan(0);
-  });
-});
-
-describe('AdminGuard', () => {
-  it('learner melihat pesan 403 dan tidak melihat konten admin', async () => {
-    mockFetch(() => me(USER));
-    renderWithProviders(
-      <AdminGuard>
-        <p>Panel admin</p>
-      </AdminGuard>,
-    );
-    expect(await screen.findByText('Anda tidak punya akses')).toBeInTheDocument();
-    expect(screen.queryByText('Panel admin')).not.toBeInTheDocument();
   });
 });
 

@@ -1,6 +1,6 @@
 # ADR-005: Aplikasi Lokal Satu Perangkat (Tanpa Login/Admin, Profil Lokal, SQLite)
 
-**Status:** `Accepted` (human 2026-11-08); Fase 1 selesai
+**Status:** `Accepted` (human 2026-11-08); Fase 1-2 selesai
 **Date:** 2026-11-08
 **Author Agent:** Orchestrator (atas permintaan human)
 **Phase:** Planning / perubahan lingkup
@@ -47,3 +47,4 @@ Node 24 membawa `node:sqlite` (SQLite 3.53) sehingga tidak perlu kompilasi nativ
 |-----------|------|-----------|
 | 2026-11-08 | Orchestrator | ADR dibuat (Proposed) |
 | 2026-11-08 | Orchestrator | Disetujui; Fase 1 (profil lokal, hapus login/daftar/undangan/password) selesai |
+| 2026-11-08 | Orchestrator | Fase 2 selesai: admin dihapus, CLI pengganti + `doctor` |

@@ -1,4 +1,4 @@
-import { Home, Map, User, History, Shield, type LucideIcon } from 'lucide-react';
+import { Home, Map, User, History, type LucideIcon } from 'lucide-react';
 import { id } from '@/i18n/id';
 
 export type NavItem = {
@@ -7,7 +7,6 @@ export type NavItem = {
   icon: LucideIcon;
   /** Rute yang sudah dibangun. Rute lain tampil `disabled` + Tooltip "Segera hadir". */
   enabled: boolean;
-  adminOnly?: boolean;
   /** Awalan path yang menandai item aktif selain `href` persis. */
   matchPrefix?: string;
 };
@@ -21,7 +20,6 @@ export const NAV_ITEMS: NavItem[] = [
   { href: '/peta', label: id.nav.map, icon: Map, enabled: true, matchPrefix: '/peta' },
   { href: '/riwayat', label: id.nav.history, icon: History, enabled: true, matchPrefix: '/riwayat' },
   { href: '/profil', label: id.nav.profile, icon: User, enabled: true, matchPrefix: '/profil' },
-  { href: '/admin', label: id.nav.admin, icon: Shield, enabled: true, adminOnly: true, matchPrefix: '/admin' },
 ];
 
 export function isNavActive(item: NavItem, pathname: string): boolean {

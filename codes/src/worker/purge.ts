@@ -2,7 +2,6 @@ import { sql } from 'drizzle-orm';
 import { writeAudit } from '../server/audit';
 import { getDb, type Db } from '../server/db';
 import { userAnonymizedHooks } from '../server/auth/hooks';
-import { purgeImportBatches } from '../server/import/purge';
 
 /**
  * Anonimisasi pengguna terhapus > 30 hari (SPEC-002 butir 10). Idempoten: baris yang sudah teranonimisasi
@@ -35,12 +34,6 @@ export const purgeTasks: Array<{ name: string; run: () => Promise<void> }> = [
     name: 'anonymizeDeletedUsers',
     run: async () => {
       await anonymizeDeletedUsers();
-    },
-  },
-  {
-    name: 'purgeImportBatches',
-    run: async () => {
-      await purgeImportBatches();
     },
   },
 ];

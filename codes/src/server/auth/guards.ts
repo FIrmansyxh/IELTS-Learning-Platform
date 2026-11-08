@@ -50,17 +50,12 @@ export function toUserDTO(u: SessionUser): UserDTOType {
   };
 }
 
-export interface RequireUserOptions {
-  requireAdmin?: boolean;
-}
-
 /**
- * requireUser()/requireAdmin() (security-standards 1.4): verifikasi JWT, lalu muat user dari DB pada SETIAP
+ * requireUser() (security-standards 1.4): verifikasi JWT, lalu muat user dari DB pada SETIAP
  * permintaan (status ACTIVE, belum dihapus, token_version sama, batas absolut sesi).
  */
 export async function requireUser(
   req: Request,
-  opts: RequireUserOptions = {},
 ): Promise<{ user: SessionUser; refreshedCookie?: string }> {
   const { claims } = await readSession(req.headers.get('cookie'));
   const now = Math.floor(Date.now() / 1000);
@@ -74,7 +69,6 @@ export async function requireUser(
   if (!row || row.status !== 'ACTIVE' || row.tokenVersion !== claims.tv) throw new ApiError('UNAUTHENTICATED');
 
   const user = toSessionUser(row);
-  if (opts.requireAdmin && user.role !== 'admin') throw new ApiError('FORBIDDEN');
 
   // Sesi geser: perbarui cookie bila token lebih tua dari updateAge, tidak melewati batas absolut.
   let refreshedCookie: string | undefined;
@@ -83,10 +77,6 @@ export async function requireUser(
     refreshedCookie = buildSetCookie(t.value, t.maxAge);
   }
   return { user, refreshedCookie };
-}
-
-export async function requireAdmin(req: Request) {
-  return requireUser(req, { requireAdmin: true });
 }
 
 /** Untuk Server Component/loader: baca user dari header Cookie mentah (null bila tidak valid). */

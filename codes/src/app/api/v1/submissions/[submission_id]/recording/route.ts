@@ -18,7 +18,6 @@ export const GET = withApi(
       user!.id,
       params.submission_id,
       rangeHeader,
-      false,
     );
     return new Response(result.stream, {
       status: result.status,
