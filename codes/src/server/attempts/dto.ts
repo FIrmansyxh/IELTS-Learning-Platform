@@ -38,6 +38,7 @@ const toH = (numeric: string | number | null): number => Math.round(Number(numer
 export interface AudioInfo {
   mimeType: string | null;
   durationSec: number | null;
+  attributionText?: string | null;
 }
 
 export function buildAttemptDTO(p: {
@@ -109,7 +110,12 @@ export function buildAttemptDTO(p: {
     ...(mixState ? { passages: mixState.passages.map((p) => ({ passage_no: p.passage_no, bank_set_id: p.bank_set_id, markdown: p.markdown })) } : {}),
     listening:
       set.listeningAssetId && p.audio?.mimeType
-        ? { audio_url: `/api/v1/attempts/${attempt.id}/audio`, mime_type: p.audio.mimeType, duration_sec: p.audio.durationSec ?? 0 }
+        ? {
+            audio_url: `/api/v1/attempts/${attempt.id}/audio`,
+            mime_type: p.audio.mimeType,
+            duration_sec: p.audio.durationSec ?? 0,
+            note: p.audio.attributionText ?? null,
+          }
         : null,
     questions: inProgress
       ? (isPlacement && pState?.served ? pState.served : state.order).flatMap((qid) => {

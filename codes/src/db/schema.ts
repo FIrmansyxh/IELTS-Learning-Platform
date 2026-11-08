@@ -10,7 +10,7 @@
  */
 import { sql } from 'drizzle-orm';
 import {
-  sqliteTable, text, integer, index, uniqueIndex, primaryKey, check, customType,
+  sqliteTable, text, integer, real, index, uniqueIndex, primaryKey, check, customType,
   type AnySQLiteColumn,
 } from 'drizzle-orm/sqlite-core';
 import { randomUUID } from 'node:crypto';
@@ -114,6 +114,7 @@ export const users = sqliteTable('users', {
   tokenVersion: integer('token_version').notNull().default(0),
   consentRecordingAt: ts('consent_recording_at'),               // dipakai SPEC-013
   keepRecordings: boolean('keep_recordings').notNull().default(true), // dipakai SPEC-013
+  activeTrackId: uuid('active_track_id').references((): AnySQLiteColumn => learningTracks.id, { onDelete: 'set null' }),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
   deletedAt: ts('deleted_at'),                                    // soft delete -> anonymize
@@ -229,7 +230,8 @@ export const subModules = sqliteTable('sub_modules', {
 
 export const learningMaterials = sqliteTable('learning_materials', {
   id: id(),
-  subModuleId: uuid('sub_module_id').notNull().unique().references(() => subModules.id, { onDelete: 'cascade' }),
+  subModuleId: uuid('sub_module_id').notNull().references(() => subModules.id, { onDelete: 'cascade' }),
+  style: text('style').$type<'BASE' | 'PRACTICE_FIRST' | 'CASE_BASED'>().notNull().default('BASE'),
   articleMarkdown: text('article_markdown').notNull(),
   // elemen JSONB menyimpan asset_id (uuid -> content_assets) + metadata tampilan, BUKAN url mentah
   videosJson: jsonb('videos_json').notNull().default(sql`'[]'`),       // [{asset_id,start_sec,end_sec,language,title}]
@@ -242,7 +244,58 @@ export const learningMaterials = sqliteTable('learning_materials', {
   contentVersion: integer('content_version').notNull().default(1),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
-});
+}, (t) => [
+  uniqueIndex('learning_materials_sub_style_uq').on(t.subModuleId, t.style),
+]);
+
+// ───────────────────────────── JALUR BELAJAR (SPEC-021) ─────────────────────────────
+export const learningTracks = sqliteTable('learning_tracks', {
+  id: id(),
+  code: varchar('code', { length: 30 }).notNull().unique(),
+  title: varchar('title', { length: 100 }).notNull(),
+  description: varchar('description', { length: 500 }).notNull(),
+  kind: text('kind').$type<'CURRICULUM' | 'CURATED'>().notNull(),
+  layout: text('layout').$type<'LIST' | 'SPRINT'>().notNull().default('LIST'),
+  deliveryStyleDefault: text('delivery_style_default').$type<'LEARN_FIRST' | 'PRACTICE_FIRST' | 'CASE_BASED'>().notNull(),
+  targetBandMin: real('target_band_min').notNull(),
+  targetBandMax: real('target_band_max').notNull(),
+  recommendedFor: varchar('recommended_for', { length: 200 }).notNull(),
+  sortOrder: integer('sort_order').notNull(),
+  status: reviewStatus('status').notNull().default('DRAFT'),
+  contentHash: text('content_hash'),
+  createdAt: createdAt(),
+  updatedAt: updatedAt(),
+}, (t) => [
+  uniqueIndex('learning_tracks_sort_order_uq').on(t.sortOrder),
+  check('learning_tracks_band_min_chk', sql`${t.targetBandMin} >= 0 AND ${t.targetBandMin} <= 9 AND (${t.targetBandMin} * 2) = CAST(${t.targetBandMin} * 2 AS INTEGER)`),
+  check('learning_tracks_band_max_chk', sql`${t.targetBandMax} >= 0 AND ${t.targetBandMax} <= 9 AND (${t.targetBandMax} * 2) = CAST(${t.targetBandMax} * 2 AS INTEGER)`),
+  check('learning_tracks_band_range_chk', sql`${t.targetBandMin} <= ${t.targetBandMax}`),
+]);
+
+export const learningTrackItems = sqliteTable('learning_track_items', {
+  id: id(),
+  trackId: uuid('track_id').notNull().references(() => learningTracks.id, { onDelete: 'cascade' }),
+  itemKind: text('item_kind').$type<'SUB_MODULE' | 'CHECKPOINT'>().notNull(),
+  subModuleId: uuid('sub_module_id').references(() => subModules.id, { onDelete: 'restrict' }),
+  orderIndex: integer('order_index').notNull(),
+  weekNo: integer('week_no'),
+  dayNo: integer('day_no'),
+  createdAt: createdAt(),
+}, (t) => [
+  uniqueIndex('track_items_track_order_uq').on(t.trackId, t.orderIndex),
+  uniqueIndex('track_items_track_sub_uq').on(t.trackId, t.subModuleId).where(sql`${t.subModuleId} IS NOT NULL`),
+  check('track_items_kind_chk', sql`(${t.itemKind} = 'SUB_MODULE' AND ${t.subModuleId} IS NOT NULL) OR (${t.itemKind} = 'CHECKPOINT' AND ${t.subModuleId} IS NULL)`),
+  check('track_items_sprint_chk', sql`(${t.weekNo} IS NULL AND ${t.dayNo} IS NULL) OR (${t.weekNo} BETWEEN 1 AND 4 AND ${t.dayNo} BETWEEN 1 AND 5 AND ${t.itemKind} = 'SUB_MODULE')`),
+]);
+
+export const userSubModuleStyles = sqliteTable('user_sub_module_styles', {
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  subModuleId: uuid('sub_module_id').notNull().references(() => subModules.id, { onDelete: 'cascade' }),
+  style: text('style').$type<'LEARN_FIRST' | 'PRACTICE_FIRST' | 'CASE_BASED'>().notNull(),
+  updatedAt: updatedAt(),
+}, (t) => [
+  primaryKey({ columns: [t.userId, t.subModuleId] }),
+]);
 
 export const assessmentSets = sqliteTable('assessment_sets', {
   id: id(),

@@ -72,6 +72,17 @@ const REGISTRY: Record<string, { status: number; message: string }> = {
   MINI_TASK_TYPE_MISMATCH: { status: 409, message: 'Jenis Mini-Task tidak sesuai.' },
   // SPEC-022
   MIX_NOT_ENOUGH_QUESTIONS: { status: 422, message: 'Soal yang tersedia untuk pilihan ini tidak cukup.' },
+  // SPEC-021
+  CHECKPOINT_NOT_READY: { status: 409, message: 'Checkpoint belum siap dikerjakan.' },
+  CHECKPOINT_NOT_ENOUGH_QUESTIONS: { status: 422, message: 'Kolam soal tidak cukup untuk Checkpoint ini.' },
+  // SPEC-023
+  SIMULATION_IN_PROGRESS: { status: 409, message: 'Simulasi lain sedang berjalan.' },
+  SIMULATION_NOT_ENOUGH_CONTENT: { status: 422, message: 'Konten tidak cukup untuk bagian yang dipilih.' },
+  SECTION_NOT_SUBMITTABLE: { status: 409, message: 'Bagian Speaking tidak dinilai lewat pengiriman biasa.' },
+  SECTION_ORDER_VIOLATION: { status: 409, message: 'Selesaikan bagian sebelumnya terlebih dahulu.' },
+  SECTION_ALREADY_DONE: { status: 409, message: 'Bagian ini sudah selesai dikerjakan.' },
+  SECTION_NOT_ACTIVE: { status: 409, message: 'Bagian ini belum dimulai.' },
+  SECTION_EXPIRED: { status: 409, message: 'Waktu pengerjaan bagian ini telah habis.' },
 };
 
 export class ApiError extends Error {

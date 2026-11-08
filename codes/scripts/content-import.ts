@@ -30,11 +30,12 @@ async function main(): Promise<number> {
     const bank = await import('../src/server/content/bank-import');
     const { existsSync } = await import('node:fs');
     const found = await bank.findBankFiles(dir);
-    if (found.issues.length > 0 && !existsSync(path.join(dir, 'content.json'))) {
+    const isContentPkg = existsSync(path.join(dir, 'content.json')) || existsSync(path.join(dir, 'tracks.json'));
+    if (found.issues.length > 0 && !isContentPkg) {
       for (const i of found.issues) console.error(bank.formatBankIssue(i));
       return 1;
     }
-    if (found.issues.length === 0 && found.files.length > 0 && !existsSync(path.join(dir, 'content.json'))) {
+    if (found.issues.length === 0 && found.files.length > 0 && !isContentPkg) {
       const staticSources = new Map(
         CONTENT_SOURCES.map((s) => [s.code, { licenseType: s.licenseType, shareAlike: s.shareAlike ?? false, mayStoreCopy: s.mayStoreCopy ?? false }]),
       );
@@ -69,7 +70,7 @@ async function main(): Promise<number> {
     const pkg = r.pkg!;
     const drills = (pkg.sub_modules ?? []).filter((s) => s.active_drill).length;
     console.log(
-      `OK: valid | modules ${pkg.modules?.length ?? 0} | sub_modules ${pkg.sub_modules?.length ?? 0} | drill ${drills} | assessment_sets ${pkg.assessment_sets?.length ?? 0} | assets ${r.manifest?.assets.length ?? 0}`,
+      `OK: valid | modules ${pkg.modules?.length ?? 0} | sub_modules ${pkg.sub_modules?.length ?? 0} | drill ${drills} | assessment_sets ${pkg.assessment_sets?.length ?? 0} | tracks ${pkg.learning_tracks?.length ?? 0} | assets ${r.manifest?.assets.length ?? 0}`,
     );
     return 0;
   }

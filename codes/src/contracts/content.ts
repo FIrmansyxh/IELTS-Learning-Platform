@@ -6,7 +6,7 @@ import { SkillCategory } from './common';
  * Struktur di sini; aturan silang (jawaban di dalam opsi, rujukan aset, dst.) ada di
  * src/server/content/validate.ts. Token `message` pada refine kustom = kode galat kontrak.
  */
-export const CONTRACT_VERSIONS = ['1.0', '1.1'] as const;
+export const CONTRACT_VERSIONS = ['1.0', '1.1', '1.2'] as const;
 
 const text = (min: number, max: number) => z.string().min(min).max(max);
 const intRange = (min: number, max: number) => z.number().int().min(min).max(max);
@@ -211,6 +211,16 @@ export const ModuleItem = z.strictObject({
   order_index: z.number().int().min(1).optional(),
 });
 
+export const MaterialVariant = z.strictObject({
+  style: z.enum(['LEARN_FIRST', 'PRACTICE_FIRST', 'CASE_BASED']),
+  article_markdown: text(1, 100000),
+  videos: z.array(Video).max(10).optional(),
+  slides: z.array(Slide).max(40).optional(),
+  attachments: z.array(Attachment).max(10).optional(),
+  mini_task: MiniTask.optional(),
+  attribution_text: text(0, 500).optional(),
+});
+
 export const SubModuleItem = z.strictObject({
   tier_number: intRange(1, 4),
   module_code: z.string().regex(MODULE_CODE_RE, { message: 'invalid_module_code' }),
@@ -221,7 +231,30 @@ export const SubModuleItem = z.strictObject({
   order_index: z.number().int().min(1).optional(),
   ...provenance,
   materials: Materials.optional(),
+  materials_variants: z.array(MaterialVariant).max(2).optional(),
   active_drill: ActiveDrill.optional(),
+});
+
+export const TrackItemContent = z.strictObject({
+  kind: z.enum(['SUB_MODULE', 'CHECKPOINT']),
+  sub_module_code: z.string().regex(SUB_MODULE_CODE_RE, { message: 'invalid_sub_module_code' }).optional(),
+  week_no: intRange(1, 4).optional(),
+  day_no: intRange(1, 5).optional(),
+});
+
+export const LearningTrackContent = z.strictObject({
+  // eslint-disable-next-line security/detect-unsafe-regex
+  track_code: text(4, 30).regex(/^GT-[A-Z0-9]+(-[A-Z0-9]+)*$/, { message: 'invalid_track_code' }),
+  title: text(1, 100),
+  description: text(1, 500),
+  kind: z.enum(['CURRICULUM', 'CURATED']),
+  layout: z.enum(['LIST', 'SPRINT']).optional(),
+  delivery_style_default: z.enum(['LEARN_FIRST', 'PRACTICE_FIRST', 'CASE_BASED']),
+  target_band_min: z.number().min(0).max(9).refine((v) => Number.isInteger(v * 2), 'band_invalid'),
+  target_band_max: z.number().min(0).max(9).refine((v) => Number.isInteger(v * 2), 'band_invalid'),
+  recommended_for: text(1, 200),
+  sort_order: intRange(1, 99),
+  items: z.array(TrackItemContent).max(60).optional(),
 });
 
 export const AssessmentSetItem = z.strictObject({
@@ -243,9 +276,13 @@ export const ContentPackageSchema = z.strictObject({
   modules: z.array(ModuleItem).optional(),
   sub_modules: z.array(SubModuleItem).optional(),
   assessment_sets: z.array(AssessmentSetItem).optional(),
+  learning_tracks: z.array(LearningTrackContent).max(20).optional(),
 });
 export type ContentPackage = z.infer<typeof ContentPackageSchema>;
 export type SubModuleItemType = z.infer<typeof SubModuleItem>;
+export type MaterialVariantType = z.infer<typeof MaterialVariant>;
+export type LearningTrackContentType = z.infer<typeof LearningTrackContent>;
+export type TrackItemContentType = z.infer<typeof TrackItemContent>;
 export type AssessmentSetItemType = z.infer<typeof AssessmentSetItem>;
 export type ModuleItemType = z.infer<typeof ModuleItem>;
 

@@ -166,7 +166,41 @@ export const OFFLINE_NOTES = [
   'Build pertama mengunduh font Google; model LLM diunduh sekali.',
 ];
 
+
+export async function ffmpegCheck(): Promise<DoctorCheck> {
+  const { execFile } = await import('node:child_process');
+  const { promisify } = await import('node:util');
+  const execFileAsync = promisify(execFile);
+
+  const ffmpegCmd = process.env.FFMPEG_PATH || 'ffmpeg';
+  const ffprobeCmd = process.env.FFPROBE_PATH || 'ffprobe';
+
+  let hasFfmpeg = false;
+  let hasFfprobe = false;
+
+  try {
+    await execFileAsync(ffmpegCmd, ['-version']);
+    hasFfmpeg = true;
+  } catch {}
+
+  try {
+    await execFileAsync(ffprobeCmd, ['-version']);
+    hasFfprobe = true;
+  } catch {}
+
+  if (hasFfmpeg && hasFfprobe) {
+    const tts = process.env.TTS_ENGINE_CMD ? ' + TTS dikonfigurasi' : '';
+    return { name: 'Alat audio (Listening)', status: 'ok', detail: `ffmpeg dan ffprobe terpasang${tts}` };
+  }
+
+  return {
+    name: 'Alat audio (Listening)',
+    status: 'warn',
+    detail: 'ffmpeg/ffprobe belum ada di PATH (opsional: hanya dibutuhkan untuk pembuatan konten audio offline listening:build)',
+  };
+}
+
 export async function runDoctor(): Promise<DoctorCheck[]> {
   const leftover = postgresLeftoverCheck();
-  return [nodeCheck(), envCheck(), hostCheck(), ...(await dbChecks()), ...(leftover ? [leftover] : []), await assetsCheck(), await llmCheck()];
+  return [nodeCheck(), envCheck(), hostCheck(), ...(await dbChecks()), ...(leftover ? [leftover] : []), await assetsCheck(), await llmCheck(), await ffmpegCheck()];
 }

@@ -137,3 +137,7 @@ temp/
 
 # Data Postgres lama (SPEC-025): tidak dipakai lagi
 .pgdata/
+
+# Handoff & Patch files
+state/handoff/
+*.patch

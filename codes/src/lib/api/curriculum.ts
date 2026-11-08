@@ -1,7 +1,6 @@
-import { CurriculumTreeResponseSchema } from '@/contracts/curriculum';
-import { apiFetch } from './client';
+import { tracksApi } from './tracks';
 
 export const curriculumApi = {
-  tree: async (signal?: AbortSignal) =>
-    (await apiFetch('/curriculum/tree', { schema: CurriculumTreeResponseSchema, signal })).data,
+  /** `track` opsional (SPEC-021); tanpa nilai = jalur aktif. `data.tiers` tidak berubah. */
+  tree: async (signal?: AbortSignal, track: string | null = null) => tracksApi.tree(track, signal),
 };

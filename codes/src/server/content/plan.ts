@@ -1,4 +1,4 @@
-import { ne } from 'drizzle-orm';
+import { eq, ne } from 'drizzle-orm';
 import {
   assessmentSets,
   contentAssets,
@@ -167,7 +167,7 @@ export async function loadDbState(tx: Tx): Promise<DbState> {
     tx.select().from(tiers),
     tx.select().from(modules),
     tx.select().from(subModules),
-    tx.select().from(learningMaterials),
+    tx.select().from(learningMaterials).where(eq(learningMaterials.style, 'BASE')),
     tx.select({ id: contentAssets.id, code: contentAssets.assetCode, ref: contentAssets.externalRef }).from(contentAssets),
     tx.select({ id: contentSources.id, code: contentSources.code }).from(contentSources),
     tx.select().from(assessmentSets).where(ne(assessmentSets.status, 'ARCHIVED')),

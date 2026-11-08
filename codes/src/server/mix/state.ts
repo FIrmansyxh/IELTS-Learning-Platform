@@ -12,6 +12,8 @@ import type { AttemptRow, SetRow } from '../attempts/dto';
 import type { AttemptState } from '../attempts/engine';
 import { ApiError } from '../http/errors';
 import { logger } from '../logger';
+import { checkpointStateOf } from '../tracks/checkpoint';
+import { virtualSetForMock } from '../simulation/state';
 
 export type MixAttemptState = AttemptState & MixState;
 
@@ -60,6 +62,42 @@ export function mixTitle(state: MixState): string {
  * dan tidak boleh dipakai sebagai kunci asing (`attempt_answers.assessment_set_id` memakai `bank_set_id` tiap soal).
  */
 export function virtualSetFor(a: AttemptRow): SetRow {
+  if (a.assessmentType === 'MOCK_TEST') {
+    return virtualSetForMock(a);
+  }
+  if (a.assessmentType === 'TRACK_CHECKPOINT') {
+    const cp = checkpointStateOf(a);
+    return {
+      id: a.id,
+      assessmentType: a.assessmentType,
+      title: `Checkpoint (${cp.questions.length} soal)`,
+      subModuleId: null,
+      moduleId: null,
+      tierId: null,
+      parentSetId: null,
+      skillCategory: null,
+      timeLimitSeconds: 0,
+      readingPassageMarkdown: null,
+      listeningAssetId: null,
+      questionsJson: cp.questions.map((q) => q.question),
+      questionCount: cp.questions.length,
+      passPercent: 75,
+      origin: 'ORIGINAL_AUTHORED',
+      sourceId: null,
+      attributionText: null,
+      status: 'PUBLISHED',
+      reviewedBy: null,
+      reviewedAt: null,
+      version: 0,
+      contentHash: null,
+      bankCode: null,
+      bankKind: null,
+      examModule: 'GENERAL_TRAINING',
+      tags: [],
+      createdAt: a.createdAt,
+      updatedAt: a.updatedAt,
+    };
+  }
   const state = mixStateOf(a);
   return {
     id: a.id,

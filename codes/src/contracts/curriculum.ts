@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { Band, IsoDateTime, ProgressStatus, SkillCategory, Uuid } from './common';
+import { CheckpointInfoDTO, DeliveryStyleSchema, TrackItemKindSchema, TrackLayoutSchema } from './tracks';
 
 /** Skema pohon kurikulum (SPEC-003). */
 export const UnlockSource = z.enum(['DEFAULT', 'SEQUENTIAL', 'BOSS_PASS', 'SKIP_TEST', 'PLACEMENT', 'ADMIN']);
@@ -74,9 +75,34 @@ export const TierNodeDTO = z.object({
   modules: z.array(ModuleNodeDTO),
 });
 
-export const CurriculumTreeResponseSchema = z.object({ data: z.object({ tiers: z.array(TierNodeDTO) }) });
+export const TrackItemDTO = z.object({
+  position: z.number().int().min(1),
+  kind: TrackItemKindSchema,
+  item_id: Uuid.nullable(),
+  sub_module: SubModuleNodeDTO.nullable(),
+  week_no: z.number().int().nullable(),
+  day_no: z.number().int().nullable(),
+  checkpoint: CheckpointInfoDTO.nullable(),
+});
+export const TrackViewDTO = z.object({
+  code: z.string(),
+  title: z.string(),
+  layout: TrackLayoutSchema,
+  delivery_style_default: DeliveryStyleSchema,
+  is_active: z.boolean(),
+  items: z.array(TrackItemDTO),
+});
+
+export const CurriculumTreeResponseSchema = z.object({
+  data: z.object({
+    tiers: z.array(TierNodeDTO),
+    track: TrackViewDTO.nullable().optional(),
+  }),
+});
 
 export type CurriculumTree = z.infer<typeof CurriculumTreeResponseSchema>['data'];
 export type TierNode = z.infer<typeof TierNodeDTO>;
 export type ModuleNode = z.infer<typeof ModuleNodeDTO>;
 export type SubModuleNode = z.infer<typeof SubModuleNodeDTO>;
+export type TrackItem = z.infer<typeof TrackItemDTO>;
+export type TrackView = z.infer<typeof TrackViewDTO>;

@@ -5,7 +5,7 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
 import { rm } from 'node:fs/promises';
-import { desc, eq, sql } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import {
   aiEvaluations,
   asyncJobs,
@@ -14,7 +14,7 @@ import {
   submissions,
   users,
 } from '@/db/schema';
-import { execute, getDb } from '../db';
+import { getDb } from '../db';
 import { getStorage } from '../storage';
 import { logger } from '../logger';
 import { writeAudit } from '../audit';

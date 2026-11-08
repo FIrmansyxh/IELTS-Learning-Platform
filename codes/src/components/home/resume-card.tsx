@@ -24,9 +24,16 @@ export function ResumeCard({ card }: { card: ResumeCardData }) {
       className="bg-gradient-to-br from-[var(--color-primary-subtle)] to-[var(--color-surface)] rounded-2xl"
     >
       <CardHeader>
-        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
-          {fallback ? id.resume.labelFallback : id.resume.label}
-        </p>
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
+            {fallback ? id.resume.labelFallback : id.resume.label}
+          </p>
+          {card.active_track ? (
+            <span className="text-xs text-muted-foreground">
+              Jalur: <strong className="text-foreground">{card.active_track.title}</strong>
+            </span>
+          ) : null}
+        </div>
         <CardTitle className="text-xl leading-snug">
           <h2>{title}</h2>
         </CardTitle>

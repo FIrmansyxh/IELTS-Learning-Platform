@@ -429,9 +429,9 @@ describe('GET /curriculum/tree', () => {
       (raw as { prepare: unknown }).prepare = original;
     }
     times.sort((a, b) => a - b);
-    // Termasuk query autentikasi (requireUser) dan BEGIN/COMMIT transaksi.
+    // Termasuk query autentikasi (requireUser), BEGIN/COMMIT transaksi, dan resolusi jalur belajar (SPEC-021).
     console.log(`[perf] tree: ${perCall} query/permintaan, p95=${times[18]!.toFixed(1)} ms`);
     expect(times[18]!).toBeLessThan(300);
-    expect(perCall).toBeLessThanOrEqual(8);
+    expect(perCall).toBeLessThanOrEqual(10);
   });
 });

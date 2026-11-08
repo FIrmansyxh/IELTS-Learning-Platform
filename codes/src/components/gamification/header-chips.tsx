@@ -14,7 +14,7 @@ export function HeaderChips() {
   const { data: stats, isLoading, isError } = useGamificationStats();
 
   // Sembunyikan pada mode ujian (/ujian/...)
-  if (pathname.startsWith('/ujian')) {
+  if (pathname.startsWith('/ujian') || pathname.startsWith('/simulasi')) {
     return null;
   }
 

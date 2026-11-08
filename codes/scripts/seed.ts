@@ -156,6 +156,20 @@ export const seedModules: SeedModule[] = [
     },
   },
   {
+    // SPEC-021: 4 jalur belajar seed (GT-STRUCT, GT-WRITING, GT-READING, GT-SPRINT-4W).
+    name: 'learning-tracks',
+    run: async (tx) => {
+      const { readFileSync } = await import('node:fs');
+      const path = await import('node:path');
+      const { applyTracks } = await import('../src/server/content/tracks-import');
+      const tracksPath = path.resolve('content/gt-tracks/tracks.json');
+      const pkg = JSON.parse(readFileSync(tracksPath, 'utf8'));
+      if (pkg.learning_tracks) {
+        await applyTracks(tx, pkg.learning_tracks, 'PUBLISHED');
+      }
+    },
+  },
+  {
     // SPEC-009: tabel band Academic aktif per skill (idempoten; tidak menimpa tabel aktif lain yang sudah ada).
     name: 'band-tables',
     run: async (tx) => {

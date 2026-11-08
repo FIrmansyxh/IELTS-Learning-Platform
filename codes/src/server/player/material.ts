@@ -1,5 +1,5 @@
-import { inArray, eq } from 'drizzle-orm';
-import { contentAssets, learningMaterials } from '@/db/schema';
+import { inArray } from 'drizzle-orm';
+import { contentAssets } from '@/db/schema';
 import type { DbOrTx } from '../db';
 import { logger } from '../logger';
 import { VIDEO_ID_RE } from './rules';
@@ -54,8 +54,13 @@ const TASK_TYPES = ['AI_SHORT_WRITING', 'AI_SHORT_SPEAKING', 'SELF_CHECK'] as co
  * `external_url`, atau `ai_rubric_criteria` (hanya `success_criteria` = isi `ai_rubric_criteria`).
  * Entri yang asetnya hilang/korup dibuang dengan log `warn` (konsisten antara tampilan dan syarat belajar).
  */
-export async function loadMaterial(db: DbOrTx, subModuleId: string): Promise<Material | null> {
-  const [lm] = await db.select().from(learningMaterials).where(eq(learningMaterials.subModuleId, subModuleId)).limit(1);
+export async function loadMaterial(
+  db: DbOrTx,
+  subModuleId: string,
+  style: 'LEARN_FIRST' | 'PRACTICE_FIRST' | 'CASE_BASED' = 'LEARN_FIRST',
+): Promise<Material | null> {
+  const { getSubModuleMaterials } = await import('../tracks/service');
+  const lm = await getSubModuleMaterials(subModuleId, style, db);
   if (!lm) return null;
   const videosJson = arr(lm.videosJson);
   const slidesJson = arr(lm.slidesJson);

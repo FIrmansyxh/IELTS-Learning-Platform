@@ -181,6 +181,31 @@ export async function applyContentPlan(tx: Tx, plan: ContentPlan, opts: ApplyOpt
         };
       };
 
+      const variantMaterialsJson = async (v: NonNullable<SubModuleItemType['materials_variants']>[number]) => {
+        const videos = [];
+        for (const vd of v.videos ?? []) {
+          videos.push({
+            asset_id: await videoAsset(vd),
+            video_id: vd.video_id,
+            title: vd.title,
+            instructor_channel: vd.instructor_channel ?? null,
+            language: vd.language,
+            start_sec: vd.start_sec,
+            end_sec: vd.end_sec,
+          });
+        }
+        return {
+          articleMarkdown: v.article_markdown,
+          videosJson: videos,
+          slidesJson: (v.slides ?? []).map((x, i) => ({ asset_id: assetId(x.asset_code!, `sub_modules.${s.sub_module_code}.materials_variants.slides[${i}]`), order: x.order, caption: x.caption, alt: x.alt ?? x.caption })),
+          attachmentsJson: (v.attachments ?? []).map((a, i) => ({ asset_id: assetId(a.asset_code!, `sub_modules.${s.sub_module_code}.materials_variants.attachments[${i}]`), title: a.title, file_type: a.file_type })),
+          miniTaskJson: v.mini_task ?? {},
+          origin: s.origin ?? ('ORIGINAL_AUTHORED' as const),
+          sourceId: sourceId(s.source_code),
+          attributionText: v.attribution_text ?? s.attribution_text ?? null,
+        };
+      };
+
       if (item.action === 'CREATE') {
         const [row] = await tx
           .insert(subModules)
@@ -188,7 +213,12 @@ export async function applyContentPlan(tx: Tx, plan: ContentPlan, opts: ApplyOpt
           .returning({ id: subModules.id });
         id = row!.id;
         subId.set(s.sub_module_code, id);
-        if (s.materials) await tx.insert(learningMaterials).values({ subModuleId: id, ...(await materialsJson()), contentVersion: 1 });
+        if (s.materials) await tx.insert(learningMaterials).values({ subModuleId: id, style: 'BASE', ...(await materialsJson()), contentVersion: 1 });
+        if (s.materials_variants) {
+          for (const v of s.materials_variants) {
+            await tx.insert(learningMaterials).values({ subModuleId: id, style: v.style as 'PRACTICE_FIRST' | 'CASE_BASED', ...(await variantMaterialsJson(v)), contentVersion: 1 });
+          }
+        }
         await ensureRevision(tx, 'SUB_MODULE', id, 1, desiredSubSnapshot(s), opts);
       } else if (item.action === 'UPDATE' && existing) {
         id = existing.id;
@@ -202,8 +232,17 @@ export async function applyContentPlan(tx: Tx, plan: ContentPlan, opts: ApplyOpt
           const mj = await materialsJson();
           await tx
             .insert(learningMaterials)
-            .values({ subModuleId: id, ...mj, contentVersion: next })
-            .onConflictDoUpdate({ target: learningMaterials.subModuleId, set: { ...mj, contentVersion: next, updatedAt: new Date() } });
+            .values({ subModuleId: id, style: 'BASE', ...mj, contentVersion: next })
+            .onConflictDoUpdate({ target: [learningMaterials.subModuleId, learningMaterials.style], set: { ...mj, contentVersion: next, updatedAt: new Date() } });
+        }
+        if (s.materials_variants) {
+          for (const v of s.materials_variants) {
+            const vj = await variantMaterialsJson(v);
+            await tx
+              .insert(learningMaterials)
+              .values({ subModuleId: id, style: v.style as 'PRACTICE_FIRST' | 'CASE_BASED', ...vj, contentVersion: next })
+              .onConflictDoUpdate({ target: [learningMaterials.subModuleId, learningMaterials.style], set: { ...vj, contentVersion: next, updatedAt: new Date() } });
+          }
         }
         await ensureRevision(tx, 'SUB_MODULE', id, next, desiredSubSnapshot(s), opts);
       }

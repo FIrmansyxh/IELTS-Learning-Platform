@@ -1,7 +1,7 @@
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { and, eq, inArray, isNotNull } from 'drizzle-orm';
-import { assessmentSets, contentAssets, contentSources, modules, subModules } from '@/db/schema';
+import { assessmentSets, contentAssets, contentSources, learningMaterials, modules, subModules, tiers } from '@/db/schema';
 import type { AssetManifest, ContentIssue, ContentPackage } from '@/contracts/content';
 import { writeAudit } from '../audit';
 import type { Db } from '../db';
@@ -12,8 +12,9 @@ import { registerFromManifest, validateAssetFile } from './assets';
 import { planContentPackage, summarize } from './plan';
 import { publish, type Blocker, type PublishEntityType } from './publish';
 import { parseAssetManifest, parseContentPackage, type ParseContext, type SourceInfo } from './validate';
-import { MODULE_SEEDS } from './curriculum-structure';
+import { MODULE_SEEDS, SUB_MODULE_SEEDS } from './curriculum-structure';
 import { findBankFiles, runBankImport, type BankImportRow } from './bank-import';
+import { applyTracks } from './tracks-import';
 
 const NIL_UUID = '00000000-0000-4000-8000-000000000000';
 export const MAX_PACKAGE_BYTES = 5 * 1_048_576;
@@ -48,21 +49,52 @@ export async function loadPackageDir(dir: string): Promise<LoadedPackage> {
       return null;
     }
   };
-  const raw = await read('content.json', true);
+  let raw = await read('content.json', false);
+  if (raw === null && !issues.some((i) => i.code === 'package_too_large' || i.code === 'invalid_json')) {
+    raw = await read('tracks.json', false);
+  }
+  if (raw === null && issues.length === 0) {
+    issues.push(issue('content.json', 'file_not_found', `content.json atau tracks.json tidak ditemukan di ${dir}.`));
+  }
   const rawManifest = await read('assets.manifest.json', false);
   return { raw, rawManifest, issues };
 }
 
 /** Konteks validasi dari DB (bila terhubung) atau dari struktur statis seed (mode luring). */
 export async function contextFromDb(db: Db): Promise<ParseContext> {
-  const [srcRows, modRows, assetRows] = await Promise.all([
+  const [srcRows, modRows, assetRows, subRows, tierRows] = await Promise.all([
     db.select().from(contentSources),
     db.select({ code: modules.moduleCode, skill: modules.skillCategory }).from(modules),
     db.select({ code: contentAssets.assetCode, kind: contentAssets.kind }).from(contentAssets).where(isNotNull(contentAssets.assetCode)),
+    db
+      .select({
+        code: subModules.subModuleCode,
+        exam: subModules.examModule,
+        tierId: modules.tierId,
+        hasBase: isNotNull(learningMaterials.id),
+      })
+      .from(subModules)
+      .innerJoin(modules, eq(subModules.moduleId, modules.id))
+      .leftJoin(
+        learningMaterials,
+        and(eq(learningMaterials.subModuleId, subModules.id), eq(learningMaterials.style, 'BASE')),
+      ),
+    db.select({ id: tiers.id, n: tiers.tierNumber }).from(tiers),
   ]);
+  const tierNumberMap = new Map(tierRows.map((t) => [t.id, Number(t.n)]));
   return {
     sources: new Map(srcRows.map((s) => [s.code, { licenseType: s.licenseType, shareAlike: s.shareAlike, mayStoreCopy: s.mayStoreCopy }])),
     modules: new Map(modRows.map((m) => [m.code, { tier: Number(m.code.split('.')[0]), skill: m.skill }])),
+    subModules: new Map(
+      subRows.map((s) => [
+        s.code,
+        {
+          tier: tierNumberMap.get(s.tierId) ?? Number(s.code.split('.')[0]),
+          exam: s.exam,
+          hasBaseMaterials: Boolean(s.hasBase),
+        },
+      ]),
+    ),
     assets: new Map(assetRows.map((a) => [a.code as string, { kind: a.kind }])),
   };
 }
@@ -71,6 +103,12 @@ export function staticContext(sources: Map<string, SourceInfo>): ParseContext {
   return {
     sources,
     modules: new Map(MODULE_SEEDS.map((m) => [m.code, { tier: m.tier, skill: m.skill }])),
+    subModules: new Map(
+      SUB_MODULE_SEEDS.map((s) => [
+        s.code,
+        { tier: Number(s.code.split('.')[0]), exam: s.exam ?? 'COMMON', hasBaseMaterials: true },
+      ]),
+    ),
   };
 }
 
@@ -135,10 +173,12 @@ export interface ImportOutcome {
 }
 
 const hasContentJson = (dir: string) =>
-  stat(path.join(dir, 'content.json')).then(
-    () => true,
-    () => false,
-  );
+  stat(path.join(dir, 'content.json'))
+    .catch(() => stat(path.join(dir, 'tracks.json')))
+    .then(
+      () => true,
+      () => false,
+    );
 
 /**
  * Titik masuk `content:import`: paket konten (`content.json`) dan/atau bank soal (SPEC-022 D8) dalam satu folder.
@@ -212,6 +252,9 @@ export async function runContentImport(db: Db, o: ImportOptions): Promise<Import
         const plan = await planContentPackage(tx, pkg);
         if (plan.errors.length) throw new Abort({ exitCode: 1, lines: plan.errors.map(formatIssue) });
         applied = await applyContentPlan(tx, plan, { actorUserId: o.actorUserId });
+        if (pkg.learning_tracks && pkg.learning_tracks.length > 0) {
+          await applyTracks(tx, pkg.learning_tracks, o.publish ? 'PUBLISHED' : 'DRAFT');
+        }
         const c = applied.counts;
         await writeAudit(tx, {
           actorUserId: o.actorUserId,

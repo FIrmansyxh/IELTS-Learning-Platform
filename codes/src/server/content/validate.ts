@@ -13,6 +13,7 @@ import {
   type SubModuleItemType,
 } from '@/contracts/content';
 import { duplicateLabels, MAX_PASSAGES, parsePassages, splitPassages } from './passages';
+import { SUB_MODULE_SEEDS } from './curriculum-structure';
 
 export type { ContentIssue } from '@/contracts/content';
 
@@ -21,11 +22,18 @@ export interface SourceInfo {
   shareAlike: boolean;
   mayStoreCopy: boolean;
 }
+export interface SubModuleInfo {
+  tier: number;
+  exam?: string;
+  hasBaseMaterials?: boolean;
+}
 export interface ParseContext {
   /** content_sources.code -> info. Bila tidak ada, pemeriksaan sumber dilewati. */
   sources?: Map<string, SourceInfo>;
   /** modules yang sudah ada (module_code -> tier, skill). Bila tidak ada, pemeriksaan modul dilewati. */
   modules?: Map<string, { tier: number; skill: string }>;
+  /** sub_modules yang sudah ada (sub_module_code -> info). */
+  subModules?: Map<string, SubModuleInfo>;
   /** content_assets.asset_code yang sudah ada -> kind. Bila tidak ada, pemeriksaan aset dilewati. */
   assets?: Map<string, { kind: string }>;
   /** Manifest paket (kode di manifest dianggap ada). */
@@ -151,7 +159,7 @@ export function canonicalJson(v: unknown): string {
   };
   return JSON.stringify(norm(v));
 }
-export const sha256Hex = (s: string) => createHash('sha256').update(s).digest('hex');
+export const sha256Hex = (s: string | Buffer | Uint8Array) => createHash('sha256').update(s).digest('hex');
 
 /** D9: `/storage/tier2/slides/x.webp` -> `tier2/slides/x`. */
 export function urlToAssetCode(url: string): string | null {
@@ -306,8 +314,9 @@ export function parseContentPackage(raw: unknown, ctx: ParseContext = {}): Parse
   const mods = pkg.modules ?? [];
   const subs = pkg.sub_modules ?? [];
   const sets = pkg.assessment_sets ?? [];
-  if (mods.length + subs.length + sets.length === 0) errors.push(err('$', 'package_empty', 'Paket harus memuat minimal satu item.'));
-  if (mods.length + subs.length + sets.length > MAX_ITEMS) errors.push(err('$', 'package_too_large', 'Paket melebihi 2.000 item.'));
+  const tracks = pkg.learning_tracks ?? [];
+  if (mods.length + subs.length + sets.length + tracks.length === 0 && (ctx.manifest?.assets?.length ?? 0) === 0) errors.push(err('$', 'package_empty', 'Paket harus memuat minimal satu item.'));
+  if (mods.length + subs.length + sets.length + tracks.length > MAX_ITEMS) errors.push(err('$', 'package_too_large', 'Paket melebihi 2.000 item.'));
 
   const assetKinds = new Map<string, string>();
   for (const [c, a] of ctx.assets ?? []) assetKinds.set(c, a.kind);
@@ -351,6 +360,15 @@ export function parseContentPackage(raw: unknown, ctx: ParseContext = {}): Parse
     }
   };
 
+  const knownSubModules = new Map<string, SubModuleInfo>();
+  if (ctx.subModules) {
+    for (const [k, v] of ctx.subModules.entries()) knownSubModules.set(k, { ...v });
+  } else {
+    for (const sm of SUB_MODULE_SEEDS) {
+      const tier = Number(sm.code.split('.')[0]);
+      knownSubModules.set(sm.code, { tier, exam: sm.exam ?? 'COMMON', hasBaseMaterials: false });
+    }
+  }
   const seenSubs = new Set<string>();
   subs.forEach((s: SubModuleItemType, i) => {
     const p = `sub_modules[${i}]`;
@@ -405,6 +423,49 @@ export function parseContentPackage(raw: unknown, ctx: ParseContext = {}): Parse
           delete a.file_url;
         } else requireAsset(a.asset_code!, `${ap}.asset_code`, 'DOCUMENT');
       });
+    }
+
+    const prevSubInfo = knownSubModules.get(s.sub_module_code);
+    knownSubModules.set(s.sub_module_code, {
+      tier: s.tier_number,
+      exam: prevSubInfo?.exam ?? 'COMMON',
+      hasBaseMaterials: prevSubInfo?.hasBaseMaterials || !!s.materials,
+    });
+
+    if (s.materials_variants && s.materials_variants.length > 0) {
+      const seenStyles = new Set<string>();
+      s.materials_variants.forEach((v, vi) => {
+        const vp = `${p}.materials_variants[${vi}]`;
+        if (v.style === 'LEARN_FIRST') {
+          errors.push(err(`${vp}.style`, 'style_reserved', 'Gaya LEARN_FIRST dicadangkan untuk materi bawaan.'));
+        }
+        if (seenStyles.has(v.style)) {
+          errors.push(err(`${vp}.style`, 'duplicate_style_variant', `Varian gaya '${v.style}' ganda.`));
+        }
+        seenStyles.add(v.style);
+        checkMarkdown(v.article_markdown, `${vp}.article_markdown`, errors);
+        v.videos?.forEach((vd, vdi) => {
+          if (vd.end_sec <= vd.start_sec || vd.end_sec > 21600) {
+            errors.push(err(`${vp}.videos[${vdi}]`, 'invalid_video_range', 'end_sec harus > start_sec dan <= 21600.'));
+          }
+        });
+        const vOrders = new Set<number>();
+        v.slides?.forEach((sl, si) => {
+          const sp = `${vp}.slides[${si}]`;
+          if (vOrders.has(sl.order)) errors.push(err(`${sp}.order`, 'duplicate_slide_order', 'order slide ganda.'));
+          vOrders.add(sl.order);
+          if (sl.asset_code) requireAsset(sl.asset_code, `${sp}.asset_code`);
+        });
+        v.attachments?.forEach((a, ai) => {
+          const ap = `${vp}.attachments[${ai}]`;
+          if (a.asset_code) requireAsset(a.asset_code, `${ap}.asset_code`, 'DOCUMENT');
+        });
+      });
+
+      const hasBase = !!s.materials || (prevSubInfo?.hasBaseMaterials ?? false);
+      if (!hasBase) {
+        errors.push(err(`${p}.materials_variants`, 'variant_without_base', 'Sub-modul belum memiliki materi bawaan (BASE).'));
+      }
     }
 
     const d = s.active_drill;

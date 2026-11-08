@@ -258,6 +258,7 @@ export function ExamSession({
             mode={attempt.mode}
             audioUrl={attempt.listening.audio_url}
             durationSec={attempt.listening.duration_sec}
+            note={attempt.listening.note}
             attemptId={attempt.id}
           />
         )}

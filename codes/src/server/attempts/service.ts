@@ -7,6 +7,7 @@ import { randomUUID } from 'node:crypto';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { assessmentSets, attemptAnswers, attempts, attemptSections, contentAssets } from '@/db/schema';
 import type { Attempt, AttemptResult } from '@/contracts/attempts';
+import type { Question } from '@/contracts/content';
 import type { BossResultDTO } from '@/contracts/exams';
 import type { Db, Tx } from '../db';
 import { nowDate } from '../clock';
@@ -45,6 +46,7 @@ import {
   isAiTask,
   isObjective,
   isPassed,
+  normalizeText,
   parseResponse,
   percentHundredths,
   displayPercentHundredths,
@@ -57,6 +59,9 @@ import { attemptCompletedHooks, type ScoreSummary } from './hooks';
 import { execute } from '@/server/db';
 import { buildMixResult } from '../mix/service';
 import { isMixAttempt, mixEntries, mixStateOf, STATE_ONLY_TYPES, virtualSetFor } from '../mix/state';
+import { checkpointEntries, checkpointStateOf } from '../tracks/checkpoint';
+import { mockQuestionEntries, mockStateOf } from '../simulation/state';
+import type { MockQuestionState, SimulationSection } from '@/contracts/simulation';
 
 const toH = (numeric: string | number | null): number => Math.round(Number(numeric ?? 0) * 100);
 
@@ -86,7 +91,11 @@ async function withMix(tx: Tx, attempt: AttemptRow, answers: AnswerRow[], dto: A
 async function loadAudio(tx: Tx, set: SetRow) {
   if (!set.listeningAssetId) return null;
   const [a] = await tx
-    .select({ mimeType: contentAssets.mimeType, durationSec: contentAssets.durationSec })
+    .select({
+      mimeType: contentAssets.mimeType,
+      durationSec: contentAssets.durationSec,
+      attributionText: contentAssets.attributionText,
+    })
     .from(contentAssets)
     .where(eq(contentAssets.id, set.listeningAssetId))
     .limit(1);
@@ -418,68 +427,102 @@ export async function submitAnswer(
       return 'expired'; // dilempar setelah commit agar penilaian tersimpan
     }
     if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
-    const state = stateOf(attempt);
-    if (!state.order.includes(questionId)) throw notFound();
 
+    const isMock = attempt.assessmentType === 'MOCK_TEST';
+    let mockQEntry: (MockQuestionState & { section: SimulationSection }) | null = null;
+    let mockSecRow: (typeof attemptSections.$inferSelect) | null = null;
+    let state: AttemptState | null = null;
     let targetSet = set;
-    if (set.assessmentType === 'TIER_BOSS_EXAM') {
-      const bState = state as unknown as BossAttemptState;
-      const sectionSetId = bState.question_section?.[questionId];
-      if (!sectionSetId) throw notFound();
 
-      const sec = bState.sections?.[sectionSetId];
-      if (!sec || sec.phase !== 'ACTIVE') {
+    if (isMock) {
+      const mState = mockStateOf(attempt);
+      mockQEntry = mockQuestionEntries(mState).get(questionId) ?? null;
+      if (!mockQEntry) throw notFound();
+
+      const [secRow] = await tx
+        .select()
+        .from(attemptSections)
+        .where(and(eq(attemptSections.attemptId, attempt.id), eq(attemptSections.skill, mockQEntry.section)))
+        .limit(1);
+
+      if (!secRow || !secRow.startedAt || secRow.status !== 'IN_PROGRESS') {
         throw new ApiError('SECTION_NOT_ACTIVE');
       }
 
-      if (sec.deadline_at && now.getTime() > new Date(sec.deadline_at).getTime() + GRACE_MS) {
-        // Section expired! Auto-close section:
-        bState.sections[sectionSetId] = { ...sec, phase: 'DONE' };
-        await tx.update(attempts).set({ state: bState, updatedAt: now }).where(eq(attempts.id, attempt.id));
-
-        const [cSet] = await tx.select().from(assessmentSets).where(eq(assessmentSets.id, sectionSetId)).limit(1);
-        if (cSet && (cSet.skillCategory === 'LISTENING' || cSet.skillCategory === 'READING')) {
-          const qs = parseQuestions(cSet);
-          const ans = await tx
-            .select()
-            .from(attemptAnswers)
-            .where(and(eq(attemptAnswers.attemptId, attempt.id), eq(attemptAnswers.assessmentSetId, sectionSetId)));
-          const ansMap = new Map(ans.map((a) => [a.questionId, a]));
-          let raw = 0;
-          let max = 0;
-          for (const q of qs.values()) {
-            if (!isObjective(q)) continue;
-            max += q.points;
-            const a = ansMap.get(q.question_id);
-            if (a) raw += Number(a.score ?? 0);
-          }
-          const raw40 = max > 0 ? scaleToForty(raw, max) : 0;
-          const table = await getActiveTable(tx, bandSkillFor(cSet.skillCategory));
-          const band = convertRawToBand(table.rows, raw40);
-          await tx
-            .update(attemptSections)
-            .set({ rawScore: String(raw), maxScore: String(max), bandScore: String(band), status: 'EXPIRED' })
-            .where(and(eq(attemptSections.attemptId, attempt.id), eq(attemptSections.assessmentSetId, sectionSetId)));
-        } else {
-          await tx
-            .update(attemptSections)
-            .set({ status: 'EXPIRED' })
-            .where(and(eq(attemptSections.attemptId, attempt.id), eq(attemptSections.assessmentSetId, sectionSetId)));
-        }
-
+      if (secRow.deadlineAt && now.getTime() > new Date(secRow.deadlineAt).getTime() + 5000) {
         throw new ApiError('SECTION_EXPIRED');
       }
+      mockSecRow = secRow;
+    } else {
+      state = stateOf(attempt);
+      if (!state.order.includes(questionId)) throw notFound();
 
-      const [childSet] = await tx.select().from(assessmentSets).where(eq(assessmentSets.id, sectionSetId)).limit(1);
-      if (!childSet) throw notFound();
-      targetSet = childSet;
+      if (set.assessmentType === 'TIER_BOSS_EXAM') {
+        const bState = state as unknown as BossAttemptState;
+        const sectionSetId = bState.question_section?.[questionId];
+        if (!sectionSetId) throw notFound();
+
+        const sec = bState.sections?.[sectionSetId];
+        if (!sec || sec.phase !== 'ACTIVE') {
+          throw new ApiError('SECTION_NOT_ACTIVE');
+        }
+
+        if (sec.deadline_at && now.getTime() > new Date(sec.deadline_at).getTime() + GRACE_MS) {
+          // Section expired! Auto-close section:
+          bState.sections[sectionSetId] = { ...sec, phase: 'DONE' };
+          await tx.update(attempts).set({ state: bState, updatedAt: now }).where(eq(attempts.id, attempt.id));
+
+          const [cSet] = await tx.select().from(assessmentSets).where(eq(assessmentSets.id, sectionSetId)).limit(1);
+          if (cSet && (cSet.skillCategory === 'LISTENING' || cSet.skillCategory === 'READING')) {
+            const qs = parseQuestions(cSet);
+            const ans = await tx
+              .select()
+              .from(attemptAnswers)
+              .where(and(eq(attemptAnswers.attemptId, attempt.id), eq(attemptAnswers.assessmentSetId, sectionSetId)));
+            const ansMap = new Map(ans.map((a) => [a.questionId, a]));
+            let raw = 0;
+            let max = 0;
+            for (const q of qs.values()) {
+              if (!isObjective(q)) continue;
+              max += q.points;
+              const a = ansMap.get(q.question_id);
+              if (a) raw += Number(a.score ?? 0);
+            }
+            const raw40 = max > 0 ? scaleToForty(raw, max) : 0;
+            const table = await getActiveTable(tx, bandSkillFor(cSet.skillCategory));
+            const band = convertRawToBand(table.rows, raw40);
+            await tx
+              .update(attemptSections)
+              .set({ rawScore: String(raw), maxScore: String(max), bandScore: String(band), status: 'EXPIRED' })
+              .where(and(eq(attemptSections.attemptId, attempt.id), eq(attemptSections.assessmentSetId, sectionSetId)));
+          } else {
+            await tx
+              .update(attemptSections)
+              .set({ status: 'EXPIRED' })
+              .where(and(eq(attemptSections.attemptId, attempt.id), eq(attemptSections.assessmentSetId, sectionSetId)));
+          }
+
+          throw new ApiError('SECTION_EXPIRED');
+        }
+
+        const [childSet] = await tx.select().from(assessmentSets).where(eq(assessmentSets.id, sectionSetId)).limit(1);
+        if (!childSet) throw notFound();
+        targetSet = childSet;
+      }
     }
 
-    const q = parseQuestions(targetSet).get(questionId);
+    const q = isMock ? (mockQEntry!.question as unknown as Question) : parseQuestions(targetSet).get(questionId);
     if (!q) throw notFound();
     if (isAiTask(q)) throw new ApiError('QUESTION_REQUIRES_SUBMISSION');
+
     // attempt_answers.assessment_set_id = set soal; untuk attempt campuran = bank_set_id asal soal (SPEC-022 Technical Flow 4).
-    const answerSetId = isMixAttempt(attempt) ? mixEntries(mixStateOf(attempt)).get(questionId)?.bank_set_id : targetSet.id;
+    const answerSetId = isMixAttempt(attempt)
+      ? mixEntries(mixStateOf(attempt)).get(questionId)?.bank_set_id
+      : attempt.assessmentType === 'TRACK_CHECKPOINT'
+        ? checkpointEntries(checkpointStateOf(attempt)).get(questionId)?.set_id
+        : isMock
+          ? mockQEntry!.bank_set_id
+          : targetSet.id;
     if (!answerSetId) throw notFound();
 
     if (set.assessmentType === 'PLACEMENT_TEST') {
@@ -494,32 +537,75 @@ export async function submitAnswer(
       }
     }
 
-    const shape = parseResponse(q, state.served[questionId] ?? {}, rawResponse);
-    if (!shape.ok) throw new ApiError('VALIDATION_ERROR', { details: shape.issues });
+    let shapeResponse: Record<string, unknown>;
+    let isCorrect = false;
+    let scoreH = 0;
 
     const all = await loadAnswers(tx, attempt.id);
     const existing = all.find((a) => a.questionId === questionId);
     const practice = attempt.mode === 'PRACTICE';
-    if (practice && existing) {
-      if (canonicalResponse(existing.response) !== canonicalResponse(shape.response)) throw new ApiError('QUESTION_ALREADY_ANSWERED');
-      return {
-        question_id: questionId,
-        saved: true,
-        answered_count: all.length,
-        feedback: feedbackFor(q, { isCorrect: existing.isCorrect === true, scoreH: toH(existing.score) }),
-        next_question: null,
-      };
+
+    if (isMock) {
+      shapeResponse = rawResponse;
+
+      const userChoice = typeof rawResponse.selected === 'string'
+        ? rawResponse.selected
+        : typeof rawResponse.choice === 'string'
+          ? rawResponse.choice
+          : typeof rawResponse.text === 'string'
+            ? rawResponse.text.trim()
+            : null;
+
+      const correctAnswers = 'correct_answers' in q ? ((q as { correct_answers?: string[] }).correct_answers) : undefined;
+      if (userChoice !== null && Array.isArray(correctAnswers)) {
+        isCorrect = correctAnswers.some(
+          (ans: string) => normalizeText(ans) === normalizeText(userChoice)
+        );
+      } else if (Array.isArray(rawResponse.option_ids) && Array.isArray(correctAnswers)) {
+        const opts = 'options' in q ? ((q as { options?: string[] }).options) : undefined;
+        if (opts) {
+          const mapped = (rawResponse.option_ids as string[]).map((id) => {
+            const idx = parseInt(id.replace(/\D/g, ''), 10);
+            return opts[idx] ?? id;
+          });
+          isCorrect = correctAnswers.some((ans: string) => mapped.includes(ans));
+        }
+      }
+
+      scoreH = isCorrect ? toH(q.points ?? 1) : 0;
+    } else {
+      const shape = parseResponse(q, state!.served[questionId] ?? {}, rawResponse);
+      if (!shape.ok) throw new ApiError('VALIDATION_ERROR', { details: shape.issues });
+      shapeResponse = shape.response;
+
+      if (practice && existing) {
+        if (canonicalResponse(existing.response) !== canonicalResponse(shape.response)) throw new ApiError('QUESTION_ALREADY_ANSWERED');
+        return {
+          question_id: questionId,
+          saved: true,
+          answered_count: all.length,
+          feedback: feedbackFor(q, { isCorrect: existing.isCorrect === true, scoreH: toH(existing.score) }),
+          next_question: null,
+        };
+      }
+
+      const g = gradeAnswer(q, state!.served[questionId] ?? {}, shape.response);
+      isCorrect = g.isCorrect;
+      scoreH = g.scoreH;
     }
 
-    const grade = gradeAnswer(q, state.served[questionId] ?? {}, shape.response);
+    const grade = { isCorrect, scoreH };
+
     // D8: selisih jam server terhadap jawaban sebelumnya / resume / mulai.
     const others = all.filter((a) => a.questionId !== questionId);
     const prev = others.length ? others[others.length - 1]! : null; // urut answered_at
-    const base = Math.max(prev ? prev.answeredAt.getTime() : -Infinity, Date.parse(state.last_resume_at), attempt.startedAt.getTime());
+    const base = isMock
+      ? Math.max(prev ? prev.answeredAt.getTime() : -Infinity, mockSecRow?.startedAt ? new Date(mockSecRow.startedAt).getTime() : attempt.startedAt.getTime())
+      : Math.max(prev ? prev.answeredAt.getTime() : -Infinity, Date.parse(state!.last_resume_at), attempt.startedAt.getTime());
     const spent = Math.max(0, now.getTime() - base);
     const target = q.target_time_ms ?? (await getSetting<number>(tx, 'speed.default_target_ms'));
     const within = spent <= target;
-    const streak = grade.isCorrect && within ? (prev?.speedStreakLen ?? 0) + 1 : 0;
+    const streak = isCorrect && within ? (prev?.speedStreakLen ?? 0) + 1 : 0;
 
     await tx
       .insert(attemptAnswers)
@@ -529,9 +615,9 @@ export async function submitAnswer(
         questionId,
         questionType: q.question_type,
         skill: q.skill,
-        response: shape.response,
-        isCorrect: grade.isCorrect,
-        score: toNumeric(grade.scoreH),
+        response: shapeResponse,
+        isCorrect,
+        score: toNumeric(scoreH),
         timeSpentMs: spent,
         withinTargetTime: within,
         speedStreakLen: streak,
@@ -540,9 +626,9 @@ export async function submitAnswer(
       .onConflictDoUpdate({
         target: [attemptAnswers.attemptId, attemptAnswers.questionId],
         set: {
-          response: shape.response,
-          isCorrect: grade.isCorrect,
-          score: toNumeric(grade.scoreH),
+          response: shapeResponse,
+          isCorrect,
+          score: toNumeric(scoreH),
           timeSpentMs: spent,
           withinTargetTime: within,
           speedStreakLen: streak,
@@ -576,16 +662,16 @@ export async function submitAnswer(
         if (nextQ) {
           pState.served.push(nextQ.question_id);
           pState.pending = nextQ.question_id;
-          if (!state.order.includes(nextQ.question_id)) {
-            state.order.push(nextQ.question_id);
+          if (!state!.order.includes(nextQ.question_id)) {
+            state!.order.push(nextQ.question_id);
           }
-          nextQuestionDTO = toPublicQuestion(nextQ, state.served[nextQ.question_id] ?? {});
+          nextQuestionDTO = toPublicQuestion(nextQ, state!.served[nextQ.question_id] ?? {});
         } else {
           pState.pending = null;
         }
       }
 
-      await tx.update(attempts).set({ state, updatedAt: now }).where(eq(attempts.id, attempt.id));
+      await tx.update(attempts).set({ state: state!, updatedAt: now }).where(eq(attempts.id, attempt.id));
     }
 
     return {

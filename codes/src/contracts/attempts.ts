@@ -112,7 +112,12 @@ export const AttemptSchema = z.object({
   /** SPEC-022: teks Reading per paket (MIX_PRACTICE); null/absen untuk tipe lain. */
   passages: z.array(z.object({ passage_no: z.number().int(), bank_set_id: Uuid, markdown: z.string() })).nullable().optional(),
   listening: z
-    .object({ audio_url: z.string(), mime_type: z.string(), duration_sec: z.number().int() })
+    .object({
+      audio_url: z.string(),
+      mime_type: z.string(),
+      duration_sec: z.number().int(),
+      note: z.string().nullable().optional(),
+    })
     .nullable(),
   questions: z.array(QuestionPublicSchema),
   answers: z.array(z.object({ question_id: z.string(), response: StoredResponse, feedback: FeedbackSchema.nullable() })),

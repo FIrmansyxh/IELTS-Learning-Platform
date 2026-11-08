@@ -19,6 +19,8 @@ import { fmt, id } from '@/i18n/id';
 import { isApiError } from '@/lib/api/client';
 import { apiErrorMessage } from '@/lib/api/errors';
 import { playerApi } from '@/lib/api/player';
+import { tracksApi } from '@/lib/api/tracks';
+import { cn } from '@/lib/utils';
 import { ApplyTab } from './apply-tab';
 import { DrillTab } from './drill-tab';
 import { LearnTab } from './learn-tab';
@@ -202,6 +204,18 @@ export function SubModulePlayer({ code, initial }: { code: string; initial: Play
     onError: (e) => toast.error(apiErrorMessage(e)),
   });
 
+  const setStyleMutation = useMutation({
+    mutationFn: (newStyle: 'LEARN_FIRST' | 'PRACTICE_FIRST' | 'CASE_BASED' | null) =>
+      tracksApi.setStyle(code, newStyle),
+    onSuccess: () => {
+      toast.success('Gaya penyampaian materi diperbarui');
+      void qc.invalidateQueries({ queryKey: subModuleKey(code) });
+    },
+    onError: () => {
+      toast.error('Gagal memperbarui gaya penyampaian.');
+    },
+  });
+
   /* ---------- perpindahan tab ---------- */
   function changeTab(next: PlayerTab) {
     timer.flushFor(subtab);
@@ -275,6 +289,48 @@ export function SubModulePlayer({ code, initial }: { code: string; initial: Play
         </div>
         <Progress value={progress.progress_percent} aria-label={id.player.progressLabel} />
       </header>
+
+      {d.delivery && d.delivery.available_styles.length > 1 ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-muted/30 px-3 py-2 text-xs">
+          <span className="font-medium text-muted-foreground">Cara belajar:</span>
+          <div className="flex flex-wrap gap-1">
+            {d.delivery.available_styles.map((st) => {
+              const isCurrent = d.delivery?.applied_style === st;
+              const names: Record<string, string> = {
+                LEARN_FIRST: 'Belajar dulu',
+                PRACTICE_FIRST: 'Latihan dulu',
+                CASE_BASED: 'Studi kasus',
+              };
+              return (
+                <button
+                  key={st}
+                  type="button"
+                  onClick={() => setStyleMutation.mutate(st)}
+                  disabled={setStyleMutation.isPending}
+                  className={cn(
+                    'rounded-md px-2.5 py-1 font-medium transition-colors',
+                    isCurrent
+                      ? 'bg-primary text-primary-foreground shadow-xs'
+                      : 'bg-background text-muted-foreground hover:bg-accent hover:text-foreground',
+                  )}
+                >
+                  {names[st] ?? st}
+                </button>
+              );
+            })}
+          </div>
+          {d.delivery.source === 'USER_OVERRIDE' ? (
+            <button
+              type="button"
+              onClick={() => setStyleMutation.mutate(null)}
+              disabled={setStyleMutation.isPending}
+              className="ml-auto text-[11px] text-muted-foreground underline hover:text-foreground"
+            >
+              Reset ke bawaan jalur
+            </button>
+          ) : null}
+        </div>
+      ) : null}
 
       <Tabs value={tab} onValueChange={(v) => changeTab(v as PlayerTab)} className="gap-5">
         <TabsList aria-label={id.player.tabs.label} className="h-12 w-full sm:w-fit">

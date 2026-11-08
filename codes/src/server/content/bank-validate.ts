@@ -54,7 +54,13 @@ export interface BankValidationContext {
   dbAssets?: KnownAssets;
 }
 
-export function validateBankPackage(raw: unknown, seenIds: Set<string> = new Set(), ctx: BankValidationContext = {}): BankValidation {
+export function validateBankPackage(
+  raw: unknown,
+  seenIdsOrCtx: Set<string> | BankValidationContext = new Set(),
+  maybeCtx: BankValidationContext = {},
+): BankValidation {
+  const seenIds = seenIdsOrCtx instanceof Set ? seenIdsOrCtx : new Set<string>();
+  const ctx = seenIdsOrCtx instanceof Set ? maybeCtx : seenIdsOrCtx;
   const parsed = QuestionBankPackageSchema.safeParse(raw);
   if (!parsed.success) return { ok: false, errors: zodIssues(parsed.error), warnings: [] };
 

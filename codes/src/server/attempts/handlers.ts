@@ -11,6 +11,8 @@ import { skipModuleHandler, skipTierHandler } from '../exams/skip';
 import { tierBossHandler } from '../exams/boss';
 import { placementHandler } from '../exams/placement';
 import { mixPracticeHandler } from '../mix/handler';
+import { getDelivery } from '../tracks/service';
+import { trackCheckpointHandler } from '../tracks/checkpoint';
 
 export type AssessmentTypeName = SetRow['assessmentType'];
 
@@ -65,7 +67,12 @@ export const activeDrillHandler: AssessmentTypeHandler = {
   async start({ tx, userId, set }) {
     if (!set.subModuleId) throw notFound();
     const access = await assertSubModuleAccessible(tx, userId, set.subModuleId); // 404 / 403 LOCKED_CONTENT
-    if (!access.progress.learnCompleted) throw new ApiError('LEARN_NOT_COMPLETED');
+    if (!access.progress.learnCompleted) {
+      const delivery = await getDelivery(userId, set.subModuleId, undefined, tx);
+      if (delivery.applied_style !== 'PRACTICE_FIRST') {
+        throw new ApiError('LEARN_NOT_COMPLETED');
+      }
+    }
     return {
       mode: 'PRACTICE',
       passPercent: set.passPercent ?? access.subModule.passingScorePercent,
@@ -111,3 +118,4 @@ assessmentTypeHandlers.SKIP_TIER_TEST = skipTierHandler;
 assessmentTypeHandlers.TIER_BOSS_EXAM = tierBossHandler; // SPEC-014
 assessmentTypeHandlers.PLACEMENT_TEST = placementHandler; // SPEC-015
 assessmentTypeHandlers.MIX_PRACTICE = mixPracticeHandler; // SPEC-022
+assessmentTypeHandlers.TRACK_CHECKPOINT = trackCheckpointHandler; // SPEC-021

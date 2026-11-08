@@ -8,18 +8,17 @@ import {
   assessmentSets,
   contentSources,
   users,
-  userSubModuleProgress,
 } from '../src/db/schema';
 import { recomputeStatuses } from '../src/server/gatekeeping/service';
 
 // Pembangun pertanyaan
-const mcq = (id: string, skill: any, prompt: string, options: string[], answer: string, explanation_id: string) => ({
+const mcq = (id: string, skill: string, prompt: string, options: string[], answer: string, explanation_id: string) => ({
   question_id: id, question_type: 'MCQ_SINGLE', skill, prompt, options, correct_answers: [answer], explanation_id, points: 1,
 });
-const fill = (id: string, skill: any, prompt: string, answers: string[], explanation_id: string, max_words = 2) => ({
+const fill = (id: string, skill: string, prompt: string, answers: string[], explanation_id: string, max_words = 2) => ({
   question_id: id, question_type: 'FILL_IN_BLANK', skill, prompt, correct_answers: answers, explanation_id, max_words, points: 1,
 });
-const shortAns = (id: string, skill: any, prompt: string, answers: string[], explanation_id: string, max_words = 2) => ({
+const shortAns = (id: string, skill: string, prompt: string, answers: string[], explanation_id: string, max_words = 2) => ({
   question_id: id, question_type: 'SHORT_ANSWER', skill, prompt, correct_answers: answers, explanation_id, max_words, points: 1,
 });
 
@@ -351,13 +350,13 @@ Modal selalu diikuti oleh kata kerja bentuk dasar (*bare infinitive* / V1 tanpa 
         sourceId,
         attributionText: 'Latihan soal variasi IELTS Learning Platform',
         status: 'PUBLISHED',
-        questionsJson: item.drillQuestions as any,
+        questionsJson: item.drillQuestions as unknown as Array<Record<string, unknown>>,
         questionCount: item.drillQuestions.length,
       });
     } else {
       await db.update(assessmentSets).set({
         title: `Active Drill: ${item.title}`,
-        questionsJson: item.drillQuestions as any,
+        questionsJson: item.drillQuestions as unknown as Array<Record<string, unknown>>,
         questionCount: item.drillQuestions.length,
         status: 'PUBLISHED',
       }).where(eq(assessmentSets.id, existingSet.id));

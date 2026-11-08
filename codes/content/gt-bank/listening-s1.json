@@ -1,0 +1,173 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-LIS-S1-001",
+      "bank_kind": "LISTENING_GT_S1",
+      "title": "Listening GT Section 1: Pendaftaran Perpustakaan Kota",
+      "skill": "LISTENING",
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "listening_asset_code": "gt-listening/gt-l-s1-001",
+      "tags": [
+        "listening",
+        "section-1",
+        "form-filling",
+        "library-registration"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTL1-001",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Complete the form below. Write NO MORE THAN ONE WORD.\n\nApplicant Surname: ________",
+          "difficulty": 1,
+          "explanation_id": "Pembicara B mengeja nama keluarganya: P-A-R-G-E-T-E-R.",
+          "max_words": 1,
+          "correct_answers": [
+            "Pargeter",
+            "pargeter"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-002",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Date of birth: 14th ________, 1992",
+          "difficulty": 1,
+          "explanation_id": "Pembicara B menyatakan tanggal lahirnya adalah 14th of June, 1992.",
+          "max_words": 1,
+          "correct_answers": [
+            "June",
+            "june"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-003",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Current Address: 27 ________ Street",
+          "difficulty": 1,
+          "explanation_id": "Pembicara B menyebut pindah baru-baru ini ke 27 Green Street (Flat 4 adalah alamat lama).",
+          "max_words": 1,
+          "correct_answers": [
+            "Green",
+            "green"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-004",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Postcode: ________",
+          "difficulty": 1,
+          "explanation_id": "Kode pos yang dieja adalah BS7 8LN.",
+          "max_words": 2,
+          "correct_answers": [
+            "BS7 8LN",
+            "bs7 8ln",
+            "BS78LN",
+            "bs78ln"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-005",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Contact telephone: ________",
+          "difficulty": 1,
+          "explanation_id": "Nomor kontak yang dikonfirmasi adalah 07700 900123.",
+          "max_words": 2,
+          "correct_answers": [
+            "07700 900123",
+            "07700900123"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-006",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Occupation: ________",
+          "difficulty": 1,
+          "explanation_id": "Peter bekerja sebagai dokter gigi (dentist) di klinik pusat.",
+          "max_words": 1,
+          "correct_answers": [
+            "dentist",
+            "Dentist"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-007",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Which membership type does Peter select?",
+          "difficulty": 1,
+          "explanation_id": "Peter memilih kartu keanggotaan standard adult.",
+          "options": [
+            "Student membership",
+            "Senior membership",
+            "Standard adult membership",
+            "Corporate membership"
+          ],
+          "correct_answers": [
+            "Standard adult membership"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-008",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Additional facility included on card: ________ access",
+          "difficulty": 1,
+          "explanation_id": "Peter meminta agar fasilitas internet access ditambahkan ke kartunya.",
+          "max_words": 1,
+          "correct_answers": [
+            "internet",
+            "Internet"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-009",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Annual membership fee: £________",
+          "difficulty": 1,
+          "explanation_id": "Biaya tahunan untuk kartu standard adult adalah 15 pounds (£15).",
+          "max_words": 1,
+          "correct_answers": [
+            "15",
+            "fifteen"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-010",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "How does Peter prefer to receive book reservation notifications?",
+          "difficulty": 1,
+          "explanation_id": "Peter memilih email karena lebih mudah dicek dibanding pesan singkat (SMS).",
+          "options": [
+            "By text message",
+            "By email",
+            "By telephone call",
+            "By postal letter"
+          ],
+          "correct_answers": [
+            "By email"
+          ]
+        }
+      ]
+    }
+  ]
+}

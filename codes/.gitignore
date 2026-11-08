@@ -33,3 +33,5 @@ Thumbs.db
 
 # Database SQLite lokal (SPEC-025)
 /data/
+
+.local-pg/

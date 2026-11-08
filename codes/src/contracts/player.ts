@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { IsoDateTime, ProgressStatus, SkillCategory, Uuid } from './common';
+import { DeliveryDTO } from './tracks';
 
 /** Skema pemutar materi (SPEC-005). Klien longgar terhadap kunci tambahan (z.object), ketat pada bentuk yang dipakai. */
 export const LearnSubtab = z.enum(['ARTICLE', 'VIDEO', 'SLIDES']);
@@ -90,6 +91,8 @@ export const SubModuleDetailDTO = z.object({
     prev_sub_module_code: z.string().nullable(),
     next_sub_module_code: z.string().nullable(),
   }),
+  /** SPEC-021: selalu ada dari server; `optional` di tipe agar fixture klien lama tetap valid. */
+  delivery: DeliveryDTO.optional(),
 });
 
 export const SubModuleDetailResponseSchema = z.object({ data: SubModuleDetailDTO });

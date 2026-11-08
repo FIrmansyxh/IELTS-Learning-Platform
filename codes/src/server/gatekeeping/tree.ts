@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import type { CurriculumTree } from '@/contracts/curriculum';
+import type { CurriculumTree, TrackItem, TrackView } from '@/contracts/curriculum';
 import type { Db } from '../db';
 import { recomputeStatuses } from './service';
 import {
@@ -14,9 +14,13 @@ import {
   tierProgressPercent,
   type ModuleNode,
   type Snapshot,
+  type SubNode,
   type TierNode,
 } from './rules';
 import { execute } from '@/server/db';
+import { notFound } from '../http/errors';
+import { findSubContext, trackLockReasonOf } from './track';
+import { getCheckpointInfo } from '../tracks/checkpoint';
 
 interface PublishedSet {
   id: string;
@@ -63,7 +67,7 @@ function skipDto(set: PublishedSet | undefined, eligible: boolean, threshold: nu
 }
 
 /** Bangun respons pohon dari snapshot yang sudah dihitung ulang (D1-D9). */
-export function buildTree(snap: Snapshot, sets: PublishedSet[]): CurriculumTree {
+export function buildTree(snap: Snapshot, sets: PublishedSet[]): { tiers: CurriculumTree['tiers'] } {
   const first = (type: string, pred: (s: PublishedSet) => boolean) => sets.find((s) => s.type === type && pred(s));
   return {
     tiers: snap.tiers.map((tier: TierNode) => {
@@ -127,11 +131,183 @@ export function buildTree(snap: Snapshot, sets: PublishedSet[]): CurriculumTree 
   };
 }
 
-/** GET /curriculum/tree: ensure + recompute (satu transaksi) lalu baca. Keadaan tunak: 3 query SQL. */
-export async function getCurriculumTree(db: Db, userId: string): Promise<CurriculumTree> {
+async function loadTrackView(
+  tx: Parameters<Parameters<Db['transaction']>[0]>[0],
+  userId: string,
+  snap: Snapshot,
+  trackCode?: string,
+): Promise<TrackView> {
+  type TargetTrack = {
+    id: string;
+    code: string;
+    title: string;
+    kind: 'CURRICULUM' | 'CURATED';
+    layout: 'LIST' | 'SPRINT';
+    delivery_style_default: 'LEARN_FIRST' | 'PRACTICE_FIRST' | 'CASE_BASED';
+  };
+  let trackRow: TargetTrack;
+  let activeTrackId: string | null = null;
+
+  if (trackCode) {
+    const res = await execute(
+      tx,
+      sql`SELECT u.active_track_id, t.id, t.code, t.title, t.kind, t.layout, t.delivery_style_default
+          FROM users u
+          LEFT JOIN learning_tracks t ON t.code = ${trackCode} AND t.status = 'PUBLISHED'
+          WHERE u.id = ${userId}`,
+    );
+    const row = res.rows[0] as (TargetTrack & { active_track_id: string | null }) | undefined;
+    if (!row || !row.id) throw notFound();
+    trackRow = row;
+    activeTrackId = row.active_track_id;
+  } else {
+    const res = await execute(
+      tx,
+      sql`SELECT u.active_track_id,
+                 COALESCE(t.id, def.id) AS id,
+                 COALESCE(t.code, def.code) AS code,
+                 COALESCE(t.title, def.title) AS title,
+                 COALESCE(t.kind, def.kind) AS kind,
+                 COALESCE(t.layout, def.layout) AS layout,
+                 COALESCE(t.delivery_style_default, def.delivery_style_default) AS delivery_style_default
+          FROM users u
+          LEFT JOIN learning_tracks t ON t.id = u.active_track_id AND t.status = 'PUBLISHED'
+          LEFT JOIN learning_tracks def ON def.code = 'GT-STRUCT' AND def.status = 'PUBLISHED'
+          WHERE u.id = ${userId}`,
+    );
+    const row = res.rows[0] as (TargetTrack & { active_track_id: string | null }) | undefined;
+    if (!row || !row.id) throw notFound();
+    trackRow = row;
+    activeTrackId = row.active_track_id;
+  }
+
+  const isActive = trackRow.id === activeTrackId || (!activeTrackId && trackRow.code === 'GT-STRUCT');
+
+  const items: TrackItem[] = [];
+
+  if (trackRow.kind === 'CURRICULUM') {
+    let position = 1;
+    for (const tier of [...snap.tiers].sort((a, b) => a.number - b.number)) {
+      for (const mod of [...tier.modules].sort((a, b) => a.order - b.order)) {
+        for (const sub of [...mod.subs].sort((a, b) => a.order - b.order)) {
+          const available = isAvailable(mod, sub);
+          items.push({
+            position: position++,
+            kind: 'SUB_MODULE',
+            item_id: null,
+            week_no: null,
+            day_no: null,
+            sub_module: {
+              id: sub.id,
+              sub_module_code: sub.code,
+              title: sub.title,
+              order_index: sub.order,
+              status: sub.status,
+              content_state: available ? 'AVAILABLE' : 'COMING_SOON',
+              mastery_crown: sub.crown,
+              best_score_percent: sub.best,
+              progress_percent: subProgressPercent(sub),
+              has_mini_task: sub.hasMiniTask,
+              lock_reason: lockReasonOf(tier, mod, sub),
+            },
+            checkpoint: null,
+          });
+        }
+      }
+    }
+  } else {
+    const itemRows = await execute(
+      tx,
+      sql`SELECT lti.id, lti.item_kind, lti.sub_module_id, lti.order_index, lti.week_no, lti.day_no
+          FROM learning_track_items lti
+          WHERE lti.track_id = ${trackRow.id}
+          ORDER BY lti.order_index ASC`,
+    );
+
+    let prevAvailableSub: SubNode | null = null;
+    let position = 1;
+
+    for (const r of itemRows.rows as Array<{
+      id: string;
+      item_kind: 'SUB_MODULE' | 'CHECKPOINT';
+      sub_module_id: string | null;
+      order_index: number;
+      week_no: number | null;
+      day_no: number | null;
+    }>) {
+      if (r.item_kind === 'CHECKPOINT') {
+        const cpInfo = await getCheckpointInfo(userId, trackRow.id, r.id, tx);
+        items.push({
+          position: position++,
+          kind: 'CHECKPOINT',
+          item_id: r.id,
+          week_no: r.week_no,
+          day_no: r.day_no,
+          sub_module: null,
+          checkpoint: {
+            ...cpInfo,
+            pass_percent: 75,
+          },
+        });
+      } else {
+        const ctx = findSubContext(snap, (s) => s.id === r.sub_module_id);
+        if (!ctx) continue;
+        const { tier, mod, sub } = ctx;
+        const available = isAvailable(mod, sub);
+        const lockReason = trackLockReasonOf(
+          tier,
+          mod,
+          sub,
+          { id: trackRow.id, code: trackRow.code, kind: trackRow.kind },
+          prevAvailableSub,
+        );
+        if (available) prevAvailableSub = sub;
+
+        items.push({
+          position: position++,
+          kind: 'SUB_MODULE',
+          item_id: r.id,
+          week_no: r.week_no,
+          day_no: r.day_no,
+          sub_module: {
+            id: sub.id,
+            sub_module_code: sub.code,
+            title: sub.title,
+            order_index: sub.order,
+            status: sub.status,
+            content_state: available ? 'AVAILABLE' : 'COMING_SOON',
+            mastery_crown: sub.crown,
+            best_score_percent: sub.best,
+            progress_percent: subProgressPercent(sub),
+            has_mini_task: sub.hasMiniTask,
+            lock_reason: lockReason,
+          },
+          checkpoint: null,
+        });
+      }
+    }
+  }
+
+  return {
+    code: trackRow.code,
+    title: trackRow.title,
+    layout: trackRow.layout,
+    delivery_style_default: trackRow.delivery_style_default,
+    is_active: isActive,
+    items,
+  };
+}
+
+/** GET /curriculum/tree: ensure + recompute (satu transaksi) lalu baca. */
+export async function getCurriculumTree(db: Db, userId: string, trackCode?: string): Promise<CurriculumTree> {
   return db.transaction(async (tx) => {
     const snap = await recomputeStatuses(tx, userId);
     const sets = await loadSets(tx);
-    return buildTree(snap, sets);
+    const baseTree = buildTree(snap, sets);
+    const track = await loadTrackView(tx, userId, snap, trackCode);
+    return {
+      tiers: baseTree.tiers,
+      track,
+    };
   });
 }

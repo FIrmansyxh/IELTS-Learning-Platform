@@ -12,6 +12,7 @@ export interface ListeningPlayerProps {
   durationSec?: number | null;
   attemptId: string;
   className?: string;
+  note?: string | null;
   onEnded?: () => void;
 }
 
@@ -28,6 +29,7 @@ export function ListeningPlayer({
   durationSec,
   attemptId,
   className = '',
+  note,
   onEnded,
 }: ListeningPlayerProps) {
   const isExam = mode === 'EXAM';
@@ -491,6 +493,11 @@ export function ListeningPlayer({
         {isExam && (
           <p className="text-xs text-muted-foreground sm:hidden">
             {id.listening.examNotice}
+          </p>
+        )}
+        {note && (
+          <p className="text-xs text-muted-foreground mt-2 border-t pt-2" data-testid="listening-note">
+            {note}
           </p>
         )}
       </CardContent>

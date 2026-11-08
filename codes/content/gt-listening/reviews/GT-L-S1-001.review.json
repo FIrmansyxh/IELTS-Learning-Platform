@@ -1,0 +1,13 @@
+{
+  "part_code": "GT-L-S1-001",
+  "reviewer": "QA Lead IELTS Platform",
+  "reviewed_at": "2026-11-08",
+  "clarity": 5,
+  "speed": 4,
+  "naturalness": 4,
+  "answer_leak": false,
+  "approved": true,
+  "script_sha256": "c57339a2156db7ef3527d4d21d7cbe563e2d7d53c54bb598df47457770ce77fa",
+  "audio_sha256": "1e4753feb92cef62f0e1c0a2bb96045840776acc30414476187ec1721258ff27",
+  "notes": "Pengucapan jelas, nama dan angka terdengar sangat natural. Lolos uji dengar S1."
+}

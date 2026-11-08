@@ -22,10 +22,29 @@ import { registerFromManifest, validateAssetFile } from './assets';
 import { validateBankPackage, type KnownAssets } from './bank-validate';
 import { ensureRevision } from './apply';
 import { changeStatus, type Blocker } from './publish';
+import { isListeningBankKind } from '@/contracts/question-bank';
+import { validateListeningReview } from '../listening/review-gate';
+import { existsSync } from 'node:fs';
 import { canonicalJson, parseAssetManifest, sha256Hex } from './validate';
 
 const MAX_FILE_BYTES = 5 * 1_048_576;
 const NOT_BANK_FILES = new Set(['content.json', 'assets.manifest.json']);
+
+
+export function extractListeningPartCode(bank: { bank_code: string; listening_asset_code?: string }): string | null {
+  if (bank.listening_asset_code) {
+    const parts = bank.listening_asset_code.split('/');
+    const last = parts[parts.length - 1];
+    if (last.startsWith('gt-l-s')) {
+      return last.toUpperCase();
+    }
+  }
+  const m = bank.bank_code.match(/^GT-LIS-S([1-4])-(\d{3})$/);
+  if (m) {
+    return `GT-L-S${m[1]}-${m[2]}`;
+  }
+  return null;
+}
 
 const issue = (p: string, code: string, message: string): ContentIssue => ({ path: p, code, message, severity: 'error' });
 export const formatBankIssue = (i: ContentIssue) => `${i.severity === 'warning' ? 'PERINGATAN ' : ''}${i.path}: ${i.code}: ${i.message}`;
@@ -125,8 +144,23 @@ export async function bankContextFromDb(db: Db | Tx): Promise<BankContext> {
  * bila tidak ada, memakai `staticSources` dan konteks aset kosong (hanya manifest paket yang dikenal).
  */
 export async function bankContextReadonly(dbPath: string, staticSources: BankContext['sources']): Promise<BankContext> {
-  const empty: BankContext = { sources: staticSources, dbAssets: new Map(), dbQuestionOwner: new Map() };
-  const { existsSync } = await import('node:fs');
+  const { existsSync, readFileSync } = await import('node:fs');
+  const path = await import('node:path');
+  const fallbackAssets = new Map<string, { kind: string; rights: string }>();
+  // Bila ada berkas manifest aset listening di repo, tambahkan agar validator bank dapat mengenalinya tanpa DB
+  const listeningManifestPath = path.resolve('content/gt-listening/assets.manifest.json');
+  if (existsSync(listeningManifestPath)) {
+    try {
+      const parsed = JSON.parse(readFileSync(listeningManifestPath, 'utf8'));
+      for (const a of parsed.assets ?? []) {
+        fallbackAssets.set(a.asset_code, { kind: a.kind, rights: a.rights_status ?? '' });
+      }
+    } catch {
+      // abaikan bila tidak valid
+    }
+  }
+
+  const empty: BankContext = { sources: staticSources, dbAssets: fallbackAssets, dbQuestionOwner: new Map() };
   if (dbPath === ':memory:' || !existsSync(dbPath)) return empty;
   const { DatabaseSync } = await import('node:sqlite');
   let raw: InstanceType<typeof DatabaseSync> | undefined;
@@ -139,6 +173,9 @@ export async function bankContextReadonly(dbPath: string, staticSources: BankCon
     const dbAssets = new Map(
       (raw.prepare('SELECT asset_code AS c, kind, rights_status AS r FROM content_assets WHERE asset_code IS NOT NULL').all() as Array<{ c: string; kind: string; r: string }>).map((a) => [a.c, { kind: a.kind, rights: a.r }]),
     );
+    for (const [k, v] of fallbackAssets.entries()) {
+      if (!dbAssets.has(k)) dbAssets.set(k, v);
+    }
     const owners = new Map(
       (raw.prepare(`SELECT s.bank_code AS b, json_extract(e.value, '$.question_id') AS q FROM assessment_sets s, json_each(s.questions_json) e WHERE s.assessment_type = 'QUESTION_BANK'`).all() as Array<{ b: string; q: string }>).map((r) => [r.q, r.b]),
     );
@@ -229,6 +266,7 @@ export async function runBankImport(db: Db, o: BankImportOptions, found?: Awaite
   const storage = o.storage ?? getStorage();
   const copied: string[] = [];
   const rows: BankImportRow[] = [];
+  let hasListeningReviewFailures = false;
 
   class Abort extends Error {
     constructor(readonly outcome: BankImportOutcome) {
@@ -246,7 +284,7 @@ export async function runBankImport(db: Db, o: BankImportOptions, found?: Awaite
     const assetIds = new Map(
       (await tx.select({ id: contentAssets.id, code: contentAssets.assetCode }).from(contentAssets)).filter((a) => a.code).map((a) => [a.code as string, a.id]),
     );
-    const publishIds: Array<{ id: string; code: string }> = [];
+    const publishIds: Array<{ id: string; code: string; bank: QuestionBank }> = [];
 
     for (const b of v.banks) {
       const hash = hashOf(b);
@@ -296,13 +334,70 @@ export async function runBankImport(db: Db, o: BankImportOptions, found?: Awaite
           await ensureRevision(tx, 'ASSESSMENT_SET', id, row!.version, row, o);
         }
       }
-      if (o.publish && !pending && id && write) publishIds.push({ id, code: b.bank_code });
+      if (o.publish && !pending && id && write) publishIds.push({ id, code: b.bank_code, bank: b });
       rows.push({ bank_code: b.bank_code, action, status: pending ? 'DRAFT' : status, pending_audio: pending, question_count: b.questions.length });
     }
 
     if (write) {
-      const blockers: Blocker[] = [];
+      const validPublishIds: Array<{ id: string; code: string }> = [];
+
       for (const p of publishIds) {
+        if (isListeningBankKind(p.bank.bank_kind)) {
+          const partCode = extractListeningPartCode(p.bank);
+          if (!partCode) {
+            hasListeningReviewFailures = true;
+            lines.push(`listening_review_missing: Bank '${p.code}' tidak memiliki part_code yang valid.`);
+            continue;
+          }
+
+          const candidatePaths = [
+            path.join(o.dir, 'reviews', `${partCode}.review.json`),
+            path.join(o.dir, '..', 'gt-listening', 'reviews', `${partCode}.review.json`),
+            path.join(process.cwd(), 'content', 'gt-listening', 'reviews', `${partCode}.review.json`),
+          ];
+          const reviewPath = candidatePaths.find((cp) => existsSync(cp)) ?? candidatePaths[0];
+
+          let audioBuf: Buffer | undefined;
+          if (p.bank.listening_asset_code) {
+            const [assetRow] = await tx
+              .select({ storageKey: contentAssets.storageKey })
+              .from(contentAssets)
+              .where(eq(contentAssets.assetCode, p.bank.listening_asset_code))
+              .limit(1);
+            if (assetRow?.storageKey) {
+              audioBuf = await storage.get(assetRow.storageKey).catch(() => undefined);
+            }
+          }
+
+          const candidateScriptPaths = [
+            path.join(o.dir, 'scripts', `${partCode}.md`),
+            path.join(o.dir, '..', 'gt-listening', 'scripts', `${partCode}.md`),
+            path.join(process.cwd(), 'content', 'gt-listening', 'scripts', `${partCode}.md`),
+          ];
+          const scriptPath = candidateScriptPaths.find((sp) => existsSync(sp));
+          let scriptBuf: Buffer | undefined;
+          if (scriptPath) {
+            scriptBuf = await readFile(scriptPath).catch(() => undefined);
+          }
+
+          const reviewCheck = await validateListeningReview({
+            reviewFilePath: reviewPath,
+            expectedPartCode: partCode,
+            currentAudioBuffer: audioBuf,
+            currentScriptBuffer: scriptBuf,
+          });
+
+          if (!reviewCheck.valid) {
+            hasListeningReviewFailures = true;
+            lines.push(`${reviewCheck.code}: Bank '${p.code}' gagal publikasi: ${reviewCheck.reason}`);
+            continue;
+          }
+        }
+        validPublishIds.push(p);
+      }
+
+      const blockers: Blocker[] = [];
+      for (const p of validPublishIds) {
         const r = await changeStatus(tx, 'ASSESSMENT_SET', p.id, 'PUBLISHED', { userId: o.actorUserId });
         if (!r.published) blockers.push(...r.blockers);
       }
@@ -313,7 +408,7 @@ export async function runBankImport(db: Db, o: BankImportOptions, found?: Awaite
           banks: [],
         });
       }
-      for (const p of publishIds) {
+      for (const p of validPublishIds) {
         const row = rows.find((r) => r.bank_code === p.code);
         if (row) row.status = 'PUBLISHED';
       }
@@ -344,5 +439,8 @@ export async function runBankImport(db: Db, o: BankImportOptions, found?: Awaite
   lines.push(
     `${o.dryRun ? 'DRY-RUN' : 'OK'}: banks +${n('CREATE')} ~${n('UPDATE')} =${n('NOOP')} | published ${rows.filter((r) => r.status === 'PUBLISHED').length} | pending_audio ${rows.filter((r) => r.pending_audio).length}`,
   );
+  if (hasListeningReviewFailures) {
+    return { exitCode: 2, lines, banks: rows };
+  }
   return { exitCode: 0, lines, banks: rows };
 }

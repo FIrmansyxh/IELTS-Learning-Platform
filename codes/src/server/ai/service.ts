@@ -4,6 +4,7 @@ import {
   aiEvaluations,
   asyncJobs,
   attempts,
+  attemptSections,
   learningMaterials,
   speakingRecordings,
   submissions,
@@ -124,6 +125,7 @@ export async function createWritingSubmission(
         userId: attempts.userId,
         status: attempts.status,
         assessmentSetId: attempts.assessmentSetId,
+        assessmentType: attempts.assessmentType,
         state: attempts.state,
       })
       .from(attempts)
@@ -132,6 +134,20 @@ export async function createWritingSubmission(
 
     if (!attempt || attempt.userId !== userId) throw notFound();
     if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
+
+    if (attempt.assessmentType === 'MOCK_TEST') {
+      const [wSec] = await db
+        .select()
+        .from(attemptSections)
+        .where(and(eq(attemptSections.attemptId, input.attempt_id), eq(attemptSections.skill, 'WRITING')))
+        .limit(1);
+      if (!wSec || !wSec.startedAt || wSec.status !== 'IN_PROGRESS') {
+        throw new ApiError('SECTION_NOT_ACTIVE');
+      }
+      if (wSec.deadlineAt && new Date().getTime() > new Date(wSec.deadlineAt).getTime() + 5000) {
+        throw new ApiError('SECTION_EXPIRED');
+      }
+    }
 
     // SPEC-022: attempt tanpa set (MIX_PRACTICE) membaca soal dari attempts.state.
     const setRow = { questionsJson: await attemptQuestionList(db, attempt) };
@@ -424,6 +440,7 @@ export async function createSpeakingSubmission(
         userId: attempts.userId,
         status: attempts.status,
         assessmentSetId: attempts.assessmentSetId,
+        assessmentType: attempts.assessmentType,
         state: attempts.state,
       })
       .from(attempts)
@@ -432,6 +449,20 @@ export async function createSpeakingSubmission(
 
     if (!attempt || attempt.userId !== userId) throw notFound();
     if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
+
+    if (attempt.assessmentType === 'MOCK_TEST') {
+      const [wSec] = await db
+        .select()
+        .from(attemptSections)
+        .where(and(eq(attemptSections.attemptId, input.attempt_id), eq(attemptSections.skill, 'WRITING')))
+        .limit(1);
+      if (!wSec || !wSec.startedAt || wSec.status !== 'IN_PROGRESS') {
+        throw new ApiError('SECTION_NOT_ACTIVE');
+      }
+      if (wSec.deadlineAt && new Date().getTime() > new Date(wSec.deadlineAt).getTime() + 5000) {
+        throw new ApiError('SECTION_EXPIRED');
+      }
+    }
 
     // SPEC-022: attempt tanpa set (MIX_PRACTICE) membaca soal dari attempts.state.
     const setRow = { questionsJson: await attemptQuestionList(db, attempt) };
@@ -1262,13 +1293,32 @@ export async function recordExternalSpeakingEvaluation(
     }
 
     const [attempt] = await db
-      .select({ userId: attempts.userId, status: attempts.status, assessmentSetId: attempts.assessmentSetId, state: attempts.state })
+      .select({
+        userId: attempts.userId,
+        status: attempts.status,
+        assessmentSetId: attempts.assessmentSetId,
+        assessmentType: attempts.assessmentType,
+        state: attempts.state,
+      })
       .from(attempts)
       .where(eq(attempts.id, input.attempt_id))
       .limit(1);
     if (!attempt || attempt.userId !== userId) throw notFound();
-    // SPEC-022: pada attempt campuran, pengiriman hanya diterima selama attempt IN_PROGRESS.
-    if (attempt.assessmentSetId === null && attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
+
+    if (attempt.assessmentType === 'MOCK_TEST') {
+      if (attempt.status === 'ABANDONED') throw new ApiError('ATTEMPT_NOT_ACTIVE');
+      const [sec] = await db
+        .select()
+        .from(attemptSections)
+        .where(and(eq(attemptSections.attemptId, input.attempt_id), eq(attemptSections.skill, 'SPEAKING')))
+        .limit(1);
+      if (!sec || sec.status === 'GRADED') {
+        throw new ApiError('ATTEMPT_NOT_ACTIVE');
+      }
+    } else {
+      // SPEC-022: pada attempt campuran, pengiriman hanya diterima selama attempt IN_PROGRESS.
+      if (attempt.assessmentSetId === null && attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
+    }
 
     // SPEC-022: attempt tanpa set (MIX_PRACTICE) membaca soal dari attempts.state.
     const setRow = { questionsJson: await attemptQuestionList(db, attempt) };

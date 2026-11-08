@@ -1,4 +1,4 @@
-import { Home, Map, User, History, Shuffle, type LucideIcon } from 'lucide-react';
+import { Home, Map, User, History, Shuffle, GraduationCap, type LucideIcon } from 'lucide-react';
 import { id } from '@/i18n/id';
 
 export type NavItem = {
@@ -19,6 +19,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: '/', label: id.nav.home, icon: Home, enabled: true },
   { href: '/peta', label: id.nav.map, icon: Map, enabled: true, matchPrefix: '/peta' },
   { href: '/latihan/campur', label: id.nav.mix, icon: Shuffle, enabled: true, matchPrefix: '/latihan' },
+  { href: '/simulasi', label: id.nav.simulation, icon: GraduationCap, enabled: true, matchPrefix: '/simulasi' },
   { href: '/riwayat', label: id.nav.history, icon: History, enabled: true, matchPrefix: '/riwayat' },
   { href: '/profil', label: id.nav.profile, icon: User, enabled: true, matchPrefix: '/profil' },
 ];

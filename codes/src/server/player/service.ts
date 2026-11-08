@@ -36,8 +36,8 @@ async function loadLearnRow(tx: Tx, userId: string, subModuleId: string, lock: b
   return row;
 }
 
-async function requireMaterial(tx: Tx, subModuleId: string): Promise<Material> {
-  const m = await loadMaterial(tx, subModuleId);
+async function requireMaterial(tx: Tx, subModuleId: string, style: 'LEARN_FIRST' | 'PRACTICE_FIRST' | 'CASE_BASED' = 'LEARN_FIRST'): Promise<Material> {
+  const m = await loadMaterial(tx, subModuleId, style);
   if (!m) {
     logger.error({ subModuleId }, 'material_missing');
     throw notFound();
@@ -62,7 +62,7 @@ export async function findPublishedDrill(tx: Tx, subModuleId: string) {
 }
 
 /** GET /sub-modules/{code}: akses (403/404), markStarted, lalu susun respons tanpa kolom internal. */
-export async function getSubModuleDetail(tx: Tx, userId: string, code: string): Promise<SubModuleDetail> {
+export async function getSubModuleDetail(tx: Tx, userId: string, code: string, requestedStyle?: string): Promise<SubModuleDetail> {
   const [row] = await tx
     .select({ id: subModules.id, contentVersion: subModules.contentVersion })
     .from(subModules)
@@ -78,7 +78,9 @@ export async function getSubModuleDetail(tx: Tx, userId: string, code: string): 
   if (!located) throw notFound();
   const { tier, mod, sub } = located;
 
-  const material = await requireMaterial(tx, row.id);
+  const { getDelivery } = await import('../tracks/service');
+  const delivery = await getDelivery(userId, row.id, requestedStyle, tx);
+  const material = await requireMaterial(tx, row.id, delivery.applied_style);
   const learn = await loadLearnRow(tx, userId, row.id, false);
   const min = await getSetting<number>(tx, 'learn.min_active_seconds');
   const ready = checkLearnReady({
@@ -97,6 +99,7 @@ export async function getSubModuleDetail(tx: Tx, userId: string, code: string): 
   const idx = chain.findIndex((c) => c.sub.id === sub.id);
 
   return {
+    delivery,
     sub_module: {
       id: sub.id,
       sub_module_code: sub.code,

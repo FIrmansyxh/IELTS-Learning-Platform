@@ -79,7 +79,32 @@ function orderedAvailable(snap: Snapshot): Located[] {
   return out;
 }
 
+async function loadUserActiveTrack(db: Db, userId: string): Promise<{ code: string; title: string }> {
+  const r = await execute(
+    db,
+    sql`SELECT t.code, t.title
+        FROM users u
+        JOIN learning_tracks t ON t.id = u.active_track_id
+        WHERE u.id = ${userId} AND t.status = 'PUBLISHED'
+        LIMIT 1`,
+  );
+  if (r.rows.length > 0) {
+    const row = r.rows[0] as { code: string; title: string };
+    return { code: row.code, title: row.title };
+  }
+  const struct = await execute(
+    db,
+    sql`SELECT code, title FROM learning_tracks WHERE code = 'GT-STRUCT' AND status = 'PUBLISHED' LIMIT 1`,
+  );
+  if (struct.rows.length > 0) {
+    const row = struct.rows[0] as { code: string; title: string };
+    return { code: row.code, title: row.title };
+  }
+  return { code: 'GT-STRUCT', title: 'Struktur Kurikulum GT' };
+}
+
 export async function getResumeCard(db: Db, userId: string): Promise<ResumeCard | null> {
+  const activeTrack = await loadUserActiveTrack(db, userId);
   const snap = await db.transaction((tx) => recomputeStatuses(tx, userId));
   const [row] = await db.select().from(lls).where(eq(lls.userId, userId)).limit(1);
   const list = orderedAvailable(snap);
@@ -114,7 +139,7 @@ export async function getResumeCard(db: Db, userId: string): Promise<ResumeCard 
       attemptId,
       fallback: false,
     };
-    return card('RESUME', saved, pos, row.updatedAt);
+    return card('RESUME', saved, pos, row.updatedAt, activeTrack);
   }
 
   // D-RESUME 4: sub-modul pertama IN_PROGRESS, lalu UNLOCKED.
@@ -134,10 +159,16 @@ export async function getResumeCard(db: Db, userId: string): Promise<ResumeCard 
     attemptId: null,
     fallback: true,
   };
-  return card('FALLBACK_NEXT', next, pos, null);
+  return card('FALLBACK_NEXT', next, pos, null, activeTrack);
 }
 
-function card(state: ResumeCard['state'], at: Located, pos: CardPosition, updatedAt: Date | null): ResumeCard {
+function card(
+  state: ResumeCard['state'],
+  at: Located,
+  pos: CardPosition,
+  updatedAt: Date | null,
+  activeTrack: { code: string; title: string },
+): ResumeCard {
   return {
     state,
     sub_module: { id: at.sub.id, sub_module_code: at.sub.code, title: at.sub.title },
@@ -152,5 +183,6 @@ function card(state: ResumeCard['state'], at: Located, pos: CardPosition, update
     resume_path: resumePath(at.sub.code, pos),
     change_path: '/peta',
     updated_at: updatedAt ? updatedAt.toISOString() : null,
+    active_track: activeTrack,
   };
 }

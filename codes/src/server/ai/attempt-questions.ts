@@ -12,7 +12,12 @@ export async function attemptQuestionList(
   attempt: { assessmentSetId: string | null; state: unknown },
 ): Promise<unknown[]> {
   if (attempt.assessmentSetId === null) {
-    const st = attempt.state as { questions?: Array<{ question?: unknown }> } | null;
+    const st = attempt.state as
+      | { schema?: string; sections?: Array<{ questions?: Array<{ question?: unknown }> }>; questions?: Array<{ question?: unknown }> }
+      | null;
+    if (st?.schema === 'mock.v1' && Array.isArray(st.sections)) {
+      return st.sections.flatMap((s) => (s.questions ?? []).flatMap((q) => (q.question ? [q.question] : [])));
+    }
     return (st?.questions ?? []).flatMap((q) => (q.question ? [q.question] : []));
   }
   const [row] = await db

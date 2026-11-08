@@ -5,7 +5,7 @@
 **Size:** XL
 **Assigned To:** Developer Agent (Backend + Frontend + Konten)
 **Dependencies:** TASK-024 (urutan wajib), TASK-022 (bank + `assessment_set_id` nullable), TASK-021 (urutan); TASK-006, TASK-009 (band; tabel `READING_GENERAL` SUDAH ada), TASK-011, TASK-012, TASK-013 (addendum Speaking eksternal), TASK-014 (mesin attempt multi-section), TASK-017
-**Current Status:** not_started
+**Current Status:** ready_to_test
 
 ---
 
@@ -13,17 +13,17 @@
 Simulasi tes GT dengan pilihan section: learner memilih himpunan tak kosong dari {LISTENING, READING, WRITING, SPEAKING}; server merakit soal dari bank GT terpublikasi, membekukan snapshot pada attempt `MOCK_TEST`, menjalankan section berurutan (Listening -> Reading -> Writing) dengan timer di server, menilai otomatis (Listening/Reading), mengantre LLM (Writing), dan menerima skor Speaking eksternal. Band per section selalu tampil; Overall hanya bila keempat section selesai dinilai; selain itu "Overall parsial". Tampilan selalu memuat "Perkiraan latihan, bukan skor resmi IELTS."
 
 ## Acceptance Criteria (dirujuk dari SPEC-023)
-- [ ] AC-1: {READING, WRITING} -> attempt hanya dua section; Overall tidak tampil, ada label parsial.
-- [ ] AC-2: empat section -> Overall tampil setelah keempatnya bernilai; Speaking tertahan ("Menunggu skor Speaking") sampai skor dimasukkan.
-- [ ] AC-3: band Reading memakai `READING_GENERAL`; 34/40 = 7.0, 30/40 = 6.0.
-- [ ] AC-4: band Writing = (T1 + 2 x T2) / 3 dibulatkan ke 0,5.
-- [ ] AC-5: kekurangan konten -> `422 SIMULATION_NOT_ENOUGH_CONTENT` dengan daftar section; Listening tidak dapat dipilih sampai ada audio.
-- [ ] AC-6: refresh memulihkan section aktif dan sisa waktu dari server (pola SPEC-014).
-- [ ] AC-7: tes unit (perakit, band gabungan), integrasi (alur dua section), endpoint-guards lulus.
-- [ ] Edge: satu simulasi `IN_PROGRESS` per profil (`409 SIMULATION_IN_PROGRESS`); waktu habis -> kirim otomatis; Writing kosong -> band 0 tanpa panggilan LLM; LLM mati -> fallback nilai-sendiri berlabel "tidak terverifikasi"; Reading/Listening < 40 soal -> section tidak ditawarkan.
-- [ ] D3: tidak mengulang soal simulasi sebelumnya bila stok cukup; Reading tiga teks berurutan makin sulit.
-- [ ] D5: hasil memperbarui `user_skill_scores` (radar) dan Riwayat Ujian; tidak menyentuh gatekeeping/Boss.
-- [ ] D4 pembulatan Overall: rata-rata empat band ke 0,5 terdekat (x.25 -> x.5, x.75 -> bulat berikutnya).
+- [x] AC-1: {READING, WRITING} -> attempt hanya dua section; Overall tidak tampil, ada label parsial.
+- [x] AC-2: empat section -> Overall tampil setelah keempatnya bernilai; Speaking tertahan ("Menunggu skor Speaking") sampai skor dimasukkan.
+- [x] AC-3: band Reading memakai `READING_GENERAL`; 34/40 = 7.0, 30/40 = 6.0.
+- [x] AC-4: band Writing = (T1 + 2 x T2) / 3 dibulatkan ke 0,5.
+- [x] AC-5: kekurangan konten -> `422 SIMULATION_NOT_ENOUGH_CONTENT` dengan daftar section; Listening tidak dapat dipilih sampai ada audio.
+- [x] AC-6: refresh memulihkan section aktif dan sisa waktu dari server (pola SPEC-014).
+- [x] AC-7: tes unit (perakit, band gabungan), integrasi (alur dua section), endpoint-guards lulus.
+- [x] Edge: satu simulasi `IN_PROGRESS` per profil (`409 SIMULATION_IN_PROGRESS`); waktu habis -> kirim otomatis; Writing kosong -> band 0 tanpa panggilan LLM; LLM mati -> fallback nilai-sendiri berlabel "tidak terverifikasi"; Reading/Listening < 40 soal -> section tidak ditawarkan.
+- [x] D3: tidak mengulang soal simulasi sebelumnya bila stok cukup; Reading tiga teks berurutan makin sulit.
+- [x] D5: hasil memperbarui `user_skill_scores` (radar) dan Riwayat Ujian; tidak menyentuh gatekeeping/Boss.
+- [x] D4 pembulatan Overall: rata-rata empat band ke 0,5 terdekat (x.25 -> x.5, x.75 -> bulat berikutnya).
 
 ## Subtasks
 
@@ -72,3 +72,7 @@ Simulasi tes GT dengan pilihan section: learner memilih himpunan tak kosong dari
 | Timestamp | Agent | Status | Notes |
 |-----------|-------|--------|-------|
 | 2026-11-08 12:00 | pm agent | task created | - |
+| 2026-11-08 23:45 | backend agent | development | Kontrak Zod, scoring D4, assemble D3, service simulasi multi-section, 8 rute API |
+| 2026-11-09 00:05 | frontend agent | development | SimulationBuilder, SimulationRunner, SimulationResult, i18n, navigasi, mode tenang |
+| 2026-11-09 00:25 | qa agent | ready_to_test | PASS: typecheck 0 error, unit 821 passed, integration 8/8 passed, next build exit 0 |
+| 2026-11-09 00:30 | orchestrator | ready_to_test | Diajukan ke Human Review Gate untuk evaluasi akhir SPEC-023 |

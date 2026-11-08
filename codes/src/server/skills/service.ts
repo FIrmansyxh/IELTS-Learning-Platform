@@ -435,17 +435,18 @@ export async function getExamHistory(
     'SKIP_TIER_TEST',
     'TIER_BOSS_EXAM',
     'PLACEMENT_TEST',
+    'MOCK_TEST',
   ] as const;
 
   const typeFilter = assessment_type
-    ? eq(assessmentSets.assessmentType, assessment_type)
-    : inArray(assessmentSets.assessmentType, EXAM_TYPES);
+    ? eq(attempts.assessmentType, assessment_type)
+    : inArray(attempts.assessmentType, EXAM_TYPES);
 
   const rows = await db
     .select({
       attemptId: attempts.id,
-      assessmentType: assessmentSets.assessmentType,
-      title: assessmentSets.title,
+      assessmentType: attempts.assessmentType,
+      title: sql<string>`coalesce(${assessmentSets.title}, 'Simulasi tes')`,
       status: attempts.status,
       scorePercent: attempts.scorePercent,
       bandScore: attempts.bandScore,
@@ -454,7 +455,7 @@ export async function getExamHistory(
       createdAt: attempts.createdAt,
     })
     .from(attempts)
-    .innerJoin(assessmentSets, eq(attempts.assessmentSetId, assessmentSets.id))
+    .leftJoin(assessmentSets, eq(attempts.assessmentSetId, assessmentSets.id))
     .where(
       and(
         eq(attempts.userId, userId),
@@ -469,7 +470,7 @@ export async function getExamHistory(
   const [countRow] = await db
     .select({ count: sql<number>`count(*)` })
     .from(attempts)
-    .innerJoin(assessmentSets, eq(attempts.assessmentSetId, assessmentSets.id))
+    .leftJoin(assessmentSets, eq(attempts.assessmentSetId, assessmentSets.id))
     .where(
       and(
         eq(attempts.userId, userId),
@@ -480,16 +481,17 @@ export async function getExamHistory(
 
   const data: ExamHistoryItemDTO[] = rows.map((r) => {
     const isPlacement = r.assessmentType === 'PLACEMENT_TEST';
+    const isMock = r.assessmentType === 'MOCK_TEST';
     return {
       attempt_id: r.attemptId,
       assessment_type: r.assessmentType,
-      title: r.title,
+      title: isMock ? 'Simulasi tes' : r.title,
       status: r.status,
-      score_percent: r.scorePercent !== null ? Number(r.scorePercent) : null,
+      score_percent: isMock ? null : r.scorePercent !== null ? Number(r.scorePercent) : null,
       band_score: isPlacement ? null : r.bandScore !== null ? Number(r.bandScore) : null,
-      passed: isPlacement ? null : r.passed,
+      passed: isPlacement || isMock ? null : r.passed,
       submitted_at: (r.submittedAt ?? r.createdAt).toISOString(),
-      result_path: `/ujian/${r.attemptId}/hasil`,
+      result_path: isMock ? `/simulasi/${r.attemptId}/hasil` : `/ujian/${r.attemptId}/hasil`,
     };
   });
 

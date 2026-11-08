@@ -27,6 +27,7 @@ import {
   type TierNode,
   type UnlockSrc,
 } from './rules';
+import { applyTrackSequential, type TrackRef } from './track';
 
 export interface UnlockedEntity {
   kind: 'TIER' | 'MODULE' | 'SUB_MODULE';
@@ -49,7 +50,10 @@ export async function ensureProgressRows(tx: DbOrTx, userId: string): Promise<vo
 }
 
 /** Transaksi diserialkan (BEGIN IMMEDIATE + mutex), jadi tidak ada kunci baris yang perlu diambil. */
-async function lockProgress(_tx: DbOrTx, _userId: string): Promise<void> {}
+async function lockProgress(_tx: DbOrTx, _userId: string): Promise<void> {
+  void _tx;
+  void _userId;
+}
 
 /** Satu query: seluruh pohon + progres pengguna (baris datar). */
 export async function loadSnapshot(tx: DbOrTx, userId: string): Promise<Snapshot> {
@@ -76,7 +80,7 @@ export async function loadSnapshot(tx: DbOrTx, userId: string): Promise<Snapshot
     LEFT JOIN sub_modules s ON s.module_id = m.id AND s.status <> 'ARCHIVED'
       AND s.exam_module IN ('COMMON', ${activeExamModule()})
     LEFT JOIN user_sub_module_progress usp ON usp.sub_module_id = s.id AND usp.user_id = ${userId}
-    LEFT JOIN learning_materials lm ON lm.sub_module_id = s.id
+    LEFT JOIN learning_materials lm ON lm.sub_module_id = s.id AND lm.style = 'BASE'
     ORDER BY t.tier_number, m.order_index, m.id, s.order_index, s.id
   `);
   const tiers = new Map<string, TierNode>();
@@ -237,19 +241,57 @@ export async function initializeProgress(tx: DbOrTx, userId: string): Promise<vo
   await recomputeStatuses(tx, userId);
 }
 
+async function loadActiveTrack(tx: DbOrTx, userId: string): Promise<TrackRef | null> {
+  const trackRes = await execute(
+    tx,
+    sql`SELECT t.id, t.code, t.kind, t.layout
+        FROM users u
+        JOIN learning_tracks t ON t.id = u.active_track_id AND t.status = 'PUBLISHED'
+        WHERE u.id = ${userId}`,
+  );
+  const tRow = trackRes.rows[0] as { id: string; code: string; kind: 'CURRICULUM' | 'CURATED'; layout?: 'LIST' | 'SPRINT' } | undefined;
+  if (!tRow) return null;
+  if (tRow.kind !== 'CURATED') return { id: tRow.id, code: tRow.code, kind: tRow.kind };
+
+  const itemRows = await execute(
+    tx,
+    sql`SELECT lti.id, lti.item_kind, lti.sub_module_id, sm.sub_module_code
+        FROM learning_track_items lti
+        LEFT JOIN sub_modules sm ON sm.id = lti.sub_module_id
+        WHERE lti.track_id = ${tRow.id}
+        ORDER BY lti.order_index ASC`,
+  );
+  return {
+    id: tRow.id,
+    code: tRow.code,
+    kind: tRow.kind,
+    layout: tRow.layout,
+    items: (itemRows.rows as Array<{ id: string; item_kind: 'SUB_MODULE' | 'CHECKPOINT'; sub_module_id: string | null; sub_module_code: string | null }>).map((r) => ({
+      id: r.id,
+      kind: r.item_kind,
+      subModuleId: r.sub_module_id,
+      subModuleCode: r.sub_module_code,
+    })),
+  };
+}
+
 /**
- * recomputeStatuses: terapkan D4/D5/D6. Jalur cepat tanpa kunci bila tidak ada perubahan.
+ * recomputeStatuses: terapkan D4/D5/D6 dan D5 (jalur aktif). Jalur cepat tanpa kunci bila tidak ada perubahan.
  * Mengembalikan snapshot terkini (setelah perubahan) agar pembaca tidak perlu memuat ulang.
  */
 export async function recomputeStatuses(tx: DbOrTx, userId: string): Promise<Snapshot> {
   await ensureProgressRows(tx, userId);
   let snap = await loadSnapshot(tx, userId);
-  recompute(snap);
+  const now = new Date();
+  recompute(snap, now);
+  const activeTrack = await loadActiveTrack(tx, userId);
+  if (activeTrack) applyTrackSequential(snap, activeTrack, now);
   if (snap.dirty.size === 0) return snap;
   // Ada perubahan: kunci berurutan, muat ulang (keadaan terbaru), hitung ulang, simpan.
   await lockProgress(tx, userId);
   snap = await loadSnapshot(tx, userId);
-  recompute(snap);
+  recompute(snap, now);
+  if (activeTrack) applyTrackSequential(snap, activeTrack, now);
   await persist(tx, userId, snap);
   return snap;
 }
@@ -311,6 +353,21 @@ export async function assertSubModuleAccessible(tx: DbOrTx, userId: string, subM
 }
 
 /** Skor 0-100 dengan maksimal 2 desimal -> sentesimal (bilangan bulat), tanpa aritmetika float pada perbandingan. */
+export async function getCompletedSubModuleIds(tx: DbOrTx, userId: string): Promise<Set<string>> {
+  const snap = await loadSnapshot(tx, userId);
+  const out = new Set<string>();
+  for (const t of snap.tiers) {
+    for (const m of t.modules) {
+      for (const s of m.subs) {
+        if (s.status === 'COMPLETED' || s.status === 'SKIPPED') {
+          out.add(s.id);
+        }
+      }
+    }
+  }
+  return out;
+}
+
 export function toHundredths(score: number | string): number {
   const n = typeof score === 'string' ? Number(score) : score;
   if (typeof n !== 'number' || !Number.isFinite(n) || n < 0 || n > 100) {

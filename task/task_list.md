@@ -1,4 +1,4 @@
-﻿# TASK LIST - ielts-learning-platform
+# TASK LIST - ielts-learning-platform
 **Last Updated:** 2026-11-08
 **Total Tasks:** 30 (21 awal + 5 dari ADR-004/005 + 4 task fitur pasca-MVP TASK-021..024)
 **Completed:** 0 | **In Progress:** 0 | **Ready to Test:** 18 | **Superseded:** 4 | **Not Started:** 8 (4 lama + 4 baru: 021-024; 025d termasuk hitungan lama) | **Blocked:** 0
@@ -274,25 +274,38 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
   - Spesifikasi: [spec] ../specifications/021_spec_learning_tracks.md
   - Detail: [task] ./TASK-021_learning-tracks/TASK-021_learning-tracks.md
   - Wave: W9 (ke-3) | Ukuran: L | Dependensi: TASK-022, TASK-003, TASK-004, TASK-005, TASK-007
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-08 12:00] (PM Agent)
+     - Backend Dev: [2026-11-08 21:30] (Backend Engineer)
+     - Backend Ready: [2026-11-08 22:00] (Backend Engineer) - Migrasi 0003, service, router, gatekeeping D5 selesai & lulus uji
+     - Frontend Dev: [2026-11-08 22:05] (Frontend Engineer)
+     - Frontend Ready: [2026-11-08 22:20] (Frontend Engineer) - TrackPicker, CuratedTrackView, Checkpoint, runner selesai
+     - QA Review: [2026-11-08 22:35] (QA Agent) - PASS, typecheck bersih, next build exit 0, 49 integrasi lulus, unit 791 lulus
+     - Gate Submitted: [2026-11-08 22:38] (Orchestrator) - Menunggu persetujuan Human Gate sebelum melangkah ke TASK-024
 
 - Task 024: Pipeline Konten Listening GT (Skrip, TTS Lokal, Aset Audio)
   - Spesifikasi: [spec] ../specifications/024_spec_listening_audio_pipeline.md
   - Detail: [task] ./TASK-024_listening-audio-pipeline/TASK-024_listening-audio-pipeline.md
   - Wave: W9 (ke-4) | Ukuran: L | Dependensi: TASK-021 (urutan), TASK-022, TASK-004, TASK-011 (018 SUPERSEDED)
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-08 12:00] (PM Agent)
+     - Implementation complete: [2026-11-08 23:20] (Fullstack/Developer) - Parser skrip D2, builder offline D3/D5, review-gate D6, konten S1, DTO listening.note D8
+     - QA Review: [2026-11-08 23:30] (QA Agent) - PASS, AC-A1..AC-A11 & AC-M1..AC-M3 terpenuhi, typecheck 0 error, build Next.js sukses
+     - Gate Submitted: [2026-11-08 23:32] (Orchestrator) - Menunggu persetujuan Human Gate sebelum melangkah ke TASK-023
 
 - Task 023: Simulasi Tes IELTS GT dengan Pilihan Section
   - Spesifikasi: [spec] ../specifications/023_spec_ielts_test_simulation.md
   - Detail: [task] ./TASK-023_ielts-test-simulation/TASK-023_ielts-test-simulation.md
   - Wave: W9 (ke-5) | Ukuran: XL | Dependensi: TASK-024, TASK-022, TASK-021 (urutan), TASK-006, TASK-009, TASK-011, TASK-012, TASK-013, TASK-014, TASK-017
-  - Current Status: not_started
+  - Current Status: ready_to_test
   - Status Logs:
      - Task Created: [2026-11-08 12:00] (PM Agent)
+     - Backend Dev: [2026-11-08 23:45] (Backend Engineer) - Kontrak Zod, scoring D4, assemble D3, service simulasi multi-section, 8 rute API
+     - Frontend Dev: [2026-11-09 00:05] (Frontend Engineer) - SimulationBuilder, SimulationRunner, SimulationResult, i18n, navigasi, mode tenang
+     - QA Review: [2026-11-09 00:25] (QA Agent) - PASS, AC-1..AC-20 terpenuhi, typecheck 0 error, unit 821 lulus, integrasi 8/8 lulus, next build exit 0
+     - Gate Submitted: [2026-11-09 00:30] (Orchestrator) - Menunggu persetujuan Human Gate untuk peninjauan akhir SPEC-023
 
 ## Priority 2 (Medium)
 

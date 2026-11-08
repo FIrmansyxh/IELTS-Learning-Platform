@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { IsoDateTime, Uuid } from './common';
 import { LearnSubtab } from './player';
+import { ActiveTrackRefDTO } from './tracks';
 
 /** Skema Resume Last Learned (SPEC-007). */
 export const ResumeTab = z.enum(['LEARN', 'DRILL', 'MINI_TASK']);
@@ -36,6 +37,8 @@ export const ResumeCardDTO = z.object({
   resume_path: z.string(),
   change_path: z.string(),
   updated_at: IsoDateTime.nullable().optional(),
+  /** SPEC-021: jalur aktif (selalu ada dari server; `optional` di tipe agar fixture klien lama tetap valid). */
+  active_track: ActiveTrackRefDTO.optional(),
 });
 export const ResumeCardResponseSchema = z.object({ data: ResumeCardDTO.nullable() });
 export type ResumeCard = z.infer<typeof ResumeCardDTO>;
