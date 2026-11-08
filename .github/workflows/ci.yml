@@ -55,24 +55,6 @@ jobs:
 
   integration:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16.10-alpine
-        env:
-          POSTGRES_DB: ielts_test
-          POSTGRES_USER: ci_admin
-          # Kredensial sekali pakai untuk service container CI; bukan rahasia.
-          POSTGRES_PASSWORD: ci-only-throwaway-password
-        ports: ['5433:5432']
-        options: >-
-          --health-cmd "pg_isready -U ci_admin -d ielts_test"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-    env:
-      TEST_DATABASE_URL: postgres://ci_admin:ci-only-throwaway-password@127.0.0.1:5433/ielts_test
-      DATABASE_MIGRATOR_URL: postgres://ci_admin:ci-only-throwaway-password@127.0.0.1:5433/ielts_test
-      SKIP_PRE_MIGRATE_BACKUP: 'true'
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.4.0
@@ -81,7 +63,7 @@ jobs:
           cache: npm
           cache-dependency-path: codes/package-lock.json
       - run: npm ci
-      - run: npm run db:migrate
+      # Berkas SQLite sementara + migrasi + seed disiapkan oleh tests/integration/global-setup.ts.
       - run: npm run test:integration
 
   build:
@@ -97,31 +79,13 @@ jobs:
       - run: npm run build
         env:
           NODE_ENV: production
-      - run: npm run build:worker
-        env:
-          NODE_ENV: production
-      - name: Validasi docker compose (tanpa rahasia nyata)
-        run: |
-          cat > .env <<'EOF'
-          POSTGRES_PASSWORD=ci-compose-config-only
-          APP_RW_PASSWORD=ci-compose-config-only
-          APP_MIGRATOR_PASSWORD=ci-compose-config-only
-          AUTH_SECRET=ci-compose-config-only-ci-compose-config-only
-          IP_HMAC_SECRET=ci-compose-config-only-ci-compose-config-only
-          BACKUP_DIR=/tmp/ci-backups
-          EOF
-          docker compose -f docker-compose.yml config > /tmp/compose.rendered.yml
-          if grep -E 'image:.*:latest' /tmp/compose.rendered.yml; then echo "Image bertag latest dilarang"; exit 1; fi
-          rm -f .env
-      - run: docker build --target web -t ielts-web:ci .
-      - run: docker build --target worker -t ielts-worker:ci .
 
   e2e:
     runs-on: ubuntu-latest
     needs: build
     env:
       CI: 'true'
-      E2E_PG_PASSWORD: ci-only-throwaway-password
+      DATABASE_PATH: /tmp/ci-e2e/ielts.db
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.4.0
@@ -130,23 +94,14 @@ jobs:
           cache: npm
           cache-dependency-path: codes/package-lock.json
       - run: npm ci
-      - name: Siapkan .env sekali pakai untuk Compose
+      - name: Rahasia sekali pakai
         run: |
-          {
-            echo "POSTGRES_DB=ielts"
-            echo "POSTGRES_USER=ci_admin"
-            echo "POSTGRES_PASSWORD=$E2E_PG_PASSWORD"
-            echo "APP_RW_PASSWORD=ci-rw-throwaway-password"
-            echo "APP_MIGRATOR_PASSWORD=ci-mig-throwaway-password"
-            echo "AUTH_SECRET=$(openssl rand -base64 32)"
-            echo "IP_HMAC_SECRET=$(openssl rand -base64 32)"
-            echo "BACKUP_DIR=/tmp/ci-backups"
-          } > .env
-      - name: Jalankan Postgres (Compose) + migrasi + seed
+          echo "AUTH_SECRET=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
+          echo "IP_HMAC_SECRET=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
+      - name: Migrasi + seed ke berkas SQLite sementara
         run: |
-          docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --wait db
-          export DATABASE_MIGRATOR_URL="postgres://app_migrator:ci-mig-throwaway-password@127.0.0.1:5432/ielts"
-          SKIP_PRE_MIGRATE_BACKUP=true npm run db:migrate
+          mkdir -p /tmp/ci-e2e
+          npm run db:migrate
           npm run db:seed
           # Fixture konten sintetis (BUKAN konten produksi) dimuat oleh globalSetup Playwright dari tests/fixtures/content/
       - run: npx playwright install --with-deps chromium
@@ -154,9 +109,8 @@ jobs:
         run: npm run test:e2e
         env:
           NODE_ENV: development
-          DATABASE_URL: postgres://app_rw:ci-rw-throwaway-password@127.0.0.1:5432/ielts
-          AUTH_URL: http://127.0.0.1:3000
-          ALLOWED_HOSTS: 127.0.0.1:3000,localhost:3000
+          AUTH_URL: http://127.0.0.1:3005
+          ALLOWED_HOSTS: 127.0.0.1:3005,localhost:3005
           ASSETS_DIR: /tmp/ci-assets
       - uses: actions/upload-artifact@v4.6.2
         if: always()
@@ -164,8 +118,53 @@ jobs:
           name: playwright-report
           path: codes/playwright-report/
           retention-days: 7
-      - if: always()
-        run: docker compose -f docker-compose.yml -f docker-compose.dev.yml down -v
+
+  # SPEC-025 Fase 4 (P4-13/21/24/40): runner bersih menjalankan alur satu perintah tanpa LLM.
+  start-local-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      AI_ENABLED: 'false'
+      PORT_SMOKE: '3015'
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: codes/package-lock.json
+      - run: npm ci
+      - name: start:local, kesiapan, impor konten, doctor, SIGINT bersih
+        shell: bash
+        run: |
+          set -euo pipefail
+          unset HOSTNAME
+          base="http://127.0.0.1:${PORT_SMOKE}"
+          node scripts/start-local.mjs --no-open --port "$PORT_SMOKE" > /tmp/start-local.log 2>&1 &
+          pid=$!
+          ready=0
+          for i in $(seq 1 450); do
+            if curl -fsS "$base/api/health" > /dev/null 2>&1; then ready=1; break; fi
+            if ! kill -0 "$pid" 2> /dev/null; then break; fi
+            sleep 2
+          done
+          cat /tmp/start-local.log
+          test "$ready" = 1
+          grep -F "Aplikasi siap: $base" /tmp/start-local.log
+          test "$(curl -s -o /dev/null -w '%{http_code}' "$base/pilih-profil")" = 200
+          # Host asing ditolak (P4-20)
+          test "$(curl -s -o /dev/null -w '%{http_code}' -H 'Host: evil.example' "$base/api/v1/profiles")" = 403
+          # Konten bawaan terbit (P4-13)
+          node -e "const {DatabaseSync}=require('node:sqlite');const n=new DatabaseSync('data/ielts.db',{readOnly:true}).prepare(\"SELECT count(*) AS n FROM sub_modules WHERE status='PUBLISHED'\").get().n;console.log('PUBLISHED',n);process.exit(n>=1?0:1)"
+          # doctor hijau (P4-40)
+          npm run doctor
+          # SIGINT bersih (P4-24)
+          kill -INT "$pid"
+          code=0
+          wait "$pid" || code=$?
+          echo "exit start-local: $code"
+          test "$code" = 0
+          if curl -fsS "$base/api/health" > /dev/null 2>&1; then echo "port masih aktif"; exit 1; fi
 
   security:
     runs-on: ubuntu-latest
@@ -185,10 +184,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Organisasi (bukan akun pribadi) memerlukan GITLEAKS_LICENSE sebagai GitHub Secret.
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
-      - run: docker build --target web -t ielts-web:scan .
-      - uses: aquasecurity/trivy-action@0.33.1
-        with:
-          image-ref: ielts-web:scan
-          severity: CRITICAL
-          exit-code: '1'
-          ignore-unfixed: true

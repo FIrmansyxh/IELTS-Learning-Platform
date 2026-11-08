@@ -9,7 +9,7 @@ export default defineConfig({
   retries: isCI ? 1 : 0,
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
   use: {
-    baseURL: process.env.E2E_BASE_URL ?? 'http://127.0.0.1:3000',
+    baseURL: process.env.E2E_BASE_URL ?? 'http://127.0.0.1:3005',
     launchOptions: process.env.E2E_CHROME_PATH ? { executablePath: process.env.E2E_CHROME_PATH } : {},
     trace: 'on-first-retry',
   },
@@ -24,7 +24,7 @@ export default defineConfig({
     ? undefined
     : {
         command: 'npm run dev',
-        url: 'http://127.0.0.1:3000/api/health',
+        url: 'http://127.0.0.1:3005/api/health',
         reuseExistingServer: !isCI,
         timeout: 120_000,
       },

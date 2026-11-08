@@ -31,8 +31,5 @@ Thumbs.db
 .idea/
 .vscode/
 
-# DB lokal jalur B (dev-db.ps1)
-.local-pg/
-
 # Database SQLite lokal (SPEC-025)
 /data/

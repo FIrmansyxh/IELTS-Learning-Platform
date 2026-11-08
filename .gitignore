@@ -134,3 +134,6 @@ temp/
 # OpenCode local artifacts
 .opencode/node_modules/
 .opencode/bun.lock
+
+# Data Postgres lama (SPEC-025): tidak dipakai lagi
+.pgdata/

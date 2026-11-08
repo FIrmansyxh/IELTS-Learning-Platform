@@ -1,7 +1,0 @@
-# Override dev: publikasikan Postgres hanya ke loopback host agar `npm run dev` / db:migrate dari host bisa dipakai.
-#   docker compose -f codes/docker-compose.yml -f codes/docker-compose.dev.yml up -d db
-services:
-  db:
-    ports:
-      - "127.0.0.1:5432:5432"
-    networks: [app-net, edge-net]

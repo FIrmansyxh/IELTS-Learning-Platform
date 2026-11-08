@@ -2,10 +2,13 @@
  * `npm run doctor` (SPEC-025 D7/D10): periksa kesiapan aplikasi lokal. Tidak mengubah apa pun.
  * Status: ok (siap), warn (berfungsi tetapi ada catatan), fail (perlu diperbaiki).
  */
-import { access, constants, readFile } from 'node:fs/promises';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { access, constants } from 'node:fs/promises';
 import path from 'node:path';
+import { parseEnv } from 'node:util';
 import { sql } from 'drizzle-orm';
 import { config } from '../config';
+import { BACKUP_PATTERN, defaultBackupDir, listBackups } from '../backup';
 import { appliedCount, journalTags } from '../db-migrate';
 import { databasePath, execute, getDb, getRaw } from '../db';
 
@@ -45,8 +48,53 @@ function migrationsCheck(): DoctorCheck {
     : { name: 'Migrasi', status: 'fail', detail: `${applied} dari ${expected} terpasang. Jalankan: npm run db:migrate` };
 }
 
+/** PRAGMA quick_check: berkas rusak atau bukan database dilaporkan sebagai GAGAL dengan petunjuk pemulihan. */
+function integrityCheck(): DoctorCheck {
+  const restore = 'Pulihkan: npm run db:restore -- latest --yes';
+  try {
+    const row = getRaw().prepare('PRAGMA quick_check').get() as { quick_check?: string } | undefined;
+    if (row?.quick_check === 'ok') return { name: 'Integritas database', status: 'ok', detail: 'quick_check ok' };
+    return { name: 'Integritas database', status: 'fail', detail: `${String(row?.quick_check ?? 'tidak diketahui').slice(0, 80)}. ${restore}` };
+  } catch (e) {
+    return { name: 'Integritas database', status: 'fail', detail: `${(e as Error).message.slice(0, 80)}. ${restore}` };
+  }
+}
+
+const BACKUP_MAX_AGE_MS = 48 * 60 * 60 * 1000;
+
+/** Cadangan harian (SPEC-025 K5): ok bila terbaru <= 48 jam; selain itu hanya catatan. */
+export function backupCheck(now: Date = new Date()): DoctorCheck {
+  const dir = defaultBackupDir(databasePath());
+  const latest = listBackups(dir)[0];
+  if (!latest) return { name: 'Cadangan', status: 'warn', detail: 'belum ada cadangan. Dibuat otomatis saat start:local, atau jalankan: npm run db:backup' };
+  const date = BACKUP_PATTERN.test(latest) ? latest.slice('ielts-'.length, 'ielts-'.length + 10) : latest;
+  const age = now.getTime() - statSync(path.join(dir, latest)).mtimeMs;
+  return age <= BACKUP_MAX_AGE_MS
+    ? { name: 'Cadangan', status: 'ok', detail: `terakhir ${date}` }
+    : { name: 'Cadangan', status: 'warn', detail: `cadangan terakhir ${date} (lebih dari 48 jam). Jalankan: npm run db:backup` };
+}
+
+const POSTGRES_LEFTOVER_KEYS = ['DATABASE_URL', 'DATABASE_MIGRATOR_URL', 'TEST_DATABASE_URL'] as const;
+
+/** Sisa konfigurasi Postgres di .env: hanya catatan, dilaporkan dengan nama kunci (bukan nilai). */
+export function postgresLeftoverCheck(envFile: string = '.env'): DoctorCheck | null {
+  if (!existsSync(envFile)) return null;
+  let parsed: Record<string, string | undefined>;
+  try {
+    parsed = parseEnv(readFileSync(envFile, 'utf8'));
+  } catch {
+    return null;
+  }
+  const found = POSTGRES_LEFTOVER_KEYS.filter((k) => k in parsed);
+  if (found.length === 0) return null;
+  return { name: 'Sisa konfigurasi Postgres', status: 'warn', detail: `${found.join(', ')} masih ada di .env dan tidak dipakai lagi; aman dihapus dari .env` };
+}
+
 async function dbChecks(): Promise<DoctorCheck[]> {
   const out: DoctorCheck[] = [];
+  const integrity = integrityCheck();
+  out.push(integrity);
+  if (integrity.status === 'fail') return out;
   const db = getDb();
   try {
     await execute(db, sql`SELECT 1`);
@@ -56,6 +104,7 @@ async function dbChecks(): Promise<DoctorCheck[]> {
     return out;
   }
   out.push(migrationsCheck());
+  out.push(backupCheck());
   try {
     const r = await execute(db, sql`SELECT (SELECT count(*) FROM tiers) AS tiers, (SELECT count(*) FROM sub_modules) AS subs, (SELECT count(*) FROM sub_modules WHERE status = 'PUBLISHED') AS published`);
     const x = r.rows[0] as { tiers: number; subs: number; published: number };
@@ -65,7 +114,7 @@ async function dbChecks(): Promise<DoctorCheck[]> {
         : { name: 'Data awal (seed)', status: 'fail', detail: 'kurikulum belum ada. Jalankan: npm run db:seed' },
     );
     if (Number(x.published) === 0 && Number(x.tiers) === 4) {
-      out.push({ name: 'Konten', status: 'warn', detail: 'belum ada sub-modul terbit. Impor: npm run content:import -- content/gt-modules/3.3.3 --publish' });
+      out.push({ name: 'Konten', status: 'warn', detail: 'belum ada sub-modul terbit. Jalankan: npm run start:local (impor otomatis) atau npm run content:import -- content/gt-modules/3.3.3 --publish' });
     }
     const b = await execute(db, sql`SELECT skill, count(*) AS n FROM band_conversion_tables WHERE is_active GROUP BY skill`);
     const skills = new Set((b.rows as Array<{ skill: string }>).map((z) => z.skill));
@@ -118,5 +167,6 @@ export const OFFLINE_NOTES = [
 ];
 
 export async function runDoctor(): Promise<DoctorCheck[]> {
-  return [nodeCheck(), envCheck(), hostCheck(), ...(await dbChecks()), await assetsCheck(), await llmCheck()];
+  const leftover = postgresLeftoverCheck();
+  return [nodeCheck(), envCheck(), hostCheck(), ...(await dbChecks()), ...(leftover ? [leftover] : []), await assetsCheck(), await llmCheck()];
 }

@@ -18,14 +18,13 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text-summary', 'lcov'],
       include: ['src/server/**'],
-      // Modul yang terikat Postgres diverifikasi oleh `npm run test:integration` (DB nyata), bukan oleh coverage unit.
-      // Logika murni (rules, validate, session, password, withApi, rate-limit, registry, assets) tetap kena ambang 70%.
+      // Modul yang terikat database diverifikasi oleh `npm run test:integration` (berkas SQLite sementara), bukan oleh coverage unit.
+      // Logika murni (rules, validate, session, withApi, registry, assets) tetap kena ambang 70%.
       exclude: [
-        'src/server/admin/**',
         'src/server/audit.ts',
         'src/server/db.ts',
         'src/server/hooks-register.ts',
-        'src/server/auth/{service,guards,bootstrap}.ts',
+        'src/server/auth/{service,guards}.ts',
         'src/server/content/{apply,import-service,plan,publish}.ts',
         'src/server/gatekeeping/{service,tree}.ts',
         'src/server/settings/service.ts',

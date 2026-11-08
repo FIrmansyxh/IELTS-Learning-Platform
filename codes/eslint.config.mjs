@@ -67,7 +67,7 @@ const config = [
     },
   },
   {
-    files: ['scripts/**', 'src/worker/**'],
+    files: ['scripts/**', 'src/server/jobs/**', 'src/server/backup.ts', 'src/server/cli/doctor.ts'],
     rules: { 'security/detect-non-literal-fs-filename': 'off', 'security/detect-child-process': 'off' },
   },
 ];

@@ -28,6 +28,64 @@ Kode error baru: `PROFILE_NAME_TAKEN` (409), `PROFILE_LIMIT_REACHED` (409), `CON
 
 ---
 
+## 0b. Perubahan SPEC-021..024 (koreksi Analyst 2026-11-08, menyelaraskan SPEC-025/ADR-005)
+
+Kontrak NORMATIF per endpoint ada di bagian "API Contract" spec masing-masing; bagian ini adalah ringkasan seam. Hanya tingkat auth `public` dan `user` yang ada. Draf lama yang menyebut `GET/POST/PATCH /admin/tracks`, `GET /admin/banks`, dan `POST /admin/import-batches` untuk bank DIBATALKAN (pengganti: berkas konten + `npm run db:seed`/`content:import`/`bank:validate`/`listening:check`/`listening:build`).
+
+**Endpoint baru (semua `user`):**
+| Metode dan path | Spec | Sukses | Catatan |
+|---|---|---|---|
+| `GET /api/v1/tracks` | 021 | 200 | daftar jalur + progres |
+| `PUT /api/v1/me/active-track` | 021 | 204 | body `{ track_code }`; 404 `NOT_FOUND` |
+| `PUT /api/v1/sub-modules/{code}/style` | 021 | 204 | body `{ style }` (`null` menghapus) |
+| `POST /api/v1/tracks/{track_code}/checkpoints/{item_id}/attempts` | 021 | 201 | `CHECKPOINT_NOT_READY` 409, `CHECKPOINT_NOT_ENOUGH_QUESTIONS` 422 |
+| `GET /api/v1/banks` | 022 | 200 | hanya bank `PUBLISHED`, tanpa kunci |
+| `POST /api/v1/mix-sessions` | 022 | 201 | `MIX_NOT_ENOUGH_QUESTIONS` 422 |
+| `GET /api/v1/simulations/options` | 023 | 200 | |
+| `POST /api/v1/simulations` | 023 | 201 | `SIMULATION_IN_PROGRESS` 409, `SIMULATION_NOT_ENOUGH_CONTENT` 422 |
+| `GET /api/v1/simulations/{attempt_id}` | 023 | 200 | |
+| `GET /api/v1/simulations/{attempt_id}/sections/{section}` | 023 | 200 | |
+| `POST /api/v1/simulations/{attempt_id}/sections/{section}/start` | 023 | 200 | idempoten |
+| `POST /api/v1/simulations/{attempt_id}/sections/{section}/submit` | 023 | 200 | `SECTION_NOT_SUBMITTABLE` 409 untuk `SPEAKING` |
+| `GET /api/v1/simulations/{attempt_id}/result` | 023 | 200 | |
+| `POST /api/v1/simulations/{attempt_id}/abandon` | 023 | 204 | |
+
+**Perubahan aditif pada endpoint yang ada (tidak mematahkan klien lama):**
+| Endpoint | Perubahan | Spec |
+|---|---|---|
+| `GET /api/v1/curriculum/tree` | query opsional `track`; `data.track` ditambahkan; `data.tiers` tidak berubah | 021 |
+| `GET /api/v1/sub-modules/{code}` | query opsional `style`; `data.delivery` ditambahkan | 021 |
+| `GET /api/v1/me/last-learned` | `data.active_track` ditambahkan | 021 |
+| `GET /api/v1/attempts/{id}` | untuk `MIX_PRACTICE`/`TRACK_CHECKPOINT`/`MOCK_TEST` soal diambil dari `attempts.state`; `passages[]` untuk `MIX_PRACTICE`; `listening.note` | 022, 023, 024 |
+| `GET /api/v1/attempts/{id}/result` | `data.mix` untuk `MIX_PRACTICE` | 022 |
+| `POST /api/v1/submissions/writing`, `/submissions/speaking-external` | `attempt_id` boleh milik attempt tanpa set (`MIX_PRACTICE`, `MOCK_TEST`); soal dibaca dari `attempts.state` | 022, 023 |
+| `GET /api/v1/me/exam-history` | entri tipe `MOCK_TEST` | 023 |
+
+**Kode error baru (tambahkan ke registri kode di `src/server/http/errors.ts` dan bagian 2.2):**
+| Kode | HTTP | Spec | Arti singkat |
+|---|---|---|---|
+| `MIX_NOT_ENOUGH_QUESTIONS` | 422 | 022 | Kapasitas pool < `count`; `details[0].code = "max_available:<n>"` |
+| `CHECKPOINT_NOT_READY` | 409 | 021 | Sub-modul yang dicakup belum selesai |
+| `CHECKPOINT_NOT_ENOUGH_QUESTIONS` | 422 | 021 | Kolam < 5 soal; `details[0].code = "max_available:<n>"` |
+| `SIMULATION_IN_PROGRESS` | 409 | 023 | Ada simulasi `IN_PROGRESS`; `details[0] = { path: "attempt_id", code: "existing_attempt", message: "<uuid>" }` |
+| `SIMULATION_NOT_ENOUGH_CONTENT` | 422 | 023 | `details[]` per section `{ path: "sections.<S>", code: "content_missing", message }` |
+| `SECTION_NOT_SUBMITTABLE` | 409 | 023 | `submit` pada section `SPEAKING` |
+Kode yang dipakai ulang tanpa perubahan arti: `SECTION_ORDER_VIOLATION`, `SECTION_ALREADY_DONE`, `SECTION_NOT_ACTIVE`, `SECTION_EXPIRED` (014), `QUESTION_REQUIRES_SUBMISSION`, `ATTEMPT_NOT_ACTIVE`, `LOCKED_CONTENT` (`details[0].code` `TIER_LOCKED` berlaku di semua jalur, SPEC-021 D5), `QUESTION_TYPE_MISMATCH`. `ORDER_INDEX_TAKEN` (020) tidak dipakai SPEC-021.
+
+**Rute UI baru:** `/latihan/campur` (022), `/simulasi`, `/simulasi/[attempt_id]`, `/simulasi/[attempt_id]/hasil` (023); `/peta` mendapat parameter `track` (021). Semua `user`.
+
+**Delta skema SQLite (menggantikan baris Postgres lama pada bagian 9 untuk spec 021-024):**
+| Spec | Tag migrasi | Perubahan |
+|---|---|---|
+| 022 | `0002_spec_022_question_banks` | SATU-SATUNYA pembangunan ulang tabel: `assessment_sets` (+`bank_code`, `bank_kind`, `exam_module`, `tags`, CHECK scope `QUESTION_BANK`), `attempts` (+`assessment_type`, `assessment_set_id` nullable, CHECK, indeks unik aktif per tipe), `attempt_sections` (+`id`, set nullable, kolom waktu). Migrator diperluas (`-- migrator: foreign_keys=off`, cadangan, `foreign_key_check`) |
+| 021 | `0003_spec_021_learning_tracks` | aditif: `learning_tracks`, `learning_track_items`, `user_sub_module_styles`, `users.active_track_id`, `learning_materials.style` (+ indeks unik `(sub_module_id, style)`) |
+| 023, 024 | tidak ada | memakai skema di atas; migrasi tambahan hanya aditif bila ditemukan perlu |
+Nilai enum TypeScript baru pada `assessmentType`: `QUESTION_BANK`, `MIX_PRACTICE`, `MOCK_TEST`, `TRACK_CHECKPOINT` (tanpa DDL).
+
+**Hook:** `assessmentTypeHandlers` menambah `MIX_PRACTICE` (022) dan `TRACK_CHECKPOINT` (021) dan dipilih dari `attempts.assessment_type`; `MOCK_TEST` ditangani `simulationService` (023). `attemptCompletedHooks`: gamifikasi dilewati untuk ketiga tipe itu, `skillScoreHook` tetap berjalan. `evaluationGradedHooks` menambah `simulationService.onEvaluationGraded` (023). `seedModules` menambah `learning-tracks` (setelah `curriculum-structure`, 021). Kontrak konten naik ke `1.2` (021: `learning_tracks[]`, `materials_variants[]`); kontrak bank soal `1.0` diperluas (022 D7: `listening_asset_code`, `pending_audio`, kind `LISTENING_GT_S1..S4`).
+
+---
+
 ## 1. Konvensi Bersama
 
 | Topik | Aturan |
@@ -413,3 +471,4 @@ Delta keamanan (`security-standards.md` bagian 16) terpetakan: `token_version` (
 | 2026-11-03 | Analyst | Kontrak FINAL awal: 98 endpoint, registri error, bucket rate limit, DTO Zod, registri hook, `app_settings`, delta skema |
 | 2026-11-03 | Backend Engineer | Spec 005 aditif: `progress.min_active_seconds` pada `GET /sub-modules/{code}`; regex kode sub-modul dilonggarkan satu digit tier (lihat spec 005). Tidak ada perubahan path/method. |
 | 2026-11-03 | Backend Engineer | Bagian 8/spec 002: `SettingDTO.options` (aditif, enum). Bagian 5: tidak ada perubahan path/method. Kode `INVALID_STATUS_TRANSITION` dipakai `PublishService.changeStatus` (status 409). |
+| 2026-11-08 | Analyst | Bagian 0b: koreksi SPEC-021..024 terhadap SPEC-025/ADR-005 (pembatalan endpoint admin jalur/bank/impor, 14 endpoint baru + perubahan aditif, 6 kode error baru, rute UI, delta skema SQLite `0002`/`0003`, hook). Tabel Postgres lama di bagian 5, 8, 9 tidak diubah (riwayat) |

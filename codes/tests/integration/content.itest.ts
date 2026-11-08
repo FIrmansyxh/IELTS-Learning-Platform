@@ -282,7 +282,7 @@ describe('content:import', () => {
 describe('CLI (proses terpisah)', () => {
   const run = (args: string[]) =>
     spawnSync('npx', ['tsx', 'scripts/content-import.ts', ...args], {
-      env: { ...process.env, DATABASE_URL: process.env.TEST_DATABASE_URL, DATABASE_MIGRATOR_URL: process.env.TEST_DATABASE_URL },
+      env: { ...process.env, DATABASE_PATH: process.env.TEST_DATABASE_PATH },
       shell: true,
       encoding: 'utf8',
       timeout: 60_000,

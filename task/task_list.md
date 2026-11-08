@@ -1,7 +1,9 @@
 # TASK LIST - ielts-learning-platform
 **Last Updated:** 2026-11-08
-**Total Tasks:** 26 (21 awal + 5 dari ADR-004/005)
-**Completed:** 0 | **In Progress:** 0 | **Ready to Test:** 18 | **Superseded:** 4 | **Not Started:** 4 | **Blocked:** 0
+**Total Tasks:** 30 (21 awal + 5 dari ADR-004/005 + 4 task fitur pasca-MVP TASK-021..024)
+**Completed:** 0 | **In Progress:** 0 | **Ready to Test:** 18 | **Superseded:** 4 | **Not Started:** 8 (4 lama + 4 baru: 021-024; 025d termasuk hitungan lama) | **Blocked:** 0
+
+> Catatan hitungan 2026-11-08: header lama (26 = 18 + 4 + 4) tidak dapat direkonsiliasi sepenuhnya dengan entri (mis. 018 berstatus in_progress, 025a-c dihitung di bagian ADR). Total baru = 26 + 4 task baru (021-024); 025d sudah masuk hitungan 26 sebelumnya. Perlu dihitung ulang penuh pada audit status berikutnya.
 
 > Pembaruan 2026-11-08: arah produk berubah (ADR-004 General Training + LLM lokal; ADR-005 aplikasi lokal satu perangkat). Task 001, 002, 018, 019, 020 digantikan; lihat bagian "Tambahan ADR-004/005" di bawah.
 
@@ -20,6 +22,8 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
 | W6 | 7-8 | 012, 013 |
 | W7 | 8-9 | 014, 015 |
 | W8 | 9-10 | 016, 017, 020 |
+| W10 | pasca-MVP | 025d (Fase 4 SPEC-025) |
+| W9 | pasca-MVP | 022 -> 021 -> 024 -> 023 (urutan wajib; 025d lebih dulu) |
 
 ---
 
@@ -241,6 +245,49 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
      - Task Created: [2026-11-03 18:30] (PM Agent)
      - Implementation Complete: [2026-11-04 13:52] (Developer Agent) - Fullstack kurasi konten, manajemen status & transisi, verifikasi AI, revisi snapshot, analisis kualitas soal, 24 unit tests lulus, siap uji manual
 
+### Pasca-MVP (ADR-004/005), urutan build WAJIB: 025d -> 022 -> 021 -> 024 -> 023
+
+- Task 025d: Satu Perintah Menjalankan (start:local) dan Pembersihan Docker/Postgres (SPEC-025 Fase 4)
+  - Spesifikasi: [spec] ../specifications/025_spec_local_single_device_app.md
+  - Detail: [task] ./TASK-025d_start-local-cleanup/TASK-025d_start-local-cleanup.md
+  - Wave: W10 | Ukuran: M | Dependensi: TASK-025c (ready_to_test)
+  - Current Status: in_progress (backend/ops kode + tes selesai; menunggu izin human .pgdata/, bukti CI, Playwright, verifikasi manual Windows)
+  - Status Logs:
+     - Task Created: [2026-11-08 12:00] (PM Agent)
+     - Backend Dev: [2026-11-08 16:40] (Backend Engineer)
+
+- Task 022: Bank Soal Modular dan Mix Builder (GT)
+  - Spesifikasi: [spec] ../specifications/022_spec_question_bank_mix_builder.md
+  - Detail: [task] ./TASK-022_question-bank-mix-builder/TASK-022_question-bank-mix-builder.md
+  - Wave: W9 (ke-2) | Ukuran: L | Dependensi: TASK-025d, TASK-004, TASK-006, TASK-017 (019/020 SUPERSEDED, diganti CLI)
+  - Current Status: not_started
+  - Status Logs:
+     - Task Created: [2026-11-08 12:00] (PM Agent)
+
+- Task 021: Jalur Belajar (Learning Track) dan Gaya Penyampaian Materi
+  - Spesifikasi: [spec] ../specifications/021_spec_learning_tracks.md
+  - Detail: [task] ./TASK-021_learning-tracks/TASK-021_learning-tracks.md
+  - Wave: W9 (ke-3) | Ukuran: L | Dependensi: TASK-022, TASK-003, TASK-004, TASK-005, TASK-007
+  - Current Status: not_started
+  - Status Logs:
+     - Task Created: [2026-11-08 12:00] (PM Agent)
+
+- Task 024: Pipeline Konten Listening GT (Skrip, TTS Lokal, Aset Audio)
+  - Spesifikasi: [spec] ../specifications/024_spec_listening_audio_pipeline.md
+  - Detail: [task] ./TASK-024_listening-audio-pipeline/TASK-024_listening-audio-pipeline.md
+  - Wave: W9 (ke-4) | Ukuran: L | Dependensi: TASK-021 (urutan), TASK-022, TASK-004, TASK-011 (018 SUPERSEDED)
+  - Current Status: not_started
+  - Status Logs:
+     - Task Created: [2026-11-08 12:00] (PM Agent)
+
+- Task 023: Simulasi Tes IELTS GT dengan Pilihan Section
+  - Spesifikasi: [spec] ../specifications/023_spec_ielts_test_simulation.md
+  - Detail: [task] ./TASK-023_ielts-test-simulation/TASK-023_ielts-test-simulation.md
+  - Wave: W9 (ke-5) | Ukuran: XL | Dependensi: TASK-024, TASK-022, TASK-021 (urutan), TASK-006, TASK-009, TASK-011, TASK-012, TASK-013, TASK-014, TASK-017
+  - Current Status: not_started
+  - Status Logs:
+     - Task Created: [2026-11-08 12:00] (PM Agent)
+
 ## Priority 2 (Medium)
 
 (Tidak ada)
@@ -267,6 +314,6 @@ Pekerjaan berikut dikerjakan Orchestrator langsung (tanpa `/build-feature`), den
 - Task 025a: SPEC-025 Fase 1 - Profil lokal tanpa login. Status: **ready_to_test** (commit e8bc1e0).
 - Task 025b: SPEC-025 Fase 2 - Hapus admin, ganti CLI (`profile:*`, `progress:*`, `points:*`, `settings:*`, `band:*`, `doctor`). Status: **ready_to_test**.
 - Task 025c: SPEC-025 Fase 3 - SQLite (`node:sqlite` + Drizzle sqlite-proxy) + antrean dalam proses. Status: **ready_to_test** (unit 640, integrasi 217, E2E 14 hijau).
-- Task 025d: SPEC-025 Fase 4 - Satu perintah menjalankan (`start:local`). Status: **not_started**.
+- Task 025d: SPEC-025 Fase 4 - Satu perintah menjalankan (`start:local`) + pembersihan Docker/Postgres. Status: **in_progress**. Detail: `./TASK-025d_start-local-cleanup/TASK-025d_start-local-cleanup.md` (entri lengkap di bagian Priority 1 > Pasca-MVP).
 - ADR-004 (selesai, ready_to_test): driver llama.cpp, prompt Writing General Training, UI Writing, Speaking via prompt eksternal + input skor, bank soal GT (71 soal), tag `exam_module`, tabel band `READING_GENERAL`, modul ajar 3.3.3.
-- SPEC-021 Jalur Belajar: **not_started** (draf). SPEC-022 Bank Soal + Mix Builder: **not_started** (draf). SPEC-023 Simulasi Tes per section: **not_started** (draf). SPEC-024 Listening (skrip + TTS lokal): **not_started** (draf).
+- SPEC-021 Jalur Belajar: **not_started** -> TASK-021 (spec APPROVED 2026-11-08). SPEC-022 Bank Soal + Mix Builder: **not_started** -> TASK-022. SPEC-023 Simulasi Tes per section: **not_started** -> TASK-023. SPEC-024 Listening (skrip + TTS lokal): **not_started** -> TASK-024. Urutan build wajib: 025d -> 022 -> 021 -> 024 -> 023. Detail tiap task di bagian Priority 1 > Pasca-MVP.

@@ -1,8 +1,8 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { VideoItem } from '@/contracts/player';
 import { VideoCard } from './video-card';
-import { effectiveEnd, effectiveStart, youtubeWatchUrl } from './youtube';
+import { effectiveEnd, effectiveStart, loadYouTubeApi, youtubeWatchUrl } from './youtube';
 
 type Opts = {
   host: string;
@@ -100,6 +100,79 @@ describe('VideoCard', () => {
     expect(link).toHaveAttribute('href', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=95s');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     expect(screen.getByRole('button', { name: 'Coba lagi' })).toBeInTheDocument();
+  });
+});
+
+describe('VideoCard offline (SPEC-025 P4-47..49)', () => {
+  let onLine = true;
+  beforeEach(() => {
+    onLine = true;
+    vi.spyOn(navigator, 'onLine', 'get').mockImplementation(() => onLine);
+    vi.mocked(loadYouTubeApi).mockClear();
+  });
+  afterEach(() => vi.restoreAllMocks());
+
+  it('P4-47: offline saat dipasang menampilkan panel status dan tidak memanggil loadYouTubeApi', async () => {
+    onLine = false;
+    render(<VideoCard video={video()} resumeAt={null} onPlayingChange={vi.fn()} onPosition={vi.fn()} />);
+    const panel = screen.getByRole('status');
+    expect(panel).toHaveTextContent('Video butuh koneksi internet');
+    expect(panel.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+    await Promise.resolve();
+    expect(loadYouTubeApi).not.toHaveBeenCalled();
+    expect(created).toHaveLength(0);
+    expect(document.querySelector('iframe')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Coba lagi' })).toBeNull();
+  });
+
+  it('P4-48: event offline mengganti pemutar dengan panel tanpa muat ulang', async () => {
+    render(<VideoCard video={video()} resumeAt={null} onPlayingChange={vi.fn()} onPosition={vi.fn()} />);
+    await waitFor(() => expect(document.querySelector('iframe')).not.toBeNull());
+    act(() => {
+      onLine = false;
+      window.dispatchEvent(new Event('offline'));
+    });
+    expect(screen.getByRole('status')).toHaveTextContent('Video butuh koneksi internet');
+    expect(document.querySelector('iframe')).toBeNull();
+  });
+
+  it('P4-49: event online kembali ke loading dan memanggil loadYouTubeApi lagi tanpa tombol tambahan', async () => {
+    onLine = false;
+    render(<VideoCard video={video()} resumeAt={null} onPlayingChange={vi.fn()} onPosition={vi.fn()} />);
+    expect(loadYouTubeApi).not.toHaveBeenCalled();
+    act(() => {
+      onLine = true;
+      window.dispatchEvent(new Event('online'));
+    });
+    expect(screen.queryByText('Video butuh koneksi internet')).toBeNull();
+    expect(screen.queryByRole('button')).toBeNull();
+    await waitFor(() => expect(loadYouTubeApi).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(created).toHaveLength(1));
+    await waitFor(() => expect(document.querySelector('iframe')).not.toBeNull());
+  });
+
+  it('tanpa hydration mismatch: render awal identik (loading) lalu beralih offline setelah efek mount', async () => {
+    onLine = false;
+    const { renderToString } = await import('react-dom/server');
+    const html = renderToString(<VideoCard video={video()} resumeAt={null} onPlayingChange={vi.fn()} onPosition={vi.fn()} />);
+    expect(html).not.toContain('Video butuh koneksi internet');
+    expect(loadYouTubeApi).not.toHaveBeenCalled();
+    onLine = true;
+    const online = renderToString(<VideoCard video={video()} resumeAt={null} onPlayingChange={vi.fn()} onPosition={vi.fn()} />);
+    expect(online).toBe(html);
+    onLine = false;
+    render(<VideoCard video={video()} resumeAt={null} onPlayingChange={vi.fn()} onPosition={vi.fn()} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Video butuh koneksi internet');
+    expect(loadYouTubeApi).not.toHaveBeenCalled();
+  });
+
+  it('pendengar offline/online dilepas saat dibongkar', () => {
+    const spy = vi.spyOn(window, 'removeEventListener');
+    const { unmount } = render(<VideoCard video={video()} resumeAt={null} onPlayingChange={vi.fn()} onPosition={vi.fn()} />);
+    unmount();
+    const types = spy.mock.calls.map((c) => c[0]);
+    expect(types).toContain('offline');
+    expect(types).toContain('online');
   });
 });
 

@@ -3,17 +3,29 @@
 Aplikasi belajar IELTS General Training yang berjalan 100% di satu perangkat (ADR-005): Next.js 15 (App Router) + TypeScript + Tailwind 4 + shadcn/ui, Drizzle + **SQLite** (`node:sqlite`, tanpa server database), antrean job dalam proses, Vitest, Playwright. Versi terkunci: lihat `VERSIONS.md`. Perlu Node.js >= 22.20 (disarankan 24).
 
 ## Menjalankan
+Satu perintah, dari folder `codes/`, setelah `npm ci` (Windows: klik ganda `start-local.cmd`, yang menjalankan `npm ci` bila `node_modules` belum ada):
 ```bash
 npm ci
-cp .env.example .env                 # isi AUTH_SECRET dan IP_HMAC_SECRET (openssl rand -base64 32)
-npm run db:migrate && npm run db:seed
-npm run content:import -- content/gt-modules/3.3.3 --publish   # contoh modul ajar
-npm run dev                          # http://127.0.0.1:3005 -> pilih/buat profil di /pilih-profil (tanpa login)
-npm run doctor                       # periksa kesiapan
+npm run start:local                       # http://127.0.0.1:3005/pilih-profil
+npm run start:local -- --port 3010        # port lain (bawaan 3005; 1024-65535)
+npm run start:local -- --no-open          # jangan buka browser
+npm run start:local -- --rebuild          # paksa build ulang
 ```
-Data tersimpan di satu berkas SQLite: `data/ielts.db` (ubah lewat `DATABASE_PATH`; di-gitignore). Cadangkan dengan menyalin berkas itu saat aplikasi mati. Penilaian Writing otomatis (opsional) memakai `llama-server` lokal: set `AI_ENABLED=true`; antrean berjalan di dalam proses web, tidak perlu worker terpisah.
+Skrip menyiapkan semuanya berurutan: `.env` (dibuat dari `.env.example` dengan rahasia acak bila belum ada; tidak pernah ditimpa), cadangan harian, migrasi dan seed, impor konten bawaan `content/gt-modules/*` (hanya bila belum ada konten terbit), build (hanya bila sumber berubah), lalu `next start` di `127.0.0.1` dan membuka browser. Ctrl+C menghentikan semuanya. Bila port dipakai program lain, skrip menyarankan `--port`; bila aplikasi ini sudah berjalan, skrip hanya membuka browser. Build pertama butuh internet (mengunduh font Google). Pemeriksaan kesiapan: `npm run doctor`.
 
-Jangan menjalankan `next build` dengan `NODE_ENV=development` di environment (mis. setelah `source .env`); biarkan Next yang memuat `.env`.
+Pengembangan: `npm run dev` (hot reload, `http://127.0.0.1:3005`). Jangan menjalankan `next build` dengan `NODE_ENV=development` di environment; biarkan Next yang memuat `.env`.
+
+### Data, cadangan, dan pemulihan
+Data tersimpan di satu berkas SQLite: `data/ielts.db` (ubah lewat `DATABASE_PATH`; di-gitignore). Cadangan otomatis harian (7 hari terakhir) di `data/backups/ielts-YYYY-MM-DD.db`: dibuat saat `start:local`, tiap 6 jam saat server produksi berjalan, atau manual:
+```bash
+npm run db:backup                                    # buat cadangan hari ini (maks. satu per tanggal)
+# hentikan aplikasi (Ctrl+C), lalu:
+npm run db:restore -- ielts-2026-11-07.db --yes     # atau: -- latest --yes
+```
+Database yang ditimpa diamankan dulu sebagai `data/backups/ielts-sebelum-pulih-<waktu>.db`.
+
+### AI opsional (penilai Writing)
+Tanpa pengaturan apa pun, tulisan masuk ke "Nilai Sendiri". Untuk penilaian otomatis, isi `.env`: `AI_ENABLED=true`, `LLM_DRIVER=llamacpp`, lalu salah satu `LLAMACPP_MODEL_PATH=<berkas.gguf>` atau `LLAMACPP_HF_REPO=<repo:kuantisasi>` (opsional `LLAMACPP_BIN`, `LLAMACPP_ARGS`). `start:local` menyalakan `llama-server` sendiri (hanya bila `LLAMACPP_BASE_URL` loopback; log di `data/logs/llama-server.log`) atau memakai ulang yang sudah berjalan. Antrean job berjalan di dalam proses web; tidak ada worker terpisah.
 
 ### Profil lokal dan perintah pemeliharaan (SPEC-025)
 Tanpa login atau daftar: layar `/pilih-profil` memilih atau membuat profil (maks. 10, tanpa password). Server hanya melayani loopback (`Host` asing ditolak 403); jangan membuka port ke jaringan. Panel admin sudah dihapus; gunakan perintah berikut (`<profil>` = nama atau id):
@@ -46,7 +58,7 @@ npm run content:import -- content/gt-modules/3.3.3 --publish
 ## Perintah utama
 `npm run lint | typecheck | test | test:integration | test:e2e | build | bench:ai`
 
-Tes integrasi memakai berkas SQLite sementara (otomatis, tanpa Docker). E2E: jalankan `npm run dev`, lalu `E2E_SKIP_WEBSERVER=1 E2E_BASE_URL=http://127.0.0.1:3005 npx playwright test` (set `E2E_CHROME_PATH` bila browser Playwright belum terpasang).
+Tes integrasi memakai berkas SQLite sementara (otomatis). E2E: jalankan `npm run dev`, lalu `E2E_SKIP_WEBSERVER=1 E2E_BASE_URL=http://127.0.0.1:3005 npx playwright test` (set `E2E_CHROME_PATH` bila browser Playwright belum terpasang).
 
 `npm run bench:ai -- --models qwen2.5:3b-instruct,qwen2.5:7b-instruct` (khusus driver Ollama; harus berjalan di 127.0.0.1:11434).
 

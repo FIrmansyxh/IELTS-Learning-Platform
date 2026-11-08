@@ -6,7 +6,7 @@ import { sql } from 'drizzle-orm';
 import { NOW, execute, closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { runCli } from '@/server/cli/run';
-import { anonymizeDeletedUsers } from '@/worker/purge';
+import { anonymizeDeletedUsers } from '@/server/jobs/purge';
 import { POST as startRoute } from '@/app/api/v1/attempts/route';
 import { call, makeUser, loginAs } from './helpers';
 import { addDrill, markLearnDone, progressOf, publishSub, resetLearning, seedMaterial } from './learning-fixtures';

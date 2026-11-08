@@ -7,8 +7,6 @@
 import './_env';
 import path from 'node:path';
 
-process.env.DATABASE_URL ??= process.env.DATABASE_MIGRATOR_URL;
-
 function arg(name: string): string | undefined {
   const i = process.argv.indexOf(`--${name}`);
   return i >= 0 ? process.argv[i + 1] : undefined;

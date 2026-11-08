@@ -447,6 +447,7 @@ export const id = {
       failed: 'Video tidak dapat dimuat',
       openYoutube: 'Buka di YouTube',
       loading: 'Memuat video...',
+      offline: 'Video butuh koneksi internet',
     },
     slides: {
       region: 'Slide materi',

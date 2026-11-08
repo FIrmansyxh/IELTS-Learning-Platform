@@ -2,7 +2,7 @@ import { afterAll, afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { sql } from 'drizzle-orm';
 import { execute, closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
-import { waitForQueueIdle } from '@/server/jobs/queue';
+import { enqueue, waitForQueueIdle } from '@/server/jobs/queue';
 import { POST as startRoute } from '@/app/api/v1/attempts/route';
 import { POST as writingRoute } from '@/app/api/v1/submissions/writing/route';
 import { call, learnerSession } from './helpers';
@@ -53,5 +53,13 @@ describe('antrean dalam proses (SPEC-025 Fase 3): penilaian Writing', () => {
     const job = (await execute(db, sql`SELECT status, finished_at FROM async_jobs WHERE submission_id = ${submissionId}`)).rows[0] as any;
     expect(job.status).toBe('SUCCEEDED');
     expect(job.finished_at).not.toBeNull();
+  });
+
+  it('P4-60: antrean dari src/server/jobs menjalankan retention-purge sampai selesai tanpa galat', async () => {
+    process.env.AI_ENABLED = 'true';
+    process.env.LLM_DRIVER = 'mock';
+    const id = await enqueue('retention-purge', {});
+    expect(id).not.toBeNull();
+    await expect(waitForQueueIdle()).resolves.toBeUndefined();
   });
 });

@@ -6,6 +6,8 @@ import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { BandSkill, CreateBandTableBodySchema, type BandSkillName } from '@/contracts/band';
 import { ApiError } from '../http/errors';
+import { backupIfDue, defaultBackupDir, restoreBackup, RestoreError } from '../backup';
+import { databasePath } from '../db';
 import { activateTable, createTable, listTables } from '../band/service';
 import { getSettingView, listSettings, setSetting } from '../settings/manage';
 import { OFFLINE_NOTES, runDoctor } from './doctor';
@@ -47,6 +49,9 @@ Tabel band
   band list [--skill LISTENING|READING_ACADEMIC|READING_GENERAL]
   band activate <id-tabel>
   band import <berkas.json> [--activate]
+Database
+  db backup                             buat cadangan hari ini (maks. satu per tanggal, simpan 7)
+  db restore <nama.db|latest> --yes     pulihkan cadangan (aplikasi harus berhenti)
 Lainnya
   doctor                                periksa kesiapan aplikasi
 
@@ -203,6 +208,37 @@ async function dispatch(rawArgs: string[], io: CliIo): Promise<number> {
         io.out('Tabel diaktifkan.');
       }
       return 0;
+    }
+    case 'db backup': {
+      const dbPath = databasePath();
+      const r = backupIfDue({ dbPath, backupDir: defaultBackupDir(dbPath), now: new Date() });
+      switch (r.status) {
+        case 'created':
+          io.out(`created: ${r.file}${r.pruned.length ? ` (dihapus: ${r.pruned.join(', ')})` : ''}`);
+          return 0;
+        case 'skipped_today':
+          io.out(`skipped_today: cadangan hari ini sudah ada (${r.file})`);
+          return 0;
+        case 'no_database':
+          io.out(`no_database: berkas database belum ada (${dbPath})`);
+          return 0;
+        default:
+          io.err('Cadangan gagal. Periksa hak tulis folder cadangan dan ruang disk.');
+          return 1;
+      }
+    }
+    case 'db restore': {
+      if (!values.yes) throw new CliError('Pemulihan mengganti database saat ini. Tambahkan --yes untuk melanjutkan.');
+      if (!rest[0]) throw new CliError('Pemakaian: db restore <nama.db|latest> --yes');
+      const dbPath = databasePath();
+      try {
+        const r = restoreBackup({ dbPath, backupDir: defaultBackupDir(dbPath), name: rest[0], now: new Date() });
+        io.out(`Database dipulihkan dari ${r.restoredFrom}.${r.previous ? ` Database sebelumnya disimpan di: ${r.previous}` : ''}`);
+        return 0;
+      } catch (e) {
+        if (e instanceof RestoreError) throw new CliError(e.message);
+        throw e;
+      }
     }
     case 'doctor': {
       const checks = await runDoctor();

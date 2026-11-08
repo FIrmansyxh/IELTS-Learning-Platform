@@ -4,8 +4,6 @@
  */
 import './_env';
 
-process.env.DATABASE_URL ??= process.env.DATABASE_MIGRATOR_URL;
-
 async function main(): Promise<number> {
   const { runCli } = await import('../src/server/cli/run');
   const dbMod = await import('../src/server/db');

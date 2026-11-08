@@ -41,6 +41,9 @@ export function VideoCard({
   const valid = VIDEO_ID_RE.test(video.video_id);
   const [status, setStatus] = React.useState<Status>(valid ? 'loading' : 'error');
   const [retryKey, setRetryKey] = React.useState(0);
+  // SPEC-025 P4-47..49: tanpa koneksi, pemutar YouTube tidak dimuat; pulih otomatis saat kembali online.
+  // `null` = belum disinkronkan: render awal identik di server dan klien (dianggap online), tanpa hydration mismatch.
+  const [online, setOnline] = React.useState<boolean | null>(null);
   const hostRef = React.useRef<HTMLDivElement | null>(null);
   const cbRef = React.useRef({ onPlayingChange, onPosition });
   cbRef.current = { onPlayingChange, onPosition };
@@ -51,10 +54,23 @@ export function VideoCard({
   const title = video.title;
 
   React.useEffect(() => {
+    const goOffline = () => setOnline(false);
+    const goOnline = () => setOnline(true);
+    setOnline(navigator.onLine !== false);
+    window.addEventListener('offline', goOffline);
+    window.addEventListener('online', goOnline);
+    return () => {
+      window.removeEventListener('offline', goOffline);
+      window.removeEventListener('online', goOnline);
+    };
+  }, []);
+
+  React.useEffect(() => {
     if (!VIDEO_ID_RE.test(videoId)) {
       setStatus('error');
       return;
     }
+    if (online === null || online === false) return;
     if (end === null && video.end_sec != null) {
       console.warn('video end_sec <= start_sec; memutar tanpa end', videoId);
     }
@@ -143,7 +159,7 @@ export function VideoCard({
     };
     // `video.end_sec` hanya dipakai untuk peringatan; efek bergantung pada nilai efektif.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoId, title, start, end, retryKey]);
+  }, [videoId, title, start, end, retryKey, online]);
 
   const label =
     end !== null
@@ -153,7 +169,12 @@ export function VideoCard({
   return (
     <figure className="grid gap-2">
       <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
-        {status === 'error' ? (
+        {valid && online === false ? (
+          <div key="offline" role="status" className="absolute inset-0 grid place-content-center justify-items-center gap-3 p-4 text-center">
+            <VideoOff className="size-8 text-muted-foreground" aria-hidden="true" />
+            <p className="font-semibold">{id.player.video.offline}</p>
+          </div>
+        ) : status === 'error' ? (
           <div role="alert" className="absolute inset-0 grid place-content-center justify-items-center gap-3 p-4 text-center">
             <VideoOff className="size-8 text-muted-foreground" aria-hidden="true" />
             <p className="font-semibold">{id.player.video.failed}</p>
@@ -178,7 +199,7 @@ export function VideoCard({
             {status === 'loading' ? (
               <Skeleton className="absolute inset-0 rounded-none" role="status" aria-label={id.player.video.loading} />
             ) : null}
-            <div ref={hostRef} className="absolute inset-0 [&_iframe]:size-full" />
+            <div key="host" ref={hostRef} className="absolute inset-0 [&_iframe]:size-full" />
           </>
         )}
       </div>

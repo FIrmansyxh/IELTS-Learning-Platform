@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 // Header keamanan dasar (security-standards 8.1). CSP berbasis nonce ditambahkan
-// oleh spec keamanan/auth berikutnya via middleware; HSTS hanya di proxy HTTPS.
+// oleh spec keamanan berikutnya via middleware. Aplikasi lokal HTTP loopback: tanpa HSTS.
 const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'X-Frame-Options', value: 'DENY' },
@@ -14,16 +14,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
   reactStrictMode: true,
-  serverExternalPackages: ['pg', 'pg-boss', 'pino', 'sharp'],
-  // SPEC-001: daftar password umum dibaca lewat fs saat runtime; paksa ikut ke output standalone.
-  outputFileTracingIncludes: {
-    '/api/v1/auth/register': ['./src/server/auth/common-passwords.txt'],
-    '/api/v1/auth/change-password': ['./src/server/auth/common-passwords.txt'],
-  },
+  serverExternalPackages: ['pino', 'sharp'],
   images: { remotePatterns: [] },
   experimental: { serverActions: { bodySizeLimit: '1mb' } },
   async headers() {

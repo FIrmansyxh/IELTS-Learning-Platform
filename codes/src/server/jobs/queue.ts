@@ -11,7 +11,7 @@
 import { randomUUID } from 'node:crypto';
 import { inArray } from 'drizzle-orm';
 import { asyncJobs } from '@/db/schema';
-import { AI_QUEUES, type QueueName } from '@/worker/queues';
+import { AI_QUEUES, type QueueName } from './queues';
 import { getDb } from '../db';
 import { logger } from '../logger';
 import { safeErr } from '../safe-error';
@@ -46,7 +46,7 @@ const KIND_TO_QUEUE: Record<string, QueueName> = {
 };
 
 async function handlerFor(queue: QueueName) {
-  const { jobHandlers } = await import('@/worker/registry');
+  const { jobHandlers } = await import('./registry');
   return jobHandlers[queue];
 }
 
