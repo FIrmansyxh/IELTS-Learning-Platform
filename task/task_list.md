@@ -1,7 +1,8 @@
 # TASK LIST - ielts-learning-platform
-**Last Updated:** 2026-11-08
-**Total Tasks:** 30 (21 awal + 5 dari ADR-004/005 + 4 task fitur pasca-MVP TASK-021..024)
-**Completed:** 0 | **In Progress:** 0 | **Ready to Test:** 18 | **Superseded:** 4 | **Not Started:** 8 (4 lama + 4 baru: 021-024; 025d termasuk hitungan lama) | **Blocked:** 0
+**Last Updated:** 2026-11-09
+**Total Tasks:** 30 entri task (21 awal + 5 dari ADR-004/005 + 4 fitur pasca-MVP TASK-021..024)
+**Hitungan status dari entri (diaudit 2026-11-09):** 22 ready_to_test | 3 development (021, 023, 024: menunggu Human Gate) | 1 in_progress (018, lama) | Completed 0. Task 002, 018, 019, 020 ditandai SUPERSEDED di judulnya (001 di bagian ADR) tetapi field statusnya tidak diubah, jadi masih ikut terhitung di atas.
+> Hitungan header lama (26/18/4/4) tidak cocok dengan entri dan sudah digantikan baris di atas. Status `ready_to_test` fitur pasca-MVP hanya berlaku setelah gerbang code review human disetujui: 022 dan 025d sudah, 021, 023, 024 BELUM.
 
 > Catatan hitungan 2026-11-08: header lama (26 = 18 + 4 + 4) tidak dapat direkonsiliasi sepenuhnya dengan entri (mis. 018 berstatus in_progress, 025a-c dihitung di bagian ADR). Total baru = 26 + 4 task baru (021-024); 025d sudah masuk hitungan 26 sebelumnya. Perlu dihitung ulang penuh pada audit status berikutnya.
 
@@ -251,7 +252,7 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
   - Spesifikasi: [spec] ../specifications/025_spec_local_single_device_app.md
   - Detail: [task] ./TASK-025d_start-local-cleanup/TASK-025d_start-local-cleanup.md
   - Wave: W10 | Ukuran: M | Dependensi: TASK-025c (ready_to_test)
-  - Current Status: in_progress (backend/ops kode + tes selesai; menunggu izin human .pgdata/, bukti CI, Playwright, verifikasi manual Windows)
+  - Current Status: ready_to_test (commit 4803c95; belum terbukti: CI GitHub, uji manual Windows bersih)
   - Status Logs:
      - Task Created: [2026-11-08 12:00] (PM Agent)
      - Backend Dev: [2026-11-08 16:40] (Backend Engineer)
@@ -269,12 +270,13 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
      - Frontend Ready: [2026-11-08 17:20] (Frontend Engineer)
      - QA Review: [2026-11-08 20:33] (QA Agent) - PASS-WITH-FIXES, unit 780/782, integrasi 269/269, next build OK
      - Human Gate: [2026-11-08 21:15] (Orchestrator) - Disetujui human, status ready_to_test
+     - Audit Teknis: [2026-11-09] (Orchestrator) - mix.itest sempat tidak berjalan (impor gt-bank gagal) dan sudah diperbaiki; butir Keputusan Analyst 4 dan 6 disetujui human
 
 - Task 021: Jalur Belajar (Learning Track) dan Gaya Penyampaian Materi
   - Spesifikasi: [spec] ../specifications/021_spec_learning_tracks.md
   - Detail: [task] ./TASK-021_learning-tracks/TASK-021_learning-tracks.md
   - Wave: W9 (ke-3) | Ukuran: L | Dependensi: TASK-022, TASK-003, TASK-004, TASK-005, TASK-007
-  - Current Status: ready_to_test
+  - Current Status: development (QA PASS-WITH-FIXES; gerbang code review human BELUM disetujui)
   - Status Logs:
      - Task Created: [2026-11-08 12:00] (PM Agent)
      - Backend Dev: [2026-11-08 21:30] (Backend Engineer)
@@ -283,29 +285,32 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
      - Frontend Ready: [2026-11-08 22:20] (Frontend Engineer) - TrackPicker, CuratedTrackView, Checkpoint, runner selesai
      - QA Review: [2026-11-08 22:35] (QA Agent) - PASS, typecheck bersih, next build exit 0, 49 integrasi lulus, unit 791 lulus
      - Gate Submitted: [2026-11-08 22:38] (Orchestrator) - Menunggu persetujuan Human Gate sebelum melangkah ke TASK-024
+     - Audit Teknis: [2026-11-09] (Orchestrator) - suite integrasi penuh sempat gagal; QA diperketat dan ditulis ulang jujur; 3 bug nyata ditemukan tes AC dan diperbaiki (validator tracks, PRACTICE_FIRST COMPLETED prematur, content:import gt-tracks); gerbang human TETAP menunggu
 
 - Task 024: Pipeline Konten Listening GT (Skrip, TTS Lokal, Aset Audio)
   - Spesifikasi: [spec] ../specifications/024_spec_listening_audio_pipeline.md
   - Detail: [task] ./TASK-024_listening-audio-pipeline/TASK-024_listening-audio-pipeline.md
   - Wave: W9 (ke-4) | Ukuran: L | Dependensi: TASK-021 (urutan), TASK-022, TASK-004, TASK-011 (018 SUPERSEDED)
-  - Current Status: ready_to_test
+  - Current Status: development (QA PASS; gerbang code review human BELUM disetujui; AC-M1..M3 manual menunggu pemilik)
   - Status Logs:
      - Task Created: [2026-11-08 12:00] (PM Agent)
      - Implementation complete: [2026-11-08 23:20] (Fullstack/Developer) - Parser skrip D2, builder offline D3/D5, review-gate D6, konten S1, DTO listening.note D8
      - QA Review: [2026-11-08 23:30] (QA Agent) - PASS, AC-A1..AC-A11 & AC-M1..AC-M3 terpenuhi, typecheck 0 error, build Next.js sukses
      - Gate Submitted: [2026-11-08 23:32] (Orchestrator) - Menunggu persetujuan Human Gate sebelum melangkah ke TASK-023
+     - Audit Teknis: [2026-11-09] (Orchestrator) - bank Listening S1 di gt-bank butuh paket gt-listening terdaftar lebih dulu: dikirim `npm run content:import:all`, pesan galat dengan petunjuk; gerbang human TETAP menunggu
 
 - Task 023: Simulasi Tes IELTS GT dengan Pilihan Section
   - Spesifikasi: [spec] ../specifications/023_spec_ielts_test_simulation.md
   - Detail: [task] ./TASK-023_ielts-test-simulation/TASK-023_ielts-test-simulation.md
   - Wave: W9 (ke-5) | Ukuran: XL | Dependensi: TASK-024, TASK-022, TASK-021 (urutan), TASK-006, TASK-009, TASK-011, TASK-012, TASK-013, TASK-014, TASK-017
-  - Current Status: ready_to_test
+  - Current Status: development (QA dikoreksi jujur; gerbang code review human BELUM disetujui; AC-C1/C2 menunggu konten nyata)
   - Status Logs:
      - Task Created: [2026-11-08 12:00] (PM Agent)
      - Backend Dev: [2026-11-08 23:45] (Backend Engineer) - Kontrak Zod, scoring D4, assemble D3, service simulasi multi-section, 8 rute API
      - Frontend Dev: [2026-11-09 00:05] (Frontend Engineer) - SimulationBuilder, SimulationRunner, SimulationResult, i18n, navigasi, mode tenang
      - QA Review: [2026-11-09 00:25] (QA Agent) - PASS, AC-1..AC-20 terpenuhi, typecheck 0 error, unit 821 lulus, integrasi 8/8 lulus, next build exit 0
      - Gate Submitted: [2026-11-09 00:30] (Orchestrator) - Menunggu persetujuan Human Gate untuk peninjauan akhir SPEC-023
+     - Audit Teknis: [2026-11-09] (Orchestrator) - klaim QA PASS untuk AC-5,6,9,11,13,14,15 tidak berbukti tes; 52 tes AC ditambah dan menemukan 8 cacat nyata (diperbaiki); AC-7/19 sebagian, AC-C1/C2 HOLD; gerbang human TETAP menunggu
 
 ## Priority 2 (Medium)
 
@@ -333,6 +338,6 @@ Pekerjaan berikut dikerjakan Orchestrator langsung (tanpa `/build-feature`), den
 - Task 025a: SPEC-025 Fase 1 - Profil lokal tanpa login. Status: **ready_to_test** (commit e8bc1e0).
 - Task 025b: SPEC-025 Fase 2 - Hapus admin, ganti CLI (`profile:*`, `progress:*`, `points:*`, `settings:*`, `band:*`, `doctor`). Status: **ready_to_test**.
 - Task 025c: SPEC-025 Fase 3 - SQLite (`node:sqlite` + Drizzle sqlite-proxy) + antrean dalam proses. Status: **ready_to_test** (unit 640, integrasi 217, E2E 14 hijau).
-- Task 025d: SPEC-025 Fase 4 - Satu perintah menjalankan (`start:local`) + pembersihan Docker/Postgres. Status: **in_progress**. Detail: `./TASK-025d_start-local-cleanup/TASK-025d_start-local-cleanup.md` (entri lengkap di bagian Priority 1 > Pasca-MVP).
+- Task 025d: SPEC-025 Fase 4 - Satu perintah menjalankan (`start:local`) + pembersihan Docker/Postgres. Status: **ready_to_test** (commit 4803c95). Detail: `./TASK-025d_start-local-cleanup/TASK-025d_start-local-cleanup.md` (entri lengkap di bagian Priority 1 > Pasca-MVP).
 - ADR-004 (selesai, ready_to_test): driver llama.cpp, prompt Writing General Training, UI Writing, Speaking via prompt eksternal + input skor, bank soal GT (71 soal), tag `exam_module`, tabel band `READING_GENERAL`, modul ajar 3.3.3.
-- SPEC-021 Jalur Belajar: **not_started** -> TASK-021 (spec APPROVED 2026-11-08). SPEC-022 Bank Soal + Mix Builder: **not_started** -> TASK-022. SPEC-023 Simulasi Tes per section: **not_started** -> TASK-023. SPEC-024 Listening (skrip + TTS lokal): **not_started** -> TASK-024. Urutan build wajib: 025d -> 022 -> 021 -> 024 -> 023. Detail tiap task di bagian Priority 1 > Pasca-MVP.
+- Fitur pasca-MVP (status sebenarnya, diaudit 2026-11-09): SPEC-022 Bank Soal + Mix Builder **ready_to_test** (gerbang disetujui, commit 307b017); SPEC-021 Jalur Belajar, SPEC-024 Listening, SPEC-023 Simulasi Tes **development** (kode ada di commit 874ca6a; gerbang human menunggu). Detail di bagian Priority 1 > Pasca-MVP.

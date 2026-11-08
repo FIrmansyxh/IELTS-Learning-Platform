@@ -90,3 +90,15 @@ Spec: `specifications/025_spec_local_single_device_app.md` (Fase 4)
 | Spec 025 | dikoreksi (dokumentasi) | Catatan pengecualian `git grep` P4-52 dan baris Revision History. |
 
 Hasil: `tsc` bersih; eslint berkas diubah 0 temuan; `vitest run` 727 lulus (57 berkas; satu tes sempat gagal sekali pada satu proses lalu hijau pada 3 pengulangan, penyebab belum teridentifikasi); integrasi 243 lulus; `next build` OK. Status TASK-025d tetap in_progress.
+
+### Coverage gabungan (pasca-audit)
+Backend/Test Engineer, 2026-11-09. Tanpa menambah `coverage.exclude`; ambang 70% tidak diubah.
+
+- Masalah: `vitest run --coverage` (konfigurasi unit) hanya ~32% untuk `src/server/**` karena modul terikat DB hanya dijalankan suite integrasi.
+- Cara ukur: `codes/vitest.coverage.config.ts` (vitest projects `unit` + `integration`, satu run, provider v8, include `src/server/**`, TANPA exclude, ambang lines 70%). Skrip baru `npm run coverage`; gagal (exit 1) bila lines gabungan < 70% atau ada tes gagal. `npm test` dan `npm run test:integration` tidak berubah. Laporan: `codes/coverage/` (`coverage-summary.json`, `lcov.info`). CI job `unit` kini memanggil `npm run coverage`.
+- Angka gabungan: sebelum tes tambahan 70.27% lines (11422/16254); sesudah 72.95% (11963/16397; sebagian kenaikan dari tes berkas lain yang masuk bersamaan, mis. gamification, tracks).
+- Tes baru (tests/unit): `cov-listening-gates.test.ts` (durasi/anti-klip/toleransi 5% dan gerbang review audio: hash, ambang clarity/speed, answer_leak), `cov-jobs-registry.test.ts` (dispatch antrean, propagasi galat), `cov-mix-state.test.ts` (penjaga state campur, judul, set maya).
+- Perbaikan isolasi: `tests/integration/gatekeeping.itest.ts` `resetContent()` kini menghapus attempt_answers/attempt_sections/attempts sebelum assessment_sets (FK RESTRICT) agar tidak bergantung urutan berkas; sebelumnya 24 tes gagal bila berkas lain berjalan lebih dulu.
+- Per direktori (lines, sesudah): ai 41.0, attempts 85.5, auth 87.3, band 99.2, cli 91.7, content 83.8, exams 31.9, gamification 66.7, gatekeeping 98.9, http 94.8, jobs 88.3, listening 53.0, mix 90.0, player 95.2, resume 98.9, settings 91.2, simulation 81.5, skills 74.6, storage 80.5, tracks 94.2. `src/lib/**` dan `src/components/**` tidak diukur (include hanya `src/server/**`).
+- Sisa utang (terendah): listening/builder.ts 0% (ffmpeg/TTS, lewat skrip), ai/audio-processor.ts 5%, ai/speaking-pipeline.ts 6%, exams/boss.ts 16%, exams/placement.ts 18%, content/tracks-import.ts 31%, ai/service.ts 31%, ai/stt.ts 45%, mix/state.ts 64%, ai/llm.ts 66%, gamification/service.ts 67%, content/bank-import.ts 70%, simulation/state.ts 71%, attempts/service.ts 72%, simulation/service.ts 72%.
+- Catatan stabilitas: `tests/integration/attempts.itest.ts` "batas 60/menit -> 429" sekali gagal saat mesin sibuk (peka waktu, lulus saat diulang); `simulation-ac.itest.ts` (agen lain) masih gagal pada beberapa tes saat pengukuran.

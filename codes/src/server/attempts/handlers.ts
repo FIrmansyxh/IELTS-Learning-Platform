@@ -87,7 +87,7 @@ export const activeDrillHandler: AssessmentTypeHandler = {
     // (mis. 74,996 dibulatkan ke 75,00 tetap tidak lulus).
     let gateH = result.percentH;
     if (result.passed === false && result.passPercent !== null && gateH >= result.passPercent * 100) gateH = result.passPercent * 100 - 1;
-    const applied = await applyDrillResult(tx, userId, { subModuleId, scorePercent: gateH / 100 });
+    const applied = await applyDrillResult(tx, userId, { subModuleId, scorePercent: gateH / 100, requireLearn: true });
 
     const snap = await recomputeStatuses(tx, userId);
     for (const tier of snap.tiers) {

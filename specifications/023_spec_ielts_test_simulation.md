@@ -289,7 +289,7 @@ Penanda: **[F]** dibuktikan sekarang dengan fixture sintetis (`tests/fixtures/co
 
 ## Human Approval
 - [x] Disetujui human (2026-11-08) — substansi produk
-- [ ] Konfirmasi human atas revisi teknis 2026-11-08 (butir "Keputusan Analyst")
+- [x] Konfirmasi human atas revisi teknis 2026-11-08 (butir "Keputusan Analyst"): disetujui semua default pada 2026-11-09
 
 ## Revision History
 | Timestamp | Agen | Perubahan |
@@ -297,3 +297,4 @@ Penanda: **[F]** dibuktikan sekarang dengan fixture sintetis (`tests/fixtures/co
 | 2026-11-08 | Orchestrator | Draft awal |
 | 2026-11-08 | Human | Draf disetujui apa adanya (build-feature, depth standard) |
 | 2026-11-08 | Analyst | Revisi teknis menyelaraskan SPEC-025/ADR-005 (niat produk tidak diubah): hapus rujukan admin ("dapat diedit admin" -> `band:import`), migrasi Postgres `0008`/`0010` dan tipe Postgres (perubahan skema dipusatkan di `0002` SPEC-022, tanpa migrasi baru di sini); `Depends on` ditambah SPEC-022/024/025; aturan pembulatan SATU (`roundBand`, aritmetika setengah-band) untuk Writing/Speaking/Overall (D4); batas lingkup saat konten Reading/Listening 40 soal belum ada (D10, AC bertanda [F] vs [C], fixture sintetis); perakitan terinci (D3), waktu Listening = jumlah audio + 120 s, komposisi Speaking 4+1+4; status attempt/section (D6), pemulihan dan kedaluwarsa malas (D7), Writing kosong/LLM mati (D8), skema `state` `mock.v1` (D9); API Contract penuh (8 endpoint, kode error `SIMULATION_*`, `SECTION_NOT_SUBMITTABLE`); AC diperluas dari 7 ke 22 (AC-1..AC-7 asli dipertahankan nomornya); tambah Status Implementasi dan "Keputusan Analyst" |
+| 2026-11-09 | Human | Seluruh butir 'Keputusan Analyst' disetujui sebagai default build. Gerbang code review fitur ini TETAP menunggu tinjauan human (belum disetujui). |

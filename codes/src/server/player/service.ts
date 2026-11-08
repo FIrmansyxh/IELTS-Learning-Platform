@@ -9,7 +9,7 @@ import type { SubModuleDetail } from '@/contracts/player';
 import type { Tx } from '../db';
 import { nowDate } from '../clock';
 import { runActivityHooks } from '../activity/hooks';
-import { assertSubModuleAccessible, markStarted, recomputeStatuses } from '../gatekeeping/service';
+import { applyLearnCompleted, assertSubModuleAccessible, markStarted, recomputeStatuses } from '../gatekeeping/service';
 import { chainOf, passOf, subProgressPercent, type SubNode } from '../gatekeeping/rules';
 import { ApiError, notFound, validationError } from '../http/errors';
 import { logger } from '../logger';
@@ -94,6 +94,8 @@ export async function getSubModuleDetail(tx: Tx, userId: string, code: string, r
   const drillSet = await findPublishedDrill(tx, row.id);
   const drillLimit = await getSetting<number>(tx, 'drill.question_count');
   const learnDone = learn.learnCompletedAt !== null;
+  // SPEC-021 D3: gaya PRACTICE_FIRST mengizinkan drill sebelum materi selesai (kelulusan tetap menunggu belajar selesai).
+  const drillUnlocked = learnDone || delivery.applied_style === 'PRACTICE_FIRST';
 
   const chain = chainOf(tier);
   const idx = chain.findIndex((c) => c.sub.id === sub.id);
@@ -139,8 +141,8 @@ export async function getSubModuleDetail(tx: Tx, userId: string, code: string, r
       question_count: drillSet ? Math.min(drillSet.questionCount, drillLimit) : 0,
       time_limit_seconds: drillSet?.timeLimitSeconds ?? 0,
       pass_percent: drillSet ? (drillSet.passPercent ?? sub.passing) : passOf(sub),
-      can_start: drillSet !== null && learnDone,
-      blocked_reason: drillSet === null ? 'NO_DRILL_PUBLISHED' : learnDone ? null : 'LEARN_NOT_COMPLETED',
+      can_start: drillSet !== null && drillUnlocked,
+      blocked_reason: drillSet === null ? 'NO_DRILL_PUBLISHED' : drillUnlocked ? null : 'LEARN_NOT_COMPLETED',
     },
     navigation: {
       prev_sub_module_code: idx > 0 ? chain[idx - 1]!.sub.code : null,
@@ -201,6 +203,7 @@ export async function completeLearn(tx: Tx, userId: string, subModuleId: string)
 
   const now = nowDate();
   await tx.update(usmp).set({ learnCompletedAt: now, updatedAt: now }).where(and(eq(usmp.userId, userId), eq(usmp.subModuleId, subModuleId)));
+  await applyLearnCompleted(tx, userId, subModuleId);
   await runActivityHooks(tx, { userId, kind: 'LEARN_COMPLETE', subModuleId });
   return { learn_completed_at: now.toISOString(), drill_can_start: drill !== null };
 }

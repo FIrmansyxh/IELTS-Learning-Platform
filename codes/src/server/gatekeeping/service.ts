@@ -379,7 +379,7 @@ export function toHundredths(score: number | string): number {
 export async function applyDrillResult(
   tx: DbOrTx,
   userId: string,
-  input: { subModuleId: string; scorePercent: number | string },
+  input: { subModuleId: string; scorePercent: number | string; requireLearn?: boolean },
 ): Promise<ApplyResult> {
   const hundredths = toHundredths(input.scorePercent);
   return mutate(tx, userId, (snap) => {
@@ -390,10 +390,28 @@ export async function applyDrillResult(
     sub.best = Math.max(sub.best, Math.floor(hundredths / 100));
     snap.dirty.add(sub);
     if (hundredths >= passOf(sub) * 100) {
-      if (!isTerminal(sub.status)) setStatus(snap, sub, 'COMPLETED');
+      if (!isTerminal(sub.status)) {
+        // SPEC-021 D3/AC-15: pada gaya PRACTICE_FIRST drill boleh dimulai sebelum belajar, tetapi sub-modul baru
+        // COMPLETED setelah belajar selesai (lihat applyLearnCompleted).
+        if (input.requireLearn && !sub.learnCompleted) {
+          if (sub.status === 'UNLOCKED') setStatus(snap, sub, 'IN_PROGRESS');
+        } else setStatus(snap, sub, 'COMPLETED');
+      }
     } else if (sub.status === 'UNLOCKED') {
       setStatus(snap, sub, 'IN_PROGRESS');
     }
+  });
+}
+
+/**
+ * SPEC-021 AC-15: dipanggil PlayerService sesudah `learn_completed_at` terisi. Bila drill sudah lulus lebih dulu
+ * (gaya PRACTICE_FIRST), sub-modul menjadi COMPLETED sekarang.
+ */
+export async function applyLearnCompleted(tx: DbOrTx, userId: string, subModuleId: string): Promise<ApplyResult> {
+  return mutate(tx, userId, (snap) => {
+    const sub = findSub(snap, subModuleId);
+    if (!sub || sub.status === 'LOCKED' || isTerminal(sub.status)) return;
+    if (sub.attempts > 0 && sub.best >= passOf(sub)) setStatus(snap, sub, 'COMPLETED');
   });
 }
 

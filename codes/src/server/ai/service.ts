@@ -22,6 +22,7 @@ import { getLlmClient } from './llm';
 import { countWords, roundToHalfBand } from './scoring';
 import { processWritingEvaluation } from './pipeline';
 import { evaluationGradedHooks } from './hooks';
+import { nowMs } from '../clock';
 import {
   processSpeakingEvaluation,
   processSttTranscription,
@@ -144,7 +145,7 @@ export async function createWritingSubmission(
       if (!wSec || !wSec.startedAt || wSec.status !== 'IN_PROGRESS') {
         throw new ApiError('SECTION_NOT_ACTIVE');
       }
-      if (wSec.deadlineAt && new Date().getTime() > new Date(wSec.deadlineAt).getTime() + 5000) {
+      if (wSec.deadlineAt && nowMs() > new Date(wSec.deadlineAt).getTime() + 5000) {
         throw new ApiError('SECTION_EXPIRED');
       }
     }
@@ -459,7 +460,7 @@ export async function createSpeakingSubmission(
       if (!wSec || !wSec.startedAt || wSec.status !== 'IN_PROGRESS') {
         throw new ApiError('SECTION_NOT_ACTIVE');
       }
-      if (wSec.deadlineAt && new Date().getTime() > new Date(wSec.deadlineAt).getTime() + 5000) {
+      if (wSec.deadlineAt && nowMs() > new Date(wSec.deadlineAt).getTime() + 5000) {
         throw new ApiError('SECTION_EXPIRED');
       }
     }
@@ -1228,6 +1229,14 @@ export async function selfAssessSubmission(
 
     if (sub.subModuleId && (sub.kind === 'MINI_TASK_WRITING' || sub.kind === 'MINI_TASK_SPEAKING')) {
       await completeAiMiniTask(tx, userId, sub.subModuleId);
+    }
+
+    // SPEC-023 D8: penilaian sendiri pada submission milik attempt (simulasi) harus memicu hook agar section
+    // Writing yang menunggu (AWAITING_GRADING) dihitung ulang; tanpa ini section tertahan selamanya.
+    if (sub.attemptId) {
+      for (const hook of evaluationGradedHooks) {
+        await hook({ tx, userId, submissionId, evaluationId: evalId, kind: isSpeaking ? 'SPEAKING' : 'WRITING' });
+      }
     }
   });
 

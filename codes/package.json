@@ -39,12 +39,14 @@
     "doctor": "tsx scripts/cli.ts doctor",
     "content:validate": "tsx scripts/content-import.ts validate",
     "content:import": "tsx scripts/content-import.ts import",
+    "content:import:all": "tsx scripts/content-import.ts import --dir content/gt-listening --publish && tsx scripts/content-import.ts import --dir content/gt-bank --publish && tsx scripts/content-import.ts import --dir content/gt-modules/3.3.3 --publish",
     "bank:validate": "tsx scripts/bank-validate.ts",
     "listening:check": "tsx scripts/listening-check.ts",
     "listening:build": "tsx scripts/listening-build.ts",
     "bench:gt": "tsx scripts/bench-gt-writing.mts",
     "bench:ai": "node scripts/bench-ai.mjs",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "coverage": "vitest run -c vitest.coverage.config.ts --coverage"
   },
   "dependencies": {
     "@dnd-kit/core": "6.3.1",

@@ -3,6 +3,7 @@ import { assessmentSets, attempts, contentAssets } from '@/db/schema';
 import type { DbOrTx } from '../db';
 import { ApiError } from '../http/errors';
 import { newRngSeed, seededCsprng, shuffled } from '../attempts/prng';
+import { serveQuestion, type Served } from '../attempts/engine';
 import { splitPassages } from '../content/passages';
 import type {
   MockPartState,
@@ -16,7 +17,7 @@ import type { Question } from '@/contracts/content';
 
 export const ORDERED_SECTIONS: readonly SimulationSection[] = ['LISTENING', 'READING', 'WRITING', 'SPEAKING'];
 
-interface BankRow {
+export interface BankRow {
   id: string;
   bankCode: string | null;
   bankKind: string | null;
@@ -30,13 +31,13 @@ interface BankRow {
   audioAttribution?: string | null;
 }
 
-interface ReadingPackage {
+export interface ReadingPackage {
   bank_set_id: string;
   bank_code: string;
   bank_kind: string;
   passage_no: number;
   passage_markdown: string;
-  questions: Array<Question & { position: number }>;
+  questions: Question[];
   seen_count: number;
 }
 
@@ -237,20 +238,19 @@ export async function checkSimulationOptions(
   };
 }
 
-function extractReadingPackages(banks: BankRow[], seenIds: Set<string>): ReadingPackage[] {
+export function extractReadingPackages(banks: BankRow[], seenIds: Set<string>): ReadingPackage[] {
   const packages: ReadingPackage[] = [];
   const readingKinds = new Set(['READING_GT_S1', 'READING_GT_S2', 'READING_GT_S3']);
 
   for (const b of banks) {
     if (!b.bankKind || !readingKinds.has(b.bankKind)) continue;
-    const questions = ((b.questionsJson as Question[]) ?? []).map((q, idx) => ({
-      ...q,
-      position: idx,
-    }));
+    // Soal disalin apa adanya: properti tambahan (mis. `position`) membuat snapshot gagal validasi skema kontrak
+    // saat attempt dibaca ulang lewat GET /attempts/{id} (500).
+    const questions = (b.questionsJson as Question[]) ?? [];
     const rawPassages = splitPassages(b.readingPassageMarkdown ?? '');
 
     // Kelompokkan pertanyaan menurut passage_no
-    const passageGroups = new Map<number, Array<Question & { position: number }>>();
+    const passageGroups = new Map<number, Question[]>();
     for (const q of questions) {
       const pNo = (q as { passage_no?: number }).passage_no ?? 1;
       if (!passageGroups.has(pNo)) passageGroups.set(pNo, []);
@@ -290,14 +290,14 @@ function extractReadingPackages(banks: BankRow[], seenIds: Set<string>): Reading
   return packages;
 }
 
-interface ReadingCombination {
+export interface ReadingCombination {
   s1: ReadingPackage;
   s2: ReadingPackage;
   s3: ReadingPackage;
   total_seen: number;
 }
 
-function findReadingCombinations(packages: ReadingPackage[]): ReadingCombination[] {
+export function findReadingCombinations(packages: ReadingPackage[]): ReadingCombination[] {
   const s1Packs = packages.filter((p) => p.bank_kind === 'READING_GT_S1');
   const s2Packs = packages.filter((p) => p.bank_kind === 'READING_GT_S2');
   const s3Packs = packages.filter((p) => p.bank_kind === 'READING_GT_S3');
@@ -331,8 +331,19 @@ export async function assembleSimulation(
 ): Promise<{ state: MockTestState; totalDurationSec: number | null }> {
   const banks = await loadPublishedBanks(db);
   const seenIds = await getSeenSimulationQuestionIds(db, userId);
+  return assembleFromPool(banks, sections, seenIds, rngSeed ?? newRngSeed());
+}
 
-  const seed = rngSeed ?? newRngSeed();
+/**
+ * Inti perakit murni (D3): `pool` = bank QUESTION_BANK PUBLISHED GENERAL_TRAINING, `seenIds` = question_id yang pernah
+ * muncul pada simulasi lain, `seed` = seed PRNG. Tanpa akses DB sehingga dapat diuji unit.
+ */
+export function assembleFromPool(
+  banks: BankRow[],
+  sections: SimulationSection[],
+  seenIds: Set<string>,
+  seed: string,
+): { state: MockTestState; totalDurationSec: number | null } {
   const rng = seededCsprng(seed);
 
   const ordered = sortSimulationSections(sections);
@@ -749,12 +760,23 @@ export async function assembleSimulation(
     });
   }
 
+  // `served` harus berbentuk `Served` mesin soal (SPEC-006) agar GET /attempts/{id} dapat membangun DTO publik tanpa galat.
+  // MCQ: diturunkan dari `option_order` supaya urutan opsi sama dengan yang disajikan GET .../sections/{section}.
   const allOrder: string[] = [];
-  const servedMap: Record<string, { option_order?: string[] | null }> = {};
+  const servedMap: Record<string, Served> = {};
   for (const s of mockSections) {
     for (const q of s.questions) {
       allOrder.push(q.question_id);
-      servedMap[q.question_id] = { option_order: q.option_order };
+      const orig = q.question as unknown as Question;
+      const rawOpts = 'options' in orig ? (orig as { options?: string[] }).options : undefined;
+      if ((orig.question_type === 'MCQ_SINGLE' || orig.question_type === 'MCQ_MULTI') && Array.isArray(rawOpts) && q.option_order) {
+        servedMap[q.question_id] = {
+          option_ids: q.option_order.map((_, i) => `o${i}`),
+          option_orig_index: q.option_order.map((o) => rawOpts.indexOf(o)),
+        };
+      } else {
+        servedMap[q.question_id] = serveQuestion(orig, rng);
+      }
     }
   }
 
@@ -772,7 +794,7 @@ export async function assembleSimulation(
   };
 }
 
-function selectQuestionsPrioritizingUnseen<T extends { q: Question }>(
+export function selectQuestionsPrioritizingUnseen<T extends { q: Question }>(
   pool: T[],
   count: number,
   seenIds: Set<string>,

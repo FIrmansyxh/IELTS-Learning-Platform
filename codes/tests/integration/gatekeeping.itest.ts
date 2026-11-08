@@ -22,6 +22,11 @@ afterAll(closeDb);
 type Tree = { tiers: any[] }; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 async function resetContent() {
+  // Bebas-urutan: berkas integrasi lain (attempts, simulasi, dst.) meninggalkan baris yang merujuk assessment_sets
+  // dengan ON DELETE RESTRICT; tanpa ini tes bergantung pada urutan eksekusi berkas.
+  await execute(db, sql`DELETE FROM attempt_answers`);
+  await execute(db, sql`DELETE FROM attempt_sections`);
+  await execute(db, sql`DELETE FROM attempts`);
   await execute(db, sql`DELETE FROM assessment_sets`);
   await execute(db, sql`UPDATE sub_modules SET status = 'DRAFT'`);
   await execute(db, sql`UPDATE modules SET status = 'DRAFT'`);

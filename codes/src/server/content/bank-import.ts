@@ -19,7 +19,7 @@ import { execute, type Db, type Tx } from '../db';
 import { safeErr } from '../safe-error';
 import { getStorage, type StorageDriver } from '../storage';
 import { registerFromManifest, validateAssetFile } from './assets';
-import { validateBankPackage, type KnownAssets } from './bank-validate';
+import { CONTENT_IMPORT_HINT, validateBankPackage, type KnownAssets } from './bank-validate';
 import { ensureRevision } from './apply';
 import { changeStatus, type Blocker } from './publish';
 import { isListeningBankKind } from '@/contracts/question-bank';
@@ -63,7 +63,7 @@ export async function findBankFiles(dir: string): Promise<{ files: BankFile[]; i
   let hasContentJson = false;
   try {
     const all = await readdir(dir);
-    hasContentJson = all.includes('content.json');
+    hasContentJson = all.includes('content.json') || all.includes('tracks.json'); // paket konten murni (SPEC-021: tracks.json)
     names = all.filter((n) => n.endsWith('.json') && !NOT_BANK_FILES.has(n)).sort();
   } catch {
     return { files, issues: [issue(dir, 'dir_not_found', `Folder ${dir} tidak dapat dibaca.`)] };
@@ -297,7 +297,7 @@ export async function runBankImport(db: Db, o: BankImportOptions, found?: Awaite
       if (action !== 'NOOP' && write) {
         const listeningAssetId = b.listening_asset_code ? (assetIds.get(b.listening_asset_code) ?? null) : null;
         if (b.listening_asset_code && !listeningAssetId) {
-          throw new Abort({ exitCode: 1, lines: [`${b.bank_code}: listening_asset_unregistered: aset '${b.listening_asset_code}' belum terdaftar.`], banks: [] });
+          throw new Abort({ exitCode: 1, lines: [`${b.bank_code}: listening_asset_unregistered: aset '${b.listening_asset_code}' belum terdaftar.${CONTENT_IMPORT_HINT}`], banks: [] });
         }
         const values = {
           assessmentType: 'QUESTION_BANK' as const,

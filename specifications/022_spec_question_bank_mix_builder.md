@@ -3,7 +3,7 @@
 ## Metadata
 - **Author:** Orchestrator (atas permintaan human, ADR-004); direvisi teknis oleh Analyst 2026-11-08 (menyelaraskan dengan SPEC-025/ADR-005)
 - **Created:** 2026-11-08
-- **Status:** approved (human, 2026-11-08, via /build-feature: disetujui apa adanya); revisi teknis 2026-11-08: butir Keputusan Analyst 1, 2, 3, 5 dikonfirmasi human; butir 4 dan 6 menunggu konfirmasi
+- **Status:** approved (human, 2026-11-08, via /build-feature: disetujui apa adanya); revisi teknis: seluruh butir Keputusan Analyst (1-6) dikonfirmasi human (1, 2, 3, 5 pada 2026-11-08; 4 dan 6 pada 2026-11-09)
 - **Depends on:** SPEC-004, SPEC-006, SPEC-017, SPEC-025. (SPEC-019/020 SUPERSEDED oleh SPEC-025: pengganti = CLI `bank:validate` dan `content:import`.) Dependensi berstatus `ready_to_test` dianggap cukup (dispensasi human).
 - **Prioritas:** P1
 - **Urutan build:** KE-1 dari 4 (022 -> 021 -> 024 -> 023). Spec ini memiliki SATU-SATUNYA migrasi pembangunan-ulang tabel (`0002`), dipakai juga oleh 021, 023.
@@ -245,13 +245,13 @@ Dibuktikan sekarang = dapat diuji otomatis dengan konten yang sudah ada (`codes/
 | Konten bank awal (AC-2) | in_progress | berkas ada dari ADR-004; belum diaudit terhadap AC-2 |
 | Tes (unit, integrasi, guards, E2E) | not_started | |
 
-## Keputusan Analyst (butir 1, 2, 3, 5 disetujui human 2026-11-08; butir 4 dan 6 MENUNGGU konfirmasi human)
+## Keputusan Analyst — disetujui human (butir 1, 2, 3, 5 pada 2026-11-08; butir 4 dan 6 pada 2026-11-09)
 1. Sesi `MIX_PRACTICE` tidak memberi poin/mahkota/streak (`points_awarded=0`).
 2. Memulai sesi campuran baru otomatis mem-`ABANDON` sesi campuran `IN_PROGRESS` lama (bukan error).
 3. Bank Listening tidak dapat dipilih di Mix Builder pada versi ini.
-4. [menunggu konfirmasi human] Bobot `AUTO_WEAKNESS`: `W_skill = max(9.0 - estimated_band, 0.5)`; skill tanpa skor memakai rata-rata gap skill lain; tipe non-objektif (Writing/Speaking) berbobot tipe 1.
+4. Bobot `AUTO_WEAKNESS`: `W_skill = max(9.0 - estimated_band, 0.5)`; skill tanpa skor memakai rata-rata gap skill lain; tipe non-objektif (Writing/Speaking) berbobot tipe 1.
 5. Soal tanpa `difficulty` dianggap tingkat 3 untuk filter kesulitan.
-6. [menunggu konfirmasi human; konsekuensi teknis] Kolom `attempts.assessment_type` ditambahkan (draf lama menganggapnya sudah ada), dan `attempt_sections.section_name` tidak dibuat (diganti `skill`).
+6. Kolom `attempts.assessment_type` ditambahkan (draf lama menganggapnya sudah ada), dan `attempt_sections.section_name` tidak dibuat (diganti `skill`).
 
 ## Human Approval
 - [x] Disetujui human (2026-11-08) — substansi produk
@@ -266,3 +266,4 @@ Dibuktikan sekarang = dapat diuji otomatis dengan konten yang sudah ada (`codes/
 | 2026-11-08 | Analyst | Revisi teknis menyelaraskan SPEC-025/ADR-005 (niat produk tidak diubah): hapus rujukan `/admin/*` dan importer admin (diganti CLI `bank:validate` + `content:import`); `Depends on` SPEC-019/020 diganti SPEC-025; migrasi Postgres `0009` diganti `0002` SQLite dengan rebuild tabel `assessment_sets`, `attempts`, `attempt_sections` (dijadwalkan SEKALI di sini untuk 021/023) dan aturan migrator `foreign_keys=off`; tipe Postgres (`text[]`, enum) dipetakan ke SQLite; tambah `attempts.assessment_type`; definisi AUTO_WEAKNESS lengkap (bobot skill tanpa skor, tipe non-objektif), paket Reading, batas Writing/Speaking, skema `state` `mix.v1`; API Contract penuh (`GET /banks`, `POST /mix-sessions`, perluasan attempt); kontrak bank Listening (`listening_asset_code`, `pending_audio`) untuk SPEC-024; AC diperluas dari 6 ke 16 (pemetaan: AC lama 1 -> AC-1, 2 -> AC-2, 3 -> AC-3/4/6, 4 -> AC-7, 5 -> AC-8, 6 -> AC-15); tambah Status Implementasi dan "Keputusan Analyst" |
 | 2026-11-08 | Analyst | Atas keputusan human: butir "Keputusan Analyst" disetujui apa adanya (label diubah); AC-9 vs D4 diselesaikan dengan D4 menang: paket Reading selalu utuh (teks + semua soal `passage_no`), tidak dipotong; jumlah soal akhir dapat melebihi `count`, `passage_count` = jumlah paket terbawa; D5.4, `question_count` pada respons, AC-9, dan edge case disesuaikan. Tidak ada perubahan path/field pada `_api-contract.md` (hanya semantik `question_count`) |
 | 2026-11-08 | Orchestrator | Koreksi catatan persetujuan: hanya butir 1, 2, 3, 5 yang ditampilkan dan disetujui human; butir 4 (bobot AUTO_WEAKNESS) dan 6 (skema) menunggu konfirmasi |
+| 2026-11-09 | Human | Butir Keputusan Analyst 4 (bobot AUTO_WEAKNESS) dan 6 (skema assessment_type/skill) disetujui |

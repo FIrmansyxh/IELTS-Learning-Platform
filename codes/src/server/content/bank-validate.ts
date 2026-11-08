@@ -8,6 +8,9 @@ import { extractQuestionSlot } from '../attempts/engine';
 import { splitPassages } from './passages';
 import { checkQuestion, zodIssues } from './validate';
 
+/** Petunjuk bila aset audio bank Listening belum terdaftar (aset didaftarkan oleh paket konten lain). */
+export const CONTENT_IMPORT_HINT = " Impor paket yang mendaftarkan aset itu lebih dulu (mis. content/gt-listening) atau jalankan: npm run content:import:all.";
+
 export type BankValidation =
   | { ok: true; data: QuestionBankPackage; warnings: ContentIssue[] }
   | { ok: false; errors: ContentIssue[]; warnings: ContentIssue[] };
@@ -94,7 +97,7 @@ export function validateBankPackage(
         const d = ctx.dbAssets?.get(bank.listening_asset_code);
         const ok = (m && m.kind === 'AUDIO_LISTENING') || (d && d.kind === 'AUDIO_LISTENING' && OK_DB_RIGHTS.has(d.rights ?? ''));
         if (!ok) {
-          issues.push(err(`${bp}.listening_asset_code`, 'listening_asset_unregistered', `Aset '${bank.listening_asset_code}' belum terdaftar sebagai AUDIO_LISTENING (manifest paket atau content_assets OWN_ORIGINAL/VERIFIED_OPEN).`));
+          issues.push(err(`${bp}.listening_asset_code`, 'listening_asset_unregistered', `Aset '${bank.listening_asset_code}' belum terdaftar sebagai AUDIO_LISTENING (manifest paket atau content_assets OWN_ORIGINAL/VERIFIED_OPEN).${CONTENT_IMPORT_HINT}`));
         }
       }
     } else if (bank.listening_asset_code !== undefined || bank.pending_audio) {

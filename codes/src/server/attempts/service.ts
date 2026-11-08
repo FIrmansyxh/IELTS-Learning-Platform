@@ -61,6 +61,10 @@ import { buildMixResult } from '../mix/service';
 import { isMixAttempt, mixEntries, mixStateOf, STATE_ONLY_TYPES, virtualSetFor } from '../mix/state';
 import { checkpointEntries, checkpointStateOf } from '../tracks/checkpoint';
 import { mockQuestionEntries, mockStateOf } from '../simulation/state';
+import { simulationService } from '../simulation/service';
+
+/** SPEC-023 D7: jawaban simulasi masih diterima sampai `deadline_at` + 5 detik. */
+const MOCK_ANSWER_GRACE_MS = 5000;
 import type { MockQuestionState, SimulationSection } from '@/contracts/simulation';
 
 const toH = (numeric: string | number | null): number => Math.round(Number(numeric ?? 0) * 100);
@@ -419,16 +423,17 @@ export async function submitAnswer(
   questionId: string,
   rawResponse: Record<string, unknown>,
 ): Promise<AnswerOutcome> {
-  const out = await db.transaction(async (tx): Promise<AnswerOutcome | 'expired'> => {
+  const out = await db.transaction(async (tx): Promise<AnswerOutcome | 'expired' | 'section_expired'> => {
     const now = nowDate();
     const { attempt, set } = await loadLocked(tx, attemptId, userId);
     if (isExpired(attempt, now)) {
       await expire(tx, attempt, set, userId);
       return 'expired'; // dilempar setelah commit agar penilaian tersimpan
     }
-    if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
-
     const isMock = attempt.assessmentType === 'MOCK_TEST';
+    // MOCK_TEST: status attempt bukan penentu (attempt bisa GRADED/AWAITING sementara section lain masih berjalan);
+    // yang menentukan adalah status section di bawah. Hanya ABANDONED yang selalu ditolak.
+    if (attempt.status !== 'IN_PROGRESS' && !(isMock && attempt.status !== 'ABANDONED')) throw new ApiError('ATTEMPT_NOT_ACTIVE');
     let mockQEntry: (MockQuestionState & { section: SimulationSection }) | null = null;
     let mockSecRow: (typeof attemptSections.$inferSelect) | null = null;
     let state: AttemptState | null = null;
@@ -445,12 +450,18 @@ export async function submitAnswer(
         .where(and(eq(attemptSections.attemptId, attempt.id), eq(attemptSections.skill, mockQEntry.section)))
         .limit(1);
 
-      if (!secRow || !secRow.startedAt || secRow.status !== 'IN_PROGRESS') {
-        throw new ApiError('SECTION_NOT_ACTIVE');
+      if (!secRow || !secRow.startedAt) throw new ApiError('SECTION_NOT_ACTIVE');
+
+      if (secRow.status !== 'IN_PROGRESS') {
+        // Section sudah dikirim: bila dikirim otomatis karena waktu habis kodenya SECTION_EXPIRED, selain itu SECTION_NOT_ACTIVE.
+        const auto = secRow.submittedAt && secRow.deadlineAt && secRow.submittedAt.getTime() >= secRow.deadlineAt.getTime();
+        throw new ApiError(auto ? 'SECTION_EXPIRED' : 'SECTION_NOT_ACTIVE');
       }
 
-      if (secRow.deadlineAt && now.getTime() > new Date(secRow.deadlineAt).getTime() + 5000) {
-        throw new ApiError('SECTION_EXPIRED');
+      if (secRow.deadlineAt && now.getTime() > new Date(secRow.deadlineAt).getTime() + MOCK_ANSWER_GRACE_MS) {
+        // D7: kirim otomatis section yang lewat batas lebih dulu, lalu tolak (dilempar setelah commit agar tersimpan).
+        await simulationService.expireDueSections(tx, { id: attempt.id, userId }, now);
+        return 'section_expired';
       }
       mockSecRow = secRow;
     } else {
@@ -683,6 +694,7 @@ export async function submitAnswer(
     };
   });
   if (out === 'expired') throw new ApiError('ATTEMPT_EXPIRED');
+  if (out === 'section_expired') throw new ApiError('SECTION_EXPIRED');
   return out;
 }
 

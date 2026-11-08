@@ -268,7 +268,7 @@ export function SubModulePlayer({ code, initial }: { code: string; initial: Play
   const drillDone = progress.best_score_percent >= drill.pass_percent && progress.best_score_percent > 0;
 
   return (
-    <div className="grid gap-5">
+    <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-5">
       <header className="grid gap-3">
         <div className="flex items-start gap-2">
           <Button asChild variant="ghost" size="icon" aria-label={id.player.backAria}>

@@ -13,7 +13,30 @@ const tmp = (p: string) => {
   dirs.push(d);
   return d;
 };
-afterAll(() => dirs.forEach((d) => rmSync(d, { recursive: true, force: true })));
+// Folder temp dibersihkan sebisanya: di Windows berkas SQLite yang masih terbuka bisa memberi EPERM (tidak memengaruhi hasil uji).
+afterAll(() =>
+  dirs.forEach((d) => {
+    try {
+      rmSync(d, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    } catch {
+      /* sisa folder temp tidak berbahaya */
+    }
+  }),
+);
+
+/** Folder migrasi yang hanya sampai 0002: tes ini memverifikasi 0002, bukan migrasi yang datang sesudahnya. */
+let upTo2Dir: string | undefined;
+const upTo2 = (): string => {
+  if (upTo2Dir) return upTo2Dir;
+  const d = tmp('mig-upto2-');
+  cpSync(REAL, d, { recursive: true });
+  const jp = path.join(d, 'meta', '_journal.json');
+  const j = JSON.parse(readFileSync(jp, 'utf8'));
+  j.entries = j.entries.slice(0, 3);
+  writeFileSync(jp, JSON.stringify(j));
+  upTo2Dir = d;
+  return d;
+};
 
 const all = (db: ReturnType<typeof openRaw>, q: string): any[] => db.prepare(q).all() as any[];
 const TABLES = ['assessment_sets', 'attempts', 'attempt_answers', 'attempt_sections', 'submissions', 'user_last_learned_state'];
@@ -56,7 +79,7 @@ describe('migrasi 0002 (SPEC-022 AC-14): pembangunan ulang tabel dengan data nya
     const counts = Object.fromEntries(TABLES.map((t) => [t, before[t]!.length]));
 
     // 3) terapkan 0002 dengan migrator
-    const report = runMigrations(db);
+    const report = runMigrations(db, upTo2());
     expect(report.applied).toEqual(['0002_spec_022_question_banks']);
     expect(report.backups).toHaveLength(1);
     expect(path.basename(report.backups[0]!)).toMatch(/^pre-0002_spec_022_question_banks-\d+\.db$/);
@@ -148,7 +171,7 @@ describe('migrasi 0002 (SPEC-022 AC-14): pembangunan ulang tabel dengan data nya
     cpSync(REAL, only, { recursive: true });
     const jp2 = path.join(only, 'meta', '_journal.json');
     const j2 = JSON.parse(readFileSync(jp2, 'utf8'));
-    j2.entries = j2.entries.slice(2);
+    j2.entries = j2.entries.slice(2, 3);
     writeFileSync(jp2, JSON.stringify(j2));
     const r = runMigrations(db, only);
     expect(r.applied).toEqual(['0002_spec_022_question_banks']);
@@ -177,7 +200,7 @@ describe('migrasi 0002 (SPEC-022 AC-14): pembangunan ulang tabel dengan data nya
   it('instalasi baru (tanpa migrasi sebelumnya) tidak membuat cadangan pra-migrasi', () => {
     const dbDir = tmp('mig-fresh-');
     const db = openRaw(path.join(dbDir, 'fresh.db'));
-    const r = runMigrations(db);
+    const r = runMigrations(db, upTo2());
     expect(r.applied).toContain('0002_spec_022_question_banks');
     expect(r.backups).toEqual([]);
     expect(existsSync(path.join(dbDir, 'backups')) ? readdirSync(path.join(dbDir, 'backups')) : []).toEqual([]);

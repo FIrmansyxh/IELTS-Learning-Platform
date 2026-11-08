@@ -525,8 +525,92 @@ export function parseContentPackage(raw: unknown, ctx: ParseContext = {}): Parse
     checkStimulus(st.questions, `${p}.questions`, requireAsset);
   });
 
+  checkLearningTracks(tracks, knownSubModules, errors);
+
   if (errors.length) return { ok: false, errors, warnings };
   return { ok: true, data: pkg, warnings };
+}
+
+/** Aturan validator jalur belajar (SPEC-021, daftar kode galat persis). */
+function checkLearningTracks(
+  tracks: NonNullable<ContentPackage['learning_tracks']>,
+  known: Map<string, SubModuleInfo>,
+  errors: ContentIssue[],
+): void {
+  const codesSeen = new Set<string>();
+  const ordersSeen = new Set<number>();
+  tracks.forEach((t, ti) => {
+    const p = `learning_tracks[${ti}]`;
+    if (codesSeen.has(t.track_code)) errors.push(err(`${p}.track_code`, 'duplicate_track_code', `track_code '${t.track_code}' ganda.`));
+    codesSeen.add(t.track_code);
+    if (ordersSeen.has(t.sort_order)) errors.push(err(`${p}.sort_order`, 'duplicate_sort_order', `sort_order ${t.sort_order} ganda.`));
+    ordersSeen.add(t.sort_order);
+    if (t.target_band_min > t.target_band_max) errors.push(err(`${p}.target_band_min`, 'band_range_invalid', 'target_band_min harus <= target_band_max.'));
+
+    const items = t.items ?? [];
+    if (t.kind === 'CURRICULUM') {
+      if (items.length > 0) errors.push(err(`${p}.items`, 'curriculum_items_forbidden', 'Jalur CURRICULUM tidak boleh memuat items.'));
+      return;
+    }
+    if (items.length === 0) {
+      errors.push(err(`${p}.items`, 'invalid_value', 'Jalur CURATED wajib memuat items (1-60).'));
+      return;
+    }
+    const sprint = t.layout === 'SPRINT';
+    const seenSubs = new Set<string>();
+    let prevTier = 0;
+    let prevSlot: [number, number] | null = null;
+    let group = 0;
+    const groups: number[] = [];
+    items.forEach((it, ii) => {
+      const ip = `${p}.items[${ii}]`;
+      if (it.kind === 'CHECKPOINT') {
+        if (ii === 0) errors.push(err(ip, 'checkpoint_first', 'Checkpoint tidak boleh menjadi item pertama.'));
+        else if (items[ii - 1]!.kind === 'CHECKPOINT') errors.push(err(ip, 'checkpoint_adjacent', 'Dua Checkpoint tidak boleh bersebelahan.'));
+        else groups.push(group);
+        group = 0;
+        return;
+      }
+      group++;
+      const code = it.sub_module_code;
+      if (!code) {
+        errors.push(err(`${ip}.sub_module_code`, 'invalid_value', 'sub_module_code wajib untuk item SUB_MODULE.'));
+        return;
+      }
+      const info = known.get(code);
+      if (!info) errors.push(err(`${ip}.sub_module_code`, 'sub_module_not_found', `Sub-modul '${code}' tidak ada.`));
+      else {
+        if (info.exam === 'ACADEMIC') errors.push(err(`${ip}.sub_module_code`, 'sub_module_not_gt', `Sub-modul '${code}' bertag ACADEMIC.`));
+        if (info.tier < prevTier) errors.push(err(`${ip}.sub_module_code`, 'tier_order_violation', 'Tier item tidak boleh menurun.'));
+        prevTier = Math.max(prevTier, info.tier);
+      }
+      if (seenSubs.has(code)) errors.push(err(`${ip}.sub_module_code`, 'duplicate_sub_module_in_track', `Sub-modul '${code}' ganda dalam jalur.`));
+      seenSubs.add(code);
+      const hasSlot = it.week_no !== undefined || it.day_no !== undefined;
+      if (sprint) {
+        if (it.week_no === undefined || it.day_no === undefined) {
+          errors.push(err(ip, 'sprint_slot_required', 'Jalur SPRINT: week_no dan day_no wajib.'));
+        } else {
+          if (prevSlot && (it.week_no < prevSlot[0] || (it.week_no === prevSlot[0] && it.day_no <= prevSlot[1]))) {
+            errors.push(err(ip, 'sprint_slot_order', 'Pasangan (week_no, day_no) harus unik dan menaik.'));
+          }
+          prevSlot = [it.week_no, it.day_no];
+        }
+      } else if (hasSlot) {
+        errors.push(err(ip, 'slot_not_allowed', 'week_no/day_no hanya untuk jalur SPRINT.'));
+      }
+    });
+    if (items[items.length - 1]!.kind !== 'CHECKPOINT') {
+      errors.push(err(`${p}.items`, 'checkpoint_last_required', 'Item terakhir harus Checkpoint.'));
+    }
+    groups.forEach((size, gi) => {
+      if (size === 0) return; // sudah dilaporkan sebagai checkpoint_first/adjacent
+      const isLast = gi === groups.length - 1;
+      if (size > 6 || (!isLast && size < 4)) {
+        errors.push(err(`${p}.items`, 'checkpoint_group_size', `Grup ke-${gi + 1} berisi ${size} sub-modul; diizinkan 1-6 (4-6 kecuali grup terakhir).`));
+      }
+    });
+  });
 }
 
 function checkStimulus(qs: Question[], path: string, requireAsset: (c: string, p: string, k?: string) => void) {

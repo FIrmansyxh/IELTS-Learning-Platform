@@ -26,6 +26,8 @@ import { call, learnerSession } from './helpers';
 
 const db = getDb();
 const BANK_DIR = path.resolve('content', 'gt-bank');
+// Bank Listening merujuk aset audio yang didaftarkan paket gt-listening: impor paket aset dulu (urutan sama dengan content:import:all).
+const LISTENING_DIR = path.resolve('content', 'gt-listening');
 type L = Awaited<ReturnType<typeof learnerSession>>;
 
 const mix = (u: L | null, body: unknown) => call(mixRoute, 'POST', '/api/v1/mix-sessions', { cookie: u?.cookie, body });
@@ -56,6 +58,8 @@ async function answerCorrectly(u: L, attemptId: string, qid: string, dto: any, r
 }
 
 beforeAll(async () => {
+  const assets = await runImport(db, { dir: LISTENING_DIR, publish: true, dryRun: false, actorUserId: null });
+  expect(assets.exitCode, assets.lines.join('\n')).toBe(0);
   const out = await runImport(db, { dir: BANK_DIR, publish: true, dryRun: false, actorUserId: null });
   expect(out.exitCode, out.lines.join('\n')).toBe(0);
 });

@@ -4,6 +4,8 @@ const isCI = !!process.env.CI;
 
 export default defineConfig({
   testDir: './tests/e2e',
+  // Dev server mengompilasi halaman saat dibuka pertama kali: beri ruang di atas bawaan 5 detik.
+  expect: { timeout: 15_000 },
   globalSetup: './tests/e2e/global-setup.ts',
   workers: 1, // satu DB bersama: pemilih profil auto-masuk bila hanya ada 1 profil
   retries: isCI ? 1 : 0,

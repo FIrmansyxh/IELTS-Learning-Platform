@@ -229,6 +229,17 @@ export interface MockTestState {
   sections: MockSectionState[];
   v?: number;
   order?: string[];
-  served?: Record<string, { option_order?: string[] | null }>;
+  /** Bentuk `Served` mesin soal (SPEC-006) per question_id; dipakai GET /attempts/{id} untuk DTO publik. */
+  served?: Record<
+    string,
+    {
+      option_ids?: string[];
+      option_orig_index?: number[];
+      right_choice_ids?: string[];
+      right_orig_index?: number[];
+      segment_ids?: string[];
+      segment_orig_index?: number[];
+    }
+  >;
   last_resume_at?: string;
 }

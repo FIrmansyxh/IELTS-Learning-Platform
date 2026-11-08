@@ -50,8 +50,9 @@ jobs:
           cache: npm
           cache-dependency-path: codes/package-lock.json
       - run: npm ci
-      # Ambang coverage src/server/** lines >= 70% ada di vitest.config.ts (gagal bila kurang).
-      - run: npm run test -- --coverage
+      # Coverage gabungan unit + integrasi (SQLite sementara, tanpa layanan eksternal); ambang lines >= 70%
+      # ada di vitest.coverage.config.ts (gagal bila kurang). Tidak ada coverage.exclude.
+      - run: npm run coverage
 
   integration:
     runs-on: ubuntu-latest

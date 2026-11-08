@@ -287,7 +287,7 @@ Seluruh AC dapat dibuktikan sekarang dengan fixture konten (tanpa menunggu konte
 
 ## Human Approval
 - [x] Disetujui human (2026-11-08) — substansi produk; D5 (gerbang Tier tetap berlaku) dan dispensasi dependensi `ready_to_test` adalah keputusan human final
-- [ ] Konfirmasi human atas revisi teknis 2026-11-08 (butir "Keputusan Analyst")
+- [x] Konfirmasi human atas revisi teknis 2026-11-08 (butir "Keputusan Analyst"): disetujui semua default pada 2026-11-09
 
 ## Revision History
 | Timestamp | Agen | Perubahan |
@@ -295,3 +295,4 @@ Seluruh AC dapat dibuktikan sekarang dengan fixture konten (tanpa menunggu konte
 | 2026-11-08 | Orchestrator | Draft awal |
 | 2026-11-08 | Human | Draf disetujui apa adanya (build-feature, depth standard) |
 | 2026-11-08 | Analyst | Revisi teknis menyelaraskan SPEC-025/ADR-005 dan keputusan human: hapus `admin/tracks`, "dikurasi admin", migrasi Postgres `0008` dan tipe Postgres (diganti migrasi SQLite `0003`, berkas konten + seed); `Depends on` ditambah SPEC-022/025; D5 ditulis ulang (gerbang Tier/Boss/Skip berlaku di semua jalur; aturan buka-urut khusus jalur aktif; alasan `TIER_LOCKED`) beserta AC-7/8/9; isi jalur per kode sub-modul (D2) dan model Sprint (D9: `week_no`/`day_no`, `layout`); Checkpoint diberi model, komposisi, endpoint, tipe attempt `TRACK_CHECKPOINT` (D8); resolusi gaya, aturan varian, perilaku `PRACTICE_FIRST` terhadap `LEARN_NOT_COMPLETED` (D3); API Contract penuh (5 endpoint baru + perluasan tree/sub-module/resume); kontrak konten 1.2 dan kode galat validator; Database Changes terperinci; AC diperluas dari 6 ke 19; tambah Status Implementasi dan "Keputusan Analyst" |
+| 2026-11-09 | Human | Seluruh butir 'Keputusan Analyst' disetujui sebagai default build. Gerbang code review fitur ini TETAP menunggu tinjauan human (belum disetujui). |

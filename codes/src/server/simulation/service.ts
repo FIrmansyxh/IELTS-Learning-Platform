@@ -9,6 +9,7 @@ import {
 import type { Db, DbOrTx, Tx } from '../db';
 import { ApiError, notFound } from '../http/errors';
 import { logger } from '../logger';
+import { nowDate } from '../clock';
 import {
   assembleSimulation,
   checkSimulationOptions,
@@ -51,6 +52,11 @@ export const mockTestHandler: AssessmentTypeHandler = {
 };
 
 assessmentTypeHandlers.MOCK_TEST = mockTestHandler;
+
+/** Section dikirim otomatis karena waktu habis: `submitted_at` jatuh tepat pada/sesudah `deadline_at`. */
+function isAutoSubmittedRow(r: { status: string; submittedAt: Date | null; deadlineAt: Date | null }): boolean {
+  return r.status === 'EXPIRED' || Boolean(r.submittedAt && r.deadlineAt && r.submittedAt.getTime() >= r.deadlineAt.getTime());
+}
 
 export class SimulationService {
   async getOptions(db: DbOrTx, userId: string): Promise<SimulationOptionsResponse['data']> {
@@ -145,12 +151,14 @@ export class SimulationService {
 
   async getSimulation(db: Db, userId: string, attemptId: string): Promise<SimulationStateResponse['data']> {
     return db.transaction(async (tx) => {
-      const now = new Date();
-      const attempt = await this.loadMockAttempt(tx, userId, attemptId);
+      const now = nowDate();
+      let attempt = await this.loadMockAttempt(tx, userId, attemptId);
       const state = mockStateOf(attempt);
 
-      // Evaluasi batas waktu malas (lazy expiration)
-      await this.processLazyExpirations(tx, attempt, now);
+      // Evaluasi batas waktu malas (lazy expiration, D7); muat ulang agar status attempt terkini ikut terkirim.
+      if ((await this.processLazyExpirations(tx, attempt, now)) > 0) {
+        attempt = await this.loadMockAttempt(tx, userId, attemptId);
+      }
 
       const secRows = await tx
         .select()
@@ -239,7 +247,7 @@ export class SimulationService {
     attemptId: string,
     section: SimulationSection,
   ): Promise<SimulationSectionDetailResponse['data']> {
-    const now = new Date();
+    const now = nowDate();
     const attempt = await this.loadMockAttempt(tx, userId, attemptId);
     const state = mockStateOf(attempt);
 
@@ -378,8 +386,9 @@ export class SimulationService {
     attemptId: string,
     section: SimulationSection,
   ): Promise<SimulationSectionDetailResponse['data']> {
-    return db.transaction(async (tx) => {
-      const now = new Date();
+    // `null` = section sudah dikirim otomatis karena waktunya habis; galat dilempar SESUDAH commit agar pengiriman otomatis tersimpan (D7).
+    const out = await db.transaction(async (tx): Promise<SimulationSectionDetailResponse['data'] | null> => {
+      const now = nowDate();
       const attempt = await this.loadMockAttempt(tx, userId, attemptId);
       const state = mockStateOf(attempt);
 
@@ -389,6 +398,9 @@ export class SimulationService {
 
       const secConfig = state.sections.find((s) => s.section === section);
       if (!secConfig) throw notFound();
+
+      // D7: setiap permintaan yang menyentuh attempt lebih dulu memproses section yang lewat batas waktu.
+      await this.processLazyExpirations(tx, attempt, now);
 
       const secRows = await tx
         .select()
@@ -401,14 +413,12 @@ export class SimulationService {
 
       // Cek apakah section sudah selesai
       if (currentSec.submittedAt || currentSec.status === 'GRADED' || currentSec.status === 'AWAITING_GRADING') {
+        if (isAutoSubmittedRow(currentSec)) return null; // SECTION_EXPIRED
         throw new ApiError('SECTION_ALREADY_DONE');
       }
 
       // Idempoten jika sudah start
       if (currentSec.startedAt) {
-        if (currentSec.deadlineAt && now.getTime() > new Date(currentSec.deadlineAt).getTime()) {
-          throw new ApiError('SECTION_EXPIRED');
-        }
         return this.getSectionDetailInternal(tx, userId, attemptId, section);
       }
 
@@ -442,6 +452,8 @@ export class SimulationService {
 
       return this.getSectionDetailInternal(tx, userId, attemptId, section);
     });
+    if (out === null) throw new ApiError('SECTION_EXPIRED');
+    return out;
   }
 
   async submitSection(
@@ -451,15 +463,20 @@ export class SimulationService {
     section: SimulationSection,
   ): Promise<SubmitSectionResponse['data']> {
     return db.transaction(async (tx) => {
-      const now = new Date();
-      const attempt = await this.loadMockAttempt(tx, userId, attemptId);
+      const now = nowDate();
+      let attempt = await this.loadMockAttempt(tx, userId, attemptId);
       const state = mockStateOf(attempt);
 
       if (section === 'SPEAKING') {
         throw new ApiError('SECTION_NOT_SUBMITTABLE');
       }
 
-      if (attempt.status !== 'IN_PROGRESS') {
+      // D7: section yang lewat batas waktu dikirim otomatis (submitted_at = deadline_at) sebelum permintaan ini diproses.
+      if ((await this.processLazyExpirations(tx, attempt, now)) > 0) {
+        attempt = await this.loadMockAttempt(tx, userId, attemptId);
+      }
+
+      if (attempt.status === 'ABANDONED') {
         throw new ApiError('ATTEMPT_NOT_ACTIVE');
       }
 
@@ -469,12 +486,8 @@ export class SimulationService {
         .where(and(eq(attemptSections.attemptId, attempt.id), eq(attemptSections.skill, section)))
         .limit(1);
 
-      if (!secRow || !secRow.startedAt) {
-        throw new ApiError('SECTION_NOT_ACTIVE');
-      }
-
-      // Idempoten jika sudah dikirim
-      if (secRow.submittedAt) {
+      // Idempoten jika sudah dikirim (termasuk dikirim otomatis)
+      if (secRow?.submittedAt) {
         return {
           section,
           status: (secRow.status === 'GRADED' ? 'GRADED' : 'AWAITING_GRADING') as 'AWAITING_GRADING' | 'GRADED',
@@ -483,6 +496,14 @@ export class SimulationService {
           max_score: secRow.maxScore ? Number(secRow.maxScore) : null,
           attempt_status: attempt.status,
         };
+      }
+
+      if (attempt.status !== 'IN_PROGRESS') {
+        throw new ApiError('ATTEMPT_NOT_ACTIVE');
+      }
+
+      if (!secRow || !secRow.startedAt) {
+        throw new ApiError('SECTION_NOT_ACTIVE');
       }
 
       const secConfig = state.sections.find((s) => s.section === section)!;
@@ -633,7 +654,7 @@ export class SimulationService {
         .update(attempts)
         .set({
           status: 'ABANDONED',
-          updatedAt: new Date(),
+          updatedAt: nowDate(),
         })
         .where(eq(attempts.id, attempt.id));
     });
@@ -749,6 +770,7 @@ export class SimulationService {
               .select({ overallBand: aiEvaluations.overallBand })
               .from(aiEvaluations)
               .where(eq(aiEvaluations.submissionId, p1Sub.id))
+              .orderBy(desc(aiEvaluations.runNumber))
               .limit(1);
             if (ev) p1Band = Number(ev.overallBand);
           }
@@ -759,6 +781,7 @@ export class SimulationService {
               .select({ overallBand: aiEvaluations.overallBand })
               .from(aiEvaluations)
               .where(eq(aiEvaluations.submissionId, p2Sub.id))
+              .orderBy(desc(aiEvaluations.runNumber))
               .limit(1);
             if (ev) p2Band = Number(ev.overallBand);
           }
@@ -769,6 +792,7 @@ export class SimulationService {
               .select({ overallBand: aiEvaluations.overallBand })
               .from(aiEvaluations)
               .where(eq(aiEvaluations.submissionId, p3Sub.id))
+              .orderBy(desc(aiEvaluations.runNumber))
               .limit(1);
             if (ev) p3Band = Number(ev.overallBand);
           }
@@ -811,6 +835,7 @@ export class SimulationService {
     tx: Tx,
     userId: string,
     attemptId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- bagian dari kontrak hook
     _submissionId: string,
   ): Promise<void> {
     const [attempt] = await tx
@@ -940,6 +965,7 @@ export class SimulationService {
         .select({ overallBand: aiEvaluations.overallBand })
         .from(aiEvaluations)
         .where(eq(aiEvaluations.submissionId, p1Sub.id))
+        .orderBy(desc(aiEvaluations.runNumber))
         .limit(1);
       if (ev) p1Band = Number(ev.overallBand);
     }
@@ -950,6 +976,7 @@ export class SimulationService {
         .select({ overallBand: aiEvaluations.overallBand })
         .from(aiEvaluations)
         .where(eq(aiEvaluations.submissionId, p2Sub.id))
+        .orderBy(desc(aiEvaluations.runNumber))
         .limit(1);
       if (ev) p2Band = Number(ev.overallBand);
     }
@@ -960,6 +987,7 @@ export class SimulationService {
         .select({ overallBand: aiEvaluations.overallBand })
         .from(aiEvaluations)
         .where(eq(aiEvaluations.submissionId, p3Sub.id))
+        .orderBy(desc(aiEvaluations.runNumber))
         .limit(1);
       if (ev) p3Band = Number(ev.overallBand);
     }
@@ -972,7 +1000,7 @@ export class SimulationService {
           .set({
             status: 'GRADED',
             bandScore: String(spkBand),
-            submittedAt: spkSec.submittedAt ?? new Date(),
+            submittedAt: spkSec.submittedAt ?? nowDate(),
           })
           .where(and(eq(attemptSections.attemptId, attemptId), eq(attemptSections.skill, 'SPEAKING')));
       }
@@ -1030,8 +1058,8 @@ export class SimulationService {
         .set({
           status: targetStatus as 'IN_PROGRESS' | 'AWAITING_GRADING' | 'GRADED' | 'ABANDONED',
           bandScore: overallBandScore,
-          submittedAt: targetStatus === 'GRADED' && !attempt.submittedAt ? new Date() : attempt.submittedAt,
-          updatedAt: new Date(),
+          submittedAt: targetStatus === 'GRADED' && !attempt.submittedAt ? nowDate() : attempt.submittedAt,
+          updatedAt: nowDate(),
         })
         .where(eq(attempts.id, attemptId));
     }
@@ -1063,7 +1091,16 @@ export class SimulationService {
     return targetStatus;
   }
 
-  private async processLazyExpirations(tx: Tx, attempt: { id: string; userId: string }, now: Date): Promise<void> {
+  /**
+   * D7: kirim otomatis semua section `IN_PROGRESS` yang `deadline_at`-nya sudah lewat. Dipakai juga oleh
+   * `submitAnswer` (attempts/service) agar pengiriman otomatis tersimpan sebelum jawaban ditolak `SECTION_EXPIRED`.
+   * Mengembalikan jumlah section yang diproses.
+   */
+  async expireDueSections(tx: Tx, attempt: { id: string; userId: string }, now: Date): Promise<number> {
+    return this.processLazyExpirations(tx, attempt, now);
+  }
+
+  private async processLazyExpirations(tx: Tx, attempt: { id: string; userId: string }, now: Date): Promise<number> {
     const secRows = await tx
       .select()
       .from(attemptSections)
@@ -1076,13 +1113,16 @@ export class SimulationService {
         ),
       );
 
+    let processed = 0;
     for (const sec of secRows) {
       if (sec.deadlineAt && now.getTime() > new Date(sec.deadlineAt).getTime()) {
         // Auto-submit section yang kedaluwarsa
         logger.info({ attemptId: attempt.id, skill: sec.skill }, 'simulation_section_auto_submitted_due_to_expiry');
         await this.autoSubmitExpiredSection(tx, attempt.id, attempt.userId, sec.skill as SimulationSection, sec.deadlineAt);
+        processed++;
       }
     }
+    return processed;
   }
 
   private async autoSubmitExpiredSection(

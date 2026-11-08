@@ -292,7 +292,7 @@ describe('CLI (proses terpisah)', () => {
     const dir = await makePackage();
     const ok = run(['validate', '--dir', `"${dir}"`]);
     expect(ok.status, ok.stderr).toBe(0);
-    expect(ok.stdout).toMatch(/OK: valid \| modules 0 \| sub_modules 1 \| drill 1 \| assessment_sets 2 \| assets 3/);
+    expect(ok.stdout).toMatch(/OK: valid \| modules 0 \| sub_modules 1 \| drill 1 \| assessment_sets 2 \| tracks 0 \| assets 3/);
     const content = JSON.parse(await (await import('node:fs/promises')).readFile(path.join(dir, 'content.json'), 'utf8'));
     content.sub_modules[0].active_drill.questions[1] = Q.mcq({ question_id: 'Q-D2', correct_answers: ['zzz'] });
     await writeFile(path.join(dir, 'content.json'), JSON.stringify(content));

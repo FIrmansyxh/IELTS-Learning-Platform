@@ -91,7 +91,7 @@ export function LearnTab({
       ) : null}
 
       {active === 'ARTICLE' ? (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start">
           <article>
             <MarkdownArticle markdown={material.article_markdown} />
             {material.attachments.length > 0 ? (

@@ -44,6 +44,7 @@ Konten ditambahkan lewat berkas di repo:
 npm run content:validate -- content/golden-sample                 # exit 0 valid, 1 ada galat
 npm run content:import   -- content/golden-sample [--dry-run] [--publish]   # exit 0/1/2 (publikasi terhalang)/3
 npm run bank:validate    -- content/gt-bank                       # bank soal General Training
+npm run content:import:all                                        # semua konten bawaan berurutan: gt-listening (aset audio) -> gt-bank -> gt-modules/3.3.3
 ```
 Tanpa `ffprobe`, durasi audio hanya terbaca untuk WAV (peringatan `ffprobe_unavailable`).
 
@@ -58,7 +59,7 @@ npm run content:import -- content/gt-modules/3.3.3 --publish
 ## Perintah utama
 `npm run lint | typecheck | test | test:integration | test:e2e | build | bench:ai`
 
-Tes integrasi memakai berkas SQLite sementara (otomatis). E2E: jalankan `npm run dev`, lalu `E2E_SKIP_WEBSERVER=1 E2E_BASE_URL=http://127.0.0.1:3005 npx playwright test` (set `E2E_CHROME_PATH` bila browser Playwright belum terpasang).
+Tes integrasi memakai berkas SQLite sementara (otomatis). Coverage: `npm run coverage` menjalankan suite unit DAN integrasi dalam satu run (`vitest.coverage.config.ts`, vitest projects, provider v8) dan mengukur `src/server/**` tanpa `coverage.exclude`; gagal bila coverage baris gabungan < 70%. Jangan memakai `vitest run --coverage` biasa untuk menilai server: modul terikat database hanya dijalankan oleh suite integrasi sehingga angkanya menyesatkan (~32%). `npm test` dan `npm run test:integration` tidak berubah. Laporan di `coverage/` (`coverage-summary.json`, `lcov.info`). E2E: jalankan `npm run dev`, lalu `E2E_SKIP_WEBSERVER=1 E2E_BASE_URL=http://127.0.0.1:3005 npx playwright test` (set `E2E_CHROME_PATH` bila browser Playwright belum terpasang).
 
 `npm run bench:ai -- --models qwen2.5:3b-instruct,qwen2.5:7b-instruct` (khusus driver Ollama; harus berjalan di 127.0.0.1:11434).
 

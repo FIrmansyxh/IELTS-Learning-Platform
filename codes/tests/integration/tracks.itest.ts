@@ -2,48 +2,13 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { sql } from 'drizzle-orm';
 import { execute, getDb } from '@/server/db';
-import { GET as tracksRoute } from '@/app/api/v1/tracks/route';
-import { PUT as activeTrackRoute } from '@/app/api/v1/me/active-track/route';
-import { GET as treeRoute } from '@/app/api/v1/curriculum/tree/route';
-import { GET as subModuleRoute } from '@/app/api/v1/sub-modules/[sub_module]/route';
-import { PUT as subModuleStyleRoute } from '@/app/api/v1/sub-modules/[sub_module]/style/route';
-import { POST as checkpointAttemptRoute } from '@/app/api/v1/tracks/[track_code]/checkpoints/[item_id]/attempts/route';
-import { GET as lastLearnedRoute } from '@/app/api/v1/me/last-learned/route';
 import { ensureProgressRows, recomputeStatuses } from '@/server/gatekeeping/service';
-import { call, learnerSession } from './helpers';
+import { learnerSession } from './helpers';
 import { addDrill, resetLearning, seedMaterial } from './learning-fixtures';
 import { Q } from '../fixtures/content/builders';
+import { getLastLearned, getSubModule, getTracks, getTree, setActiveTrack, setSubModuleStyle, startCheckpoint, type L } from './tracks-helpers';
 
 const db = getDb();
-type L = Awaited<ReturnType<typeof learnerSession>>;
-
-const getTracks = (u: L | null) => call(tracksRoute, 'GET', '/api/v1/tracks', { cookie: u?.cookie });
-const setActiveTrack = (u: L | null, trackCode: string) =>
-  call(activeTrackRoute, 'PUT', '/api/v1/me/active-track', { cookie: u?.cookie, body: { track_code: trackCode } });
-const getTree = (u: L | null, query?: Record<string, string>) => {
-  const qs = query ? `?${new URLSearchParams(query).toString()}` : '';
-  return call(treeRoute, 'GET', `/api/v1/curriculum/tree${qs}`, { cookie: u?.cookie });
-};
-const getSubModule = (u: L | null, code: string, query?: Record<string, string>) => {
-  const qs = query ? `?${new URLSearchParams(query).toString()}` : '';
-  return call(subModuleRoute, 'GET', `/api/v1/sub-modules/${code}${qs}`, {
-    cookie: u?.cookie,
-    params: { sub_module: code },
-  });
-};
-const setSubModuleStyle = (u: L | null, code: string, style: string | null) =>
-  call(subModuleStyleRoute, 'PUT', `/api/v1/sub-modules/${code}/style`, {
-    cookie: u?.cookie,
-    params: { sub_module: code },
-    body: { style },
-  });
-const startCheckpoint = (u: L | null, trackCode: string, itemId: string) =>
-  call(checkpointAttemptRoute, 'POST', `/api/v1/tracks/${trackCode}/checkpoints/${itemId}/attempts`, {
-    cookie: u?.cookie,
-    params: { track_code: trackCode, item_id: itemId },
-    body: {},
-  });
-const getLastLearned = (u: L | null) => call(lastLearnedRoute, 'GET', '/api/v1/me/last-learned', { cookie: u?.cookie });
 
 describe('SPEC-021: Jalur Belajar & Gaya Penyampaian Materi (Integration)', () => {
   let user: L;

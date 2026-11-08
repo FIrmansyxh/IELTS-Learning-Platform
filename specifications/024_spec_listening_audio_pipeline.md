@@ -171,7 +171,7 @@ Dibagi: **otomatis** (CI dan mesin dev tanpa TTS/ffmpeg asli, memakai fixture; W
 
 ## Human Approval
 - [x] Disetujui human (2026-11-08) — substansi produk
-- [ ] Konfirmasi human atas revisi teknis 2026-11-08 (butir "Keputusan Analyst")
+- [x] Konfirmasi human atas revisi teknis 2026-11-08 (butir "Keputusan Analyst"): disetujui semua default pada 2026-11-09
 
 ## Revision History
 | Timestamp | Agen | Perubahan |
@@ -179,3 +179,4 @@ Dibagi: **otomatis** (CI dan mesin dev tanpa TTS/ffmpeg asli, memakai fixture; W
 | 2026-11-08 | Orchestrator | Draft awal |
 | 2026-11-08 | Human | Draf disetujui apa adanya (build-feature, depth standard) |
 | 2026-11-08 | Analyst | Revisi teknis menyelaraskan SPEC-025/ADR-005 (niat produk tidak diubah): `Depends on` SPEC-018 diganti manifest + `content:import` (SPEC-025); jalur CLI persis (`listening:check`, `listening:build`, kode keluar, penulisan atomik); format skrip D2 dengan kode galat; kriteria penerimaan mesin TTS K1-K6 (lisensi, RTF CPU, ragam suara, uji dengar); definisi durasi D5 (planned vs measured, anti-klip); gerbang uji dengar berbasis berkas review ber-hash (D6); AC dipisah otomatis (AC-A1..A11) vs manual-manusia (AC-M1..M3); cakupan wajib S1 vs konten S2-S4; catatan sintetis lewat `listening.note`; API Contract (CLI + perubahan aditif DTO), Database Changes, Status Implementasi, "Keputusan Analyst" |
+| 2026-11-09 | Human | Seluruh butir 'Keputusan Analyst' disetujui sebagai default build. Gerbang code review fitur ini TETAP menunggu tinjauan human (belum disetujui). |
