@@ -12,6 +12,7 @@ import { isAvailable, subProgressPercent, type ModuleNode, type Snapshot, type S
 import { validationError } from '../http/errors';
 import { loadMaterial } from '../player/material';
 import { fallbackTab, positionLabel, resumePath, type CardPosition } from './card';
+import { execute } from '@/server/db';
 
 export async function updateLastLearned(db: Db, userId: string, input: UpdateLastLearnedRequest): Promise<{ updated_at: string }> {
   return db.transaction(async (tx) => {
@@ -37,10 +38,10 @@ export async function updateLastLearned(db: Db, userId: string, input: UpdateLas
     // Attempt harus IN_PROGRESS milik pengguna untuk set drill sub-modul ini; selain itu NULL tanpa error.
     let attemptId: string | null = null;
     if (tab === 'DRILL' && input.active_attempt_id) {
-      const r = await tx.execute(sql`
+      const r = await execute(tx, sql`
         SELECT a.id FROM attempts a JOIN assessment_sets s ON s.id = a.assessment_set_id
-        WHERE a.id = ${input.active_attempt_id}::uuid AND a.user_id = ${userId}::uuid AND a.status = 'IN_PROGRESS'
-          AND s.assessment_type = 'ACTIVE_DRILL' AND s.sub_module_id = ${subId}::uuid`);
+        WHERE a.id = ${input.active_attempt_id} AND a.user_id = ${userId} AND a.status = 'IN_PROGRESS'
+          AND s.assessment_type = 'ACTIVE_DRILL' AND s.sub_module_id = ${subId}`);
       if (r.rows.length > 0) attemptId = input.active_attempt_id;
     }
 
@@ -90,10 +91,10 @@ export async function getResumeCard(db: Db, userId: string): Promise<ResumeCard 
     let questionCount: number | null = null;
     let attemptId: string | null = null;
     if (row.activeTab === 'DRILL' && row.activeAttemptId) {
-      const r = await db.execute(sql`
-        SELECT jsonb_array_length(a.state -> 'order')::int AS n FROM attempts a JOIN assessment_sets s ON s.id = a.assessment_set_id
-        WHERE a.id = ${row.activeAttemptId}::uuid AND a.user_id = ${userId}::uuid AND a.status = 'IN_PROGRESS'
-          AND s.assessment_type = 'ACTIVE_DRILL' AND s.sub_module_id = ${saved.sub.id}::uuid`);
+      const r = await execute(db, sql`
+        SELECT json_array_length(json_extract(a.state, '$.order')) AS n FROM attempts a JOIN assessment_sets s ON s.id = a.assessment_set_id
+        WHERE a.id = ${row.activeAttemptId} AND a.user_id = ${userId} AND a.status = 'IN_PROGRESS'
+          AND s.assessment_type = 'ACTIVE_DRILL' AND s.sub_module_id = ${saved.sub.id}`);
       if (r.rows.length > 0) {
         attemptId = row.activeAttemptId;
         questionCount = Number((r.rows[0] as { n: number }).n);

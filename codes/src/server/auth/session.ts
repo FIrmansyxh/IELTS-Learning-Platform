@@ -6,7 +6,6 @@ import { config } from '../config';
 export const SESSION_MAX_AGE_SEC = 604_800; // 7 hari
 export const SESSION_UPDATE_AGE_SEC = 3_600;
 export const ABS_TTL_LEARNER_SEC = 2_592_000; // 30 hari
-export const ABS_TTL_ADMIN_SEC = 43_200; // 12 jam
 
 export interface SessionClaims {
   uid: string;
@@ -23,15 +22,15 @@ export function cookieName(): string {
 const nowSec = () => Math.floor(Date.now() / 1000);
 
 export async function issueSessionToken(
-  user: { id: string; role: 'learner' | 'admin'; tokenVersion: number },
+  user: { id: string; tokenVersion: number },
   opts: { absExp?: number; now?: number } = {},
 ): Promise<{ value: string; maxAge: number }> {
   const now = opts.now ?? nowSec();
-  const absExp = opts.absExp ?? now + (user.role === 'admin' ? ABS_TTL_ADMIN_SEC : ABS_TTL_LEARNER_SEC);
+  const absExp = opts.absExp ?? now + ABS_TTL_LEARNER_SEC;
   const maxAge = Math.max(1, Math.min(SESSION_MAX_AGE_SEC, absExp - now));
   const name = cookieName();
   const value = await encode({
-    token: { sub: user.id, uid: user.id, role: user.role, tv: user.tokenVersion, abs_exp: absExp, iat: now },
+    token: { sub: user.id, uid: user.id, role: 'learner', tv: user.tokenVersion, abs_exp: absExp, iat: now },
     secret: config.authSecret(),
     salt: name,
     maxAge,

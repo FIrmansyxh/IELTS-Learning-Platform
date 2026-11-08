@@ -38,11 +38,8 @@ export const PageMetaSchema = z.strictObject({
 
 export const UserDTO = z.strictObject({
   id: Uuid,
-  email: z.string(),
   display_name: z.string(),
-  role: z.enum(['learner', 'admin']),
   target_band: Band.nullable(),
-  must_change_password: z.boolean(),
   consent_recording_at: IsoDateTime.nullable(),
   keep_recordings: z.boolean(),
   placement_completed_at: IsoDateTime.nullable(),
@@ -51,7 +48,7 @@ export type UserDTOType = z.infer<typeof UserDTO>;
 
 export const JobDTO = z.strictObject({
   id: Uuid,
-  kind: z.enum(['GRADE_WRITING', 'GRADE_SPEAKING', 'STT_TRANSCRIBE', 'IMPORT_VALIDATE', 'IMPORT_PUBLISH']),
+  kind: z.enum(['GRADE_WRITING', 'GRADE_SPEAKING', 'STT_TRANSCRIBE']),
   status: z.enum(['QUEUED', 'RUNNING', 'SUCCEEDED', 'FAILED', 'CANCELLED']),
   stage: z.enum(['TRANSCRIBING', 'GRADING', 'SAVING']).nullable(),
   progress_percent: z.number().int().min(0).max(100),

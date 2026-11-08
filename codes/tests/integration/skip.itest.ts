@@ -4,7 +4,7 @@ import { assessmentSets } from '@/db/schema';
 import { AttemptResultResponseSchema } from '@/contracts/attempts';
 import { ExamIntroResponseSchema, SkipResultSchema } from '@/contracts/exams';
 import { setClockForTest } from '@/server/clock';
-import { closeDb, getDb } from '@/server/db';
+import { execute, closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { ensureProgressRows } from '@/server/gatekeeping/service';
 import { POST as startRoute } from '@/app/api/v1/attempts/route';
@@ -64,7 +64,7 @@ async function answerBy(u: L, dto: Dto, isRight: (n: number) => boolean) {
 }
 
 async function moduleSet(moduleCode: string, questions: unknown[], over: Partial<typeof assessmentSets.$inferInsert> = {}) {
-  const mod = (await db.execute(sql`SELECT id FROM modules WHERE module_code = ${moduleCode}`)).rows[0] as { id: string };
+  const mod = (await execute(db, sql`SELECT id FROM modules WHERE module_code = ${moduleCode}`)).rows[0] as { id: string };
   const [s] = await db
     .insert(assessmentSets)
     .values({
@@ -83,7 +83,7 @@ async function moduleSet(moduleCode: string, questions: unknown[], over: Partial
 }
 
 async function tierSet(tierNumber: number, questions: unknown[]) {
-  const t = (await db.execute(sql`SELECT id FROM tiers WHERE tier_number = ${tierNumber}`)).rows[0] as { id: string };
+  const t = (await execute(db, sql`SELECT id FROM tiers WHERE tier_number = ${tierNumber}`)).rows[0] as { id: string };
   const [s] = await db
     .insert(assessmentSets)
     .values({
@@ -102,28 +102,28 @@ async function tierSet(tierNumber: number, questions: unknown[]) {
 
 const subStatus = async (userId: string, code: string) =>
   (
-    await db.execute(sql`
+    await execute(db, sql`
       SELECT p.status, p.unlock_source FROM user_sub_module_progress p JOIN sub_modules s ON s.id = p.sub_module_id
-      WHERE p.user_id = ${userId}::uuid AND s.sub_module_code = ${code}`)
+      WHERE p.user_id = ${userId} AND s.sub_module_code = ${code}`)
   ).rows[0] as { status: string; unlock_source: string | null } | undefined;
 const modStatus = async (userId: string, code: string) =>
   (
-    await db.execute(sql`
-      SELECT p.status, p.unlock_source, p.skip_best_percent::float AS skip_best FROM user_module_progress p JOIN modules m ON m.id = p.module_id
-      WHERE p.user_id = ${userId}::uuid AND m.module_code = ${code}`)
+    await execute(db, sql`
+      SELECT p.status, p.unlock_source, p.skip_best_percent AS skip_best FROM user_module_progress p JOIN modules m ON m.id = p.module_id
+      WHERE p.user_id = ${userId} AND m.module_code = ${code}`)
   ).rows[0] as { status: string; unlock_source: string | null; skip_best: number | null } | undefined;
 const tierStatus = async (userId: string, n: number) =>
   (
-    await db.execute(sql`
+    await execute(db, sql`
       SELECT p.status, p.unlock_source FROM user_tier_progress p JOIN tiers t ON t.id = p.tier_id
-      WHERE p.user_id = ${userId}::uuid AND t.tier_number = ${n}`)
+      WHERE p.user_id = ${userId} AND t.tier_number = ${n}`)
   ).rows[0] as { status: string; unlock_source: string | null } | undefined;
 const auditCount = async (action: string, entityId: string) =>
-  Number((await db.execute(sql`SELECT count(*)::int AS n FROM audit_log WHERE action = ${action} AND entity_id = ${entityId}`)).rows[0]!.n);
-const attemptCount = async (userId: string) => Number((await db.execute(sql`SELECT count(*)::int AS n FROM attempts WHERE user_id = ${userId}::uuid`)).rows[0]!.n);
+  Number((await execute(db, sql`SELECT count(*) AS n FROM audit_log WHERE action = ${action} AND entity_id = ${entityId}`)).rows[0]!.n);
+const attemptCount = async (userId: string) => Number((await execute(db, sql`SELECT count(*) AS n FROM attempts WHERE user_id = ${userId}`)).rows[0]!.n);
 
 const setSetting = (key: string, value: number) =>
-  db.execute(sql`UPDATE app_settings SET value = ${JSON.stringify(value)}::jsonb WHERE key = ${key}`);
+  execute(db, sql`UPDATE app_settings SET value = ${JSON.stringify(value)} WHERE key = ${key}`);
 
 beforeEach(async () => {
   resetRateLimits();
@@ -175,7 +175,7 @@ describe('GET /exams/{id}/intro', () => {
     const set = await moduleSet('2.1', mcqs(3));
     const u = await learnerSession();
     await ensureProgressRows(db, u.user.id);
-    await db.execute(sql`UPDATE user_sub_module_progress SET status = 'IN_PROGRESS' WHERE user_id = ${u.user.id}::uuid AND sub_module_id = (SELECT id FROM sub_modules WHERE sub_module_code = '2.1.2')`);
+    await execute(db, sql`UPDATE user_sub_module_progress SET status = 'IN_PROGRESS' WHERE user_id = ${u.user.id} AND sub_module_id = (SELECT id FROM sub_modules WHERE sub_module_code = '2.1.2')`);
     const r = await intro(u, set.id);
     expect(r.status).toBe(200);
     expect(r.json.data).toMatchObject({ available: false, blocked_reason: 'SKIP_NOT_AVAILABLE' });
@@ -265,7 +265,7 @@ describe('POST /attempts (Skip)', () => {
     const set = await moduleSet('2.1', mcqs(3));
     const u = await learnerSession();
     await ensureProgressRows(db, u.user.id);
-    await db.execute(sql`UPDATE user_sub_module_progress SET status = 'IN_PROGRESS' WHERE user_id = ${u.user.id}::uuid AND sub_module_id = (SELECT id FROM sub_modules WHERE sub_module_code = '2.1.3')`);
+    await execute(db, sql`UPDATE user_sub_module_progress SET status = 'IN_PROGRESS' WHERE user_id = ${u.user.id} AND sub_module_id = (SELECT id FROM sub_modules WHERE sub_module_code = '2.1.3')`);
     const r = await start(u, set.id);
     expect(r.status).toBe(409);
     expect(r.json.error.code).toBe('SKIP_NOT_AVAILABLE');
@@ -300,9 +300,9 @@ describe('POST /attempts (Skip)', () => {
     const u = await learnerSession();
     const first = (await start(u, set.id)).json.data;
     // Seolah ada percobaan lain yang baru gagal (cooldown aktif) -> resume tetap diizinkan (D5 langkah 2).
-    await db.execute(sql`
+    await execute(db, sql`
       INSERT INTO attempts (user_id, assessment_set_id, assessment_version, mode, status, started_at, submitted_at, passed, state)
-      VALUES (${u.user.id}::uuid, ${set.id}::uuid, 1, 'EXAM', 'GRADED', ${new Date(clock - 5 * MIN)}, ${new Date(clock - MIN)}, false, '{}'::jsonb)`);
+      VALUES (${u.user.id}, ${set.id}, 1, 'EXAM', 'GRADED', ${new Date(clock - 5 * MIN)}, ${new Date(clock - MIN)}, false, '{}')`);
     const r = await start(u, set.id);
     expect(r.status).toBe(200);
     expect(r.json.data).toMatchObject({ id: first.id, resumed: true });
@@ -346,7 +346,7 @@ describe('submit: hasil lulus / gagal', () => {
     }
     expect(await modStatus(u.user.id, '2.1')).toMatchObject({ status: 'SKIPPED', unlock_source: 'SKIP_TEST', skip_best: 91.67 });
     expect((await subStatus(u.user.id, '2.2.1'))!.status).toBe('UNLOCKED');
-    expect(d.skip.unlocked.map((x: any) => x.label)).toContain((await db.execute(sql`SELECT title FROM sub_modules WHERE sub_module_code = '2.2.1'`)).rows[0]!.title);
+    expect(d.skip.unlocked.map((x: any) => x.label)).toContain((await execute(db, sql`SELECT title FROM sub_modules WHERE sub_module_code = '2.2.1'`)).rows[0]!.title);
     expect(await auditCount('SKIP_TEST_PASSED', dto.id)).toBe(1);
 
     // idempoten: submit ulang = hasil yang sama, tanpa efek ganda
@@ -408,8 +408,8 @@ describe('submit: hasil lulus / gagal', () => {
     const set = await moduleSet('2.1', mcqs(12));
     const u = await learnerSession();
     const dto = (await start(u, set.id)).json.data;
-    await db.execute(sql`INSERT INTO user_sub_module_progress (user_id, sub_module_id, status)
-      SELECT ${u.user.id}::uuid, id, 'IN_PROGRESS' FROM sub_modules WHERE sub_module_code = '2.1.1'
+    await execute(db, sql`INSERT INTO user_sub_module_progress (user_id, sub_module_id, status)
+      SELECT ${u.user.id}, id, 'IN_PROGRESS' FROM sub_modules WHERE sub_module_code = '2.1.1'
       ON CONFLICT (user_id, sub_module_id) DO UPDATE SET status = 'IN_PROGRESS'`);
     await answerBy(u, dto, () => true);
     const d = (await submit(u, dto.id)).json.data;
@@ -418,8 +418,8 @@ describe('submit: hasil lulus / gagal', () => {
     expect((await subStatus(u.user.id, '2.1.1'))!.status).toBe('IN_PROGRESS');
     for (const c of ['2.1.2', '2.1.3', '2.1.4']) expect((await subStatus(u.user.id, c))!.status).not.toBe('SKIPPED');
     expect((await modStatus(u.user.id, '2.1'))!.status).not.toBe('SKIPPED');
-    const a = await db.execute(sql`SELECT metadata FROM audit_log WHERE action = 'SKIP_TEST_PASSED' AND entity_id = ${dto.id}`);
-    expect((a.rows[0] as { metadata: Record<string, unknown> }).metadata.effect_skipped).toBe('not_eligible_at_finish');
+    const a = await execute(db, sql`SELECT metadata FROM audit_log WHERE action = 'SKIP_TEST_PASSED' AND entity_id = ${dto.id}`);
+    expect((JSON.parse((a.rows[0] as { metadata: string }).metadata) as Record<string, unknown>).effect_skipped).toBe('not_eligible_at_finish');
   });
 
   it('gagal: next_allowed_at = submit + 60 menit; attempts_remaining_today = 2; intro dan mulai ulang diblokir', async () => {
@@ -549,10 +549,10 @@ describe('kadaluarsa (D7)', () => {
     const r = await put(u, dto.id, q.question_id, wrongOf(q));
     expect(r.status).toBe(409);
     expect(r.json.error.code).toBe('ATTEMPT_EXPIRED');
-    const row = (await db.execute(sql`SELECT status, submitted_at, passed FROM attempts WHERE id = ${dto.id}::uuid`)).rows[0] as Dto;
+    const row = (await execute(db, sql`SELECT status, submitted_at, passed FROM attempts WHERE id = ${dto.id}`)).rows[0] as Dto;
     expect(row.status).toBe('EXPIRED');
     expect(new Date(row.submitted_at).toISOString()).toBe('2026-11-03T10:02:00.000Z');
-    expect(row.passed).toBe(true);
+    expect(row.passed).toBe(1);
     expect((await modStatus(u.user.id, '2.1'))!.status).toBe('SKIPPED');
     const res = await result(u, dto.id);
     expect(res.json.data.skip).toMatchObject({ passed: true, score_percent: 100 });
@@ -587,7 +587,7 @@ describe('kadaluarsa (D7)', () => {
     expect(r.status).toBe(409); // sudah lulus -> SKIP_NOT_AVAILABLE (modul SKIPPED), efek lama ter-commit
     expect(r.json.error.code).toBe('SKIP_NOT_AVAILABLE');
     expect((await modStatus(u.user.id, '2.1'))!.status).toBe('SKIPPED');
-    expect(((await db.execute(sql`SELECT status FROM attempts WHERE id = ${dto.id}::uuid`)).rows[0] as Dto).status).toBe('EXPIRED');
+    expect(((await execute(db, sql`SELECT status FROM attempts WHERE id = ${dto.id}`)).rows[0] as Dto).status).toBe('EXPIRED');
   });
 });
 
@@ -616,7 +616,7 @@ describe('Skip Tier', () => {
     const set = await tierSet(1, mcqs(3));
     const u = await learnerSession();
     await ensureProgressRows(db, u.user.id);
-    await db.execute(sql`UPDATE user_sub_module_progress SET status = 'IN_PROGRESS' WHERE user_id = ${u.user.id}::uuid AND sub_module_id = (SELECT id FROM sub_modules WHERE sub_module_code = '1.1.1')`);
+    await execute(db, sql`UPDATE user_sub_module_progress SET status = 'IN_PROGRESS' WHERE user_id = ${u.user.id} AND sub_module_id = (SELECT id FROM sub_modules WHERE sub_module_code = '1.1.1')`);
     const r = await start(u, set.id);
     expect(r.status).toBe(409);
     expect(r.json.error.code).toBe('SKIP_NOT_AVAILABLE');

@@ -374,10 +374,10 @@ Modal selalu diikuti oleh kata kerja bentuk dasar (*bare infinitive* / V1 tanpa 
 
   // 4. Hitung ulang progres untuk semua user (termasuk learner & admin)
   console.log('[seed-full-content] Menghitung ulang unlocking status (recomputeStatuses)...');
-  const allUsers = await db.select({ id: users.id, email: users.email }).from(users);
+  const allUsers = await db.select({ id: users.id, displayName: users.displayName }).from(users);
   for (const u of allUsers) {
     await recomputeStatuses(db, u.id);
-    console.log(`[seed-full-content] Status progres diperbarui untuk: ${u.email}`);
+    console.log(`[seed-full-content] Status progres diperbarui untuk: ${u.displayName}`);
   }
 
   console.log('[seed-full-content] SELESAI! Seluruh sub-modul Tier 1 aktif dan siap dipelajari.');

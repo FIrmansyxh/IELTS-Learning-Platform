@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { sql } from 'drizzle-orm';
 import { ResumeCardResponseSchema, UpdateLastLearnedResponseSchema } from '@/contracts/resume';
-import { closeDb, getDb } from '@/server/db';
+import { NOW, execute, closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { GET as getRoute, PUT as putRoute } from '@/app/api/v1/me/last-learned/route';
 import { POST as startRoute } from '@/app/api/v1/attempts/route';
@@ -24,7 +24,7 @@ type L = Awaited<ReturnType<typeof learnerSession>>;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const put = (u: L, body: unknown) => call(putRoute, 'PUT', '/api/v1/me/last-learned', { cookie: u.cookie, body });
 const get = (u: L) => call(getRoute, 'GET', '/api/v1/me/last-learned', { cookie: u.cookie });
-const row = async (u: L) => (await db.execute(sql`SELECT * FROM user_last_learned_state WHERE user_id = ${u.user.id}::uuid`)).rows[0] as any;
+const row = async (u: L) => (await execute(db, sql`SELECT * FROM user_last_learned_state WHERE user_id = ${u.user.id}`)).rows[0] as any;
 const VID = 'dQw4w9WgXcQ';
 
 describe('PUT /me/last-learned', () => {
@@ -121,7 +121,7 @@ describe('posisi DRILL', () => {
   it('attempt sudah GRADED: indeks diabaikan, Tab Latihan tanpa q dan attempt', async () => {
     const { id, u, att } = await drillSetup();
     await put(u, { sub_module_id: id, active_tab: 'DRILL', last_question_index: 3, active_attempt_id: att.id });
-    await db.execute(sql`UPDATE attempts SET status = 'GRADED' WHERE id = ${att.id}::uuid`);
+    await execute(db, sql`UPDATE attempts SET status = 'GRADED' WHERE id = ${att.id}`);
     const d = (await get(u)).json.data;
     expect(d).toMatchObject({ position_label: 'Tab Latihan', last_question_index: null, question_count: null });
     expect(d.resume_path).toBe('/belajar/1.1.1?tab=latihan');
@@ -152,7 +152,7 @@ describe('GET /me/last-learned fallback (D-RESUME)', () => {
     await seedMaterial('1.1.2');
     const u = await learnerSession();
     await put(u, { sub_module_id: id, active_tab: 'LEARN', active_learn_subtab: 'ARTICLE' });
-    await db.execute(sql`UPDATE user_sub_module_progress SET status = 'COMPLETED', completed_at = now() WHERE user_id = ${u.user.id}::uuid AND sub_module_id = ${id}::uuid`);
+    await execute(db, sql`UPDATE user_sub_module_progress SET status = 'COMPLETED', completed_at = ${NOW} WHERE user_id = ${u.user.id} AND sub_module_id = ${id}`);
     const d = (await get(u)).json.data;
     expect(d.state).toBe('FALLBACK_NEXT');
     expect(d.sub_module.sub_module_code).toBe('1.1.2');
@@ -163,7 +163,7 @@ describe('GET /me/last-learned fallback (D-RESUME)', () => {
     await seedMaterial('1.1.2');
     const u = await learnerSession();
     await put(u, { sub_module_id: id, active_tab: 'LEARN' });
-    await db.execute(sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE id = ${id}::uuid`);
+    await execute(db, sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE id = ${id}`);
     const r = await get(u);
     expect(r.status).toBe(200);
     expect(r.json.data.state).toBe('FALLBACK_NEXT');
@@ -174,7 +174,7 @@ describe('GET /me/last-learned fallback (D-RESUME)', () => {
     const u = await learnerSession();
     await markLearnDone(u.user.id, '1.1.1');
     expect((await get(u)).json.data.resume_path).toBe('/belajar/1.1.1?tab=latihan');
-    await db.execute(sql`UPDATE user_sub_module_progress SET status = 'COMPLETED', completed_at = now() WHERE user_id = ${u.user.id}::uuid AND sub_module_id = ${id}::uuid`);
+    await execute(db, sql`UPDATE user_sub_module_progress SET status = 'COMPLETED', completed_at = ${NOW} WHERE user_id = ${u.user.id} AND sub_module_id = ${id}`);
     expect((await get(u)).json).toEqual({ data: null });
   });
 

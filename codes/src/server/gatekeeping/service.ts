@@ -7,7 +7,7 @@ import { activeExamModule } from './exam-module';
 import { and, eq, sql } from 'drizzle-orm';
 import { userSubModuleProgress, users } from '@/db/schema';
 import { writeAudit } from '../audit';
-import type { DbOrTx, Tx } from '../db';
+import { execute, NOW, type DbOrTx, type Tx } from '../db';
 import { ApiError } from '../http/errors';
 import {
   chainOf,
@@ -43,27 +43,17 @@ const date = (v: unknown): Date | null => (v === null || v === undefined ? null 
 
 /** INSERT ... ON CONFLICT DO NOTHING untuk semua entitas non-ARCHIVED yang belum punya baris progres. */
 export async function ensureProgressRows(tx: DbOrTx, userId: string): Promise<void> {
-  await tx.execute(sql`
-    WITH t AS (
-      INSERT INTO user_tier_progress (user_id, tier_id) SELECT ${userId}::uuid, id FROM tiers ON CONFLICT DO NOTHING
-    ), m AS (
-      INSERT INTO user_module_progress (user_id, module_id) SELECT ${userId}::uuid, id FROM modules WHERE status <> 'ARCHIVED' ON CONFLICT DO NOTHING
-    )
-    INSERT INTO user_sub_module_progress (user_id, sub_module_id)
-    SELECT ${userId}::uuid, id FROM sub_modules WHERE status <> 'ARCHIVED' ON CONFLICT DO NOTHING
-  `);
+  await tx.run(sql`INSERT OR IGNORE INTO user_tier_progress (user_id, tier_id) SELECT ${userId}, id FROM tiers`);
+  await tx.run(sql`INSERT OR IGNORE INTO user_module_progress (user_id, module_id) SELECT ${userId}, id FROM modules WHERE status <> 'ARCHIVED'`);
+  await tx.run(sql`INSERT OR IGNORE INTO user_sub_module_progress (user_id, sub_module_id) SELECT ${userId}, id FROM sub_modules WHERE status <> 'ARCHIVED'`);
 }
 
-/** Kunci baris progres pengguna berurutan (tier, modul, sub-modul; tiap tabel urut id) agar tidak deadlock. */
-async function lockProgress(tx: DbOrTx, userId: string): Promise<void> {
-  await tx.execute(sql`SELECT 1 FROM user_tier_progress WHERE user_id = ${userId}::uuid ORDER BY tier_id FOR UPDATE`);
-  await tx.execute(sql`SELECT 1 FROM user_module_progress WHERE user_id = ${userId}::uuid ORDER BY module_id FOR UPDATE`);
-  await tx.execute(sql`SELECT 1 FROM user_sub_module_progress WHERE user_id = ${userId}::uuid ORDER BY sub_module_id FOR UPDATE`);
-}
+/** Transaksi diserialkan (BEGIN IMMEDIATE + mutex), jadi tidak ada kunci baris yang perlu diambil. */
+async function lockProgress(_tx: DbOrTx, _userId: string): Promise<void> {}
 
 /** Satu query: seluruh pohon + progres pengguna (baris datar). */
 export async function loadSnapshot(tx: DbOrTx, userId: string): Promise<Snapshot> {
-  const res = await tx.execute(sql`
+  const res = await execute(tx, sql`
     SELECT t.id AS tier_id, t.tier_number, t.title AS tier_title, t.cefr_level, t.target_band_min, t.target_band_max,
            t.boss_gate_type, t.boss_gate_value, t.skip_threshold_percent,
            utp.status AS tier_status, utp.unlock_source AS tier_src, utp.boss_best_percent, utp.boss_best_band,
@@ -78,14 +68,14 @@ export async function loadSnapshot(tx: DbOrTx, userId: string): Promise<Snapshot
            (SELECT a.pass_percent FROM assessment_sets a
               WHERE a.sub_module_id = s.id AND a.assessment_type = 'ACTIVE_DRILL' AND a.status = 'PUBLISHED'
               ORDER BY a.created_at, a.id LIMIT 1) AS drill_pass,
-           (lm.mini_task_json ->> 'task_type') IS NOT NULL AS has_mini
+           (json_extract(lm.mini_task_json, '$.task_type') IS NOT NULL) AS has_mini
     FROM tiers t
-    LEFT JOIN user_tier_progress utp ON utp.tier_id = t.id AND utp.user_id = ${userId}::uuid
+    LEFT JOIN user_tier_progress utp ON utp.tier_id = t.id AND utp.user_id = ${userId}
     LEFT JOIN modules m ON m.tier_id = t.id AND m.status <> 'ARCHIVED'
-    LEFT JOIN user_module_progress ump ON ump.module_id = m.id AND ump.user_id = ${userId}::uuid
+    LEFT JOIN user_module_progress ump ON ump.module_id = m.id AND ump.user_id = ${userId}
     LEFT JOIN sub_modules s ON s.module_id = m.id AND s.status <> 'ARCHIVED'
-      AND s.exam_module IN ('COMMON', ${activeExamModule()}::exam_module)
-    LEFT JOIN user_sub_module_progress usp ON usp.sub_module_id = s.id AND usp.user_id = ${userId}::uuid
+      AND s.exam_module IN ('COMMON', ${activeExamModule()})
+    LEFT JOIN user_sub_module_progress usp ON usp.sub_module_id = s.id AND usp.user_id = ${userId}
     LEFT JOIN learning_materials lm ON lm.sub_module_id = s.id
     ORDER BY t.tier_number, m.order_index, m.id, s.order_index, s.id
   `);
@@ -153,7 +143,7 @@ export async function loadSnapshot(tx: DbOrTx, userId: string): Promise<Snapshot
       order: Number(r.sub_order),
       review: r.sub_review as Review,
       drillPass: num(r.drill_pass),
-      hasMiniTask: r.has_mini === true,
+      hasMiniTask: Number(r.has_mini) === 1,
       status: (r.sub_status as Status | null) ?? 'LOCKED',
       unlockSource: (r.sub_src as UnlockSrc | null) ?? null,
       learnCompleted: r.learn_completed_at !== null && r.learn_completed_at !== undefined,
@@ -175,37 +165,42 @@ async function persist(tx: DbOrTx, userId: string, snap: Snapshot): Promise<void
   const mods: Row[] = [];
   const subs: Row[] = [];
   for (const e of snap.dirty) {
-    const base = { id: e.id, status: e.status, src: e.unlockSource, done: e.completedAt?.toISOString() ?? null };
+    const base = { id: e.id, status: e.status, src: e.unlockSource, done: e.completedAt?.getTime() ?? null };
     if (e.kind === 'TIER') {
       tiers.push({
         ...base,
         bp: e.bossBestPercent,
         bb: e.bossBestBand,
-        bpa: e.bossPassedAt?.toISOString() ?? null,
+        bpa: e.bossPassedAt?.getTime() ?? null,
       });
     } else if (e.kind === 'MODULE') mods.push({ ...base, sb: e.skipBest });
     else subs.push({ ...base, best: e.best, att: e.attempts });
   }
   if (tiers.length) {
-    await tx.execute(sql`
-      UPDATE user_tier_progress p SET status = v.status::progress_status, unlock_source = v.src::unlock_source,
-             completed_at = v.done, boss_best_percent = v.bp, boss_best_band = v.bb, boss_passed_at = v.bpa, updated_at = now()
-      FROM jsonb_to_recordset(${JSON.stringify(tiers)}::jsonb) AS v(id uuid, status text, src text, done timestamptz, bp numeric, bb numeric, bpa timestamptz)
-      WHERE p.user_id = ${userId}::uuid AND p.tier_id = v.id`);
+    await tx.run(sql`
+      UPDATE user_tier_progress AS p SET status = v.status, unlock_source = v.src,
+             completed_at = v.done, boss_best_percent = v.bp, boss_best_band = v.bb, boss_passed_at = v.bpa, updated_at = ${NOW}
+      FROM (SELECT json_extract(j.value, '$.id') AS id, json_extract(j.value, '$.status') AS status, json_extract(j.value, '$.src') AS src,
+                   json_extract(j.value, '$.done') AS done, json_extract(j.value, '$.bp') AS bp, json_extract(j.value, '$.bb') AS bb,
+                   json_extract(j.value, '$.bpa') AS bpa FROM json_each(${JSON.stringify(tiers)}) AS j) AS v
+      WHERE p.user_id = ${userId} AND p.tier_id = v.id`);
   }
   if (mods.length) {
-    await tx.execute(sql`
-      UPDATE user_module_progress p SET status = v.status::progress_status, unlock_source = v.src::unlock_source,
-             completed_at = v.done, skip_best_percent = v.sb, updated_at = now()
-      FROM jsonb_to_recordset(${JSON.stringify(mods)}::jsonb) AS v(id uuid, status text, src text, done timestamptz, sb numeric)
-      WHERE p.user_id = ${userId}::uuid AND p.module_id = v.id`);
+    await tx.run(sql`
+      UPDATE user_module_progress AS p SET status = v.status, unlock_source = v.src,
+             completed_at = v.done, skip_best_percent = v.sb, updated_at = ${NOW}
+      FROM (SELECT json_extract(j.value, '$.id') AS id, json_extract(j.value, '$.status') AS status, json_extract(j.value, '$.src') AS src,
+                   json_extract(j.value, '$.done') AS done, json_extract(j.value, '$.sb') AS sb FROM json_each(${JSON.stringify(mods)}) AS j) AS v
+      WHERE p.user_id = ${userId} AND p.module_id = v.id`);
   }
   if (subs.length) {
-    await tx.execute(sql`
-      UPDATE user_sub_module_progress p SET status = v.status::progress_status, unlock_source = v.src::unlock_source,
-             completed_at = v.done, best_score_percent = v.best, attempts_count = v.att, updated_at = now()
-      FROM jsonb_to_recordset(${JSON.stringify(subs)}::jsonb) AS v(id uuid, status text, src text, done timestamptz, best int, att int)
-      WHERE p.user_id = ${userId}::uuid AND p.sub_module_id = v.id`);
+    await tx.run(sql`
+      UPDATE user_sub_module_progress AS p SET status = v.status, unlock_source = v.src,
+             completed_at = v.done, best_score_percent = v.best, attempts_count = v.att, updated_at = ${NOW}
+      FROM (SELECT json_extract(j.value, '$.id') AS id, json_extract(j.value, '$.status') AS status, json_extract(j.value, '$.src') AS src,
+                   json_extract(j.value, '$.done') AS done, json_extract(j.value, '$.best') AS best, json_extract(j.value, '$.att') AS att
+            FROM json_each(${JSON.stringify(subs)}) AS j) AS v
+      WHERE p.user_id = ${userId} AND p.sub_module_id = v.id`);
   }
 }
 
@@ -260,8 +255,9 @@ export async function recomputeStatuses(tx: DbOrTx, userId: string): Promise<Sna
 }
 
 export async function markStarted(tx: DbOrTx, userId: string, subModuleId: string): Promise<void> {
-  const cur = await tx.execute(
-    sql`SELECT status FROM user_sub_module_progress WHERE user_id = ${userId}::uuid AND sub_module_id = ${subModuleId}::uuid`,
+  const cur = await execute(
+    tx,
+    sql`SELECT status FROM user_sub_module_progress WHERE user_id = ${userId} AND sub_module_id = ${subModuleId}`,
   );
   if ((cur.rows[0] as Row | undefined)?.status !== 'UNLOCKED') return;
   await mutate(tx, userId, (snap) => {
@@ -423,7 +419,7 @@ export async function applyPlacementResult(
       }
     }
   });
-  await tx.update(users).set({ placementCompletedAt: sql`coalesce(${users.placementCompletedAt}, now())` }).where(eq(users.id, userId));
+  await tx.update(users).set({ placementCompletedAt: sql`coalesce(${users.placementCompletedAt}, ${NOW})` }).where(eq(users.id, userId));
   return result;
 }
 
@@ -440,7 +436,7 @@ export async function adminOverride(
   input: OverrideInput,
   ipHash?: string,
 ): Promise<{ level: OverrideInput['level']; targetId: string; status: 'UNLOCKED'; unlockSource: 'ADMIN' }> {
-  const u = await tx.execute(sql`SELECT 1 FROM users WHERE id = ${userId}::uuid AND deleted_at IS NULL`);
+  const u = await execute(tx, sql`SELECT 1 FROM users WHERE id = ${userId} AND deleted_at IS NULL`);
   if (u.rows.length === 0) throw new ApiError('NOT_FOUND');
   await mutate(tx, userId, (snap) => {
     let target: Entity | undefined;
@@ -530,8 +526,8 @@ export async function getCrownCounts(
 ): Promise<{ gold: number; silver: number }> {
   const [crownCountRow] = await tx
     .select({
-      gold: sql<number>`count(*) filter (where mastery_crown = 'GOLD')::int`,
-      silver: sql<number>`count(*) filter (where mastery_crown = 'SILVER')::int`,
+      gold: sql<number>`count(*) filter (where mastery_crown = 'GOLD')`,
+      silver: sql<number>`count(*) filter (where mastery_crown = 'SILVER')`,
     })
     .from(userSubModuleProgress)
     .where(eq(userSubModuleProgress.userId, userId));

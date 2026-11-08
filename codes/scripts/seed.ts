@@ -1,8 +1,7 @@
 /** Seeder idempoten. Semua modul memakai ON CONFLICT DO NOTHING. Urutan = urutan array. */
 import './_env';
-import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { and, eq, sql } from 'drizzle-orm';
-import pg from 'pg';
+import { getDb, closeDb, type Tx } from '../src/server/db';
 import * as schema from '../src/db/schema';
 import { MODULE_SEEDS, SUB_MODULE_SEEDS, TIER_SEEDS } from '../src/server/content/curriculum-structure';
 import {
@@ -15,7 +14,6 @@ import {
   READING_GENERAL_SEED_ROWS,
 } from '../src/server/band/seed-data';
 
-type Tx = NodePgDatabase<typeof schema>;
 export interface SeedModule {
   name: string;
   run: (tx: Tx) => Promise<void>;
@@ -97,7 +95,7 @@ export const seedModules: SeedModule[] = [
     run: async (tx) => {
       await tx
         .insert(schema.appSettings)
-        .values({ key: 'system.worker_heartbeat_at', value: sql`'null'::jsonb`, description: 'Heartbeat worker (sistem)' })
+        .values({ key: 'system.worker_heartbeat_at', value: sql`'null'`, description: 'Penanda sistem (tersembunyi)' })
         .onConflictDoNothing();
     },
   },
@@ -186,22 +184,16 @@ export const seedModules: SeedModule[] = [
 ];
 
 async function main() {
-  const url = process.env.DATABASE_MIGRATOR_URL;
-  if (!url) {
-    console.error('Konfigurasi env tidak valid: DATABASE_MIGRATOR_URL');
-    process.exit(1);
-  }
-  const pool = new pg.Pool({ connectionString: url, max: 2 });
+  const db = getDb();
   try {
-    const db = drizzle(pool, { schema });
     await db.transaction(async (tx) => {
       for (const m of seedModules) {
-        await m.run(tx as unknown as Tx);
+        await m.run(tx);
         console.log(`[seed] modul ${m.name} selesai`);
       }
     });
   } finally {
-    await pool.end();
+    await closeDb();
   }
 }
 

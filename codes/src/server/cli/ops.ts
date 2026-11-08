@@ -4,7 +4,7 @@
  */
 import { sql } from 'drizzle-orm';
 import { writeAudit } from '../audit';
-import { getDb } from '../db';
+import { NOW, execute, getDb } from '../db';
 import { ApiError } from '../http/errors';
 import { createProfile, deleteProfile, listProfiles } from '../auth/profiles';
 import { updateProfile } from '../auth/service';
@@ -61,15 +61,15 @@ export async function resolveCurriculumCode(code: string): Promise<{ level: Unlo
   const c = code.trim();
   const db = getDb();
   if (/^[1-4]$/.test(c)) {
-    const r = await db.execute(sql`SELECT id, title FROM tiers WHERE tier_number = ${Number(c)}`);
+    const r = await execute(db, sql`SELECT id, title FROM tiers WHERE tier_number = ${Number(c)}`);
     const row = r.rows[0] as { id: string; title: string } | undefined;
     if (row) return { level: 'TIER', id: row.id, label: `Tier ${c}: ${row.title}` };
   } else if (/^[1-4]\.\d{1,2}$/.test(c)) {
-    const r = await db.execute(sql`SELECT id, title FROM modules WHERE module_code = ${c}`);
+    const r = await execute(db, sql`SELECT id, title FROM modules WHERE module_code = ${c}`);
     const row = r.rows[0] as { id: string; title: string } | undefined;
     if (row) return { level: 'MODULE', id: row.id, label: `Modul ${c}: ${row.title}` };
   } else if (/^[1-4]\.\d{1,2}\.\d{1,2}$/.test(c)) {
-    const r = await db.execute(sql`SELECT id, title FROM sub_modules WHERE sub_module_code = ${c}`);
+    const r = await execute(db, sql`SELECT id, title FROM sub_modules WHERE sub_module_code = ${c}`);
     const row = r.rows[0] as { id: string; title: string } | undefined;
     if (row) return { level: 'SUB_MODULE', id: row.id, label: `Sub-modul ${c}: ${row.title}` };
   } else {
@@ -112,12 +112,12 @@ export async function progressReset(ref: string, opts: { sub?: string; all?: boo
     const target = await resolveCurriculumCode(opts.sub);
     if (target.level !== 'SUB_MODULE') throw new CliError('--sub memerlukan kode sub-modul, mis. 3.3.3.');
     return db.transaction(async (tx) => {
-      const del = await tx.execute(sql`
-        DELETE FROM attempts WHERE user_id = ${profile.id}::uuid
-          AND assessment_set_id IN (SELECT id FROM assessment_sets WHERE sub_module_id = ${target.id}::uuid)
+      const del = await execute(tx, sql`
+        DELETE FROM attempts WHERE user_id = ${profile.id}
+          AND assessment_set_id IN (SELECT id FROM assessment_sets WHERE sub_module_id = ${target.id})
         RETURNING id`);
-      await tx.execute(sql`DELETE FROM user_last_learned_state WHERE user_id = ${profile.id}::uuid AND active_sub_module_id = ${target.id}::uuid`);
-      await tx.execute(sql`DELETE FROM user_sub_module_progress WHERE user_id = ${profile.id}::uuid AND sub_module_id = ${target.id}::uuid`);
+      await execute(tx, sql`DELETE FROM user_last_learned_state WHERE user_id = ${profile.id} AND active_sub_module_id = ${target.id}`);
+      await execute(tx, sql`DELETE FROM user_sub_module_progress WHERE user_id = ${profile.id} AND sub_module_id = ${target.id}`);
       await recomputeStatuses(tx, profile.id);
       await writeAudit(tx, { actorUserId: null, action: 'PROGRESS_RESET', entityType: 'user', entityId: profile.id, metadata: { scope: 'sub', code: opts.sub } });
       return { profile, scope: target.label, attemptsDeleted: del.rows.length };
@@ -125,14 +125,14 @@ export async function progressReset(ref: string, opts: { sub?: string; all?: boo
   }
 
   return db.transaction(async (tx) => {
-    await tx.execute(sql`DELETE FROM user_last_learned_state WHERE user_id = ${profile.id}::uuid`);
-    const del = await tx.execute(sql`DELETE FROM attempts WHERE user_id = ${profile.id}::uuid RETURNING id`);
-    await tx.execute(sql`DELETE FROM user_sub_module_progress WHERE user_id = ${profile.id}::uuid`);
-    await tx.execute(sql`DELETE FROM user_module_progress WHERE user_id = ${profile.id}::uuid`);
-    await tx.execute(sql`DELETE FROM user_tier_progress WHERE user_id = ${profile.id}::uuid`);
-    await tx.execute(sql`DELETE FROM user_skill_scores WHERE user_id = ${profile.id}::uuid`);
-    await tx.execute(sql`DELETE FROM user_band_predictions WHERE user_id = ${profile.id}::uuid`);
-    await tx.execute(sql`UPDATE users SET placement_completed_at = NULL, updated_at = now() WHERE id = ${profile.id}::uuid`);
+    await execute(tx, sql`DELETE FROM user_last_learned_state WHERE user_id = ${profile.id}`);
+    const del = await execute(tx, sql`DELETE FROM attempts WHERE user_id = ${profile.id} RETURNING id`);
+    await execute(tx, sql`DELETE FROM user_sub_module_progress WHERE user_id = ${profile.id}`);
+    await execute(tx, sql`DELETE FROM user_module_progress WHERE user_id = ${profile.id}`);
+    await execute(tx, sql`DELETE FROM user_tier_progress WHERE user_id = ${profile.id}`);
+    await execute(tx, sql`DELETE FROM user_skill_scores WHERE user_id = ${profile.id}`);
+    await execute(tx, sql`DELETE FROM user_band_predictions WHERE user_id = ${profile.id}`);
+    await execute(tx, sql`UPDATE users SET placement_completed_at = NULL, updated_at = ${NOW} WHERE id = ${profile.id}`);
     await ensureProgressRows(tx, profile.id);
     await recomputeStatuses(tx, profile.id);
     await writeAudit(tx, { actorUserId: null, action: 'PROGRESS_RESET', entityType: 'user', entityId: profile.id, metadata: { scope: 'all' } });
@@ -150,14 +150,14 @@ export async function pointsAdjust(ref: string, delta: number, reason: string) {
   return db.transaction(async (tx) => {
     await adminAdjustUserPoints(tx, { userId: profile.id, points: delta, note: reason.trim() });
     await writeAudit(tx, { actorUserId: null, action: 'POINTS_ADJUSTED', entityType: 'user', entityId: profile.id, metadata: { delta, reason: reason.trim() } });
-    const r = await tx.execute(sql`SELECT total_points FROM user_stats WHERE user_id = ${profile.id}::uuid`);
+    const r = await execute(tx, sql`SELECT total_points FROM user_stats WHERE user_id = ${profile.id}`);
     return { profile, total: Number((r.rows[0] as { total_points: number } | undefined)?.total_points ?? 0) };
   });
 }
 
 export async function pointsShow() {
-  const r = await getDb().execute(sql`
-    SELECT u.display_name, COALESCE(s.total_points, 0)::int AS total, COALESCE(s.daily_streak_days, 0)::int AS streak
+  const r = await execute(getDb(), sql`
+    SELECT u.display_name, COALESCE(s.total_points, 0) AS total, COALESCE(s.daily_streak_days, 0) AS streak
     FROM users u LEFT JOIN user_stats s ON s.user_id = u.id
     WHERE u.deleted_at IS NULL AND u.status = 'ACTIVE' ORDER BY u.created_at, u.id`);
   return (r.rows as Array<{ display_name: string; total: number; streak: number }>).map((x) => ({ name: x.display_name, total: Number(x.total), streak: Number(x.streak) }));

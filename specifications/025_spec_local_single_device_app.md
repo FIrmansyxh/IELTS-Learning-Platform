@@ -3,7 +3,7 @@
 ## Metadata
 - **Author:** Orchestrator (atas permintaan human, ADR-005)
 - **Created:** 2026-11-08
-- **Status:** approved (human, 2026-11-08); Fase 1-2 SELESAI, Fase 3-4 belum
+- **Status:** approved (human, 2026-11-08); Fase 1-3 SELESAI, Fase 4 belum
 - **Supersedes:** SPEC-001 (auth), SPEC-002 (admin) seluruhnya; SPEC-018/019/020 pada bagian UI admin
 - **Depends on:** SPEC-000, SPEC-003, SPEC-007
 - **Prioritas:** P1
@@ -80,6 +80,15 @@ Sebagai pemilik yang belajar di laptop sendiri, saya ingin membuka aplikasi tanp
 - `doctor` memeriksa Node, `.env`, binding loopback, DB, migrasi (butuh `DATABASE_MIGRATOR_URL`), seed, tabel band aktif, profil, folder aset, LLM; juga mencetak daftar kebutuhan internet.
 - Disengaja tetap ada sampai Fase 3: kolom `users.role/email/password_hash`, tabel `import_batches`, `import_batch_items`, `content_revisions` (tak terpakai), peran di JWT, UI perekam Speaking lama (pipeline STT dorman).
 - Catatan: `progress:reset --sub` tidak menurunkan status Modul/Tier yang sudah selesai (status monoton, SPEC-003).
+
+**Fase 3 (selesai 2026-11-08):**
+- Database: SQLite lewat `node:sqlite` (tanpa dependensi native) + Drizzle `sqlite-proxy` (`src/server/db.ts`). Satu koneksi sinkron; transaksi diserialkan mutex + `BEGIN IMMEDIATE`; transaksi bersarang memakai savepoint; kode di dalam transaksi yang memanggil `getDb()` ikut transaksi itu. WAL + `busy_timeout`, `foreign_keys=ON`. Berkas: `DATABASE_PATH` (bawaan `./data/ielts.db`).
+- Skema: lapisan kompatibilitas di `src/db/schema.ts` (uuid=TEXT dengan default SQL, timestamp=INTEGER ms dibaca sebagai `Date`, numeric=REAL dibaca string berskala tetap, jsonb/array=TEXT JSON, enum=TEXT bertipe sempit). Kolom login (`email`, `password_hash`, `role`, kunci akun) dan tabel impor dibuang. Migrasi lama Postgres diganti baseline `0000_baseline_sqlite` + `0001_publish_blockers_view` (view ditulis ulang dengan `json_each`); migrator sendiri `src/server/db-migrate.ts` (tabel `_migrations`).
+- Antrean: `src/server/jobs/queue.ts` dalam proses (FIFO, job AI satu per satu, ulang maks 3x, pemulihan job QUEUED/RUNNING saat start, purge harian). Proses worker, pg-boss, dan `pg_advisory_*` dihapus; `async_jobs` tetap menjadi jembatan status UI.
+- Dihapus: dependensi `pg`, `pg-boss`, `@types/pg`, `testcontainers`; `scripts/seed-learner.ts`; peran `app_rw/app_migrator` dan penegakan append-only `audit_log`/`point_ledger` di tingkat DB (tidak ada lagi pemisahan peran pada aplikasi satu perangkat).
+- Tes: tes integrasi memakai berkas SQLite sementara (`tests/integration/global-setup.ts`); ditambah `ai-queue.itest.ts` (Writing masuk antrean -> GRADED).
+- Verifikasi: `tsc` bersih, unit 640/640, integrasi 217/217, `next build` OK, Playwright 14/14 (desktop+mobile) terhadap SQLite. Perbandingan kinerja: pohon kurikulum p95 2,6 ms (batas tes 300 ms).
+- Belum (Fase 4): `npm run start:local`, pembersihan Docker/Compose/`scripts/dev-db.ps1`/`docker/`, dan impor data satu kali dari Postgres lama (tidak dibuat; data uji saja).
 
 ## Human Approval
 - [x] Disetujui human (2026-11-08, "Setujui, mulai Fase 1")

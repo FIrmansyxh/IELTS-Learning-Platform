@@ -2,7 +2,7 @@
 import { afterAll, afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { sql } from 'drizzle-orm';
 import { setClockForTest } from '@/server/clock';
-import { closeDb, getDb } from '@/server/db';
+import { execute, closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { POST as startRoute } from '@/app/api/v1/attempts/route';
 import { GET as getRoute } from '@/app/api/v1/attempts/[attempt_id]/route';
@@ -47,15 +47,15 @@ async function setup(n = 10) {
   return { u, set };
 }
 const spentOf = async (attemptId: string, qid: string) =>
-  Number(((await db.execute(sql`SELECT time_spent_ms FROM attempt_answers WHERE attempt_id = ${attemptId}::uuid AND question_id = ${qid}`)).rows[0] as any).time_spent_ms);
-const resumeAt = async (attemptId: string) => ((await db.execute(sql`SELECT state->>'last_resume_at' AS t FROM attempts WHERE id = ${attemptId}::uuid`)).rows[0] as any).t as string;
+  Number(((await execute(db, sql`SELECT time_spent_ms FROM attempt_answers WHERE attempt_id = ${attemptId} AND question_id = ${qid}`)).rows[0] as any).time_spent_ms);
+const resumeAt = async (attemptId: string) => ((await execute(db, sql`SELECT state->>'last_resume_at' AS t FROM attempts WHERE id = ${attemptId}`)).rows[0] as any).t as string;
 
 describe('F-06-01: seed pengacakan CSPRNG', () => {
   it('seed 128-bit tersimpan di attempts.state, bukan turunan id; tidak bocor ke klien', async () => {
     const { u, set } = await setup();
     const r = await start(u, set.id);
     const id: string = r.json.data.id;
-    const st = ((await db.execute(sql`SELECT state FROM attempts WHERE id = ${id}::uuid`)).rows[0] as any).state;
+    const st = JSON.parse(((await execute(db, sql`SELECT state FROM attempts WHERE id = ${id}`)).rows[0] as any).state);
     expect(st.rng_seed).toMatch(/^[0-9a-f]{32}$/);
     expect(st.rng_seed.startsWith(id.replace(/-/g, '').slice(0, 8))).toBe(false);
     expect(JSON.stringify(r.json)).not.toContain(st.rng_seed);
@@ -65,9 +65,9 @@ describe('F-06-01: seed pengacakan CSPRNG', () => {
   it('dua attempt pada set sama memakai seed berbeda', async () => {
     const { u, set } = await setup();
     const a = (await start(u, set.id)).json.data.id;
-    await db.execute(sql`UPDATE attempts SET status = 'ABANDONED' WHERE id = ${a}::uuid`);
+    await execute(db, sql`UPDATE attempts SET status = 'ABANDONED' WHERE id = ${a}`);
     const b = (await start(u, set.id)).json.data.id;
-    const seeds = (await db.execute(sql`SELECT state->>'rng_seed' AS s FROM attempts WHERE id IN (${a}::uuid, ${b}::uuid)`)).rows.map((r: any) => r.s);
+    const seeds = (await execute(db, sql`SELECT state->>'rng_seed' AS s FROM attempts WHERE id IN (${a}, ${b})`)).rows.map((r: any) => r.s);
     expect(new Set(seeds).size).toBe(2);
   });
 });
@@ -82,7 +82,7 @@ describe('F-06-02: GET /attempts/{id} bebas efek samping', () => {
       expect((await get(u, dto.id)).status).toBe(200);
     }
     expect(await resumeAt(dto.id)).toBe(base);
-    const updatedBefore = ((await db.execute(sql`SELECT updated_at FROM attempts WHERE id = ${dto.id}::uuid`)).rows[0] as any).updated_at;
+    const updatedBefore = ((await execute(db, sql`SELECT updated_at FROM attempts WHERE id = ${dto.id}`)).rows[0] as any).updated_at;
     expect(new Date(updatedBefore).getTime()).toBe(T0);
     clock = T0 + 40_000;
     const q = dto.questions[0];

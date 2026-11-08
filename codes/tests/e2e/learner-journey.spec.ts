@@ -18,7 +18,10 @@ test('buat profil lalu masuk ke beranda', async ({ page }) => {
 
 test('tata letak: tanpa overflow horizontal dan konten tidak tertutup sidebar', async ({ page, isMobile }) => {
   await page.goto('/pilih-profil');
-  await page.getByRole('button', { name: /masuk|pilih/i }).first().click();
+  // Satu profil: pemilih langsung masuk sendiri. Beberapa profil: pilih yang pertama.
+  const enter = page.getByRole('button', { name: /masuk|pilih/i }).first();
+  await Promise.race([page.waitForURL('/', { timeout: 8000 }).catch(() => undefined), enter.waitFor({ timeout: 8000 }).catch(() => undefined)]);
+  if (new URL(page.url()).pathname !== '/') await enter.click();
   await expect(page).toHaveURL('/');
   const m = await page.evaluate(() => ({
     sw: document.documentElement.scrollWidth,

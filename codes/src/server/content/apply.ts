@@ -39,7 +39,6 @@ export interface ApplyResult {
 
 export interface ApplyOptions {
   actorUserId: string | null;
-  importBatchId: string | null;
 }
 
 const bump = (r: ApplyResult, kind: EntityKind, action: PlanItem['action']) => {
@@ -49,16 +48,16 @@ const bump = (r: ApplyResult, kind: EntityKind, action: PlanItem['action']) => {
 export async function ensureRevision(tx: Tx, type: string, id: string, version: number, snapshot: unknown, o: ApplyOptions) {
   await tx
     .insert(contentRevisions)
-    .values({ entityType: type, entityId: id, version, snapshot: snapshot as object, changedBy: o.actorUserId, importBatchId: o.importBatchId })
+    .values({ entityType: type, entityId: id, version, snapshot: snapshot as object, changedBy: o.actorUserId })
     .onConflictDoNothing();
 }
 
 /** Revisi modul (modul tidak punya kolom versi): nomor = max+1; snapshot pra-perubahan ditulis bila belum ada revisi. */
 async function moduleRevision(tx: Tx, id: string, snap: unknown, o: ApplyOptions, force = false) {
-  const [r] = await tx.select({ v: sql<number>`coalesce(max(${contentRevisions.version}), 0)::int` }).from(contentRevisions).where(sql`${contentRevisions.entityType} = 'MODULE' AND ${contentRevisions.entityId} = ${id}::uuid`);
+  const [r] = await tx.select({ v: sql<number>`coalesce(max(${contentRevisions.version}), 0)` }).from(contentRevisions).where(sql`${contentRevisions.entityType} = 'MODULE' AND ${contentRevisions.entityId} = ${id}`);
   const n = Number(r?.v ?? 0);
   if (n > 0 && !force) return;
-  await tx.insert(contentRevisions).values({ entityType: 'MODULE', entityId: id, version: n + 1, snapshot: snap as object, changedBy: o.actorUserId, importBatchId: o.importBatchId }).onConflictDoNothing();
+  await tx.insert(contentRevisions).values({ entityType: 'MODULE', entityId: id, version: n + 1, snapshot: snap as object, changedBy: o.actorUserId }).onConflictDoNothing();
 }
 
 /**

@@ -1,4 +1,3 @@
-import pg from 'pg';
 import { eq, sql } from 'drizzle-orm';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { assessmentSets, auditLog, tiers, users } from '@/db/schema';
@@ -12,7 +11,7 @@ import {
   markStarted,
   recomputeStatuses,
 } from '@/server/gatekeeping/service';
-import { closeDb, getDb } from '@/server/db';
+import { NOW, execute, closeDb, getDb, getRaw } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { GET as treeGet } from '@/app/api/v1/curriculum/tree/route';
 import { call, learnerSession, makeUser } from './helpers';
@@ -23,16 +22,17 @@ afterAll(closeDb);
 type Tree = { tiers: any[] }; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 async function resetContent() {
-  await db.execute(sql`DELETE FROM assessment_sets`);
-  await db.execute(sql`UPDATE sub_modules SET status = 'DRAFT'`);
-  await db.execute(sql`UPDATE modules SET status = 'DRAFT'`);
-  await db.execute(sql`DELETE FROM learning_materials`);
+  await execute(db, sql`DELETE FROM assessment_sets`);
+  await execute(db, sql`UPDATE sub_modules SET status = 'DRAFT'`);
+  await execute(db, sql`UPDATE modules SET status = 'DRAFT'`);
+  await execute(db, sql`DELETE FROM learning_materials`);
 }
 /** Publikasikan sub-modul (dan modul induknya). */
 async function publish(...codes: string[]) {
   for (const c of codes) {
-    await db.execute(sql`UPDATE sub_modules SET status = 'PUBLISHED' WHERE sub_module_code = ${c}`);
-    await db.execute(
+    await execute(db, sql`UPDATE sub_modules SET status = 'PUBLISHED' WHERE sub_module_code = ${c}`);
+    await execute(
+      db,
       sql`UPDATE modules SET status = 'PUBLISHED' WHERE id = (SELECT module_id FROM sub_modules WHERE sub_module_code = ${c})`,
     );
   }
@@ -40,7 +40,7 @@ async function publish(...codes: string[]) {
 async function addSet(type: 'SKIP_MODULE_TEST' | 'SKIP_TIER_TEST' | 'TIER_BOSS_EXAM', scopeCode: string | number) {
   const base = { assessmentType: type, title: `Set ${type}`, timeLimitSeconds: 900, origin: 'ORIGINAL_AUTHORED' as const, status: 'PUBLISHED' as const, questionCount: 12 };
   if (type === 'SKIP_MODULE_TEST') {
-    const r = await db.execute(sql`SELECT id FROM modules WHERE module_code = ${scopeCode as string}`);
+    const r = await execute(db, sql`SELECT id FROM modules WHERE module_code = ${scopeCode as string}`);
     const [s] = await db.insert(assessmentSets).values({ ...base, moduleId: (r.rows[0] as { id: string }).id }).returning();
     return s!;
   }
@@ -61,14 +61,14 @@ const mod = (t: Tree, code: string) => t.tiers.flatMap((x) => x.modules).find((m
 const tier = (t: Tree, n: number) => t.tiers.find((x) => x.tier_number === n);
 const drill = (userId: string, code: string, score: number | string) =>
   db.transaction(async (tx) => {
-    const r = await tx.execute(sql`SELECT id FROM sub_modules WHERE sub_module_code = ${code}`);
+    const r = await execute(tx, sql`SELECT id FROM sub_modules WHERE sub_module_code = ${code}`);
     return applyDrillResult(tx, userId, { subModuleId: (r.rows[0] as { id: string }).id, scorePercent: score });
   });
-const subId = async (code: string) => ((await db.execute(sql`SELECT id FROM sub_modules WHERE sub_module_code = ${code}`)).rows[0] as { id: string }).id;
-const moduleId = async (code: string) => ((await db.execute(sql`SELECT id FROM modules WHERE module_code = ${code}`)).rows[0] as { id: string }).id;
+const subId = async (code: string) => ((await execute(db, sql`SELECT id FROM sub_modules WHERE sub_module_code = ${code}`)).rows[0] as { id: string }).id;
+const moduleId = async (code: string) => ((await execute(db, sql`SELECT id FROM modules WHERE module_code = ${code}`)).rows[0] as { id: string }).id;
 const tierId = async (n: number) => (await db.select().from(tiers).where(eq(tiers.tierNumber, n)))[0]!.id;
 const progressRow = async (userId: string, code: string) =>
-  (await db.execute(sql`SELECT p.* FROM user_sub_module_progress p JOIN sub_modules s ON s.id = p.sub_module_id WHERE p.user_id = ${userId}::uuid AND s.sub_module_code = ${code}`)).rows[0] as Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  (await execute(db, sql`SELECT p.* FROM user_sub_module_progress p JOIN sub_modules s ON s.id = p.sub_module_id WHERE p.user_id = ${userId} AND s.sub_module_code = ${code}`)).rows[0] as Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 beforeEach(async () => {
   resetRateLimits();
@@ -107,19 +107,19 @@ describe('pohon dan status awal', () => {
   it('sub-modul baru dipublikasikan setelah pengguna terdaftar: baris dibuat otomatis', async () => {
     const u = await newUser();
     await publish('1.1.1');
-    await db.execute(sql`DELETE FROM user_sub_module_progress WHERE user_id = ${u.id}::uuid`);
+    await execute(db, sql`DELETE FROM user_sub_module_progress WHERE user_id = ${u.id}`);
     const t = await getTree(u.id);
     expect(sub(t, '1.1.1').status).toBe('UNLOCKED');
-    expect((await db.execute(sql`SELECT count(*)::int AS n FROM user_sub_module_progress WHERE user_id = ${u.id}::uuid`)).rows[0]).toEqual({ n: 33 });
+    expect((await execute(db, sql`SELECT count(*) AS n FROM user_sub_module_progress WHERE user_id = ${u.id}`)).rows[0]).toEqual({ n: 33 });
   });
 
   it('mini_task_json {} -> has_mini_task=false; berisi task_type -> true; D7 persentase', async () => {
     await publish('1.1.1', '1.1.2');
-    await db.execute(sql`INSERT INTO learning_materials (sub_module_id, article_markdown, origin, mini_task_json) SELECT id, 'x', 'ORIGINAL_AUTHORED', '{}'::jsonb FROM sub_modules WHERE sub_module_code = '1.1.1'`);
-    await db.execute(sql`INSERT INTO learning_materials (sub_module_id, article_markdown, origin, mini_task_json) SELECT id, 'x', 'ORIGINAL_AUTHORED', '{"task_type":"SELF_CHECK","prompt":"p","ai_rubric_criteria":"c"}'::jsonb FROM sub_modules WHERE sub_module_code = '1.1.2'`);
+    await execute(db, sql`INSERT INTO learning_materials (sub_module_id, article_markdown, origin, mini_task_json) SELECT id, 'x', 'ORIGINAL_AUTHORED', '{}' FROM sub_modules WHERE sub_module_code = '1.1.1'`);
+    await execute(db, sql`INSERT INTO learning_materials (sub_module_id, article_markdown, origin, mini_task_json) SELECT id, 'x', 'ORIGINAL_AUTHORED', '{"task_type":"SELF_CHECK","prompt":"p","ai_rubric_criteria":"c"}' FROM sub_modules WHERE sub_module_code = '1.1.2'`);
     const u = await newUser();
     await db.transaction((tx) => recomputeStatuses(tx, u.id));
-    await db.execute(sql`UPDATE user_sub_module_progress SET learn_completed_at = now() WHERE user_id = ${u.id}::uuid`);
+    await execute(db, sql`UPDATE user_sub_module_progress SET learn_completed_at = ${NOW} WHERE user_id = ${u.id}`);
     const t = await getTree(u.id);
     expect(sub(t, '1.1.1')).toMatchObject({ has_mini_task: false, progress_percent: 50 });
     expect(sub(t, '1.1.2')).toMatchObject({ has_mini_task: true, progress_percent: 40 });
@@ -211,7 +211,7 @@ describe('applyDrillResult', () => {
     let t = await getTree(u.id);
     expect(sub(t, '1.1.1').status).toBe('COMPLETED');
     expect(mod(t, '1.1').status).toBe('COMPLETED'); // lengket (D5)
-    await db.execute(sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE sub_module_code = '1.1.1'`);
+    await execute(db, sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE sub_module_code = '1.1.1'`);
     t = await getTree(u.id);
     expect(sub(t, '1.1.1')).toBeUndefined();
     expect((await progressRow(u.id, '1.1.1')).status).toBe('COMPLETED');
@@ -228,7 +228,7 @@ describe('assertSubModuleAccessible dan markStarted', () => {
     await expect(run(await subId('2.1.1'))).rejects.toMatchObject({ code: 'LOCKED_CONTENT', details: [{ code: 'TIER_LOCKED' }] });
     await expect(run(await subId('1.1.3'))).rejects.toMatchObject({ code: 'NOT_FOUND', status: 404 });
     await expect(run('7a1b2c3d-0000-4000-8000-000000000000')).rejects.toMatchObject({ code: 'NOT_FOUND' });
-    await db.execute(sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE sub_module_code = '1.1.1'`);
+    await execute(db, sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE sub_module_code = '1.1.1'`);
     await expect(run(await subId('1.1.1'))).rejects.toMatchObject({ code: 'NOT_FOUND' });
   });
 
@@ -292,7 +292,7 @@ describe('Boss, Skip, Placement', () => {
     expect(sub(t, '2.1.2').status).toBe('SKIPPED');
     expect(sub(t, '2.2.1').status).toBe('UNLOCKED');
     expect((await progressRow(u.id, '2.1.1')).unlock_source).toBe('SKIP_TEST');
-    expect(Number((await db.execute(sql`SELECT skip_best_percent FROM user_module_progress WHERE user_id = ${u.id}::uuid AND module_id = ${mid}::uuid`)).rows[0]!.skip_best_percent)).toBe(90);
+    expect(Number((await execute(db, sql`SELECT skip_best_percent FROM user_module_progress WHERE user_id = ${u.id} AND module_id = ${mid}`)).rows[0]!.skip_best_percent)).toBe(90);
     const again = await db.transaction((tx) => applySkipResult(tx, u.id, { scope: 'MODULE', targetId: mid, scorePercent: 95, passed: true }));
     expect(again.unlocked).toEqual([]);
   });
@@ -305,7 +305,7 @@ describe('Boss, Skip, Placement', () => {
     const mid = await moduleId('2.1');
     await db.transaction((tx) => applySkipResult(tx, u.id, { scope: 'MODULE', targetId: mid, scorePercent: 60, passed: false }));
     expect((await progressRow(u.id, '2.1.1')).status).toBe('LOCKED');
-    expect(Number((await db.execute(sql`SELECT skip_best_percent FROM user_module_progress WHERE user_id = ${u.id}::uuid AND module_id = ${mid}::uuid`)).rows[0]!.skip_best_percent)).toBe(60);
+    expect(Number((await execute(db, sql`SELECT skip_best_percent FROM user_module_progress WHERE user_id = ${u.id} AND module_id = ${mid}`)).rows[0]!.skip_best_percent)).toBe(60);
 
     await publish('1.1.1');
     const v = await newUser();
@@ -403,16 +403,15 @@ describe('GET /curriculum/tree', () => {
   });
 
   it('kinerja: 4 Tier x 33 sub-modul, keadaan tunak <= 8 query SQL dan p95 < 300 ms', async () => {
-    await publish(...(await db.execute(sql`SELECT sub_module_code AS c FROM sub_modules`)).rows.map((r) => (r as { c: string }).c));
+    await publish(...(await execute(db, sql`SELECT sub_module_code AS c FROM sub_modules`)).rows.map((r) => (r as { c: string }).c));
     const l = await learnerSession();
     await call(treeGet, 'GET', '/api/v1/curriculum/tree', { cookie: l.cookie }); // hangatkan + buat progres
-    const original = pg.Client.prototype.query;
+    const raw = getRaw();
+    const original = raw.prepare.bind(raw);
     let queries = 0;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (pg.Client.prototype as any).query = function (this: unknown, ...args: unknown[]) {
+    (raw as { prepare: unknown }).prepare = (q: string) => {
       queries++;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (original as any).apply(this, args);
+      return original(q);
     };
     const times: number[] = [];
     let perCall = 0;
@@ -427,7 +426,7 @@ describe('GET /curriculum/tree', () => {
         perCall = queries - before;
       }
     } finally {
-      pg.Client.prototype.query = original;
+      (raw as { prepare: unknown }).prepare = original;
     }
     times.sort((a, b) => a - b);
     // Termasuk query autentikasi (requireUser) dan BEGIN/COMMIT transaksi.

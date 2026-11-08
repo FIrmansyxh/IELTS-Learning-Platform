@@ -181,7 +181,7 @@ export async function runImport(db: Db, o: ImportOptions): Promise<ImportOutcome
         }
         const plan = await planContentPackage(tx, pkg);
         if (plan.errors.length) throw new Abort({ exitCode: 1, lines: plan.errors.map(formatIssue) });
-        applied = await applyContentPlan(tx, plan, { actorUserId: o.actorUserId, importBatchId: null });
+        applied = await applyContentPlan(tx, plan, { actorUserId: o.actorUserId });
         const c = applied.counts;
         await writeAudit(tx, {
           actorUserId: o.actorUserId,

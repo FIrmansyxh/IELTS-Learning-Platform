@@ -7,7 +7,7 @@ import sharp from 'sharp';
 import { eq, sql } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { assessmentSets, auditLog, contentAssets, contentRevisions } from '@/db/schema';
-import { closeDb, getDb } from '@/server/db';
+import { execute, closeDb, getDb } from '@/server/db';
 import { runImport, validatePackage, contextFromDb } from '@/server/content/import-service';
 import { FsStorageDriver } from '@/server/storage';
 import { Q, placementQuestions } from '../fixtures/content/builders';
@@ -28,12 +28,12 @@ afterAll(async () => {
 });
 
 async function resetContent() {
-  await db.execute(sql`DELETE FROM assessment_sets`);
-  await db.execute(sql`DELETE FROM learning_materials`);
-  await db.execute(sql`DELETE FROM content_revisions`);
-  await db.execute(sql`DELETE FROM content_assets`);
-  await db.execute(sql`UPDATE sub_modules SET status = 'DRAFT', content_version = 1`);
-  await db.execute(sql`UPDATE modules SET status = 'DRAFT'`);
+  await execute(db, sql`DELETE FROM assessment_sets`);
+  await execute(db, sql`DELETE FROM learning_materials`);
+  await execute(db, sql`DELETE FROM content_revisions`);
+  await execute(db, sql`DELETE FROM content_assets`);
+  await execute(db, sql`UPDATE sub_modules SET status = 'DRAFT', content_version = 1`);
+  await execute(db, sql`UPDATE modules SET status = 'DRAFT'`);
 }
 beforeEach(resetContent);
 
@@ -102,8 +102,8 @@ async function makePackage(o: PackageOpts = {}) {
 
 const imp = (dir: string, opts: { publish?: boolean; dryRun?: boolean } = {}) =>
   runImport(db, { dir, publish: opts.publish ?? false, dryRun: opts.dryRun ?? false, actorUserId: null, storage });
-const count = async (table: string) => Number((await db.execute(sql.raw(`SELECT count(*)::int AS n FROM ${table}`))).rows[0]!.n);
-const statusOf = async (code: string) => ((await db.execute(sql`SELECT status FROM sub_modules WHERE sub_module_code = ${code}`)).rows[0] as { status: string }).status;
+const count = async (table: string) => Number((await execute(db, sql.raw(`SELECT count(*) AS n FROM ${table}`))).rows[0]!.n);
+const statusOf = async (code: string) => ((await execute(db, sql`SELECT status FROM sub_modules WHERE sub_module_code = ${code}`)).rows[0] as { status: string }).status;
 const filesInStorage = async () => {
   if (!existsSync(storageRoot)) return 0;
   let n = 0;
@@ -164,7 +164,8 @@ describe('content:import', () => {
     expect(await storage.exists(file.storageKey!)).toBe(true);
     const audio = assets.find((a) => a.assetCode === 'own/listening-1')!;
     expect(audio.durationSec).toBe(2);
-    const lm = (await db.execute(sql`SELECT slides_json, videos_json FROM learning_materials`)).rows[0] as { slides_json: Array<{ asset_id: string }>; videos_json: Array<{ asset_id: string }> };
+    const lmRaw = (await execute(db, sql`SELECT slides_json, videos_json FROM learning_materials`)).rows[0] as { slides_json: string; videos_json: string };
+    const lm = { slides_json: JSON.parse(lmRaw.slides_json) as Array<{ asset_id: string }>, videos_json: JSON.parse(lmRaw.videos_json) as Array<{ asset_id: string }> };
     expect(lm.slides_json[0]!.asset_id).toBe(file.id);
     expect(lm.videos_json[0]!.asset_id).toBe(video.id);
 
@@ -193,11 +194,11 @@ describe('content:import', () => {
   it('setelah aset terverifikasi: --publish sukses (exit 0) dan sub-modul/set/modul PUBLISHED; audit CONTENT_PUBLISHED', async () => {
     const dir = await makePackage({ withBoss: true });
     expect((await imp(dir)).exitCode).toBe(0);
-    await db.execute(sql`UPDATE content_assets SET rights_status = 'OWN_ORIGINAL' WHERE kind = 'VIDEO_EMBED'`);
+    await execute(db, sql`UPDATE content_assets SET rights_status = 'OWN_ORIGINAL' WHERE kind = 'VIDEO_EMBED'`);
     const r = await imp(dir, { publish: true });
     expect(r.exitCode, r.lines.join('\n')).toBe(0);
     expect(await statusOf('2.1.3')).toBe('PUBLISHED');
-    expect(((await db.execute(sql`SELECT status FROM modules WHERE module_code = '2.1'`)).rows[0] as { status: string }).status).toBe('PUBLISHED');
+    expect(((await execute(db, sql`SELECT status FROM modules WHERE module_code = '2.1'`)).rows[0] as { status: string }).status).toBe('PUBLISHED');
     const sets = await db.select().from(assessmentSets);
     expect(sets).toHaveLength(6);
     expect(sets.every((s) => s.status === 'PUBLISHED' && s.reviewedAt !== null && s.reviewedBy === null)).toBe(true);
@@ -236,8 +237,8 @@ describe('content:import', () => {
   });
 
   it('CHECK assessment_sets_scope_chk menolak ACTIVE_DRILL yang juga memiliki tier_id', async () => {
-    const tierRow = (await db.execute(sql`SELECT id FROM tiers WHERE tier_number = 1`)).rows[0] as { id: string };
-    const subRow = (await db.execute(sql`SELECT id FROM sub_modules LIMIT 1`)).rows[0] as { id: string };
+    const tierRow = (await execute(db, sql`SELECT id FROM tiers WHERE tier_number = 1`)).rows[0] as { id: string };
+    const subRow = (await execute(db, sql`SELECT id FROM sub_modules LIMIT 1`)).rows[0] as { id: string };
     await expect(
       db.insert(assessmentSets).values({ assessmentType: 'ACTIVE_DRILL', title: 'x', subModuleId: subRow.id, tierId: tierRow.id, timeLimitSeconds: 60, origin: 'ORIGINAL_AUTHORED' }),
     ).rejects.toThrow();

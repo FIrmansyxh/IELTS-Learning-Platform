@@ -16,6 +16,7 @@ import {
   type Snapshot,
   type TierNode,
 } from './rules';
+import { execute } from '@/server/db';
 
 interface PublishedSet {
   id: string;
@@ -27,7 +28,7 @@ interface PublishedSet {
 }
 
 async function loadSets(db: Parameters<Parameters<Db['transaction']>[0]>[0]): Promise<PublishedSet[]> {
-  const res = await db.execute(sql`
+  const res = await execute(db, sql`
     SELECT id, assessment_type, module_id, tier_id, time_limit_seconds, question_count
     FROM assessment_sets
     WHERE status = 'PUBLISHED' AND assessment_type IN ('SKIP_MODULE_TEST', 'SKIP_TIER_TEST', 'TIER_BOSS_EXAM')

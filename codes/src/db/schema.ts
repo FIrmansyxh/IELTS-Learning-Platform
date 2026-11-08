@@ -10,93 +10,118 @@
  */
 import { sql } from 'drizzle-orm';
 import {
-  pgTable, pgEnum, uuid, varchar, text, integer, smallint, numeric, boolean,
-  timestamp, jsonb, bigserial, index, uniqueIndex, primaryKey, check,
-  type AnyPgColumn,
-} from 'drizzle-orm/pg-core';
+  sqliteTable, text, integer, index, uniqueIndex, primaryKey, check, customType,
+  type AnySQLiteColumn,
+} from 'drizzle-orm/sqlite-core';
+import { randomUUID } from 'node:crypto';
 
-const id = () => uuid('id').primaryKey().defaultRandom();
-const createdAt = () => timestamp('created_at', { withTimezone: true }).notNull().defaultNow();
-const updatedAt = () => timestamp('updated_at', { withTimezone: true }).notNull().defaultNow();
-const ts = (name: string) => timestamp(name, { withTimezone: true });
+/*
+ * SPEC-025 Fase 3: SQLite (node:sqlite). Lapisan kompatibilitas agar kode lama tetap bekerja:
+ *  - uuid        -> TEXT (UUID v4 dibuat aplikasi)
+ *  - timestamptz -> INTEGER epoch ms, dibaca sebagai Date
+ *  - numeric     -> REAL, dibaca sebagai string berskala tetap ('75.00') seperti driver Postgres
+ *  - jsonb/array -> TEXT berisi JSON
+ *  - enum        -> TEXT dengan CHECK
+ */
+const NOW_MS = sql`(cast(unixepoch('subsec') * 1000 as integer))`;
+/** UUID v4 dibuat aplikasi; default SQL menjaga INSERT mentah (tanpa id) tetap sah. */
+const UUID_SQL = sql`(lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))), 2) || '-' || substr('89ab', abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))), 2) || '-' || lower(hex(randomblob(6))))`;
+const id = () => text('id').primaryKey().$defaultFn(() => randomUUID()).default(UUID_SQL);
+const uuid = (name: string) => text(name);
+const varchar = (name: string, _o?: { length: number }) => text(name);
+const smallint = (name: string) => integer(name);
+const boolean = (name: string) => integer(name, { mode: 'boolean' });
+const ts = (name: string) => integer(name, { mode: 'timestamp_ms' });
+const tsNow = (name: string) => ts(name).notNull().default(NOW_MS);
+const createdAt = () => tsNow('created_at');
+const updatedAt = () => tsNow('updated_at');
+
+const numeric = (name: string, o: { scale: number }) =>
+  customType<{ data: string; driverData: number }>({
+    dataType: () => 'real',
+    toDriver: (v) => Number(v),
+    fromDriver: (v) => Number(v).toFixed(o.scale),
+  })(name);
+const jsonb = (name: string) =>
+  customType<{ data: unknown; driverData: string }>({
+    dataType: () => 'text',
+    toDriver: (v) => JSON.stringify(v),
+    fromDriver: (v) => (typeof v === 'string' ? JSON.parse(v) : v),
+  })(name);
+const textArray = (name: string) =>
+  customType<{ data: string[]; driverData: string }>({
+    dataType: () => 'text',
+    toDriver: (v) => JSON.stringify(v),
+    fromDriver: (v) => (typeof v === 'string' ? (JSON.parse(v) as string[]) : v),
+  })(name);
+/** Kolom enum: TEXT bertipe sempit (tanpa CHECK di DB). Mengembalikan fungsi bernama seperti pgEnum agar kode pemanggil tak berubah. */
+const enumOf = <const V extends readonly [string, ...string[]]>(values: V) => {
+  const f = (name: string) => text(name, { enum: values });
+  f.enumValues = values;
+  return f;
+};
 /** Band IELTS: 0.0-9.0 kelipatan 0.5 */
-const band = (name: string) => numeric(name, { precision: 2, scale: 1 });
-const bandCheck = (n: string, col: AnyPgColumn) =>
-  check(n, sql`${col} IS NULL OR (${col} >= 0 AND ${col} <= 9 AND (${col} * 2) = floor(${col} * 2))`);
+const band = (name: string) => numeric(name, { scale: 1 });
+const bandCheck = (n: string, col: AnySQLiteColumn) =>
+  check(n, sql`${col} IS NULL OR (${col} >= 0 AND ${col} <= 9 AND (${col} * 2) = cast(${col} * 2 as integer))`);
 
 // ───────────────────────────── ENUMS ─────────────────────────────
-export const userRole = pgEnum('user_role', ['learner', 'admin']);
-export const userStatus = pgEnum('user_status', ['ACTIVE', 'DISABLED']);
-export const skillCategory = pgEnum('skill_category', ['GRAMMAR', 'VOCAB', 'LISTENING', 'READING', 'WRITING', 'SPEAKING']);
-export const gateType = pgEnum('gate_type', ['PERCENT', 'BAND']);
-export const progressStatus = pgEnum('progress_status', ['LOCKED', 'UNLOCKED', 'IN_PROGRESS', 'COMPLETED', 'SKIPPED']);
-export const unlockSource = pgEnum('unlock_source', ['DEFAULT', 'SEQUENTIAL', 'SKIP_TEST', 'PLACEMENT', 'BOSS_PASS', 'ADMIN']);
-export const crown = pgEnum('mastery_crown', ['NONE', 'SILVER', 'GOLD']);
-export const activeTab = pgEnum('active_tab', ['LEARN', 'DRILL', 'MINI_TASK']);
-export const learnSubtab = pgEnum('learn_subtab', ['ARTICLE', 'VIDEO', 'SLIDES']);
-export const assessmentType = pgEnum('assessment_type', [
+export const userStatus = enumOf(['ACTIVE', 'DISABLED'] as const);
+export const skillCategory = enumOf(['GRAMMAR', 'VOCAB', 'LISTENING', 'READING', 'WRITING', 'SPEAKING'] as const);
+export const gateType = enumOf(['PERCENT', 'BAND'] as const);
+export const progressStatus = enumOf(['LOCKED', 'UNLOCKED', 'IN_PROGRESS', 'COMPLETED', 'SKIPPED'] as const);
+export const unlockSource = enumOf(['DEFAULT', 'SEQUENTIAL', 'SKIP_TEST', 'PLACEMENT', 'BOSS_PASS', 'ADMIN'] as const);
+export const crown = enumOf(['NONE', 'SILVER', 'GOLD'] as const);
+export const activeTab = enumOf(['LEARN', 'DRILL', 'MINI_TASK'] as const);
+export const learnSubtab = enumOf(['ARTICLE', 'VIDEO', 'SLIDES'] as const);
+export const assessmentType = enumOf([
   'ACTIVE_DRILL', 'SKIP_MODULE_TEST', 'SKIP_TIER_TEST', 'TIER_BOSS_EXAM', 'PLACEMENT_TEST', 'BOSS_SECTION',
-]);
-export const reviewStatus = pgEnum('review_status', ['DRAFT', 'IN_REVIEW', 'APPROVED', 'PUBLISHED', 'ARCHIVED']);
+] as const);
+export const reviewStatus = enumOf(['DRAFT', 'IN_REVIEW', 'APPROVED', 'PUBLISHED', 'ARCHIVED'] as const);
 /** Sengaja TIDAK ada nilai 'COPYRIGHTED_COPY': materi berhak cipta tidak boleh disalin ke DB. */
-export const contentOrigin = pgEnum('content_origin', ['ORIGINAL_AUTHORED', 'AI_GENERATED_REVIEWED', 'OPEN_LICENSED_ADAPTED']);
-export const licenseType = pgEnum('license_type', [
+export const contentOrigin = enumOf(['ORIGINAL_AUTHORED', 'AI_GENERATED_REVIEWED', 'OPEN_LICENSED_ADAPTED'] as const);
+export const licenseType = enumOf([
   'OWN', 'CC0', 'CC_BY', 'CC_BY_SA', 'CC_BY_NC', 'MIT', 'EMBED_TOS', 'LINK_ONLY_COPYRIGHTED', 'OTHER',
-]);
-export const rightsStatus = pgEnum('rights_status', ['UNVERIFIED', 'VERIFIED_OPEN', 'OWN_ORIGINAL', 'EMBED_ONLY', 'LINK_ONLY']);
-export const assetKind = pgEnum('asset_kind', ['SLIDE_IMAGE', 'DOCUMENT', 'AUDIO_LISTENING', 'VIDEO_EMBED', 'IMAGE', 'REFERENCE_LINK']);
-export const storageBackend = pgEnum('storage_backend', ['FILESYSTEM', 'MINIO', 'EXTERNAL']);
-export const attemptMode = pgEnum('attempt_mode', ['PRACTICE', 'EXAM']);
-export const attemptStatus = pgEnum('attempt_status', ['IN_PROGRESS', 'SUBMITTED', 'AWAITING_GRADING', 'GRADED', 'EXPIRED', 'ABANDONED']);
-export const submissionKind = pgEnum('submission_kind', [
+] as const);
+export const rightsStatus = enumOf(['UNVERIFIED', 'VERIFIED_OPEN', 'OWN_ORIGINAL', 'EMBED_ONLY', 'LINK_ONLY'] as const);
+export const assetKind = enumOf(['SLIDE_IMAGE', 'DOCUMENT', 'AUDIO_LISTENING', 'VIDEO_EMBED', 'IMAGE', 'REFERENCE_LINK'] as const);
+export const storageBackend = enumOf(['FILESYSTEM', 'MINIO', 'EXTERNAL'] as const);
+export const attemptMode = enumOf(['PRACTICE', 'EXAM'] as const);
+export const attemptStatus = enumOf(['IN_PROGRESS', 'SUBMITTED', 'AWAITING_GRADING', 'GRADED', 'EXPIRED', 'ABANDONED'] as const);
+export const submissionKind = enumOf([
   'WRITING_TASK1', 'WRITING_TASK2', 'MINI_TASK_WRITING', 'SPEAKING_PART1', 'SPEAKING_PART2', 'SPEAKING_PART3', 'MINI_TASK_SPEAKING',
-]);
-export const submissionStatus = pgEnum('submission_status', ['RECEIVED', 'TRANSCRIBING', 'GRADING', 'GRADED', 'FALLBACK_SELF_ASSESSMENT', 'FAILED']);
-export const asyncJobKind = pgEnum('async_job_kind', ['STT_TRANSCRIBE', 'GRADE_WRITING', 'GRADE_SPEAKING', 'IMPORT_VALIDATE', 'IMPORT_PUBLISH', 'RETENTION_PURGE']);
-export const asyncJobStatus = pgEnum('async_job_status', ['QUEUED', 'RUNNING', 'SUCCEEDED', 'FAILED', 'CANCELLED']);
-export const examModule = pgEnum('exam_module', ['COMMON', 'GENERAL_TRAINING', 'ACADEMIC']);
-export const evalMethod = pgEnum('eval_method', ['AI_LOCAL', 'SELF_ASSESSMENT', 'EXTERNAL_AI']);
-export const importFormat = pgEnum('import_format', ['JSON', 'CSV']);
-export const importStatus = pgEnum('import_status', [
-  'UPLOADED', 'VALIDATING', 'PREVIEW_READY', 'PUBLISHING', 'PUBLISHED', 'FAILED', 'CANCELLED', 'ROLLED_BACK',
-]);
-export const importItemStatus = pgEnum('import_item_status', ['VALID', 'INVALID', 'APPLIED', 'SKIPPED']);
-export const importAction = pgEnum('import_action', ['CREATE', 'UPDATE', 'NOOP']);
-export const bandTableSkill = pgEnum('band_table_skill', ['LISTENING', 'READING_ACADEMIC', 'READING_GENERAL']);
-export const pointSource = pgEnum('point_source', ['DRILL', 'SPEED_STREAK', 'CROWN', 'MINI_TASK', 'BOSS', 'DAILY', 'ADJUSTMENT']);
+] as const);
+export const submissionStatus = enumOf(['RECEIVED', 'TRANSCRIBING', 'GRADING', 'GRADED', 'FALLBACK_SELF_ASSESSMENT', 'FAILED'] as const);
+export const asyncJobKind = enumOf(['STT_TRANSCRIBE', 'GRADE_WRITING', 'GRADE_SPEAKING', 'RETENTION_PURGE'] as const);
+export const asyncJobStatus = enumOf(['QUEUED', 'RUNNING', 'SUCCEEDED', 'FAILED', 'CANCELLED'] as const);
+export const examModule = enumOf(['COMMON', 'GENERAL_TRAINING', 'ACADEMIC'] as const);
+export const evalMethod = enumOf(['AI_LOCAL', 'SELF_ASSESSMENT', 'EXTERNAL_AI'] as const);
+export const bandTableSkill = enumOf(['LISTENING', 'READING_ACADEMIC', 'READING_GENERAL'] as const);
+export const pointSource = enumOf(['DRILL', 'SPEED_STREAK', 'CROWN', 'MINI_TASK', 'BOSS', 'DAILY', 'ADJUSTMENT'] as const);
 
 // ───────────────────────────── AUTH ─────────────────────────────
 // Auth.js Credentials => strategi JWT (httpOnly cookie), jadi tabel sessions/accounts TIDAK dibuat.
 // Bila OAuth/adapter ditambahkan kelak: tambah accounts, sessions, verification_tokens lewat ADR.
-export const users = pgTable('users', {
+export const users = sqliteTable('users', {
   id: id(),
-  email: varchar('email', { length: 254 }).notNull(),            // PII
   displayName: varchar('display_name', { length: 80 }).notNull(), // PII ringan
-  passwordHash: text('password_hash').notNull(),                  // SPEC-025: tak terpakai ('!'); dibuang saat migrasi SQLite (Fase 3)
-  role: userRole('role').notNull().default('learner'),
   status: userStatus('status').notNull().default('ACTIVE'),
   targetBand: band('target_band'),
   placementCompletedAt: ts('placement_completed_at'),
-  failedLoginCount: smallint('failed_login_count').notNull().default(0),
-  lockedUntil: ts('locked_until'),
   lastLoginAt: ts('last_login_at'),
-  // SPEC-001 (migrasi spec_001_auth_security)
   tokenVersion: integer('token_version').notNull().default(0),
-  mustChangePassword: boolean('must_change_password').notNull().default(false),
-  lastFailedLoginAt: ts('last_failed_login_at'),
   consentRecordingAt: ts('consent_recording_at'),               // dipakai SPEC-013
   keepRecordings: boolean('keep_recordings').notNull().default(true), // dipakai SPEC-013
   createdAt: createdAt(),
   updatedAt: updatedAt(),
   deletedAt: ts('deleted_at'),                                    // soft delete -> anonymize
 }, (t) => [
-  uniqueIndex('users_email_lower_uq').on(sql`lower(${t.email})`),
   // SPEC-025: nama profil unik (tanpa memedulikan huruf besar/kecil) di antara profil yang belum dihapus.
   uniqueIndex('users_display_name_lower_uq').on(sql`lower(${t.displayName})`).where(sql`${t.deletedAt} IS NULL`),
   bandCheck('users_target_band_chk', t.targetBand),
 ]);
 
-export const contentSources = pgTable('content_sources', {
+export const contentSources = sqliteTable('content_sources', {
   id: id(),
   code: varchar('code', { length: 40 }).notNull().unique(),       // 'NGSL', 'TATOEBA', 'OWN', 'YOUTUBE', 'CAMBRIDGE_REF'
   name: varchar('name', { length: 150 }).notNull(),
@@ -115,7 +140,7 @@ export const contentSources = pgTable('content_sources', {
     sql`NOT (${t.licenseType} IN ('LINK_ONLY_COPYRIGHTED','EMBED_TOS') AND ${t.mayStoreCopy})`),
 ]);
 
-export const contentAssets = pgTable('content_assets', {
+export const contentAssets = sqliteTable('content_assets', {
   id: id(),
   assetCode: varchar('asset_code', { length: 80 }),               // SPEC-004 (spec_004_content_foundation)
   kind: assetKind('kind').notNull(),
@@ -149,7 +174,7 @@ export const contentAssets = pgTable('content_assets', {
 ]);
 
 // ───────────────────────────── KURIKULUM ─────────────────────────────
-export const tiers = pgTable('tiers', {
+export const tiers = sqliteTable('tiers', {
   id: id(),
   tierNumber: smallint('tier_number').notNull().unique(),
   title: varchar('title', { length: 100 }).notNull(),
@@ -158,7 +183,7 @@ export const tiers = pgTable('tiers', {
   targetBandMax: band('target_band_max').notNull(),
   // pengganti required_boss_score ambigu di PRD
   bossGateType: gateType('boss_gate_type').notNull(),
-  bossGateValue: numeric('boss_gate_value', { precision: 4, scale: 1 }).notNull(), // PERCENT: 80.0 | BAND: 5.0
+  bossGateValue: numeric('boss_gate_value', { scale: 1 }).notNull(), // PERCENT: 80.0 | BAND: 5.0
   skipThresholdPercent: smallint('skip_threshold_percent').notNull().default(85),
   skipTimeLimitSeconds: integer('skip_time_limit_seconds'),
   createdAt: createdAt(),
@@ -168,7 +193,7 @@ export const tiers = pgTable('tiers', {
   bandCheck('tiers_band_max_chk', t.targetBandMax),
 ]);
 
-export const modules = pgTable('modules', {
+export const modules = sqliteTable('modules', {
   id: id(),
   tierId: uuid('tier_id').notNull().references(() => tiers.id, { onDelete: 'restrict' }),
   moduleCode: varchar('module_code', { length: 20 }).notNull().unique(), // '2.1'
@@ -182,7 +207,7 @@ export const modules = pgTable('modules', {
   uniqueIndex('modules_tier_order_uq').on(t.tierId, t.orderIndex),
 ]);
 
-export const subModules = pgTable('sub_modules', {
+export const subModules = sqliteTable('sub_modules', {
   id: id(),
   moduleId: uuid('module_id').notNull().references(() => modules.id, { onDelete: 'restrict' }),
   subModuleCode: varchar('sub_module_code', { length: 20 }).notNull().unique(), // '2.1.3'
@@ -200,15 +225,15 @@ export const subModules = pgTable('sub_modules', {
   check('sub_modules_pass_chk', sql`${t.passingScorePercent} BETWEEN 1 AND 100`),
 ]);
 
-export const learningMaterials = pgTable('learning_materials', {
+export const learningMaterials = sqliteTable('learning_materials', {
   id: id(),
   subModuleId: uuid('sub_module_id').notNull().unique().references(() => subModules.id, { onDelete: 'cascade' }),
   articleMarkdown: text('article_markdown').notNull(),
   // elemen JSONB menyimpan asset_id (uuid -> content_assets) + metadata tampilan, BUKAN url mentah
-  videosJson: jsonb('videos_json').notNull().default(sql`'[]'::jsonb`),       // [{asset_id,start_sec,end_sec,language,title}]
-  slidesJson: jsonb('slides_json').notNull().default(sql`'[]'::jsonb`),       // [{asset_id,order,caption}]
-  attachmentsJson: jsonb('attachments_json').notNull().default(sql`'[]'::jsonb`), // [{asset_id,title,file_type}]
-  miniTaskJson: jsonb('mini_task_json').notNull().default(sql`'{}'::jsonb`),  // {task_type,prompt,ai_rubric_criteria}
+  videosJson: jsonb('videos_json').notNull().default(sql`'[]'`),       // [{asset_id,start_sec,end_sec,language,title}]
+  slidesJson: jsonb('slides_json').notNull().default(sql`'[]'`),       // [{asset_id,order,caption}]
+  attachmentsJson: jsonb('attachments_json').notNull().default(sql`'[]'`), // [{asset_id,title,file_type}]
+  miniTaskJson: jsonb('mini_task_json').notNull().default(sql`'{}'`),  // {task_type,prompt,ai_rubric_criteria}
   origin: contentOrigin('origin').notNull(),
   sourceId: uuid('source_id').references(() => contentSources.id, { onDelete: 'restrict' }),
   attributionText: text('attribution_text'),
@@ -217,7 +242,7 @@ export const learningMaterials = pgTable('learning_materials', {
   updatedAt: updatedAt(),
 });
 
-export const assessmentSets = pgTable('assessment_sets', {
+export const assessmentSets = sqliteTable('assessment_sets', {
   id: id(),
   assessmentType: assessmentType('assessment_type').notNull(),
   title: varchar('title', { length: 200 }).notNull(),
@@ -225,12 +250,12 @@ export const assessmentSets = pgTable('assessment_sets', {
   subModuleId: uuid('sub_module_id').references(() => subModules.id, { onDelete: 'cascade' }),
   moduleId: uuid('module_id').references(() => modules.id, { onDelete: 'cascade' }),
   tierId: uuid('tier_id').references(() => tiers.id, { onDelete: 'cascade' }),
-  parentSetId: uuid('parent_set_id').references((): AnyPgColumn => assessmentSets.id, { onDelete: 'cascade' }), // Boss: induk -> section
+  parentSetId: uuid('parent_set_id').references((): AnySQLiteColumn => assessmentSets.id, { onDelete: 'cascade' }), // Boss: induk -> section
   skillCategory: skillCategory('skill_category'),                   // untuk BOSS_SECTION / skor radar
   timeLimitSeconds: integer('time_limit_seconds').notNull(),
   readingPassageMarkdown: text('reading_passage_markdown'),
   listeningAssetId: uuid('listening_asset_id').references(() => contentAssets.id, { onDelete: 'restrict' }),
-  questionsJson: jsonb('questions_json').notNull().default(sql`'[]'::jsonb`), // kontrak v1.1 (lihat data-model.md 3.x)
+  questionsJson: jsonb('questions_json').notNull().default(sql`'[]'`), // kontrak v1.1 (lihat data-model.md 3.x)
   questionCount: smallint('question_count').notNull().default(0),
   passPercent: smallint('pass_percent'),                            // override; null => ikut sub_modules/tiers
   origin: contentOrigin('origin').notNull(),
@@ -257,29 +282,29 @@ export const assessmentSets = pgTable('assessment_sets', {
 ]);
 
 // ───────────────────────────── PROGRES & RESUME ─────────────────────────────
-export const userTierProgress = pgTable('user_tier_progress', {
+export const userTierProgress = sqliteTable('user_tier_progress', {
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   tierId: uuid('tier_id').notNull().references(() => tiers.id, { onDelete: 'cascade' }),
   status: progressStatus('status').notNull().default('LOCKED'),
   unlockSource: unlockSource('unlock_source'),
-  bossBestPercent: numeric('boss_best_percent', { precision: 5, scale: 2 }),
+  bossBestPercent: numeric('boss_best_percent', { scale: 2 }),
   bossBestBand: band('boss_best_band'),
   bossPassedAt: ts('boss_passed_at'),
   completedAt: ts('completed_at'),
   updatedAt: updatedAt(),
 }, (t) => [primaryKey({ columns: [t.userId, t.tierId] })]);
 
-export const userModuleProgress = pgTable('user_module_progress', {
+export const userModuleProgress = sqliteTable('user_module_progress', {
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   moduleId: uuid('module_id').notNull().references(() => modules.id, { onDelete: 'cascade' }),
   status: progressStatus('status').notNull().default('LOCKED'),
   unlockSource: unlockSource('unlock_source'),
-  skipBestPercent: numeric('skip_best_percent', { precision: 5, scale: 2 }),
+  skipBestPercent: numeric('skip_best_percent', { scale: 2 }),
   completedAt: ts('completed_at'),
   updatedAt: updatedAt(),
 }, (t) => [primaryKey({ columns: [t.userId, t.moduleId] })]);
 
-export const userSubModuleProgress = pgTable('user_sub_module_progress', {
+export const userSubModuleProgress = sqliteTable('user_sub_module_progress', {
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   subModuleId: uuid('sub_module_id').notNull().references(() => subModules.id, { onDelete: 'cascade' }),
   status: progressStatus('status').notNull().default('LOCKED'),
@@ -288,7 +313,7 @@ export const userSubModuleProgress = pgTable('user_sub_module_progress', {
   miniTaskCompletedAt: ts('mini_task_completed_at'),
   // SPEC-005 (spec_005_learn_evidence): bukti belajar; ditulis hanya oleh PlayerService.
   learnActiveSeconds: integer('learn_active_seconds').notNull().default(0),
-  learnVisitedSubtabs: text('learn_visited_subtabs').array().notNull().default(sql`'{}'::text[]`),
+  learnVisitedSubtabs: textArray('learn_visited_subtabs').notNull().default(sql`'[]'`),
   learnLastPingAt: ts('learn_last_ping_at'),
   masteryCrown: crown('mastery_crown').notNull().default('NONE'),
   bestScorePercent: smallint('best_score_percent').notNull().default(0),
@@ -300,7 +325,7 @@ export const userSubModuleProgress = pgTable('user_sub_module_progress', {
   index('usmp_user_status_idx').on(t.userId, t.status),
 ]);
 
-export const userLastLearnedState = pgTable('user_last_learned_state', {
+export const userLastLearnedState = sqliteTable('user_last_learned_state', {
   userId: uuid('user_id').primaryKey().references(() => users.id, { onDelete: 'cascade' }),
   activeTierId: uuid('active_tier_id').references(() => tiers.id, { onDelete: 'set null' }),
   activeModuleId: uuid('active_module_id').references(() => modules.id, { onDelete: 'set null' }),
@@ -310,12 +335,12 @@ export const userLastLearnedState = pgTable('user_last_learned_state', {
   activeVideoId: varchar('active_video_id', { length: 64 }),
   videoProgressSec: integer('video_progress_sec').notNull().default(0),
   lastQuestionIndex: smallint('last_question_index'),
-  activeAttemptId: uuid('active_attempt_id'), // FK ke attempts ditambahkan di migrasi (hindari impor melingkar)
+  activeAttemptId: uuid('active_attempt_id').references((): AnySQLiteColumn => attempts.id, { onDelete: 'set null' }),
   updatedAt: updatedAt(),
 });
 
 // ───────────────────────────── KONVERSI BAND (data yang dapat diubah) ─────────────────────────────
-export const bandConversionTables = pgTable('band_conversion_tables', {
+export const bandConversionTables = sqliteTable('band_conversion_tables', {
   id: id(),
   skill: bandTableSkill('skill').notNull(),
   versionLabel: varchar('version_label', { length: 60 }).notNull(),
@@ -330,7 +355,7 @@ export const bandConversionTables = pgTable('band_conversion_tables', {
   uniqueIndex('band_tables_one_active_uq').on(t.skill).where(sql`${t.isActive}`),
 ]);
 
-export const bandConversionRows = pgTable('band_conversion_rows', {
+export const bandConversionRows = sqliteTable('band_conversion_rows', {
   tableId: uuid('table_id').notNull().references(() => bandConversionTables.id, { onDelete: 'cascade' }),
   rawMin: smallint('raw_min').notNull(),
   rawMax: smallint('raw_max').notNull(),
@@ -342,45 +367,45 @@ export const bandConversionRows = pgTable('band_conversion_rows', {
 ]);
 
 // ───────────────────────────── ATTEMPT & JAWABAN ─────────────────────────────
-export const attempts = pgTable('attempts', {
+export const attempts = sqliteTable('attempts', {
   id: id(),
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   assessmentSetId: uuid('assessment_set_id').notNull().references(() => assessmentSets.id, { onDelete: 'restrict' }),
   assessmentVersion: integer('assessment_version').notNull(),   // snapshot versi soal saat mulai
   mode: attemptMode('mode').notNull().default('PRACTICE'),
   status: attemptStatus('status').notNull().default('IN_PROGRESS'),
-  startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+  startedAt: tsNow('started_at'),
   deadlineAt: ts('deadline_at'),                                // timer otoritatif di server
   submittedAt: ts('submitted_at'),
-  rawScore: numeric('raw_score', { precision: 6, scale: 2 }),
-  maxScore: numeric('max_score', { precision: 6, scale: 2 }),
-  scorePercent: numeric('score_percent', { precision: 5, scale: 2 }),
+  rawScore: numeric('raw_score', { scale: 2 }),
+  maxScore: numeric('max_score', { scale: 2 }),
+  scorePercent: numeric('score_percent', { scale: 2 }),
   bandScore: band('band_score'),
   bandTableId: uuid('band_table_id').references(() => bandConversionTables.id, { onDelete: 'restrict' }),
   passed: boolean('passed'),
   pointsAwarded: integer('points_awarded').notNull().default(0),
-  state: jsonb('state').notNull().default(sql`'{}'::jsonb`),    // soal terlayani (placement adaptif), urutan acak, index terakhir
+  state: jsonb('state').notNull().default(sql`'{}'`),    // soal terlayani (placement adaptif), urutan acak, index terakhir
   resultJson: jsonb('result_json'),                             // placement: tier hasil; boss: ringkasan per skill
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 }, (t) => [
-  index('attempts_user_started_idx').on(t.userId, t.startedAt.desc()),
+  index('attempts_user_started_idx').on(t.userId, sql`${t.startedAt} desc`),
   index('attempts_user_set_idx').on(t.userId, t.assessmentSetId),
   uniqueIndex('attempts_one_active_uq').on(t.userId, t.assessmentSetId).where(sql`${t.status} = 'IN_PROGRESS'`),
   bandCheck('attempts_band_chk', t.bandScore),
 ]);
 
-export const attemptSections = pgTable('attempt_sections', {
+export const attemptSections = sqliteTable('attempt_sections', {
   attemptId: uuid('attempt_id').notNull().references(() => attempts.id, { onDelete: 'cascade' }),
   assessmentSetId: uuid('assessment_set_id').notNull().references(() => assessmentSets.id, { onDelete: 'restrict' }),
   skill: skillCategory('skill').notNull(),
-  rawScore: numeric('raw_score', { precision: 6, scale: 2 }),
-  maxScore: numeric('max_score', { precision: 6, scale: 2 }),
+  rawScore: numeric('raw_score', { scale: 2 }),
+  maxScore: numeric('max_score', { scale: 2 }),
   bandScore: band('band_score'),
   status: attemptStatus('status').notNull().default('IN_PROGRESS'),
 }, (t) => [primaryKey({ columns: [t.attemptId, t.assessmentSetId] })]);
 
-export const attemptAnswers = pgTable('attempt_answers', {
+export const attemptAnswers = sqliteTable('attempt_answers', {
   id: id(),
   attemptId: uuid('attempt_id').notNull().references(() => attempts.id, { onDelete: 'cascade' }),
   assessmentSetId: uuid('assessment_set_id').notNull().references(() => assessmentSets.id, { onDelete: 'restrict' }),
@@ -389,18 +414,18 @@ export const attemptAnswers = pgTable('attempt_answers', {
   skill: skillCategory('skill'),
   response: jsonb('response'),                                  // jawaban user (string | string[] | map)
   isCorrect: boolean('is_correct'),                             // null utk soal yang dinilai AI
-  score: numeric('score', { precision: 5, scale: 2 }).notNull().default('0'),
+  score: numeric('score', { scale: 2 }).notNull().default('0'),
   timeSpentMs: integer('time_spent_ms'),
   withinTargetTime: boolean('within_target_time'),
   speedStreakLen: smallint('speed_streak_len').notNull().default(0),
-  answeredAt: timestamp('answered_at', { withTimezone: true }).notNull().defaultNow(),
+  answeredAt: tsNow('answered_at'),
 }, (t) => [
   uniqueIndex('attempt_answers_uq').on(t.attemptId, t.questionId),   // idempoten: jawab ulang = UPSERT
   index('attempt_answers_set_q_idx').on(t.assessmentSetId, t.questionId, t.isCorrect),
 ]);
 
 // ───────────────────────────── PENILAIAN AI (Writing & Speaking) ─────────────────────────────
-export const gradingRubrics = pgTable('grading_rubrics', {
+export const gradingRubrics = sqliteTable('grading_rubrics', {
   id: id(),
   skill: skillCategory('skill').notNull(),                       // WRITING | SPEAKING
   versionLabel: varchar('version_label', { length: 60 }).notNull(),
@@ -413,7 +438,7 @@ export const gradingRubrics = pgTable('grading_rubrics', {
   uniqueIndex('rubrics_one_active_uq').on(t.skill).where(sql`${t.isActive}`),
 ]);
 
-export const submissions = pgTable('submissions', {
+export const submissions = sqliteTable('submissions', {
   id: id(),
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   kind: submissionKind('kind').notNull(),
@@ -428,11 +453,11 @@ export const submissions = pgTable('submissions', {
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 }, (t) => [
-  index('submissions_user_created_idx').on(t.userId, t.createdAt.desc()),
+  index('submissions_user_created_idx').on(t.userId, sql`${t.createdAt} desc`),
   index('submissions_attempt_idx').on(t.attemptId),
 ]);
 
-export const speakingRecordings = pgTable('speaking_recordings', {
+export const speakingRecordings = sqliteTable('speaking_recordings', {
   id: id(),
   submissionId: uuid('submission_id').notNull().references(() => submissions.id, { onDelete: 'cascade' }),
   storageBackend: storageBackend('storage_backend').notNull().default('FILESYSTEM'),
@@ -444,7 +469,7 @@ export const speakingRecordings = pgTable('speaking_recordings', {
   transcript: text('transcript'),
   transcriptSegments: jsonb('transcript_segments'),             // [{start_ms,end_ms,text,confidence}]
   sttEngine: varchar('stt_engine', { length: 60 }),             // 'whisper.cpp small-q5'
-  sttConfidence: numeric('stt_confidence', { precision: 4, scale: 3 }),
+  sttConfidence: numeric('stt_confidence', { scale: 3 }),
   retentionExpiresAt: ts('retention_expires_at'),
   purgedAt: ts('purged_at'),
   createdAt: createdAt(),
@@ -453,7 +478,7 @@ export const speakingRecordings = pgTable('speaking_recordings', {
   index('recordings_retention_idx').on(t.retentionExpiresAt).where(sql`${t.purgedAt} IS NULL`),
 ]);
 
-export const aiEvaluations = pgTable('ai_evaluations', {
+export const aiEvaluations = sqliteTable('ai_evaluations', {
   id: id(),
   submissionId: uuid('submission_id').notNull().references(() => submissions.id, { onDelete: 'cascade' }),
   runNumber: smallint('run_number').notNull().default(1),       // regrade => run berikutnya; UI memakai terbaru
@@ -475,15 +500,13 @@ export const aiEvaluations = pgTable('ai_evaluations', {
   bandCheck('ai_eval_band_chk', t.overallBand),
 ]);
 
-// ───────────────────────────── ANTREAN (pg-boss) ─────────────────────────────
-// pg-boss membuat/mengelola skema `pgboss` sendiri. Tabel ini hanya "jembatan" untuk UI polling.
-export const asyncJobs = pgTable('async_jobs', {
+// ───────────────────────────── ANTREAN (dalam proses) ─────────────────────────────
+// Antrean berjalan di dalam proses server; tabel ini menjadi "jembatan" status untuk UI polling.
+export const asyncJobs = sqliteTable('async_jobs', {
   id: id(),
   kind: asyncJobKind('kind').notNull(),
-  bossJobId: uuid('boss_job_id'),                               // id job di pgboss.job (tanpa FK lintas skema)
   userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
   submissionId: uuid('submission_id').references(() => submissions.id, { onDelete: 'cascade' }),
-  importBatchId: uuid('import_batch_id'),
   status: asyncJobStatus('status').notNull().default('QUEUED'),
   stage: varchar('stage', { length: 40 }),                      // 'TRANSCRIBING' | 'GRADING' | 'SAVING'
   progressPercent: smallint('progress_percent').notNull().default(0),
@@ -499,7 +522,7 @@ export const asyncJobs = pgTable('async_jobs', {
 ]);
 
 // ───────────────────────────── GAMIFIKASI & ANALITIK ─────────────────────────────
-export const userStats = pgTable('user_stats', {
+export const userStats = sqliteTable('user_stats', {
   userId: uuid('user_id').primaryKey().references(() => users.id, { onDelete: 'cascade' }),
   totalPoints: integer('total_points').notNull().default(0),
   dailyStreakDays: integer('daily_streak_days').notNull().default(0),
@@ -511,8 +534,8 @@ export const userStats = pgTable('user_stats', {
   updatedAt: updatedAt(),
 });
 
-export const pointLedger = pgTable('point_ledger', {           // append-only
-  id: bigserial('id', { mode: 'number' }).primaryKey(),
+export const pointLedger = sqliteTable('point_ledger', {           // append-only
+  id: integer('id').primaryKey({ autoIncrement: true }),
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   source: pointSource('source').notNull(),
   sourceId: uuid('source_id'),                                  // attempt_id / sub_module_id dll
@@ -520,22 +543,22 @@ export const pointLedger = pgTable('point_ledger', {           // append-only
   note: varchar('note', { length: 200 }),
   createdAt: createdAt(),
 }, (t) => [
-  index('point_ledger_user_idx').on(t.userId, t.createdAt.desc()),
+  index('point_ledger_user_idx').on(t.userId, sql`${t.createdAt} desc`),
   uniqueIndex('point_ledger_once_uq')
     .on(t.userId, t.source, t.sourceId)
     .where(sql`${t.source} IN ('DRILL','SPEED_STREAK','CROWN','MINI_TASK','BOSS')`),
 ]);
 
-export const userSkillScores = pgTable('user_skill_scores', {   // sumber radar 6 sumbu
+export const userSkillScores = sqliteTable('user_skill_scores', {   // sumber radar 6 sumbu
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   skill: skillCategory('skill').notNull(),
-  scorePercent: numeric('score_percent', { precision: 5, scale: 2 }).notNull(),
+  scorePercent: numeric('score_percent', { scale: 2 }).notNull(),
   estimatedBand: band('estimated_band'),
   sampleSize: integer('sample_size').notNull().default(0),
   updatedAt: updatedAt(),
 }, (t) => [primaryKey({ columns: [t.userId, t.skill] })]);
 
-export const userBandPredictions = pgTable('user_band_predictions', { // riwayat; bukti metrik +0.5..+1.0/Tier
+export const userBandPredictions = sqliteTable('user_band_predictions', { // riwayat; bukti metrik +0.5..+1.0/Tier
   id: id(),
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   overallBand: band('overall_band').notNull(),
@@ -543,63 +566,21 @@ export const userBandPredictions = pgTable('user_band_predictions', { // riwayat
   trigger: varchar('trigger', { length: 30 }).notNull(),        // 'BOSS' | 'PLACEMENT' | 'RECALC'
   attemptId: uuid('attempt_id').references(() => attempts.id, { onDelete: 'set null' }),
   createdAt: createdAt(),
-}, (t) => [index('band_pred_user_idx').on(t.userId, t.createdAt.desc())]);
+}, (t) => [index('band_pred_user_idx').on(t.userId, sql`${t.createdAt} desc`)]);
 
-// ───────────────────────────── ADMIN: IMPOR, REVISI, AUDIT, PENGATURAN ─────────────────────────────
-export const importBatches = pgTable('import_batches', {
-  id: id(),
-  adminUserId: uuid('admin_user_id').notNull().references(() => users.id, { onDelete: 'restrict' }),
-  format: importFormat('format').notNull(),
-  contractVersion: varchar('contract_version', { length: 10 }).notNull(), // '1.1'
-  fileName: varchar('file_name', { length: 255 }).notNull(),
-  fileSha256: varchar('file_sha256', { length: 64 }).notNull(),
-  storageKey: text('storage_key'),                              // file asli (diretensi singkat)
-  status: importStatus('status').notNull().default('UPLOADED'),
-  totalItems: integer('total_items').notNull().default(0),
-  validItems: integer('valid_items').notNull().default(0),
-  invalidItems: integer('invalid_items').notNull().default(0),
-  createdCount: integer('created_count').notNull().default(0),
-  updatedCount: integer('updated_count').notNull().default(0),
-  skippedCount: integer('skipped_count').notNull().default(0),
-  summary: jsonb('summary'),
-  createdAt: createdAt(),
-  validatedAt: ts('validated_at'),
-  publishedAt: ts('published_at'),
-}, (t) => [
-  index('import_batches_status_idx').on(t.status, t.createdAt.desc()),
-  uniqueIndex('import_batches_file_uq').on(t.fileSha256).where(sql`${t.status} IN ('PREVIEW_READY','PUBLISHING','PUBLISHED')`),
-]);
-
-export const importBatchItems = pgTable('import_batch_items', {
-  id: id(),
-  batchId: uuid('batch_id').notNull().references(() => importBatches.id, { onDelete: 'cascade' }),
-  rowNumber: integer('row_number').notNull(),
-  entityKind: varchar('entity_kind', { length: 30 }).notNull(), // 'SUB_MODULE' | 'ASSESSMENT_SET' | 'ASSET' | ...
-  entityCode: varchar('entity_code', { length: 160 }),          // sub_module_code / kunci set / '<set_type>:<scope>:<question_id>' (SPEC-019)
-  status: importItemStatus('status').notNull(),
-  action: importAction('action'),
-  errors: jsonb('errors'),                                      // [{path,code,message}]
-  payload: jsonb('payload').notNull(),
-  contentHash: varchar('content_hash', { length: 64 }),
-  appliedEntityId: uuid('applied_entity_id'),
-}, (t) => [
-  uniqueIndex('import_items_batch_row_uq').on(t.batchId, t.rowNumber),
-  index('import_items_batch_status_idx').on(t.batchId, t.status),
-]);
-
-export const contentRevisions = pgTable('content_revisions', {
+// ───────────────────────────── REVISI KONTEN, AUDIT, PENGATURAN ─────────────────────────────
+export const contentRevisions = sqliteTable('content_revisions', {
   id: id(),
   entityType: varchar('entity_type', { length: 30 }).notNull(), // 'SUB_MODULE' | 'LEARNING_MATERIAL' | 'ASSESSMENT_SET'
   entityId: uuid('entity_id').notNull(),
   version: integer('version').notNull(),
   snapshot: jsonb('snapshot').notNull(),
   changedBy: uuid('changed_by').references(() => users.id, { onDelete: 'set null' }),
-  importBatchId: uuid('import_batch_id').references(() => importBatches.id, { onDelete: 'set null' }),
   createdAt: createdAt(),
 }, (t) => [uniqueIndex('content_rev_entity_version_uq').on(t.entityType, t.entityId, t.version)]);
 
-export const auditLog = pgTable('audit_log', {                 // append-only
-  id: bigserial('id', { mode: 'number' }).primaryKey(),
+export const auditLog = sqliteTable('audit_log', {                 // append-only
+  id: integer('id').primaryKey({ autoIncrement: true }),
   actorUserId: uuid('actor_user_id'),                           // tanpa FK: tetap ada setelah user dihapus
   action: varchar('action', { length: 60 }).notNull(),          // 'AUTH_LOGIN_FAILED','CONTENT_PUBLISH','BAND_TABLE_ACTIVATE',...
   entityType: varchar('entity_type', { length: 40 }),
@@ -608,12 +589,12 @@ export const auditLog = pgTable('audit_log', {                 // append-only
   ipHash: varchar('ip_hash', { length: 64 }),                   // HMAC, bukan IP mentah
   createdAt: createdAt(),
 }, (t) => [
-  index('audit_actor_idx').on(t.actorUserId, t.createdAt.desc()),
+  index('audit_actor_idx').on(t.actorUserId, sql`${t.createdAt} desc`),
   index('audit_entity_idx').on(t.entityType, t.entityId),
-  index('audit_action_idx').on(t.action, t.createdAt.desc()),
+  index('audit_action_idx').on(t.action, sql`${t.createdAt} desc`),
 ]);
 
-export const appSettings = pgTable('app_settings', {
+export const appSettings = sqliteTable('app_settings', {
   key: varchar('key', { length: 80 }).primaryKey(),             // 'crown.silver_min','crown.gold_min','speed.target_ms_default',...
   value: jsonb('value').notNull(),
   description: text('description'),

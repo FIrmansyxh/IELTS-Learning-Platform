@@ -1,2 +1,0 @@
-ALTER TABLE "content_assets" ADD COLUMN "asset_code" varchar(80);--> statement-breakpoint
-CREATE UNIQUE INDEX "content_assets_asset_code_uq" ON "content_assets" USING btree ("asset_code") WHERE "content_assets"."asset_code" IS NOT NULL;

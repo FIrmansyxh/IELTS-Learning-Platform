@@ -8,6 +8,7 @@ import { ApiError, notFound } from '../http/errors';
 import { logger } from '../logger';
 import { getStorage } from '../storage';
 import { etagMatches, SERVABLE_MIMES, slugifyTitle } from './rules';
+import { execute } from '@/server/db';
 
 const CACHE_CONTROL = 'private, max-age=3600';
 const SERVABLE_KINDS = new Set(['SLIDE_IMAGE', 'IMAGE', 'DOCUMENT']);
@@ -33,12 +34,12 @@ export async function serveAssetFile(tx: Tx, userId: string, assetId: string, if
   const mime = asset.mimeType ? SERVABLE_MIMES[asset.mimeType] : undefined;
   if (!mime || asset.storageBackend === 'EXTERNAL' || !asset.storageKey) throw notFound();
 
-  const ref = JSON.stringify([{ asset_id: assetId }]);
-  const refs = await tx.execute(sql`
+  const refs = await execute(tx, sql`
     SELECT s.id FROM learning_materials lm
     JOIN sub_modules s ON s.id = lm.sub_module_id AND s.status = 'PUBLISHED'
     JOIN modules m ON m.id = s.module_id AND m.status = 'PUBLISHED'
-    WHERE lm.slides_json @> ${ref}::jsonb OR lm.attachments_json @> ${ref}::jsonb`);
+    WHERE EXISTS (SELECT 1 FROM json_each(lm.slides_json) e WHERE json_extract(e.value, '$.asset_id') = ${assetId})
+       OR EXISTS (SELECT 1 FROM json_each(lm.attachments_json) e WHERE json_extract(e.value, '$.asset_id') = ${assetId})`);
   const subIds = new Set((refs.rows as Array<{ id: string }>).map((r) => r.id));
   if (subIds.size === 0) throw notFound();
 

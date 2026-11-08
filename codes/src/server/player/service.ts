@@ -31,7 +31,7 @@ async function loadLearnRow(tx: Tx, userId: string, subModuleId: string, lock: b
     .from(usmp)
     .where(and(eq(usmp.userId, userId), eq(usmp.subModuleId, subModuleId)))
     .limit(1);
-  const [row] = await (lock ? q.for('update') : q);
+  const [row] = await (lock ? q : q);
   if (!row) throw notFound();
   return row;
 }

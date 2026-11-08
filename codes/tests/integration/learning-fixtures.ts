@@ -2,7 +2,7 @@
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { eq, sql } from 'drizzle-orm';
 import { assessmentSets, contentAssets, contentSources, learningMaterials } from '@/db/schema';
-import { getDb } from '@/server/db';
+import { NOW, execute, getDb } from '@/server/db';
 import { ensureProgressRows } from '@/server/gatekeeping/service';
 import { getStorage } from '@/server/storage';
 
@@ -13,12 +13,12 @@ const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR
 
 /** Bersihkan data belajar antar tes (attempts dulu karena FK RESTRICT ke assessment_sets). */
 export async function resetLearning() {
-  await db().execute(sql`DELETE FROM attempts`);
-  await db().execute(sql`DELETE FROM user_last_learned_state`);
-  await db().execute(sql`DELETE FROM assessment_sets`);
-  await db().execute(sql`DELETE FROM learning_materials`);
-  await db().execute(sql`UPDATE sub_modules SET status = 'DRAFT'`);
-  await db().execute(sql`UPDATE modules SET status = 'DRAFT'`);
+  await execute(db(), sql`DELETE FROM attempts`);
+  await execute(db(), sql`DELETE FROM user_last_learned_state`);
+  await execute(db(), sql`DELETE FROM assessment_sets`);
+  await execute(db(), sql`DELETE FROM learning_materials`);
+  await execute(db(), sql`UPDATE sub_modules SET status = 'DRAFT'`);
+  await execute(db(), sql`UPDATE modules SET status = 'DRAFT'`);
 }
 
 export async function sourceId(code: string): Promise<string> {
@@ -27,14 +27,14 @@ export async function sourceId(code: string): Promise<string> {
 }
 
 export async function subId(code: string): Promise<string> {
-  const r = await db().execute(sql`SELECT id FROM sub_modules WHERE sub_module_code = ${code}`);
+  const r = await execute(db(), sql`SELECT id FROM sub_modules WHERE sub_module_code = ${code}`);
   return (r.rows[0] as { id: string }).id;
 }
 
 export async function publishSub(...codes: string[]) {
   for (const c of codes) {
-    await db().execute(sql`UPDATE sub_modules SET status = 'PUBLISHED' WHERE sub_module_code = ${c}`);
-    await db().execute(sql`UPDATE modules SET status = 'PUBLISHED' WHERE id = (SELECT module_id FROM sub_modules WHERE sub_module_code = ${c})`);
+    await execute(db(), sql`UPDATE sub_modules SET status = 'PUBLISHED' WHERE sub_module_code = ${c}`);
+    await execute(db(), sql`UPDATE modules SET status = 'PUBLISHED' WHERE id = (SELECT module_id FROM sub_modules WHERE sub_module_code = ${c})`);
   }
 }
 
@@ -147,15 +147,15 @@ export async function addDrill(code: string, questions: unknown[], over: Partial
 /** Tandai materi selesai langsung di DB (jalan pintas untuk tes yang bukan tentang bukti belajar). */
 export async function markLearnDone(userId: string, code: string) {
   await ensureProgressRows(db(), userId);
-  await db().execute(sql`
+  await execute(db(), sql`
     INSERT INTO user_sub_module_progress (user_id, sub_module_id, learn_completed_at)
-    VALUES (${userId}::uuid, (SELECT id FROM sub_modules WHERE sub_module_code = ${code}), now())
-    ON CONFLICT (user_id, sub_module_id) DO UPDATE SET learn_completed_at = now()`);
+    VALUES (${userId}, (SELECT id FROM sub_modules WHERE sub_module_code = ${code}), ${NOW})
+    ON CONFLICT (user_id, sub_module_id) DO UPDATE SET learn_completed_at = ${NOW}`);
 }
 
 export async function progressOf(userId: string, code: string): Promise<Record<string, any>> { // eslint-disable-line @typescript-eslint/no-explicit-any
-  const r = await db().execute(sql`
+  const r = await execute(db(), sql`
     SELECT p.* FROM user_sub_module_progress p JOIN sub_modules s ON s.id = p.sub_module_id
-    WHERE p.user_id = ${userId}::uuid AND s.sub_module_code = ${code}`);
+    WHERE p.user_id = ${userId} AND s.sub_module_code = ${code}`);
   return r.rows[0] as Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }

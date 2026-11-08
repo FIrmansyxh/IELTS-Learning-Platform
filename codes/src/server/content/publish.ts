@@ -4,6 +4,7 @@ import { OBJECTIVE_TYPES, type QuestionType } from '@/contracts/content';
 import { writeAudit } from '../audit';
 import type { Tx } from '../db';
 import { ApiError } from '../http/errors';
+import { execute } from '@/server/db';
 
 export type PublishEntityType = 'MODULE' | 'SUB_MODULE' | 'ASSESSMENT_SET';
 export type ReviewStatusName = 'DRAFT' | 'IN_REVIEW' | 'APPROVED' | 'PUBLISHED' | 'ARCHIVED';
@@ -27,11 +28,11 @@ type QuestionLite = { question_type: QuestionType; difficulty?: number };
 
 /** Ambil `detail` aset UNVERIFIED dari v_publish_blockers lalu perkaya dengan asset_code / external_ref. */
 async function viewBlockers(tx: Tx, entityType: 'LEARNING_MATERIAL' | 'ASSESSMENT_SET', entityId: string, as: PublishEntityType, as_id: string): Promise<Blocker[]> {
-  const res = await tx.execute(sql`
+  const res = await execute(tx, sql`
     SELECT b.reason_code, b.detail, a.asset_code, a.external_ref
     FROM v_publish_blockers b
-    LEFT JOIN content_assets a ON b.detail = 'asset ' || a.id::text
-    WHERE b.entity_type = ${entityType} AND b.entity_id = ${entityId}::uuid`);
+    LEFT JOIN content_assets a ON b.detail = 'asset ' || a.id
+    WHERE b.entity_type = ${entityType} AND b.entity_id = ${entityId}`);
   return (res.rows as Array<{ reason_code: string; detail: string; asset_code: string | null; external_ref: string | null }>).map((r) => ({
     code: r.reason_code as Blocker['code'],
     entity_type: as,
@@ -64,7 +65,7 @@ export async function computeBlockers(tx: Tx, entityType: PublishEntityType, id:
     }
     if (t === 'TIER_BOSS_EXAM') {
       const kids = await tx.select({ skill: assessmentSets.skillCategory }).from(assessmentSets).where(
-        sql`${assessmentSets.parentSetId} = ${id}::uuid AND ${assessmentSets.status} = 'PUBLISHED'`,
+        sql`${assessmentSets.parentSetId} = ${id} AND ${assessmentSets.status} = 'PUBLISHED'`,
       );
       const have = new Set(kids.map((k) => k.skill));
       if (!have.has('LISTENING') || !have.has('READING')) b('BOSS_SECTIONS_MISSING', 'Boss butuh anak LISTENING dan READING berstatus PUBLISHED.');
@@ -76,7 +77,7 @@ export async function computeBlockers(tx: Tx, entityType: PublishEntityType, id:
     if (!lm) out.push({ code: 'MATERIAL_MISSING', entity_type: 'SUB_MODULE', entity_id: id, detail: 'Sub-modul belum memiliki materi.' });
     else out.push(...(await viewBlockers(tx, 'LEARNING_MATERIAL', lm.id, 'SUB_MODULE', id)));
     const drills = await tx.select({ id: assessmentSets.id }).from(assessmentSets).where(
-      sql`${assessmentSets.subModuleId} = ${id}::uuid AND ${assessmentSets.assessmentType} = 'ACTIVE_DRILL' AND ${assessmentSets.status} = 'PUBLISHED'`,
+      sql`${assessmentSets.subModuleId} = ${id} AND ${assessmentSets.assessmentType} = 'ACTIVE_DRILL' AND ${assessmentSets.status} = 'PUBLISHED'`,
     );
     if (drills.length === 0) out.push({ code: 'DRILL_NOT_PUBLISHED', entity_type: 'SUB_MODULE', entity_id: id, detail: 'Belum ada Active Drill berstatus PUBLISHED.' });
   } else {

@@ -3,7 +3,6 @@ import { parseEnv } from '@/server/env';
 
 const valid = {
   NODE_ENV: 'test',
-  DATABASE_URL: 'postgres://app_rw:a-long-random-password-1234@db:5432/ielts',
   AUTH_SECRET: 'x'.repeat(32),
   AUTH_URL: 'http://localhost:3000',
   ALLOWED_HOSTS: 'localhost:3000',
@@ -33,11 +32,6 @@ describe('parseEnv', () => {
     }
   });
 
-  it('menolak password database "postgres"', () => {
-    const r = parseEnv({ ...valid, DATABASE_URL: 'postgres://postgres:postgres@db:5432/ielts' });
-    expect(r.ok).toBe(false);
-  });
-
   it('mewajibkan S3_* lengkap bila STORAGE_DRIVER=s3', () => {
     const r = parseEnv({ ...valid, STORAGE_DRIVER: 's3', S3_BUCKET: 'b' });
     expect(r.ok).toBe(false);
@@ -47,6 +41,6 @@ describe('parseEnv', () => {
   it('melaporkan semua key yang hilang', () => {
     const r = parseEnv({ NODE_ENV: 'test' });
     expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.keys).toEqual(expect.arrayContaining(['DATABASE_URL', 'AUTH_SECRET', 'AUTH_URL', 'ALLOWED_HOSTS']));
+    if (!r.ok) expect(r.keys).toEqual(expect.arrayContaining(['AUTH_SECRET', 'AUTH_URL', 'ALLOWED_HOSTS']));
   });
 });

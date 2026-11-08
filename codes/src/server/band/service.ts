@@ -3,7 +3,7 @@ import { and, asc, desc, eq, sql } from 'drizzle-orm';
 import { bandConversionRows, bandConversionTables } from '@/db/schema';
 import type { BandSkillName, CreateBandTableBody } from '@/contracts/band';
 import { writeAudit } from '../audit';
-import { getDb, type DbOrTx } from '../db';
+import { NOW, execute, getDb, type DbOrTx } from '../db';
 import { ApiError, notFound, type ErrorDetail } from '../http/errors';
 import { logger } from '../logger';
 import type { BandRowLike } from './convert';
@@ -44,8 +44,8 @@ export async function getActiveTables(db: DbOrTx) {
   return { listening: dto(listening), reading_academic: dto(reading), reading_general: dto(general), disclaimer: 'Perkiraan latihan, bukan skor resmi IELTS.' };
 }
 
-const usedCount = sql<number>`(SELECT count(*)::int FROM attempts a WHERE a.band_table_id = "band_conversion_tables"."id")`;
-const rowCount = sql<number>`(SELECT count(*)::int FROM band_conversion_rows r WHERE r.table_id = "band_conversion_tables"."id")`;
+const usedCount = sql<number>`(SELECT count(*) FROM attempts a WHERE a.band_table_id = "band_conversion_tables"."id")`;
+const rowCount = sql<number>`(SELECT count(*) FROM band_conversion_rows r WHERE r.table_id = "band_conversion_tables"."id")`;
 
 interface ListRow {
   id: string;
@@ -147,9 +147,7 @@ export async function activateTable(actorId: string | null, tableId: string, ipH
   return getDb().transaction(async (tx) => {
     const [probe] = await tx.select({ skill: bandConversionTables.skill }).from(bandConversionTables).where(eq(bandConversionTables.id, tableId)).limit(1);
     if (!probe) throw notFound();
-    // Serialkan aktivasi per skill; indeks unik parsial tetap menjadi jaring pengaman terakhir.
-    await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${`band_activate:${probe.skill}`}, 0))`);
-    const [t] = await tx.select().from(bandConversionTables).where(eq(bandConversionTables.id, tableId)).limit(1).for('update');
+    const [t] = await tx.select().from(bandConversionTables).where(eq(bandConversionTables.id, tableId)).limit(1);
     if (!t) throw notFound();
     if (t.isActive) throw new ApiError('ALREADY_ACTIVE');
     const prev = await tx
@@ -159,7 +157,7 @@ export async function activateTable(actorId: string | null, tableId: string, ipH
       .returning({ id: bandConversionTables.id });
     const [now] = await tx
       .update(bandConversionTables)
-      .set({ isActive: true, effectiveFrom: sql`now()` })
+      .set({ isActive: true, effectiveFrom: sql`${NOW}` })
       .where(eq(bandConversionTables.id, tableId))
       .returning();
     await writeAudit(tx, {
@@ -176,12 +174,12 @@ export async function activateTable(actorId: string | null, tableId: string, ipH
 
 export async function deleteTable(actorId: string | null, tableId: string, ipHash?: string): Promise<void> {
   await getDb().transaction(async (tx) => {
-    const [t] = await tx.select().from(bandConversionTables).where(eq(bandConversionTables.id, tableId)).limit(1).for('update');
+    const [t] = await tx.select().from(bandConversionTables).where(eq(bandConversionTables.id, tableId)).limit(1);
     if (!t) throw notFound();
     // Dirujuk lewat kolom atau tercantum di result_json attempt mana pun (spec 010/011/014 menyimpan id tabel di sana).
-    const ref = await tx.execute(sql`
+    const ref = await execute(tx, sql`
       SELECT 1 FROM attempts
-      WHERE band_table_id = ${tableId}::uuid OR result_json::text LIKE ${`%${tableId}%`}
+      WHERE band_table_id = ${tableId} OR result_json LIKE ${`%${tableId}%`}
       LIMIT 1`);
     if (t.isActive || ref.rows.length > 0) throw new ApiError('BAND_TABLE_IN_USE');
     await tx.delete(bandConversionTables).where(eq(bandConversionTables.id, tableId));

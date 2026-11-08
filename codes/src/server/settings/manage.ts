@@ -68,7 +68,7 @@ export async function setSetting(key: string, value: unknown): Promise<SettingVi
     throw bad(check.code, msg);
   }
   return getDb().transaction(async (tx) => {
-    const [old] = await tx.select().from(appSettings).where(eq(appSettings.key, key)).for('update');
+    const [old] = await tx.select().from(appSettings).where(eq(appSettings.key, key));
     const oldValue = old && checkSettingValue(def, old.value).ok ? old.value : def.default;
 
     if ((key === 'crown.gold_min' || key === 'crown.silver_min') && def.type === 'int') {

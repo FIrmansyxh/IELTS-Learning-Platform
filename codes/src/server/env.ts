@@ -18,7 +18,8 @@ const baseSchema = z.object({
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
   APP_TIMEZONE: z.string().min(1).default('Asia/Jakarta'),
 
-  DATABASE_URL: z.string().url(),
+  /** Berkas SQLite (SPEC-025 Fase 3). Bawaan: ./data/ielts.db */
+  DATABASE_PATH: z.string().min(1).optional(),
   AUTH_SECRET: secret32,
   AUTH_URL: z.string().url(),
   AUTH_TRUST_HOST: bool(false),
@@ -75,16 +76,6 @@ export type EnvResult = { ok: true; env: Env } | { ok: false; keys: string[]; me
 export function parseEnv(source: Record<string, string | undefined>): EnvResult {
   const result = schema.safeParse(source);
   if (result.success) {
-    const password = decodeURIComponent(new URL(result.data.DATABASE_URL).password);
-    // Validasi konfigurasi (bukan perbandingan rahasia pengguna): bukan celah timing.
-    // eslint-disable-next-line security/detect-possible-timing-attacks
-    if (password === 'postgres') {
-      return {
-        ok: false,
-        keys: ['DATABASE_URL'],
-        messages: ['Konfigurasi env tidak valid: DATABASE_URL'],
-      };
-    }
     return { ok: true, env: result.data };
   }
   const keys = [...new Set(result.error.issues.map((i) => String(i.path[0] ?? 'env')))];

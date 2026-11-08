@@ -1,13 +1,13 @@
 import './_env';
 import { sql } from 'drizzle-orm';
-import { getDb, closeDb } from '../src/server/db';
+import { execute, getDb, closeDb } from '../src/server/db';
 
 async function unlockAllReady() {
   const db = getDb();
   console.log('[unlock] Meng-unlock sub-modul yang materi dan soalnya sudah siap...');
 
   // Unlock sub-modul yang memiliki learning_materials untuk semua pengguna
-  await db.execute(sql`
+  await execute(db, sql`
     UPDATE user_sub_module_progress up
     SET status = 'UNLOCKED', unlock_source = 'ADMIN'
     FROM sub_modules sm
@@ -16,7 +16,7 @@ async function unlockAllReady() {
   `);
 
   // Pastikan Tier 1, Tier 2, Tier 3 juga berstatus UNLOCKED
-  await db.execute(sql`
+  await execute(db, sql`
     UPDATE user_tier_progress
     SET status = 'UNLOCKED', unlock_source = 'ADMIN'
     WHERE status = 'LOCKED';

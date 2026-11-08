@@ -286,7 +286,7 @@ export async function createWritingSubmission(
   try {
     await enqueue('ai-grade-writing', { submission_id: submissionId, async_job_id: jobId });
   } catch (err) {
-    logger.warn({ err: safeErr(err), submissionId }, 'pg_boss_enqueue_failed_continuing_worker');
+    logger.warn({ err: safeErr(err), submissionId }, 'job_enqueue_failed');
   }
 
   if (process.env.LLM_DRIVER === 'mock' || process.env.NODE_ENV === 'test') {
@@ -654,7 +654,7 @@ export async function createSpeakingSubmission(
   try {
     await enqueue('stt-transcribe', { submission_id: submissionId, async_job_id: jobId });
   } catch (err) {
-    logger.warn({ err: safeErr(err), submissionId }, 'pg_boss_enqueue_stt_failed');
+    logger.warn({ err: safeErr(err), submissionId }, 'job_enqueue_stt_failed');
   }
 
   if (process.env.STT_DRIVER === 'mock' || process.env.NODE_ENV === 'test') {
@@ -1088,7 +1088,7 @@ export async function retrySubmission(
   try {
     await enqueue(queueTarget, { submission_id: submissionId, async_job_id: jobId });
   } catch (err) {
-    logger.warn({ err: safeErr(err), submissionId }, 'pg_boss_enqueue_retry_failed');
+    logger.warn({ err: safeErr(err), submissionId }, 'job_enqueue_retry_failed');
   }
 
   if (process.env.LLM_DRIVER === 'mock' || process.env.NODE_ENV === 'test') {

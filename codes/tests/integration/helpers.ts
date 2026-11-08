@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
-import { getDb } from '@/server/db';
+import { execute, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import type { RouteHandler } from '@/server/http/withApi';
 
@@ -41,7 +41,8 @@ export async function call(
 /** `name=value` dari header Set-Cookie (untuk dikirim kembali). */
 export const cookieOf = (setCookie: string | null) => (setCookie ? setCookie.split(';')[0]! : null);
 
-export const uniqueEmail = (p = 'u') => `${p}.${randomUUID().slice(0, 8)}@example.test`;
+/** Kompatibilitas tes lama: "email" kini hanya nama profil unik. */
+export const uniqueEmail = (p = 'u') => `${p} ${randomUUID().slice(0, 8)}`;
 export const STRONG_PASSWORD = 'kopi-tubruk-2026!';
 
 export async function resetState() {
@@ -49,39 +50,32 @@ export async function resetState() {
 }
 
 export async function exec(query: ReturnType<typeof sql>) {
-  return getDb().execute(query);
+  return execute(getDb(), query);
 }
 
 // ---- fabrik pengguna/sesi untuk tes lintas spec ----
 import { users } from '@/db/schema';
-import { UNUSABLE_PASSWORD_HASH } from '@/server/auth/profiles';
 import { POST as selectRoute } from '@/app/api/v1/profiles/[profile_id]/select/route';
 
 export async function makeUser(over: Partial<typeof users.$inferInsert> = {}, password = STRONG_PASSWORD) {
-  const email = over.email ?? uniqueEmail();
   const [u] = await getDb()
     .insert(users)
     // Nama unik per pemanggilan: indeks nama profil unik (SPEC-025).
-    .values({ email, displayName: `Uji ${randomUUID().slice(0, 8)}`, passwordHash: UNUSABLE_PASSWORD_HASH, ...over })
+    .values({ displayName: `Uji ${randomUUID().slice(0, 8)}`, ...over })
     .returning();
-  return { user: u!, email, password };
+  // `email` = nama profil (pengenal untuk loginAs); tidak ada email/password lagi.
+  return { user: u!, email: u!.displayName, password };
 }
 
-/** Pilih profil (SPEC-025): menerbitkan cookie sesi tanpa kredensial. `password` diabaikan (kompatibilitas tes lama). */
-export async function loginAs(email: string, _password?: string): Promise<{ status: number; cookie: string | null; json: any }> { // eslint-disable-line @typescript-eslint/no-explicit-any
+/** Pilih profil (SPEC-025) berdasarkan nama: menerbitkan cookie sesi tanpa kredensial. */
+export async function loginAs(name: string, _password?: string): Promise<{ status: number; cookie: string | null; json: any }> { // eslint-disable-line @typescript-eslint/no-explicit-any
   void _password;
-  const rows = (await getDb().execute(sql`SELECT id FROM users WHERE lower(email) = lower(${email}) AND deleted_at IS NULL`)).rows as Array<{ id: string }>;
+  const rows = (await execute(getDb(), sql`SELECT id FROM users WHERE lower(display_name) = lower(${name}) AND deleted_at IS NULL`)).rows as Array<{ id: string }>;
   const id = rows[0]?.id ?? '00000000-0000-4000-8000-000000000000';
   const r = await call(selectRoute, 'POST', `/api/v1/profiles/${id}/select`, { params: { profile_id: id } });
   return { status: r.status, json: r.json, cookie: cookieOf(r.cookie) };
 }
 
-/** Buat admin + sesi siap pakai. */
-export async function adminSession(over: Partial<typeof users.$inferInsert> = {}) {
-  const a = await makeUser({ role: 'admin', ...over });
-  const s = await loginAs(a.email, a.password);
-  return { ...a, cookie: s.cookie! };
-}
 export async function learnerSession(over: Partial<typeof users.$inferInsert> = {}) {
   const a = await makeUser(over);
   const s = await loginAs(a.email, a.password);

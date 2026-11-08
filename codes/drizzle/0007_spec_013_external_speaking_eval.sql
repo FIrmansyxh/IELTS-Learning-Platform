@@ -1,2 +1,0 @@
-ALTER TYPE "public"."eval_method" ADD VALUE 'EXTERNAL_AI';--> statement-breakpoint
-CREATE UNIQUE INDEX "point_ledger_once_uq" ON "point_ledger" USING btree ("user_id","source","source_id") WHERE "point_ledger"."source" IN ('DRILL','SPEED_STREAK','CROWN','MINI_TASK','BOSS');

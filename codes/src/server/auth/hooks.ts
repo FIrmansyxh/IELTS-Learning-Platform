@@ -2,7 +2,6 @@ import type { Tx } from '../db';
 
 export interface HookUser {
   id: string;
-  role: 'learner' | 'admin';
 }
 
 /** Registri hook SPEC-001 (_api-contract.md bagian 7). Dijalankan di dalam transaksi pemicu; kegagalan membatalkan transaksi. */

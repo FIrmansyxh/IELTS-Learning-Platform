@@ -1,82 +1,19 @@
 {
   "version": "7",
-  "dialect": "postgresql",
+  "dialect": "sqlite",
   "entries": [
     {
       "idx": 0,
-      "version": "7",
-      "when": 1793650105399,
-      "tag": "0000_init",
+      "version": "6",
+      "when": 1794126291080,
+      "tag": "0000_baseline_sqlite",
       "breakpoints": true
     },
     {
       "idx": 1,
-      "version": "7",
-      "when": 1793650107279,
-      "tag": "0001_circular_fk",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1793650109212,
-      "tag": "0002_custom_views_triggers",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1793663963437,
-      "tag": "0003_spec_001_auth_security",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1793663965423,
-      "tag": "0004_spec_004_content_foundation",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1793666947253,
-      "tag": "0005_spec_005_learn_evidence",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1793683851927,
-      "tag": "0006_spec_019_import_entity_code_band_fk_restrict",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1794116872831,
-      "tag": "0007_spec_013_external_speaking_eval",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1794118165930,
-      "tag": "0008_spec_023_reading_general_band",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "7",
-      "when": 1794118480695,
-      "tag": "0009_spec_004_exam_module_tag",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "7",
-      "when": 1794120129404,
-      "tag": "0010_spec_025_local_profiles",
+      "version": "6",
+      "when": 1794126306528,
+      "tag": "0001_publish_blockers_view",
       "breakpoints": true
     }
   ]

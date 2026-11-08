@@ -1,7 +1,7 @@
 # TASK LIST - ielts-learning-platform
 **Last Updated:** 2026-11-08
 **Total Tasks:** 26 (21 awal + 5 dari ADR-004/005)
-**Completed:** 0 | **In Progress:** 0 | **Ready to Test:** 17 | **Superseded:** 4 | **Not Started:** 5 | **Blocked:** 0
+**Completed:** 0 | **In Progress:** 0 | **Ready to Test:** 18 | **Superseded:** 4 | **Not Started:** 4 | **Blocked:** 0
 
 > Pembaruan 2026-11-08: arah produk berubah (ADR-004 General Training + LLM lokal; ADR-005 aplikasi lokal satu perangkat). Task 001, 002, 018, 019, 020 digantikan; lihat bagian "Tambahan ADR-004/005" di bawah.
 
@@ -266,7 +266,7 @@ Pekerjaan berikut dikerjakan Orchestrator langsung (tanpa `/build-feature`), den
 - Task 001 (Auth) [SUPERSEDED oleh SPEC-025]: login/daftar/ganti-password/undangan dihapus; diganti profil lokal.
 - Task 025a: SPEC-025 Fase 1 - Profil lokal tanpa login. Status: **ready_to_test** (commit e8bc1e0).
 - Task 025b: SPEC-025 Fase 2 - Hapus admin, ganti CLI (`profile:*`, `progress:*`, `points:*`, `settings:*`, `band:*`, `doctor`). Status: **ready_to_test**.
-- Task 025c: SPEC-025 Fase 3 - SQLite + antrean dalam proses. Status: **not_started**.
+- Task 025c: SPEC-025 Fase 3 - SQLite (`node:sqlite` + Drizzle sqlite-proxy) + antrean dalam proses. Status: **ready_to_test** (unit 640, integrasi 217, E2E 14 hijau).
 - Task 025d: SPEC-025 Fase 4 - Satu perintah menjalankan (`start:local`). Status: **not_started**.
 - ADR-004 (selesai, ready_to_test): driver llama.cpp, prompt Writing General Training, UI Writing, Speaking via prompt eksternal + input skor, bank soal GT (71 soal), tag `exam_module`, tabel band `READING_GENERAL`, modul ajar 3.3.3.
 - SPEC-021 Jalur Belajar: **not_started** (draf). SPEC-022 Bank Soal + Mix Builder: **not_started** (draf). SPEC-023 Simulasi Tes per section: **not_started** (draf). SPEC-024 Listening (skrip + TTS lokal): **not_started** (draf).

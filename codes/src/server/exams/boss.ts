@@ -782,8 +782,7 @@ export async function startBossSection(
       .select()
       .from(attempts)
       .where(and(eq(attempts.id, attemptId), eq(attempts.userId, userId)))
-      .limit(1)
-      .for('update');
+      .limit(1);
     if (!attempt) throw notFound();
 
     if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
@@ -938,8 +937,7 @@ export async function submitBossSection(
       .select()
       .from(attempts)
       .where(and(eq(attempts.id, attemptId), eq(attempts.userId, userId)))
-      .limit(1)
-      .for('update');
+      .limit(1);
     if (!attempt) throw notFound();
 
     if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');

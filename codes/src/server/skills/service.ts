@@ -398,7 +398,7 @@ export async function getBandPredictionsHistory(
     .offset(offset);
 
   const [countRow] = await db
-    .select({ count: sql<number>`count(*)::int` })
+    .select({ count: sql<number>`count(*)` })
     .from(userBandPredictions)
     .where(eq(userBandPredictions.userId, userId));
 
@@ -467,7 +467,7 @@ export async function getExamHistory(
     .offset(offset);
 
   const [countRow] = await db
-    .select({ count: sql<number>`count(*)::int` })
+    .select({ count: sql<number>`count(*)` })
     .from(attempts)
     .innerJoin(assessmentSets, eq(attempts.assessmentSetId, assessmentSets.id))
     .where(

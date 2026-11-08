@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
-import { getPool } from '@/server/db';
+import { getRaw } from '@/server/db';
 import { id } from '@/i18n/id';
 
 export const dynamic = 'force-dynamic';
@@ -14,7 +14,7 @@ async function pingDb(): Promise<void> {
     timer = setTimeout(() => reject(new Error('timeout')), DB_TIMEOUT_MS);
   });
   try {
-    await Promise.race([getPool().query('SELECT 1'), timeout]);
+    await Promise.race([Promise.resolve().then(() => getRaw().prepare('SELECT 1').get()), timeout]);
   } finally {
     clearTimeout(timer);
   }

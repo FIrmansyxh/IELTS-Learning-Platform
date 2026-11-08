@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { sql } from 'drizzle-orm';
 import { ProfileListResponseSchema } from '@/contracts/profiles';
-import { closeDb, getDb } from '@/server/db';
+import { execute, closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { GET as listGet, POST as createPost } from '@/app/api/v1/profiles/route';
 import { POST as selectPost } from '@/app/api/v1/profiles/[profile_id]/select/route';
@@ -24,8 +24,7 @@ beforeEach(async () => {
 
 /** Hapus semua profil; batch impor lama menahan hapus lewat FK RESTRICT sehingga dibersihkan dulu. */
 async function wipeUsers() {
-  await db.execute(sql`DELETE FROM import_batches`);
-  await db.execute(sql`DELETE FROM users`);
+  await execute(db, sql`DELETE FROM users`);
 }
 
 const create = (display_name: string) => call(createPost, 'POST', '/api/v1/profiles', { body: { display_name } });
@@ -46,7 +45,7 @@ describe('profil lokal (SPEC-025)', () => {
   it('buat profil: 201, cookie sesi SameSite=Strict yang langsung berlaku, tanpa password/hash di respons', async () => {
     const r = await create('Rina Putri');
     expect(r.status).toBe(201);
-    expect(r.json.data.user).toMatchObject({ display_name: 'Rina Putri', role: 'learner', must_change_password: false });
+    expect(r.json.data.user).toMatchObject({ display_name: 'Rina Putri' });
     expect(JSON.stringify(r.json)).not.toMatch(/password_hash|\$argon2/);
     expect(r.headers.getSetCookie().join(';')).toMatch(/SameSite=Strict/i);
     const cookie = cookieOf(r.cookie);
@@ -92,9 +91,9 @@ describe('profil lokal (SPEC-025)', () => {
   it('ringkasan progres per profil terpisah', async () => {
     const a = (await create('Ani')).json.data.user.id as string;
     const b = (await create('Bayu')).json.data.user.id as string;
-    await db.execute(sql`
+    await execute(db, sql`
       UPDATE user_sub_module_progress SET status = 'COMPLETED'
-      WHERE user_id = ${a}::uuid AND sub_module_id IN (SELECT id FROM sub_modules LIMIT 2)`);
+      WHERE user_id = ${a} AND sub_module_id IN (SELECT id FROM sub_modules LIMIT 2)`);
     const list = (await call(listGet, 'GET', '/api/v1/profiles')).json.data.profiles as any[];
     expect(list.find((p) => p.id === a).completed_sub_modules).toBe(2);
     expect(list.find((p) => p.id === b).completed_sub_modules).toBe(0);
@@ -128,14 +127,14 @@ describe('profil lokal (SPEC-025)', () => {
     expect(wrong.json.error.code).toBe('CONFIRM_NAME_MISMATCH');
     expect((await me(cookieOf(a.cookie))).status).toBe(200);
 
-    const rowsBefore = Number(((await db.execute(sql`SELECT count(*)::int AS n FROM user_sub_module_progress WHERE user_id = ${aid}::uuid`)).rows[0] as any).n);
+    const rowsBefore = Number(((await execute(db, sql`SELECT count(*) AS n FROM user_sub_module_progress WHERE user_id = ${aid}`)).rows[0] as any).n);
     expect(rowsBefore).toBeGreaterThan(0);
 
     const ok = await remove(aid, 'ani', cookieOf(a.cookie)); // tanpa memedulikan huruf besar/kecil
     expect(ok.status).toBe(204);
     expect(ok.headers.getSetCookie().join(';')).toMatch(/Max-Age=0/);
     expect((await me(cookieOf(a.cookie))).status).toBe(401);
-    const rowsAfter = Number(((await db.execute(sql`SELECT count(*)::int AS n FROM user_sub_module_progress WHERE user_id = ${aid}::uuid`)).rows[0] as any).n);
+    const rowsAfter = Number(((await execute(db, sql`SELECT count(*) AS n FROM user_sub_module_progress WHERE user_id = ${aid}`)).rows[0] as any).n);
     expect(rowsAfter).toBe(0);
 
     const list = (await call(listGet, 'GET', '/api/v1/profiles')).json.data.profiles as any[];
@@ -199,7 +198,7 @@ describe('penjaga Host dan Origin (SPEC-025 D4)', () => {
     );
     expect(res.status).toBe(403);
     expect(((await res.json()) as any).error.code).toBe('CSRF_ORIGIN_MISMATCH');
-    expect(Number(((await db.execute(sql`SELECT count(*)::int AS n FROM users`)).rows[0] as any).n)).toBe(0);
+    expect(Number(((await execute(db, sql`SELECT count(*) AS n FROM users`)).rows[0] as any).n)).toBe(0);
   });
 });
 

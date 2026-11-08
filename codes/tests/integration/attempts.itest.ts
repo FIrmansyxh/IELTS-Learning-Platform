@@ -4,7 +4,7 @@ import { eq, sql } from 'drizzle-orm';
 import { assessmentSets, tiers } from '@/db/schema';
 import { AttemptResponseSchema, AttemptResultResponseSchema, SubmitAnswerResponseSchema } from '@/contracts/attempts';
 import { setClockForTest } from '@/server/clock';
-import { closeDb, getDb } from '@/server/db';
+import { NOW, execute, closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { assessmentTypeHandlers } from '@/server/attempts/handlers';
 import { attemptCompletedHooks } from '@/server/attempts/hooks';
@@ -88,7 +88,7 @@ describe('POST /attempts', () => {
       passage_markdown: null, listening: null,
     });
     expect(d.questions).toHaveLength(10);
-    const rows = await db.execute(sql`SELECT mode, status, assessment_version FROM attempts WHERE user_id = ${u.user.id}::uuid`);
+    const rows = await execute(db, sql`SELECT mode, status, assessment_version FROM attempts WHERE user_id = ${u.user.id}`);
     expect(rows.rows).toEqual([{ mode: 'PRACTICE', status: 'IN_PROGRESS', assessment_version: 1 }]);
   });
 
@@ -110,7 +110,7 @@ describe('POST /attempts', () => {
     const r = await start(u, set.id);
     expect(r.status).toBe(409);
     expect(r.json.error).toMatchObject({ code: 'LEARN_NOT_COMPLETED', message: 'Selesaikan materi terlebih dahulu.' });
-    expect((await db.execute(sql`SELECT count(*)::int AS n FROM attempts`)).rows[0]).toEqual({ n: 0 });
+    expect((await execute(db, sql`SELECT count(*) AS n FROM attempts`)).rows[0]).toEqual({ n: 0 });
   });
 
   it('attempt IN_PROGRESS yang sama -> 200 resumed=true, id, urutan, dan option_id identik', async () => {
@@ -121,7 +121,7 @@ describe('POST /attempts', () => {
     expect(b.json.data.resumed).toBe(true);
     expect(b.json.data.id).toBe(a.json.data.id);
     expect(b.json.data.questions).toEqual(a.json.data.questions);
-    expect((await db.execute(sql`SELECT count(*)::int AS n FROM attempts`)).rows[0]).toEqual({ n: 1 });
+    expect((await execute(db, sql`SELECT count(*) AS n FROM attempts`)).rows[0]).toEqual({ n: 1 });
   });
 
   it('permintaan mulai serentak menghasilkan satu attempt aktif', async () => {
@@ -131,13 +131,8 @@ describe('POST /attempts', () => {
     expect(rs.filter((r) => r.status === 201)).toHaveLength(1);
   });
 
-  it('tipe tanpa handler -> 409 ASSESSMENT_TYPE_NOT_ENABLED; BOSS_SECTION -> 409 SECTION_NOT_STARTABLE', async () => {
+  it('BOSS_SECTION tidak dapat dimulai langsung -> 409 SECTION_NOT_STARTABLE (semua tipe lain kini punya handler)', async () => {
     const { u } = await setup();
-    const [exam] = await db
-      .insert(assessmentSets)
-      .values({ assessmentType: 'PLACEMENT_TEST', title: 'Placement', timeLimitSeconds: 600, questionsJson: mcqs(2), questionCount: 2, origin: 'ORIGINAL_AUTHORED', status: 'PUBLISHED' })
-      .returning();
-    expect((await start(u, exam!.id)).json.error.code).toBe('ASSESSMENT_TYPE_NOT_ENABLED');
     const [t1] = await db.select().from(tiers).where(eq(tiers.tierNumber, 1));
     const [boss] = await db
       .insert(assessmentSets)
@@ -187,11 +182,11 @@ describe('POST /attempts', () => {
   it('attempt PRACTICE > 24 jam tanpa aktivitas menjadi ABANDONED dan attempt baru dibuat', async () => {
     const { u, set } = await setup();
     const a = await start(u, set.id);
-    await db.execute(sql`UPDATE attempts SET updated_at = now() - interval '25 hours' WHERE id = ${a.json.data.id}::uuid`);
+    await execute(db, sql`UPDATE attempts SET updated_at = ${NOW} - 90000000 WHERE id = ${a.json.data.id}`);
     const b = await start(u, set.id);
     expect(b.status).toBe(201);
     expect(b.json.data.id).not.toBe(a.json.data.id);
-    expect((await db.execute(sql`SELECT status FROM attempts WHERE id = ${a.json.data.id}::uuid`)).rows[0]).toEqual({ status: 'ABANDONED' });
+    expect((await execute(db, sql`SELECT status FROM attempts WHERE id = ${a.json.data.id}`)).rows[0]).toEqual({ status: 'ABANDONED' });
   });
 
   it('batas 30/jam: permintaan ke-31 -> 429', async () => {
@@ -212,8 +207,8 @@ describe('PUT answers', () => {
     expect(SubmitAnswerResponseSchema.safeParse(r.json).success).toBe(true);
     expect(r.json.data).toMatchObject({ question_id: q.question_id, saved: true, answered_count: 1, next_question: null });
     expect(r.json.data.feedback).toMatchObject({ is_correct: true, score: 1, max_score: 1, correct_answer: { display: [`right-${q.prompt.slice(1)}`] }, explanation_id: `Pembahasan ${q.prompt.slice(1)}` });
-    const row = (await db.execute(sql`SELECT is_correct, score::float AS score, speed_streak_len, within_target_time FROM attempt_answers WHERE attempt_id = ${dto.id}::uuid`)).rows[0];
-    expect(row).toEqual({ is_correct: true, score: 1, speed_streak_len: 1, within_target_time: true });
+    const row = (await execute(db, sql`SELECT is_correct, score AS score, speed_streak_len, within_target_time FROM attempt_answers WHERE attempt_id = ${dto.id}`)).rows[0];
+    expect(row).toEqual({ is_correct: 1, score: 1, speed_streak_len: 1, within_target_time: 1 });
   });
 
   it('kunci tak dikenal (is_correct, time_spent_ms) -> 400 unrecognized_key dan tidak ada baris', async () => {
@@ -227,7 +222,7 @@ describe('PUT answers', () => {
     expect(b.json.error.details[0]).toMatchObject({ path: 'time_spent_ms', code: 'unrecognized_key' });
     const c = await put(u, dto.id, q.question_id, { ...rightOf(q), score: 5 });
     expect(c.json.error.details[0]).toMatchObject({ path: 'response.score', code: 'unrecognized_key' });
-    expect((await db.execute(sql`SELECT count(*)::int AS n FROM attempt_answers`)).rows[0]).toEqual({ n: 0 });
+    expect((await execute(db, sql`SELECT count(*) AS n FROM attempt_answers`)).rows[0]).toEqual({ n: 0 });
   });
 
   it('bentuk salah: option_id tak dikenal / kosong / tipe salah -> 400 dengan kode details', async () => {
@@ -252,7 +247,7 @@ describe('PUT answers', () => {
     const c = await put(u, dto.id, q.question_id, wrongOf(q));
     expect(c.status).toBe(409);
     expect(c.json.error.code).toBe('QUESTION_ALREADY_ANSWERED');
-    expect((await db.execute(sql`SELECT is_correct FROM attempt_answers WHERE attempt_id = ${dto.id}::uuid`)).rows).toEqual([{ is_correct: true }]);
+    expect((await execute(db, sql`SELECT is_correct FROM attempt_answers WHERE attempt_id = ${dto.id}`)).rows).toEqual([{ is_correct: 1 }]);
   });
 
   it('question_id bukan bagian attempt -> 404; attempt milik pengguna lain -> 404 di semua endpoint', async () => {
@@ -328,13 +323,13 @@ describe('PUT answers', () => {
     await step(2000, false, 2);
     await step(3000, true, 3); // benar & cepat, tetapi streak sebelumnya 0 -> 1
     await step(15000, true, 4); // lambat (> 10 dtk) -> 0
-    const rows = (await db.execute(sql`SELECT speed_streak_len AS s, within_target_time AS w, time_spent_ms AS ms FROM attempt_answers WHERE attempt_id = ${dto.id}::uuid ORDER BY answered_at`)).rows;
+    const rows = (await execute(db, sql`SELECT speed_streak_len AS s, within_target_time AS w, time_spent_ms AS ms FROM attempt_answers WHERE attempt_id = ${dto.id} ORDER BY answered_at`)).rows;
     expect(rows).toEqual([
-      { s: 1, w: true, ms: 4000 },
-      { s: 2, w: true, ms: 6000 },
-      { s: 0, w: true, ms: 2000 },
-      { s: 1, w: true, ms: 3000 },
-      { s: 0, w: false, ms: 15000 },
+      { s: 1, w: 1, ms: 4000 },
+      { s: 2, w: 1, ms: 6000 },
+      { s: 0, w: 1, ms: 2000 },
+      { s: 1, w: 1, ms: 3000 },
+      { s: 0, w: 0, ms: 15000 },
     ]);
   });
 });
@@ -468,7 +463,7 @@ describe('POST submit dan GET result', () => {
     const r = await submit(u, dto.id);
     expect(r.status).toBe(500);
     expect(r.json.error.code).toBe('INTERNAL_ERROR');
-    expect((await db.execute(sql`SELECT status FROM attempts WHERE id = ${dto.id}::uuid`)).rows[0]).toEqual({ status: 'IN_PROGRESS' });
+    expect((await execute(db, sql`SELECT status FROM attempts WHERE id = ${dto.id}`)).rows[0]).toEqual({ status: 'IN_PROGRESS' });
     const p = await progressOf(u.user.id, '1.1.1');
     expect(p.attempts_count).toBe(0);
     expect(p.status).not.toBe('COMPLETED');
@@ -479,7 +474,7 @@ describe('POST submit dan GET result', () => {
   it('ATTEMPT_ABANDONED tidak dapat disubmit', async () => {
     const { u, set } = await setup();
     const dto = (await start(u, set.id)).json.data;
-    await db.execute(sql`UPDATE attempts SET status = 'ABANDONED' WHERE id = ${dto.id}::uuid`);
+    await execute(db, sql`UPDATE attempts SET status = 'ABANDONED' WHERE id = ${dto.id}`);
     expect((await submit(u, dto.id)).json.error.code).toBe('ATTEMPT_NOT_ACTIVE');
     expect((await result(u, dto.id)).json.error.code).toBe('ATTEMPT_NOT_FINISHED');
   });
@@ -495,7 +490,7 @@ describe('mode EXAM (mesin generik, handler uji)', () => {
     },
   };
   async function examSet(n = 4) {
-    const mod = (await db.execute(sql`SELECT id FROM modules WHERE module_code = '1.1'`)).rows[0] as { id: string };
+    const mod = (await execute(db, sql`SELECT id FROM modules WHERE module_code = '1.1'`)).rows[0] as { id: string };
     const [s] = await db
       .insert(assessmentSets)
       .values({ assessmentType: 'SKIP_MODULE_TEST', title: 'Ujian uji', moduleId: mod.id, timeLimitSeconds: 300, questionsJson: mcqs(n), questionCount: n, origin: 'ORIGINAL_AUTHORED', status: 'PUBLISHED' })
@@ -545,7 +540,7 @@ describe('mode EXAM (mesin generik, handler uji)', () => {
     const r = await put(u, dto.id, dto.questions[3].question_id, rightOf(dto.questions[3]));
     expect(r.status).toBe(409);
     expect(r.json.error.code).toBe('ATTEMPT_EXPIRED');
-    const row = (await db.execute(sql`SELECT status, submitted_at, raw_score::float AS raw, max_score::float AS max FROM attempts WHERE id = ${dto.id}::uuid`)).rows[0] as Dto;
+    const row = (await execute(db, sql`SELECT status, submitted_at, raw_score AS raw, max_score AS max FROM attempts WHERE id = ${dto.id}`)).rows[0] as Dto;
     expect(row.status).toBe('EXPIRED');
     expect(new Date(row.submitted_at).toISOString()).toBe('2026-11-03T10:05:00.000Z');
     expect(row).toMatchObject({ raw: 3, max: 4 });

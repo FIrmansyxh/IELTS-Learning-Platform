@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { sql } from 'drizzle-orm';
 import { EvaluationSchema } from '@/contracts/ai';
-import { closeDb, getDb } from '@/server/db';
+import { execute, closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { POST as startRoute } from '@/app/api/v1/attempts/route';
 import { POST as externalRoute } from '@/app/api/v1/submissions/speaking-external/route';
@@ -43,7 +43,7 @@ const ctx = (attemptId: string, over: Record<string, unknown> = {}) => ({
   kind: 'SPEAKING_PART1', attempt_id: attemptId, question_id: 'Q-GTSPK1-001', tool: 'CLAUDE', criteria_scores: SC, ...over,
 });
 const skillRow = async (userId: string) =>
-  (await db.execute(sql`SELECT estimated_band::float AS band, sample_size FROM user_skill_scores WHERE user_id = ${userId}::uuid AND skill = 'SPEAKING'`)).rows[0] as any;
+  (await execute(db, sql`SELECT estimated_band AS band, sample_size FROM user_skill_scores WHERE user_id = ${userId} AND skill = 'SPEAKING'`)).rows[0] as any;
 
 describe('POST /submissions/speaking-external (ADR-004)', () => {
   it('201: overall dihitung server (6.25 -> 6.5), method EXTERNAL_AI, sesuai skema, dan masuk radar Speaking', async () => {
@@ -67,7 +67,7 @@ describe('POST /submissions/speaking-external (ADR-004)', () => {
     expect(b.status).toBe(201);
     expect(b.json.data.submission.id).toBe(a.json.data.submission.id);
     expect(b.json.data.evaluation).toMatchObject({ run_number: 2, overall_band: 5, external_tool: 'GEMINI' });
-    const n = (await db.execute(sql`SELECT count(*)::int AS n FROM submissions WHERE user_id = ${u.user.id}::uuid`)).rows[0] as any;
+    const n = (await execute(db, sql`SELECT count(*) AS n FROM submissions WHERE user_id = ${u.user.id}`)).rows[0] as any;
     expect(n.n).toBe(1);
     expect(await skillRow(u.user.id)).toMatchObject({ band: 5, sample_size: 1 });
   });
@@ -75,7 +75,7 @@ describe('POST /submissions/speaking-external (ADR-004)', () => {
   it('nilai sendiri (SELF_ASSESSMENT) tetap tidak dihitung radar', async () => {
     const { u, attemptId } = await setup();
     const r = await record(u, ctx(attemptId));
-    await db.execute(sql`UPDATE ai_evaluations SET method = 'SELF_ASSESSMENT' WHERE submission_id = ${r.json.data.submission.id}::uuid`);
+    await execute(db, sql`UPDATE ai_evaluations SET method = 'SELF_ASSESSMENT' WHERE submission_id = ${r.json.data.submission.id}`);
     // pemicu ulang hitung lewat kiriman kedua tidak mengubah baris lama; cek lewat kiriman pada soal lain
     const r2 = await record(u, ctx(attemptId, { criteria_scores: { fluency: 8, lexical: 8, grammar: 8, pronunciation: 8 } }));
     expect(r2.json.data.evaluation.method).toBe('EXTERNAL_AI');

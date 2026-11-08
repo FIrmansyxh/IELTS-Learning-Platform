@@ -36,11 +36,8 @@ export function mockFetch(handler: Handler) {
 
 export const USER = {
   id: 'b8f2c1a4-5d3e-4a7b-9c21-0e6f7a8b9c10',
-  email: 'budi.santoso@example.test',
   display_name: 'Budi Santoso',
-  role: 'learner' as const,
   target_band: 6.0,
-  must_change_password: false,
   consent_recording_at: null,
   keep_recordings: true,
   placement_completed_at: null,

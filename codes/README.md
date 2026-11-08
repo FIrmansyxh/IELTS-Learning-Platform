@@ -1,40 +1,18 @@
 # ielts-learning-platform (codes/)
 
-Fondasi SPEC-000: Next.js 15 (App Router) + TypeScript + Tailwind 4 + shadcn/ui, Drizzle, Auth.js, pg-boss, Vitest, Playwright. Versi terkunci: lihat `VERSIONS.md`.
+Aplikasi belajar IELTS General Training yang berjalan 100% di satu perangkat (ADR-005): Next.js 15 (App Router) + TypeScript + Tailwind 4 + shadcn/ui, Drizzle + **SQLite** (`node:sqlite`, tanpa server database), antrean job dalam proses, Vitest, Playwright. Versi terkunci: lihat `VERSIONS.md`. Perlu Node.js >= 22.20 (disarankan 24).
 
-## Jalur A: Docker Compose (target)
-```bash
-cp .env.example .env            # isi POSTGRES_PASSWORD, APP_RW_PASSWORD, APP_MIGRATOR_PASSWORD, AUTH_SECRET, IP_HMAC_SECRET, BACKUP_DIR
-docker compose -f docker-compose.yml up -d db
-docker compose -f docker-compose.yml run --rm migrate
-docker compose -f docker-compose.yml run --rm migrate npm run db:seed
-docker compose -f docker-compose.yml up -d web worker
-curl -s http://127.0.0.1:3000/api/health
-```
-Dev dengan Postgres terbuka di loopback: tambahkan `-f docker-compose.dev.yml`. Profil: `--profile ai` (stt), `minio`, `proxy`, `ollama-container`.
-
-## Jalur B: tanpa Docker (Postgres 16 lokal)
-1. Buat cluster khusus (jangan pakai instalasi lain): `initdb -D <dir> -U postgres_admin --pwfile=<pw.txt> -A scram-sha-256`, lalu `pg_ctl -D <dir> -o "-p 55432 -c listen_addresses=127.0.0.1" start`.
-2. `createdb ielts`, lalu jalankan `docker/db/init/01-roles.sh` dengan `POSTGRES_DB`, `POSTGRES_USER`, `APP_RW_PASSWORD`, `APP_MIGRATOR_PASSWORD`, `PGHOST`, `PGPORT`, `PGPASSWORD` terisi (butuh `sh` + `psql`, mis. Git Bash).
-3. Isi `.env` (DATABASE_URL dan DATABASE_MIGRATOR_URL mengarah ke 127.0.0.1:55432), lalu:
+## Menjalankan
 ```bash
 npm ci
+cp .env.example .env                 # isi AUTH_SECRET dan IP_HMAC_SECRET (openssl rand -base64 32)
 npm run db:migrate && npm run db:seed
-npm run dev                      # http://127.0.0.1:3000
-npm run build:worker && node dist/index.js   # worker (set WORKER_HEARTBEAT_FILE di Windows)
+npm run content:import -- content/gt-modules/3.3.3 --publish   # contoh modul ajar
+npm run dev                          # http://127.0.0.1:3005 -> pilih/buat profil di /pilih-profil (tanpa login)
+npm run doctor                       # periksa kesiapan
 ```
+Data tersimpan di satu berkas SQLite: `data/ielts.db` (ubah lewat `DATABASE_PATH`; di-gitignore). Cadangkan dengan menyalin berkas itu saat aplikasi mati. Penilaian Writing otomatis (opsional) memakai `llama-server` lokal: set `AI_ENABLED=true`; antrean berjalan di dalam proses web, tidak perlu worker terpisah.
 
-### Jalur B otomatis di Windows: `scripts/dev-db.ps1`
-Cluster Postgres 16 persisten di `codes/.local-pg` (di-gitignore), port 55432, hanya `127.0.0.1`, memakai instalasi `C:\Program Files\PostgreSQLin` (ganti lewat `-PgBin` atau env `PG_BIN`).
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev-db.ps1 start   # init (sekali) + start; menulis codes/.env berisi rahasia acak
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev-db.ps1 stop
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev-db.ps1 status
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev-db.ps1 reset   # HAPUS cluster + .env buatan skrip, lalu init ulang
-npm run db:migrate && npm run db:seed
-npm run dev                      # http://127.0.0.1:3005 -> pilih/buat profil di /pilih-profil (tanpa login)
-```
-Database `ielts` (dev) dan `ielts_test` (`TEST_DATABASE_URL`; dipakai `npm run test:integration` tanpa Docker/Testcontainers). Hanya untuk dev/test lokal: `app_migrator` diberi keanggotaan `app_rw` agar tes hak akses `SET ROLE app_rw` berjalan.
 Jangan menjalankan `next build` dengan `NODE_ENV=development` di environment (mis. setelah `source .env`); biarkan Next yang memuat `.env`.
 
 ### Profil lokal dan perintah pemeliharaan (SPEC-025)
@@ -51,8 +29,8 @@ npm run cli -- --help                                                # bantuan l
 ```
 Konten ditambahkan lewat berkas di repo:
 ```bash
-npm run content:validate -- --dir content/golden-sample           # exit 0 valid, 1 ada galat
-npm run content:import   -- --dir content/golden-sample [--dry-run] [--publish]   # exit 0/1/2 (publikasi terhalang)/3
+npm run content:validate -- content/golden-sample                 # exit 0 valid, 1 ada galat
+npm run content:import   -- content/golden-sample [--dry-run] [--publish]   # exit 0/1/2 (publikasi terhalang)/3
 npm run bank:validate    -- content/gt-bank                       # bank soal General Training
 ```
 Tanpa `ffprobe`, durasi audio hanya terbaca untuk WAV (peringatan `ffprobe_unavailable`).
@@ -66,7 +44,9 @@ npm run content:import -- content/gt-modules/3.3.3 --publish
 ```
 
 ## Perintah utama
-`npm run lint | typecheck | test | test:integration | test:e2e | build | build:worker | bench:ai`
+`npm run lint | typecheck | test | test:integration | test:e2e | build | bench:ai`
+
+Tes integrasi memakai berkas SQLite sementara (otomatis, tanpa Docker). E2E: jalankan `npm run dev`, lalu `E2E_SKIP_WEBSERVER=1 E2E_BASE_URL=http://127.0.0.1:3005 npx playwright test` (set `E2E_CHROME_PATH` bila browser Playwright belum terpasang).
 
 `npm run bench:ai -- --models qwen2.5:3b-instruct,qwen2.5:7b-instruct` (khusus driver Ollama; harus berjalan di 127.0.0.1:11434).
 

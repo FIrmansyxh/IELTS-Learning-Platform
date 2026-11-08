@@ -14,7 +14,7 @@ import {
   submissions,
   users,
 } from '@/db/schema';
-import { getDb } from '../db';
+import { execute, getDb } from '../db';
 import { getStorage } from '../storage';
 import { logger } from '../logger';
 import { writeAudit } from '../audit';
@@ -58,13 +58,7 @@ export async function processSttTranscription(
   const db = getDb();
   const startedAt = new Date();
 
-  // Advisory lock 727001
-  try {
-    await db.execute(sql`SELECT pg_advisory_lock(727001)`);
-  } catch {
-    // ignore if advisory lock not supported in memory db
-  }
-
+  // Satu job AI pada satu waktu dijamin antrean dalam proses (jobs/queue.ts).
   try {
     // 1. Update job RUNNING, stage TRANSCRIBING
     const jobRunning = {
@@ -240,11 +234,6 @@ export async function processSttTranscription(
       .set({ status: 'FAILED', updatedAt: new Date() })
       .where(eq(submissions.id, submissionId));
   } finally {
-    try {
-      await db.execute(sql`SELECT pg_advisory_unlock(727001)`);
-    } catch {
-      // ignore
-    }
   }
 }
 
@@ -255,13 +244,7 @@ export async function processSpeakingEvaluation(
   const db = getDb();
   const startedAt = new Date();
 
-  // Advisory lock 727001
-  try {
-    await db.execute(sql`SELECT pg_advisory_lock(727001)`);
-  } catch {
-    // ignore
-  }
-
+  // Satu job AI pada satu waktu dijamin antrean dalam proses (jobs/queue.ts).
   try {
     const jobRunning = {
       status: 'RUNNING' as const,
@@ -473,10 +456,5 @@ export async function processSpeakingEvaluation(
       .set({ status: 'FAILED', updatedAt: new Date() })
       .where(eq(submissions.id, submissionId));
   } finally {
-    try {
-      await db.execute(sql`SELECT pg_advisory_unlock(727001)`);
-    } catch {
-      // ignore
-    }
   }
 }

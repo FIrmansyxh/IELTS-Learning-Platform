@@ -9,13 +9,13 @@ import { zodDetails } from '@/server/http/zod-errors';
 
 describe('sesi JWT', () => {
   it('terbit, terbaca, dan klaim lengkap; token rusak/ber-salt lain ditolak', async () => {
-    const t = await issueSessionToken({ id: '7a1b2c3d-0001-4000-8000-000000000001', role: 'admin', tokenVersion: 3 });
+    const t = await issueSessionToken({ id: '7a1b2c3d-0001-4000-8000-000000000001', tokenVersion: 3 });
     const cookie = `${cookieName()}=${t.value}`;
     const { claims } = await readSession(cookie);
-    expect(claims).toMatchObject({ uid: '7a1b2c3d-0001-4000-8000-000000000001', role: 'admin', tv: 3 });
-    expect(claims!.abs_exp - claims!.iat).toBeLessThanOrEqual(43200);
-    expect(claims!.abs_exp - claims!.iat).toBeGreaterThanOrEqual(43199);
-    expect(t.maxAge).toBeLessThanOrEqual(43200);
+    expect(claims).toMatchObject({ uid: '7a1b2c3d-0001-4000-8000-000000000001', role: 'learner', tv: 3 });
+    expect(claims!.abs_exp - claims!.iat).toBeLessThanOrEqual(2_592_000);
+    expect(claims!.abs_exp - claims!.iat).toBeGreaterThanOrEqual(2_591_999);
+    expect(t.maxAge).toBeLessThanOrEqual(604_800);
     expect((await readSession(`${cookieName()}=${t.value}x`)).claims).toBeNull();
     expect((await readSession(`other=${t.value}`)).present).toBe(false);
   });

@@ -2,7 +2,7 @@ import path from 'node:path';
 import { existsSync } from 'node:fs';
 import { defineConfig } from 'vitest/config';
 
-// Muat codes/.env (jalur B: TEST_DATABASE_URL) tanpa menimpa env yang sudah ada.
+// Muat codes/.env (DB uji dibuat otomatis oleh global-setup) tanpa menimpa env yang sudah ada.
 if (existsSync('.env')) process.loadEnvFile('.env');
 
 export default defineConfig({

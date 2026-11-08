@@ -6,7 +6,8 @@ import { access, constants, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { sql } from 'drizzle-orm';
 import { config } from '../config';
-import { getDb } from '../db';
+import { appliedCount, journalTags } from '../db-migrate';
+import { databasePath, execute, getDb, getRaw } from '../db';
 
 export type DoctorStatus = 'ok' | 'warn' | 'fail';
 export interface DoctorCheck {
@@ -24,55 +25,39 @@ function nodeCheck(): DoctorCheck {
 }
 
 function envCheck(): DoctorCheck {
-  const missing = ['DATABASE_URL', 'AUTH_SECRET', 'IP_HMAC_SECRET'].filter((k) => !process.env[k]);
+  const missing = ['AUTH_SECRET', 'IP_HMAC_SECRET'].filter((k) => !process.env[k]);
   return missing.length === 0
-    ? { name: 'Konfigurasi .env', status: 'ok', detail: 'DATABASE_URL, AUTH_SECRET, IP_HMAC_SECRET terisi' }
+    ? { name: 'Konfigurasi .env', status: 'ok', detail: 'AUTH_SECRET, IP_HMAC_SECRET terisi' }
     : { name: 'Konfigurasi .env', status: 'fail', detail: `belum diisi: ${missing.join(', ')}` };
 }
 
-/**
- * Banding migrasi terpasang dengan jurnal. Tabel migrasi hanya dapat dibaca peran migrator (peran aplikasi
- * sengaja tidak punya akses), jadi pakai DATABASE_MIGRATOR_URL bila ada dan beri catatan bila tidak.
- */
-async function migrationsCheck(): Promise<DoctorCheck> {
-  const url = process.env.DATABASE_MIGRATOR_URL;
+/** Banding migrasi terpasang (tabel _migrations) dengan jurnal drizzle. */
+function migrationsCheck(): DoctorCheck {
   let expected = 0;
   try {
-    const journal = JSON.parse(await readFile(path.join(process.cwd(), 'drizzle', 'meta', '_journal.json'), 'utf8')) as { entries: unknown[] };
-    expected = journal.entries.length;
+    expected = journalTags().length;
   } catch {
     return { name: 'Migrasi', status: 'warn', detail: 'jurnal migrasi tidak ditemukan (jalankan dari folder codes/)' };
   }
-  if (!url) return { name: 'Migrasi', status: 'warn', detail: `tidak dapat diperiksa tanpa DATABASE_MIGRATOR_URL (jurnal: ${expected} migrasi). Pastikan: npm run db:migrate` };
-  const { default: pg } = await import('pg');
-  const client = new pg.Client({ connectionString: url });
-  try {
-    await client.connect();
-    const r = await client.query<{ n: number }>('SELECT count(*)::int AS n FROM drizzle.__drizzle_migrations');
-    const applied = Number(r.rows[0]?.n ?? 0);
-    return applied >= expected
-      ? { name: 'Migrasi', status: 'ok', detail: `${applied} dari ${expected} terpasang` }
-      : { name: 'Migrasi', status: 'fail', detail: `${applied} dari ${expected} terpasang. Jalankan: npm run db:migrate` };
-  } catch {
-    return { name: 'Migrasi', status: 'fail', detail: 'belum terpasang. Jalankan: npm run db:migrate' };
-  } finally {
-    await client.end().catch(() => undefined);
-  }
+  const applied = appliedCount(getRaw());
+  return applied >= expected
+    ? { name: 'Migrasi', status: 'ok', detail: `${applied} dari ${expected} terpasang` }
+    : { name: 'Migrasi', status: 'fail', detail: `${applied} dari ${expected} terpasang. Jalankan: npm run db:migrate` };
 }
 
 async function dbChecks(): Promise<DoctorCheck[]> {
   const out: DoctorCheck[] = [];
   const db = getDb();
   try {
-    await db.execute(sql`SELECT 1`);
+    await execute(db, sql`SELECT 1`);
     out.push({ name: 'Database', status: 'ok', detail: 'terhubung' });
   } catch (e) {
-    out.push({ name: 'Database', status: 'fail', detail: `tidak terhubung (${(e as Error).message.slice(0, 80)}). Nyalakan Postgres lalu coba lagi.` });
+    out.push({ name: 'Database', status: 'fail', detail: `tidak terhubung (${(e as Error).message.slice(0, 80)}). Periksa DATABASE_PATH dan hak tulis folder.` });
     return out;
   }
-  out.push(await migrationsCheck());
+  out.push(migrationsCheck());
   try {
-    const r = await db.execute(sql`SELECT (SELECT count(*) FROM tiers)::int AS tiers, (SELECT count(*) FROM sub_modules)::int AS subs, (SELECT count(*) FROM sub_modules WHERE status = 'PUBLISHED')::int AS published`);
+    const r = await execute(db, sql`SELECT (SELECT count(*) FROM tiers) AS tiers, (SELECT count(*) FROM sub_modules) AS subs, (SELECT count(*) FROM sub_modules WHERE status = 'PUBLISHED') AS published`);
     const x = r.rows[0] as { tiers: number; subs: number; published: number };
     out.push(
       Number(x.tiers) === 4
@@ -82,11 +67,11 @@ async function dbChecks(): Promise<DoctorCheck[]> {
     if (Number(x.published) === 0 && Number(x.tiers) === 4) {
       out.push({ name: 'Konten', status: 'warn', detail: 'belum ada sub-modul terbit. Impor: npm run content:import -- content/gt-modules/3.3.3 --publish' });
     }
-    const b = await db.execute(sql`SELECT skill, count(*)::int AS n FROM band_conversion_tables WHERE is_active GROUP BY skill`);
+    const b = await execute(db, sql`SELECT skill, count(*) AS n FROM band_conversion_tables WHERE is_active GROUP BY skill`);
     const skills = new Set((b.rows as Array<{ skill: string }>).map((z) => z.skill));
     const need = ['LISTENING', 'READING_GENERAL'].filter((s) => !skills.has(s));
     out.push(need.length === 0 ? { name: 'Tabel band aktif', status: 'ok', detail: 'Listening dan Reading General Training' } : { name: 'Tabel band aktif', status: 'fail', detail: `belum aktif: ${need.join(', ')}. Jalankan: npm run db:seed` });
-    const p = await db.execute(sql`SELECT count(*)::int AS n FROM users WHERE deleted_at IS NULL AND status = 'ACTIVE'`);
+    const p = await execute(db, sql`SELECT count(*) AS n FROM users WHERE deleted_at IS NULL AND status = 'ACTIVE'`);
     const n = Number((p.rows[0] as { n: number }).n);
     out.push({ name: 'Profil', status: n > 0 ? 'ok' : 'warn', detail: n > 0 ? `${n} profil` : 'belum ada profil (dibuat di layar /pilih-profil)' });
   } catch (e) {

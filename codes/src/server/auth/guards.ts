@@ -7,11 +7,8 @@ import { buildSetCookie, issueSessionToken, readSession, SESSION_UPDATE_AGE_SEC 
 
 export interface SessionUser {
   id: string;
-  email: string;
   displayName: string;
-  role: 'learner' | 'admin';
   targetBand: number | null;
-  mustChangePassword: boolean;
   consentRecordingAt: Date | null;
   keepRecordings: boolean;
   placementCompletedAt: Date | null;
@@ -23,11 +20,8 @@ type UserRow = typeof users.$inferSelect;
 export function toSessionUser(r: UserRow): SessionUser {
   return {
     id: r.id,
-    email: r.email,
     displayName: r.displayName,
-    role: r.role,
     targetBand: r.targetBand === null ? null : Number(r.targetBand),
-    mustChangePassword: r.mustChangePassword,
     consentRecordingAt: r.consentRecordingAt,
     keepRecordings: r.keepRecordings,
     placementCompletedAt: r.placementCompletedAt,
@@ -39,11 +33,8 @@ export function toSessionUser(r: UserRow): SessionUser {
 export function toUserDTO(u: SessionUser): UserDTOType {
   return {
     id: u.id,
-    email: u.email,
     display_name: u.displayName,
-    role: u.role,
     target_band: u.targetBand,
-    must_change_password: u.mustChangePassword,
     consent_recording_at: u.consentRecordingAt ? u.consentRecordingAt.toISOString() : null,
     keep_recordings: u.keepRecordings,
     placement_completed_at: u.placementCompletedAt ? u.placementCompletedAt.toISOString() : null,
@@ -73,7 +64,7 @@ export async function requireUser(
   // Sesi geser: perbarui cookie bila token lebih tua dari updateAge, tidak melewati batas absolut.
   let refreshedCookie: string | undefined;
   if (now - claims.iat > SESSION_UPDATE_AGE_SEC) {
-    const t = await issueSessionToken({ id: user.id, role: user.role, tokenVersion: user.tokenVersion }, { absExp: claims.abs_exp, now });
+    const t = await issueSessionToken({ id: user.id, tokenVersion: user.tokenVersion }, { absExp: claims.abs_exp, now });
     refreshedCookie = buildSetCookie(t.value, t.maxAge);
   }
   return { user, refreshedCookie };

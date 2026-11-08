@@ -2,7 +2,7 @@ import { rm } from 'node:fs/promises';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { sql } from 'drizzle-orm';
 import { LearnCompleteResponseSchema, LearnProgressResponseSchema, SubModuleDetailResponseSchema } from '@/contracts/player';
-import { closeDb, getDb } from '@/server/db';
+import { NOW, execute, closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { GET as getDetail } from '@/app/api/v1/sub-modules/[sub_module]/route';
 import { POST as postProgress } from '@/app/api/v1/sub-modules/[sub_module]/learn-progress/route';
@@ -31,7 +31,7 @@ const asset = (u: L, id: string, headers: Record<string, string> = {}) =>
   call(getAsset, 'GET', `/api/v1/assets/${id}/file`, { cookie: u.cookie, params: { asset_id: id }, headers });
 /** Mundurkan stempel ping terakhir (jam server tidak dapat dimajukan pada route, jadi dimundurkan di DB). */
 const setProgress = (u: L, id: string, set: ReturnType<typeof sql>) =>
-  db.execute(sql`UPDATE user_sub_module_progress SET ${set} WHERE user_id = ${u.user.id}::uuid AND sub_module_id = ${id}::uuid`);
+  execute(db, sql`UPDATE user_sub_module_progress SET ${set} WHERE user_id = ${u.user.id} AND sub_module_id = ${id}`);
 
 describe('GET /sub-modules/{code}', () => {
   it('UNLOCKED -> 200, IN_PROGRESS, artikel non-kosong, drill terblokir LEARN_NOT_COMPLETED; sesuai skema kontrak', async () => {
@@ -86,7 +86,7 @@ describe('GET /sub-modules/{code}', () => {
     expect(tier.json.error.details[0].code).toBe('TIER_LOCKED');
 
     expect((await detail(u, '1.1.3')).status).toBe(404); // DRAFT
-    await db.execute(sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE sub_module_code = '1.1.4'`);
+    await execute(db, sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE sub_module_code = '1.1.4'`);
     expect((await detail(u, '1.1.4')).status).toBe(404);
     expect((await detail(u, '9.9.9')).status).toBe(404);
     const bad = await detail(u, 'abc');
@@ -115,7 +115,7 @@ describe('GET /sub-modules/{code}', () => {
 
   it('video dengan video_id korup dibuang dari payload (tidak pernah dikirim ke klien)', async () => {
     const { subId: id } = await seedMaterial('1.1.1', { videoIds: ['dQw4w9WgXcQ'] });
-    await db.execute(sql`UPDATE content_assets SET external_ref = 'bad id!' WHERE kind = 'VIDEO_EMBED'`);
+    await execute(db, sql`UPDATE content_assets SET external_ref = 'bad id!' WHERE kind = 'VIDEO_EMBED'`);
     void id;
     const u = await learnerSession();
     expect((await detail(u, '1.1.1')).json.data.material.videos).toEqual([]);
@@ -140,7 +140,7 @@ describe('POST learn-progress (anti-farming)', () => {
     const { subId: id } = await seedMaterial('1.1.1');
     const u = await learnerSession();
     await detail(u, '1.1.1');
-    await setProgress(u, id, sql`learn_active_seconds = 20, learn_last_ping_at = now() - interval '10 seconds'`);
+    await setProgress(u, id, sql`learn_active_seconds = 20, learn_last_ping_at = ${NOW} - 10000`);
     const r = await ping(u, id, { subtab: 'ARTICLE', active_seconds: 30 });
     const gained = r.json.data.learn_active_seconds - 20;
     expect(gained).toBeGreaterThan(0);
@@ -151,7 +151,7 @@ describe('POST learn-progress (anti-farming)', () => {
     const { subId: id } = await seedMaterial('1.1.1');
     const u = await learnerSession();
     await detail(u, '1.1.1');
-    await setProgress(u, id, sql`learn_active_seconds = 0, learn_last_ping_at = now() - interval '1 hour'`);
+    await setProgress(u, id, sql`learn_active_seconds = 0, learn_last_ping_at = ${NOW} - 3600000`);
     expect((await ping(u, id, { subtab: 'ARTICLE', active_seconds: 25 })).json.data.learn_active_seconds).toBe(25);
     expect((await ping(u, id, { subtab: 'ARTICLE', active_seconds: 31 })).status).toBe(400);
     expect((await ping(u, id, { subtab: 'ARTICLE', active_seconds: 0 })).status).toBe(400);
@@ -184,7 +184,7 @@ describe('POST learn-progress (anti-farming)', () => {
     const { subId: id } = await seedMaterial('1.1.1');
     const u = await learnerSession();
     await detail(u, '1.1.1');
-    await setProgress(u, id, sql`status = 'COMPLETED', completed_at = now()`);
+    await setProgress(u, id, sql`status = 'COMPLETED', completed_at = ${NOW}`);
     expect((await ping(u, id, { subtab: 'ARTICLE', active_seconds: 5 })).status).toBe(200);
     expect((await progressOf(u.user.id, '1.1.1')).status).toBe('COMPLETED');
   });
@@ -214,7 +214,7 @@ describe('POST learn-complete', () => {
     const { subId: id } = await seedMaterial('1.1.1');
     const u = await learnerSession();
     await detail(u, '1.1.1');
-    await setProgress(u, id, sql`learn_active_seconds = 45, learn_visited_subtabs = '{ARTICLE}'`);
+    await setProgress(u, id, sql`learn_active_seconds = 45, learn_visited_subtabs = '["ARTICLE"]'`);
     const r = await complete(u, id);
     expect(r.status).toBe(409);
     expect(r.json.error.code).toBe('LEARN_REQUIREMENTS_NOT_MET');
@@ -228,7 +228,7 @@ describe('POST learn-complete', () => {
     const { subId: id } = await seedMaterial('1.1.1', { videoIds: ['dQw4w9WgXcQ'] });
     const u = await learnerSession();
     await detail(u, '1.1.1');
-    await setProgress(u, id, sql`learn_active_seconds = 61, learn_visited_subtabs = '{ARTICLE}'`);
+    await setProgress(u, id, sql`learn_active_seconds = 61, learn_visited_subtabs = '["ARTICLE"]'`);
     const r = await complete(u, id);
     expect(r.status).toBe(409);
     expect(r.json.error.details).toEqual([{ path: 'learn_visited_subtabs', code: 'subtab_not_visited', message: 'Buka tab Video terlebih dahulu.' }]);
@@ -239,7 +239,7 @@ describe('POST learn-complete', () => {
     await addDrill('1.1.1', [Q.mcq()]);
     const u = await learnerSession();
     await detail(u, '1.1.1');
-    await setProgress(u, id, sql`learn_active_seconds = 61, learn_visited_subtabs = '{ARTICLE,VIDEO}'`);
+    await setProgress(u, id, sql`learn_active_seconds = 61, learn_visited_subtabs = '["ARTICLE","VIDEO"]'`);
     const events: string[] = [];
     const hook = async (_tx: unknown, e: { kind: string }) => void events.push(e.kind);
     activityHooks.push(hook as never);
@@ -264,7 +264,7 @@ describe('POST learn-complete', () => {
     const { subId: id } = await seedMaterial('1.1.1');
     const u = await learnerSession();
     await detail(u, '1.1.1');
-    await setProgress(u, id, sql`learn_active_seconds = 60, learn_visited_subtabs = '{ARTICLE}'`);
+    await setProgress(u, id, sql`learn_active_seconds = 60, learn_visited_subtabs = '["ARTICLE"]'`);
     const r = await complete(u, id);
     expect(r.status).toBe(200);
     expect(r.json.data.drill_can_start).toBe(false);
@@ -274,12 +274,12 @@ describe('POST learn-complete', () => {
     const { subId: id } = await seedMaterial('1.1.1');
     const u = await learnerSession();
     await detail(u, '1.1.1');
-    await setProgress(u, id, sql`learn_active_seconds = 30, learn_visited_subtabs = '{ARTICLE}'`);
-    await db.execute(sql`UPDATE app_settings SET value = '20'::jsonb WHERE key = 'learn.min_active_seconds'`);
+    await setProgress(u, id, sql`learn_active_seconds = 30, learn_visited_subtabs = '["ARTICLE"]'`);
+    await execute(db, sql`UPDATE app_settings SET value = '20' WHERE key = 'learn.min_active_seconds'`);
     try {
       expect((await complete(u, id)).status).toBe(200);
     } finally {
-      await db.execute(sql`UPDATE app_settings SET value = '60'::jsonb WHERE key = 'learn.min_active_seconds'`);
+      await execute(db, sql`UPDATE app_settings SET value = '60' WHERE key = 'learn.min_active_seconds'`);
     }
   });
 
@@ -316,7 +316,7 @@ describe('POST mini-task/complete', () => {
     await detail(u, '1.1.1');
     await markLearnDone(u.user.id, '1.1.1');
     expect((await mini(u, ai)).json.error.code).toBe('MINI_TASK_NOT_SELF_CHECK');
-    await db.execute(sql`UPDATE user_sub_module_progress SET status = 'COMPLETED', completed_at = now() WHERE user_id = ${u.user.id}::uuid`);
+    await execute(db, sql`UPDATE user_sub_module_progress SET status = 'COMPLETED', completed_at = ${NOW} WHERE user_id = ${u.user.id}`);
     await detail(u, '1.1.2');
     expect((await mini(u, none)).json.error.code).toBe('NO_MINI_TASK');
   });
@@ -366,7 +366,7 @@ describe('GET /assets/{asset_id}/file', () => {
     const u = await learnerSession();
     const { asset: audio } = await addFileAsset({ kind: 'AUDIO_LISTENING', mime: 'audio/mpeg', ext: 'mp3', data: Buffer.from('ID3-uji-audio-unik') });
     expect((await asset(u, audio.id)).status).toBe(404);
-    const video = (await db.execute(sql`SELECT id FROM content_assets WHERE kind = 'VIDEO_EMBED' LIMIT 1`)).rows[0] as { id: string };
+    const video = (await execute(db, sql`SELECT id FROM content_assets WHERE kind = 'VIDEO_EMBED' LIMIT 1`)).rows[0] as { id: string };
     expect((await asset(u, video.id)).status).toBe(404);
     const { asset: orphan } = await addFileAsset({ kind: 'SLIDE_IMAGE', mime: 'image/png', ext: 'png' });
     expect((await asset(u, orphan.id)).status).toBe(404);
@@ -381,14 +381,14 @@ describe('GET /assets/{asset_id}/file', () => {
     const r = await asset(u, slideAssets[0]!);
     expect(r.status).toBe(403);
     expect(r.json.error.code).toBe('LOCKED_CONTENT');
-    await db.execute(sql`UPDATE sub_modules SET status = 'DRAFT' WHERE sub_module_code = '1.1.2'`);
+    await execute(db, sql`UPDATE sub_modules SET status = 'DRAFT' WHERE sub_module_code = '1.1.2'`);
     expect((await asset(u, slideAssets[0]!)).status).toBe(404);
   });
 
   it('berkas hilang dari storage -> 404 tanpa membocorkan path', async () => {
     const { slideAssets } = await seedMaterial('1.1.1', { slides: 1 });
     const u = await learnerSession();
-    const key = ((await db.execute(sql`SELECT storage_key FROM content_assets WHERE id = ${slideAssets[0]}::uuid`)).rows[0] as { storage_key: string }).storage_key;
+    const key = ((await execute(db, sql`SELECT storage_key FROM content_assets WHERE id = ${slideAssets[0]}`)).rows[0] as { storage_key: string }).storage_key;
     await rm(`${process.env.ASSETS_DIR}/${key}`);
     const r = await asset(u, slideAssets[0]!);
     expect(r.status).toBe(404);
@@ -397,7 +397,7 @@ describe('GET /assets/{asset_id}/file', () => {
 
   it('mime di luar daftar putih tidak dilayani', async () => {
     const { slideAssets } = await seedMaterial('1.1.1', { slides: 1 });
-    await db.execute(sql`UPDATE content_assets SET mime_type = 'text/html' WHERE id = ${slideAssets[0]}::uuid`);
+    await execute(db, sql`UPDATE content_assets SET mime_type = 'text/html' WHERE id = ${slideAssets[0]}`);
     const u = await learnerSession();
     expect((await asset(u, slideAssets[0]!)).status).toBe(404);
   });

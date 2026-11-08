@@ -397,8 +397,7 @@ export async function applyPlacement(
       .select()
       .from(attempts)
       .where(and(eq(attempts.id, attemptId), eq(attempts.userId, userId)))
-      .limit(1)
-      .for('update');
+      .limit(1);
 
     if (!attempt) throw notFound();
 

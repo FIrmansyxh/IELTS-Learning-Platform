@@ -14,7 +14,7 @@ export const GET = withApi({ auth: 'public' }, async () => ({
 /** Buat profil baru dan langsung memilihnya (menerbitkan cookie sesi). */
 export const POST = withApi({ auth: 'public', body: CreateProfileRequestSchema }, async ({ body, ipHash, setCookie }) => {
   const user = await createProfile(body.display_name, ipHash);
-  const t = await issueSessionToken({ id: user.id, role: user.role, tokenVersion: user.tokenVersion });
+  const t = await issueSessionToken({ id: user.id, tokenVersion: user.tokenVersion });
   setCookie(buildSetCookie(t.value, t.maxAge));
   return { status: 201, data: { user: toUserDTO(user) } };
 });

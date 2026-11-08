@@ -4,8 +4,8 @@
   "last_agent": "orchestrator",
   "current_sprint": "Pivot General Training + Aplikasi Lokal Satu Perangkat (ADR-004/005)",
   "active_tasks": [
-    "SPEC-025 Fase 3 (SQLite + antrean dalam proses) - belum dimulai"
+    "SPEC-025 Fase 4 (start:local, pembersihan Docker) - belum dimulai"
   ],
   "blocked_tasks": [],
-  "notes": "2026-11-08: ADR-004 (IELTS General Training, LLM lokal llama.cpp untuk Writing, Speaking via prompt AI eksternal + input skor, bank soal GT, tag exam_module, tabel band READING_GENERAL) dan ADR-005 Fase 1-2 (profil lokal tanpa login; panel admin dihapus, diganti CLI: npm run profile:*, progress:*, points:*, settings:*, band:*, doctor) selesai dan teruji. Draf menunggu: SPEC-021 jalur belajar, 022 bank soal+mix, 023 simulasi tes per section, 024 Listening TTS. Berikutnya: SPEC-025 Fase 3 (SQLite) lalu Fase 4 (satu perintah). Model LLM belum dikunci (Qwen3-8B menjanjikan, perlu uji ulang). Satu tes integrasi lama usang (Placement tanpa handler). Rujukan: state/knowledge_base/decisions/ADR-004*, ADR-005*."
+  "notes": "2026-11-08: ADR-004 (IELTS General Training, LLM lokal llama.cpp untuk Writing, Speaking via prompt AI eksternal + input skor, bank soal GT, tag exam_module, tabel band READING_GENERAL) dan ADR-005 Fase 1-2 (profil lokal tanpa login; panel admin dihapus, diganti CLI: npm run profile:*, progress:*, points:*, settings:*, band:*, doctor) selesai dan teruji. Draf menunggu: SPEC-021 jalur belajar, 022 bank soal+mix, 023 simulasi tes per section, 024 Listening TTS. SPEC-025 Fase 3 (SQLite + antrean dalam proses) selesai dan teruji; berikutnya Fase 4 (start:local, hapus Docker/Postgres). Model LLM belum dikunci (Qwen3-8B menjanjikan, perlu uji ulang). Rujukan: state/knowledge_base/decisions/ADR-004*, ADR-005*."
 }

@@ -12,7 +12,7 @@ export const POST = withApi(
   { auth: 'public', params: z.object({ profile_id: Uuid }) },
   async ({ params, ipHash, setCookie }) => {
     const user = await selectProfile(params.profile_id, ipHash);
-    const t = await issueSessionToken({ id: user.id, role: user.role, tokenVersion: user.tokenVersion });
+    const t = await issueSessionToken({ id: user.id, tokenVersion: user.tokenVersion });
     setCookie(buildSetCookie(t.value, t.maxAge));
     return { status: 200, data: { user: toUserDTO(user) } };
   },

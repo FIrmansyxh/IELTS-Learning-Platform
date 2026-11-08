@@ -1,7 +1,7 @@
 /**
  * AttemptService (SPEC-006, SPEC-014): siklus attempt generik (mulai/lanjut, jawab, submit, hasil) untuk semua tipe set.
  * Aturan per tipe ada di `assessmentTypeHandlers`. Semua tulis terjadi dalam satu transaksi per permintaan dengan
- * `SELECT ... FOR UPDATE` pada baris attempt; kegagalan hook membatalkan seluruh submit.
+ * `SELECT ...` pada baris attempt; kegagalan hook membatalkan seluruh submit.
  */
 import { randomUUID } from 'node:crypto';
 import { and, asc, eq, sql } from 'drizzle-orm';
@@ -54,6 +54,7 @@ import {
 } from './engine';
 import { assessmentTypeHandlers } from './handlers';
 import { attemptCompletedHooks, type ScoreSummary } from './hooks';
+import { execute } from '@/server/db';
 
 const toH = (numeric: string | number | null): number => Math.round(Number(numeric ?? 0) * 100);
 
@@ -62,8 +63,7 @@ async function loadLocked(tx: Tx, attemptId: string, userId: string): Promise<{ 
     .select()
     .from(attempts)
     .where(and(eq(attempts.id, attemptId), eq(attempts.userId, userId)))
-    .limit(1)
-    .for('update');
+    .limit(1);
   if (!attempt) throw notFound(); // bukan milik pengguna = tidak ada (tidak pernah 403)
   const [set] = await tx.select().from(assessmentSets).where(eq(assessmentSets.id, attempt.assessmentSetId)).limit(1);
   if (!set) throw notFound();
@@ -208,8 +208,7 @@ export async function settleExpiredForSet(db: Db, userId: string, assessmentSetI
       .select()
       .from(attempts)
       .where(and(eq(attempts.userId, userId), eq(attempts.assessmentSetId, assessmentSetId), eq(attempts.status, 'IN_PROGRESS')))
-      .limit(1)
-      .for('update');
+      .limit(1);
     if (!a || !isExpired(a, now)) return;
     const [set] = await tx.select().from(assessmentSets).where(eq(assessmentSets.id, assessmentSetId)).limit(1);
     if (set) await expire(tx, a, set, userId);
@@ -227,21 +226,19 @@ export async function startAttempt(db: Db, userId: string, assessmentSetId: stri
     const handler = assessmentTypeHandlers[set.assessmentType];
     if (!handler) throw new ApiError('ASSESSMENT_TYPE_NOT_ENABLED');
 
-    // Serialkan permintaan mulai serentak untuk (user, set) agar tidak ada dua attempt aktif.
-    await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${`attempt:${userId}:${set.id}`}, 0))`);
+    // Transaksi diserialkan (mutex + BEGIN IMMEDIATE): tidak ada dua attempt aktif dari permintaan serentak.
 
     // D3: attempt PRACTICE > 24 jam tanpa aktivitas menjadi ABANDONED.
-    await tx.execute(sql`
+    await execute(tx, sql`
       UPDATE attempts SET status = 'ABANDONED', updated_at = ${now}
-      WHERE user_id = ${userId}::uuid AND assessment_set_id = ${set.id}::uuid AND status = 'IN_PROGRESS' AND mode = 'PRACTICE'
+      WHERE user_id = ${userId} AND assessment_set_id = ${set.id} AND status = 'IN_PROGRESS' AND mode = 'PRACTICE'
         AND updated_at < ${new Date(now.getTime() - 24 * 3600 * 1000)}`);
 
     const [existing] = await tx
       .select()
       .from(attempts)
       .where(and(eq(attempts.userId, userId), eq(attempts.assessmentSetId, set.id), eq(attempts.status, 'IN_PROGRESS')))
-      .limit(1)
-      .for('update');
+      .limit(1);
     if (existing && isExpired(existing, now)) {
       await expire(tx, existing, set, userId); // lalu buat attempt baru di bawah
     } else if (existing) {

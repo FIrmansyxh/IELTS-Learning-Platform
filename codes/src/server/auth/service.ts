@@ -1,30 +1,20 @@
 import { eq } from 'drizzle-orm';
 import { users } from '@/db/schema';
-import { getDb, type Tx } from '../db';
+import { getDb, isUniqueViolation, type Tx } from '../db';
 import { ApiError } from '../http/errors';
 import '../hooks-register';
 import { userCreatedHooks } from './hooks';
 import { toSessionUser, type SessionUser } from './guards';
 
-/** Deteksi pelanggaran indeks unik pg (drizzle membungkus error pg di `cause`). */
-export function isUniqueViolation(err: unknown): boolean {
-  const e = err as { code?: string; cause?: { code?: string } } | null;
-  return e?.code === '23505' || e?.cause?.code === '23505';
-}
+export { isUniqueViolation };
 
 /**
- * Sisipkan user baru + jalankan userCreatedHooks (dalam transaksi pemanggil). Melempar EMAIL_TAKEN pada
- * pelanggaran unik apa pun (pemanggil memetakannya: profil lokal -> PROFILE_NAME_TAKEN).
+ * Sisipkan user baru + jalankan userCreatedHooks (dalam transaksi pemanggil). Melempar PROFILE_NAME_TAKEN pada
+ * pelanggaran unik (nama profil).
  */
 export async function insertUser(
   tx: Tx,
-  v: {
-    email: string;
-    displayName: string;
-    passwordHash: string;
-    role: 'learner' | 'admin';
-    mustChangePassword: boolean;
-  },
+  v: { displayName: string },
 ) {
   let row: typeof users.$inferSelect | undefined;
   try {
@@ -34,11 +24,11 @@ export async function insertUser(
       return r;
     });
   } catch (err) {
-    if (isUniqueViolation(err)) throw new ApiError('EMAIL_TAKEN');
+    if (isUniqueViolation(err)) throw new ApiError('PROFILE_NAME_TAKEN');
     throw err;
   }
   if (!row) throw new Error('insert user gagal');
-  for (const hook of userCreatedHooks) await hook(tx, { id: row.id, role: row.role });
+  for (const hook of userCreatedHooks) await hook(tx, { id: row.id });
   return row;
 }
 

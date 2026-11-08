@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { writeAudit } from '../server/audit';
-import { getDb, type Db } from '../server/db';
+import { NOW, execute, getDb, type Db } from '../server/db';
 import { userAnonymizedHooks } from '../server/auth/hooks';
 
 /**
@@ -9,18 +9,15 @@ import { userAnonymizedHooks } from '../server/auth/hooks';
  */
 export async function anonymizeDeletedUsers(db: Db = getDb()): Promise<number> {
   return db.transaction(async (tx) => {
-    const res = await tx.execute(sql`
+    const res = await execute(tx, sql`
       SELECT id FROM users
       WHERE deleted_at IS NOT NULL
-        AND deleted_at <= now() - interval '30 days'
-        AND (email <> 'deleted-' || id::text || '@invalid' OR password_hash <> '!deleted')
-      ORDER BY id FOR UPDATE`);
+        AND deleted_at <= ${NOW} - 30 * 86400000
+        AND display_name <> 'Pengguna dihapus'
+      ORDER BY id`);
     const ids = (res.rows as Array<{ id: string }>).map((r) => r.id);
     for (const id of ids) {
-      await tx.execute(sql`
-        UPDATE users SET email = 'deleted-' || id::text || '@invalid', display_name = 'Pengguna dihapus',
-               password_hash = '!deleted', target_band = NULL, updated_at = now()
-        WHERE id = ${id}::uuid`);
+      await execute(tx, sql`UPDATE users SET display_name = 'Pengguna dihapus', target_band = NULL, updated_at = ${NOW} WHERE id = ${id}`);
       for (const hook of userAnonymizedHooks) await hook(tx, id);
       await writeAudit(tx, { action: 'USER_ANONYMIZED', entityType: 'user', entityId: id });
     }

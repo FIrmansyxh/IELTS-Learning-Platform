@@ -141,7 +141,7 @@ export async function getPointsHistory(
     .offset(offset);
 
   const [countRow] = await tx
-    .select({ count: sql<number>`count(*)::int` })
+    .select({ count: sql<number>`count(*)` })
     .from(pointLedger)
     .where(eq(pointLedger.userId, userId));
 
@@ -178,8 +178,7 @@ export async function recordActivity(
   const [row] = await tx
     .select()
     .from(userStats)
-    .where(eq(userStats.userId, userId))
-    .for('update');
+    .where(eq(userStats.userId, userId));
 
   if (!row) {
     return { daily_points_awarded: 0, daily_streak_days: 0 };
@@ -321,14 +320,14 @@ async function handleDrillGamification(ctx: AttemptCompletedContext, now: Date):
   // G1: Drill points delta (anti-farming)
   const drillPointsTarget = correctCount * correctSetting;
   const [existingDrillRow] = await tx
-    .select({ total: sql<number>`coalesce(sum(points), 0)::int` })
+    .select({ total: sql<number>`coalesce(sum(points), 0)` })
     .from(pointLedger)
     .where(
       and(
         eq(pointLedger.userId, userId),
         eq(pointLedger.source, 'DRILL'),
         sql`${pointLedger.sourceId} IN (
-          SELECT id FROM attempts WHERE user_id = ${userId}::uuid AND assessment_set_id = ${set.id}::uuid
+          SELECT id FROM attempts WHERE user_id = ${userId} AND assessment_set_id = ${set.id}
         )`,
       ),
     );
@@ -349,14 +348,14 @@ async function handleDrillGamification(ctx: AttemptCompletedContext, now: Date):
   // G2: Speed streak delta (anti-farming)
   const speedPointsTarget = speedCount * speedBonusSetting;
   const [existingSpeedRow] = await tx
-    .select({ total: sql<number>`coalesce(sum(points), 0)::int` })
+    .select({ total: sql<number>`coalesce(sum(points), 0)` })
     .from(pointLedger)
     .where(
       and(
         eq(pointLedger.userId, userId),
         eq(pointLedger.source, 'SPEED_STREAK'),
         sql`${pointLedger.sourceId} IN (
-          SELECT id FROM attempts WHERE user_id = ${userId}::uuid AND assessment_set_id = ${set.id}::uuid
+          SELECT id FROM attempts WHERE user_id = ${userId} AND assessment_set_id = ${set.id}
         )`,
       ),
     );
@@ -570,54 +569,6 @@ async function handleBossGamification(ctx: AttemptCompletedContext, now: Date): 
 }
 
 /**
- * Ambil daftar ringkasan poin pengguna dan mutasi ledger terakhir untuk Admin.
- */
-export async function adminListUserPoints(db: DbOrTx) {
-  const userRows = await db
-    .select({
-      userId: users.id,
-      email: users.email,
-      displayName: users.displayName,
-      role: users.role,
-      totalPoints: sql<number>`COALESCE(${userStats.totalPoints}, 0)`,
-      dailyStreakDays: sql<number>`COALESCE(${userStats.dailyStreakDays}, 0)`,
-      longestDailyStreak: sql<number>`COALESCE(${userStats.longestDailyStreak}, 0)`,
-      lastActiveDate: userStats.lastActiveDate,
-    })
-    .from(users)
-    .leftJoin(userStats, eq(users.id, userStats.userId))
-    .where(sql`${users.deletedAt} IS NULL`)
-    .orderBy(desc(sql`COALESCE(${userStats.totalPoints}, 0)`));
-
-  const ledgerRows = await db
-    .select({
-      id: pointLedger.id,
-      userId: pointLedger.userId,
-      userEmail: users.email,
-      userDisplayName: users.displayName,
-      source: pointLedger.source,
-      points: pointLedger.points,
-      note: pointLedger.note,
-      createdAt: pointLedger.createdAt,
-    })
-    .from(pointLedger)
-    .innerJoin(users, eq(pointLedger.userId, users.id))
-    .orderBy(desc(pointLedger.createdAt))
-    .limit(50);
-
-  return {
-    users: userRows.map((u) => ({
-      ...u,
-      lastActiveDate: u.lastActiveDate ? u.lastActiveDate.toISOString() : null,
-    })),
-    recentLedger: ledgerRows.map((l) => ({
-      ...l,
-      createdAt: l.createdAt.toISOString(),
-    })),
-  };
-}
-
-/**
  * Penyesuaian poin manual oleh Admin (reward/koreksi).
  */
 export async function adminAdjustUserPoints(
@@ -630,8 +581,7 @@ export async function adminAdjustUserPoints(
   const [row] = await tx
     .select()
     .from(userStats)
-    .where(eq(userStats.userId, params.userId))
-    .for('update');
+    .where(eq(userStats.userId, params.userId));
 
   const currentTotal = row?.totalPoints ?? 0;
   const newTotal = Math.max(0, currentTotal + params.points);

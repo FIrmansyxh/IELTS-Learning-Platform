@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { sql } from 'drizzle-orm';
-import { closeDb, getDb } from '@/server/db';
+import { execute, closeDb, getDb } from '@/server/db';
 import { resetRateLimits } from '@/server/http/rate-limit';
 import { GET as treeGet } from '@/app/api/v1/curriculum/tree/route';
 import { GET as detailGet } from '@/app/api/v1/sub-modules/[sub_module]/route';
@@ -28,14 +28,14 @@ const codesInTree = async (cookie: string): Promise<string[]> => {
   return r.json.data.tiers.flatMap((t: any) => t.modules.flatMap((m: any) => m.sub_modules.map((s: any) => s.sub_module_code as string)));
 };
 const publishAll = async () => {
-  const rows = (await db.execute(sql`SELECT sub_module_code AS c FROM sub_modules`)).rows as Array<{ c: string }>;
+  const rows = (await execute(db, sql`SELECT sub_module_code AS c FROM sub_modules`)).rows as Array<{ c: string }>;
   await publishSub(...rows.map((r) => r.c));
 };
 
 describe('tag exam_module (ADR-004)', () => {
   it('seed: 33 sub-modul; hanya 3.3.1 dan 4.1.1 bertag ACADEMIC; 3.3.3 dan 4.1.3 bertag GENERAL_TRAINING', async () => {
     expect(SUB_MODULE_SEEDS).toHaveLength(33);
-    const rows = (await db.execute(sql`SELECT sub_module_code AS c, exam_module AS e FROM sub_modules`)).rows as Array<{ c: string; e: string }>;
+    const rows = (await execute(db, sql`SELECT sub_module_code AS c, exam_module AS e FROM sub_modules`)).rows as Array<{ c: string; e: string }>;
     const seeded = new Map(SUB_MODULE_SEEDS.map((s) => [s.code, s.exam ?? 'COMMON']));
     const mine = rows.filter((r) => seeded.has(r.c));
     expect(mine).toHaveLength(33);
