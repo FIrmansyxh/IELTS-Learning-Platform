@@ -5,10 +5,12 @@ const isCI = !!process.env.CI;
 export default defineConfig({
   testDir: './tests/e2e',
   globalSetup: './tests/e2e/global-setup.ts',
+  workers: 1, // satu DB bersama: pemilih profil auto-masuk bila hanya ada 1 profil
   retries: isCI ? 1 : 0,
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
   use: {
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL: process.env.E2E_BASE_URL ?? 'http://127.0.0.1:3000',
+    launchOptions: process.env.E2E_CHROME_PATH ? { executablePath: process.env.E2E_CHROME_PATH } : {},
     trace: 'on-first-retry',
   },
   projects: [

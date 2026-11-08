@@ -95,7 +95,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         id="main"
         ref={mainRef}
         tabIndex={-1}
-        className="w-full px-4 py-6 pb-24 outline-none md:px-6 lg:ml-64 lg:px-8 lg:pb-8"
+        className="min-w-0 px-4 py-6 pb-24 outline-none md:px-6 lg:ml-64 lg:px-8 lg:pb-8"
       >
         <div className="w-full max-w-7xl 2xl:max-w-[1536px]">
           <div className="mb-4 flex items-center justify-end pb-1">
