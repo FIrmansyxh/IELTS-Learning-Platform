@@ -50,9 +50,7 @@ function envInt(env: Record<string, string | undefined>, name: string, def: numb
 
 /** Default app_settings (_api-contract.md bagian 8); tiga kunci disemai dari env. */
 export function defaultSettings(env: Record<string, string | undefined> = process.env): Array<{ key: string; value: unknown; description: string }> {
-  const signup = ['open', 'invite', 'closed'].includes(env.SIGNUP_MODE ?? '') ? env.SIGNUP_MODE! : 'invite';
   return [
-    { key: 'signup.mode', value: signup, description: 'Mode pendaftaran' },
     { key: 'learn.min_active_seconds', value: 60, description: 'Waktu belajar aktif minimal sebelum Selesai Belajar' },
     { key: 'drill.question_count', value: 10, description: 'Jumlah soal Active Drill' },
     { key: 'speed.default_target_ms', value: 20000, description: 'Target waktu per soal default' },

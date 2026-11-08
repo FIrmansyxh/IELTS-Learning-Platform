@@ -81,19 +81,15 @@ function RouteFocus({ target }: { target: React.RefObject<HTMLElement | null> })
 
 /**
  * Kerangka aplikasi terautentikasi: sidebar desktop (>= lg) dan bottom nav mobile.
- * Saat `must_change_password` navigasi disembunyikan (hanya halaman ganti password).
  */
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const items = useVisibleItems();
-  const me = useMe();
   const mainRef = React.useRef<HTMLElement | null>(null);
-  const hideNav = me.data?.must_change_password === true;
 
   return (
     <div className="min-h-dvh">
-      {!hideNav ? (
-        <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r bg-card p-4 lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r bg-card p-4 lg:flex">
           <p className="mb-6 px-3 font-heading text-lg font-bold">{id.app.name}</p>
           <nav aria-label={id.nav.main} className="flex flex-col gap-1">
             {items.map((item) => (
@@ -101,38 +97,30 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
         </aside>
-      ) : null}
 
       <main
         id="main"
         ref={mainRef}
         tabIndex={-1}
-        className={cn(
-          'w-full px-4 py-6 outline-none md:px-6 lg:px-8',
-          hideNav ? 'mx-auto max-w-xl' : 'pb-24 lg:ml-64 lg:pb-8',
-        )}
+        className="w-full px-4 py-6 pb-24 outline-none md:px-6 lg:ml-64 lg:px-8 lg:pb-8"
       >
-        <div className={cn('w-full', !hideNav && 'max-w-7xl 2xl:max-w-[1536px]')}>
-          {!hideNav && (
-            <div className="mb-4 flex items-center justify-end pb-1">
-              <HeaderChips />
-            </div>
-          )}
+        <div className="w-full max-w-7xl 2xl:max-w-[1536px]">
+          <div className="mb-4 flex items-center justify-end pb-1">
+            <HeaderChips />
+          </div>
           {children}
         </div>
       </main>
       <RouteFocus target={mainRef} />
 
-      {!hideNav ? (
-        <nav
-          aria-label={id.nav.main}
-          className="fixed inset-x-0 bottom-0 z-30 flex border-t bg-card pb-[env(safe-area-inset-bottom)] lg:hidden"
-        >
-          {items.map((item) => (
-            <NavLink key={item.href} item={item} pathname={pathname} variant="bottom" />
-          ))}
-        </nav>
-      ) : null}
+      <nav
+        aria-label={id.nav.main}
+        className="fixed inset-x-0 bottom-0 z-30 flex border-t bg-card pb-[env(safe-area-inset-bottom)] lg:hidden"
+      >
+        {items.map((item) => (
+          <NavLink key={item.href} item={item} pathname={pathname} variant="bottom" />
+        ))}
+      </nav>
     </div>
   );
 }

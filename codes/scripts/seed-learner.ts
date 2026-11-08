@@ -2,7 +2,7 @@ import './_env';
 import { eq } from 'drizzle-orm';
 import { users } from '../src/db/schema';
 import { getDb, closeDb } from '../src/server/db';
-import { hashPassword } from '../src/server/auth/password';
+import { UNUSABLE_PASSWORD_HASH } from '../src/server/auth/profiles';
 
 async function main() {
   const db = getDb();
@@ -13,8 +13,7 @@ async function main() {
 
     // 2. Insert or update learner account
     const learnerEmail = 'pelajar@ielts.test';
-    const learnerPassword = 'PelajarPassword123!';
-    const passwordHash = await hashPassword(learnerPassword);
+    const passwordHash = UNUSABLE_PASSWORD_HASH; // SPEC-025: tanpa password; profil dipilih lewat /pilih-profil
 
     const [existing] = await db.select().from(users).where(eq(users.email, learnerEmail)).limit(1);
     if (!existing) {

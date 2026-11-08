@@ -16,17 +16,13 @@ describe('seed SPEC-000', () => {
     expect(seedModules.map((m) => m.name)).toEqual(['content_sources', 'app_settings', 'system_settings', 'curriculum-structure', 'band-tables']);
   });
 
-  it('menyemai tiga kunci dari env dan sisanya default', () => {
-    const s = defaultSettings({ SIGNUP_MODE: 'closed', AI_DAILY_LIMIT_PER_USER: '7', AUDIO_RETENTION_DAYS: '30' });
+  it('menyemai dua kunci dari env dan sisanya default', () => {
+    const s = defaultSettings({ AI_DAILY_LIMIT_PER_USER: '7', AUDIO_RETENTION_DAYS: '30' });
     const get = (k: string) => s.find((x) => x.key === k)?.value;
-    expect(s).toHaveLength(21);
-    expect(get('signup.mode')).toBe('closed');
+    expect(s).toHaveLength(20);
+    expect(get('signup.mode')).toBeUndefined();
     expect(get('ai.daily_limit_per_user')).toBe(7);
     expect(get('retention.audio_days')).toBe(30);
     expect(get('crown.gold_min')).toBe(90);
-  });
-
-  it('mengabaikan SIGNUP_MODE tidak valid', () => {
-    expect(defaultSettings({ SIGNUP_MODE: 'xx' }).find((x) => x.key === 'signup.mode')?.value).toBe('invite');
   });
 });

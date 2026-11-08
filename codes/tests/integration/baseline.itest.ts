@@ -40,7 +40,7 @@ describe('migrasi baseline', () => {
     const n = await pool.query('SELECT count(*)::int AS n FROM content_sources');
     expect(n.rows[0].n).toBe(14);
     const a = await pool.query('SELECT count(*)::int AS n FROM app_settings');
-    expect(a.rows[0].n).toBe(22); // 21 kunci registri + system.worker_heartbeat_at (SPEC-002)
+    expect(a.rows[0].n).toBe(21); // 20 kunci registri + system.worker_heartbeat_at (SPEC-002)
   });
 
   it('migrate dijalankan ulang tanpa perubahan skema: exit 0', () => {

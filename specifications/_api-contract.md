@@ -9,6 +9,23 @@
 
 ---
 
+## 0. Perubahan SPEC-025 (2026-11-08): profil lokal menggantikan login
+
+Endpoint `auth/login`, `auth/register`, `auth/logout`, `auth/change-password`, `auth/signup-config`, seluruh `admin/invites*`, `admin/users` (POST), `admin/users/{id}/reset-password`, dan kode error `INVALID_CREDENTIALS`, `SIGNUP_CLOSED`, `INVITE_INVALID`, `CURRENT_PASSWORD_INCORRECT`, `PASSWORD_CHANGE_REQUIRED`, `INVITE_NOT_ACTIVE` sudah DIHAPUS. Bucket rate-limit `login_ip`, `login_email`, `register_ip`, `account_action` tidak lagi dipakai. Guard `must_change_password` dicabut.
+
+Endpoint baru (semua `public`; satu-satunya yang tanpa sesi selain `GET /api/health`):
+| Metode dan path | Fungsi | Hasil |
+|---|---|---|
+| `GET /api/v1/profiles` | daftar profil + `completed_sub_modules`, `max_profiles` (10) | 200 |
+| `POST /api/v1/profiles` `{ display_name }` (2-40 karakter) | buat profil dan langsung dipilih (cookie sesi) | 201; `409 PROFILE_NAME_TAKEN`, `409 PROFILE_LIMIT_REACHED` |
+| `POST /api/v1/profiles/{id}/select` | pilih profil (cookie sesi) | 200; 404 |
+| `POST /api/v1/profiles/leave` | ganti profil (hapus cookie) | 204 |
+| `DELETE /api/v1/profiles/{id}` `{ confirm_name }` | hapus profil + seluruh progres | 204; `400 CONFIRM_NAME_MISMATCH`, 404 |
+
+Kode error baru: `PROFILE_NAME_TAKEN` (409), `PROFILE_LIMIT_REACHED` (409), `CONFIRM_NAME_MISMATCH` (400), `HOST_NOT_ALLOWED` (403: header `Host` bukan localhost/127.0.0.1/[::1]). Cookie sesi kini `SameSite=Strict`. `PATCH /api/v1/me/profile` dengan nama kembar mengembalikan `409 PROFILE_NAME_TAKEN`. Bagian tabel di bawah yang masih menyebut endpoint lama dipertahankan sebagai riwayat.
+
+---
+
 ## 1. Konvensi Bersama
 
 | Topik | Aturan |

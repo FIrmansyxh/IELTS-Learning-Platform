@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
   reactStrictMode: true,
-  serverExternalPackages: ['@node-rs/argon2', 'pg', 'pg-boss', 'pino', 'sharp'],
+  serverExternalPackages: ['pg', 'pg-boss', 'pino', 'sharp'],
   // SPEC-001: daftar password umum dibaca lewat fs saat runtime; paksa ikut ke output standalone.
   outputFileTracingIncludes: {
     '/api/v1/auth/register': ['./src/server/auth/common-passwords.txt'],

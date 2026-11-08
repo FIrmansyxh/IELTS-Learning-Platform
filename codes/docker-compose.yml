@@ -73,7 +73,6 @@ services:
       NODE_ENV: production
       DATABASE_MIGRATOR_URL: postgres://app_migrator:${APP_MIGRATOR_PASSWORD:?isi APP_MIGRATOR_PASSWORD di .env}@db:5432/${POSTGRES_DB:-ielts}
       AI_JOB_TIMEOUT_SEC: ${AI_JOB_TIMEOUT_SEC:-180}
-      SIGNUP_MODE: ${SIGNUP_MODE:-invite}
       AI_DAILY_LIMIT_PER_USER: ${AI_DAILY_LIMIT_PER_USER:-10}
       AUDIO_RETENTION_DAYS: ${AUDIO_RETENTION_DAYS:-90}
       MIGRATE_BACKUP_DIR: /backups/pre-migrate

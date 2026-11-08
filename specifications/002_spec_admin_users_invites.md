@@ -1,5 +1,7 @@
 # SPEC-002: Admin Dasar (Kelola Pengguna, Undangan, Pengaturan, Audit, Kesehatan Sistem)
 
+> **DIGANTIKAN (superseded) oleh SPEC-025 / ADR-005 (2026-11-08).** Login, daftar, undangan, dan password dihapus; aplikasi memakai profil lokal. Dokumen ini dipertahankan sebagai riwayat.
+
 ## Metadata
 - **Author:** Analyst Agent
 - **Created:** 2026-11-03

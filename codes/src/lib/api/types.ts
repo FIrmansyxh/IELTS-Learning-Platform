@@ -2,7 +2,6 @@ import type { z } from 'zod';
 import type {
   AdminUserDTO,
   AuditLogItemDTO,
-  InviteListItemDTO,
   SettingDTO,
 } from '@/contracts/admin';
 import type { PageMetaSchema, UserDTO } from '@/contracts/common';
@@ -11,7 +10,6 @@ import type { PageMetaSchema, UserDTO } from '@/contracts/common';
 export type User = z.infer<typeof UserDTO>;
 export type PageMeta = z.infer<typeof PageMetaSchema>;
 export type AdminUser = z.infer<typeof AdminUserDTO>;
-export type Invite = z.infer<typeof InviteListItemDTO>;
 export type Setting = z.infer<typeof SettingDTO>;
 export type AuditLogEntry = z.infer<typeof AuditLogItemDTO>;
 export type UnlockLevel = 'TIER' | 'MODULE' | 'SUB_MODULE';

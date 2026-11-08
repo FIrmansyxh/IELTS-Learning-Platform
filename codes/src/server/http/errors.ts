@@ -24,6 +24,11 @@ const REGISTRY: Record<string, { status: number; message: string }> = {
   INVITE_INVALID: { status: 403, message: 'Kode undangan tidak valid atau sudah kedaluwarsa.' },
   EMAIL_TAKEN: { status: 409, message: 'Email sudah terdaftar.' },
   CURRENT_PASSWORD_INCORRECT: { status: 403, message: 'Password saat ini salah.' },
+  // SPEC-025 (profil lokal)
+  PROFILE_NAME_TAKEN: { status: 409, message: 'Nama profil sudah dipakai.' },
+  PROFILE_LIMIT_REACHED: { status: 409, message: 'Jumlah profil sudah mencapai batas (10).' },
+  CONFIRM_NAME_MISMATCH: { status: 400, message: 'Nama konfirmasi tidak cocok.' },
+  HOST_NOT_ALLOWED: { status: 403, message: 'Permintaan ditolak.' },
   // SPEC-002
   CANNOT_MODIFY_SELF: { status: 409, message: 'Anda tidak dapat mengubah akun Anda sendiri.' },
   LAST_ADMIN: { status: 409, message: 'Minimal satu admin aktif harus tersisa.' },

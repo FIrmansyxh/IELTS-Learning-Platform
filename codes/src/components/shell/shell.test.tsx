@@ -1,6 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ChangePasswordForm } from '@/components/auth/change-password-form';
 import { ProfileCard } from '@/components/auth/profile-card';
 import { errorBody, mockFetch, renderWithProviders, USER } from '@/components/test-utils';
 import { AdminGuard } from '@/components/admin/admin-guard';
@@ -26,7 +25,7 @@ beforeEach(() => {
 const me = (user: unknown, status = 200) => ({ status, body: status === 200 ? { data: { user } } : user });
 
 describe('AuthenticatedLayout (AuthGate + AppShell)', () => {
-  it('tanpa sesi mengalihkan ke /masuk?next=<path> dan tidak merender konten', async () => {
+  it('tanpa profil terpilih mengalihkan ke /pilih-profil?next=<path> dan tidak merender konten', async () => {
     search = 'tab=a';
     mockFetch(() => me(errorBody('UNAUTHENTICATED', 'x'), 401));
     renderWithProviders(
@@ -34,18 +33,7 @@ describe('AuthenticatedLayout (AuthGate + AppShell)', () => {
         <p>Rahasia</p>
       </AuthenticatedLayout>,
     );
-    await waitFor(() => expect(replace).toHaveBeenCalledWith('/masuk?next=%2Fprofil%3Ftab%3Da'));
-    expect(screen.queryByText('Rahasia')).not.toBeInTheDocument();
-  });
-
-  it('must_change_password memaksa /ganti-password dan menyembunyikan navigasi', async () => {
-    mockFetch(() => me({ ...USER, must_change_password: true }));
-    renderWithProviders(
-      <AuthenticatedLayout>
-        <p>Rahasia</p>
-      </AuthenticatedLayout>,
-    );
-    await waitFor(() => expect(replace).toHaveBeenCalledWith('/ganti-password'));
+    await waitFor(() => expect(replace).toHaveBeenCalledWith('/pilih-profil?next=%2Fprofil%3Ftab%3Da'));
     expect(screen.queryByText('Rahasia')).not.toBeInTheDocument();
   });
 
@@ -92,39 +80,6 @@ describe('AdminGuard', () => {
   });
 });
 
-describe('ChangePasswordForm', () => {
-  it('mode paksa menampilkan teks wajib ganti dan memetakan password saat ini salah', async () => {
-    mockFetch((url) => {
-      if (url.pathname.endsWith('/auth/me')) return me({ ...USER, must_change_password: true });
-      return { status: 403, body: errorBody('CURRENT_PASSWORD_INCORRECT', 'x') };
-    });
-    renderWithProviders(<ChangePasswordForm />);
-    expect(await screen.findByText('Anda harus mengganti password sementara.')).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText('Password saat ini'), { target: { value: 'Qm7vXk3PzR9tNc2H' } });
-    fireEvent.change(screen.getByLabelText('Password baru'), { target: { value: 'teh-tarik-hangat-77' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
-    expect(await screen.findByText('Password saat ini salah.')).toBeInTheDocument();
-    expect(screen.getByLabelText('Password saat ini')).toHaveAttribute('aria-invalid', 'true');
-  });
-
-  it('sukses memperbarui sesi dan mengarah ke /', async () => {
-    const calls = mockFetch((url, init) => {
-      if (init.method === 'POST') return me({ ...USER, must_change_password: false });
-      return me({ ...USER, must_change_password: true });
-    });
-    renderWithProviders(<ChangePasswordForm />);
-    await screen.findByLabelText('Password saat ini');
-    fireEvent.change(screen.getByLabelText('Password saat ini'), { target: { value: 'Qm7vXk3PzR9tNc2H' } });
-    fireEvent.change(screen.getByLabelText('Password baru'), { target: { value: 'teh-tarik-hangat-77' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
-    await waitFor(() => expect(replace).toHaveBeenCalledWith('/'));
-    expect(calls.find((c) => c.init.method === 'POST')!.json).toEqual({
-      current_password: 'Qm7vXk3PzR9tNc2H',
-      new_password: 'teh-tarik-hangat-77',
-    });
-  });
-});
-
 describe('ProfileCard', () => {
   it('hanya mengirim field yang berubah dan tidak pernah role/email/status', async () => {
     const calls = mockFetch((url, init) => {
@@ -142,10 +97,17 @@ describe('ProfileCard', () => {
     expect(calls.find((c) => c.init.method === 'PATCH')!.json).toEqual({ display_name: 'Budi S.' });
   });
 
-  it('tombol Keluar membuka dialog konfirmasi', async () => {
-    mockFetch(() => me(USER));
+  it('tidak menampilkan email maupun menu password; tombol Ganti profil memanggil /profiles/leave lalu ke pemilih', async () => {
+    const calls = mockFetch((url) => {
+      if (url.pathname.endsWith('/profiles/leave')) return { status: 204, body: null };
+      return me(USER);
+    });
     renderWithProviders(<ProfileCard />);
-    fireEvent.click(await screen.findByRole('button', { name: 'Keluar' }));
-    expect(await screen.findByText('Keluar dari akun?')).toBeInTheDocument();
+    await screen.findByLabelText('Nama tampilan');
+    expect(screen.queryByLabelText('Email')).not.toBeInTheDocument();
+    expect(screen.queryByText('Ganti password')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Ganti profil' }));
+    await waitFor(() => expect(replace).toHaveBeenCalledWith('/pilih-profil?pilih=1'));
+    expect(calls.some((c) => c.url.pathname.endsWith('/profiles/leave') && c.init.method === 'POST')).toBe(true);
   });
 });

@@ -1,15 +1,7 @@
 import { z } from 'zod';
 import { Band, IsoDateTime, PageMetaSchema, PageQuerySchema, Uuid } from './common';
-import { DISPLAY_NAME_RE } from './auth';
 
 /** Kontrak SPEC-002 (admin: pengguna, undangan, pengaturan, audit, kesehatan). */
-const emailField = z
-  .string()
-  .trim()
-  .min(3, { message: 'invalid_email' })
-  .max(254, { message: 'invalid_email' })
-  .refine((v) => z.email().safeParse(v).success, { message: 'invalid_email' });
-
 export const AdminUserDTO = z.strictObject({
   id: Uuid,
   email: z.string(),
@@ -34,20 +26,6 @@ export const AdminUserListQuerySchema = PageQuerySchema.extend({
 });
 export const AdminUserListResponseSchema = z.strictObject({ data: z.array(AdminUserDTO), meta: PageMetaSchema });
 
-export const AdminCreateUserRequestSchema = z.strictObject({
-  email: emailField,
-  display_name: z
-    .string()
-    .trim()
-    .min(2, { message: 'display_name_invalid' })
-    .max(80, { message: 'display_name_invalid' })
-    .regex(DISPLAY_NAME_RE, { message: 'display_name_invalid' }),
-  role: z.enum(['learner', 'admin']),
-});
-export const AdminCreateUserResponseSchema = z.strictObject({
-  data: z.strictObject({ user: AdminUserDTO, temporary_password: z.string().length(16) }),
-});
-
 export const AdminUpdateUserRequestSchema = z
   .strictObject({
     role: z.enum(['learner', 'admin']).optional(),
@@ -56,33 +34,7 @@ export const AdminUpdateUserRequestSchema = z
   .refine((v) => v.role !== undefined || v.status !== undefined, { message: 'empty_update' });
 export const AdminUpdateUserResponseSchema = z.strictObject({ data: z.strictObject({ user: AdminUserDTO }) });
 
-export const AdminResetPasswordResponseSchema = z.strictObject({
-  data: z.strictObject({ temporary_password: z.string().length(16) }),
-});
-
 export const UserIdParamSchema = z.strictObject({ user_id: Uuid });
-export const InviteIdParamSchema = z.strictObject({ invite_id: Uuid });
-
-export const CreateInviteRequestSchema = z.strictObject({
-  expires_in_days: z.number().int().min(1).max(30).default(7),
-});
-export const CreateInviteResponseSchema = z.strictObject({
-  data: z.strictObject({ id: Uuid, code: z.string(), expires_at: IsoDateTime, created_at: IsoDateTime }),
-});
-
-export const InviteStatus = z.enum(['active', 'used', 'expired', 'revoked']);
-export const InviteListQuerySchema = PageQuerySchema.extend({ status: InviteStatus.optional() });
-export const InviteListItemDTO = z.strictObject({
-  id: Uuid,
-  status: InviteStatus,
-  expires_at: IsoDateTime,
-  created_at: IsoDateTime,
-  used_at: IsoDateTime.nullable(),
-  used_by_email: z.string().nullable(),
-  revoked_at: IsoDateTime.nullable(),
-});
-export const InviteListResponseSchema = z.strictObject({ data: z.array(InviteListItemDTO), meta: PageMetaSchema });
-
 /**
  * `options` (enum) adalah tambahan aditif terhadap contoh spec agar UI dapat membuat Select tanpa
  * menanam daftar nilai; `min`/`max` null untuk tipe non-int.
@@ -163,12 +115,10 @@ export const AdminUnlockProgressResponseSchema = z.strictObject({
 });
 
 // Alias nama yang dipakai Frontend (src/lib/api/admin.ts) dan tipe turunan.
-export const ResetPasswordResponseSchema = AdminResetPasswordResponseSchema;
 export const SettingListResponseSchema = SettingsListResponseSchema;
 export const AuditLogListResponseSchema = AuditLogResponseSchema;
 export type AdminUser = AdminUserDTOType;
 export type Setting = z.infer<typeof SettingDTO>;
-export type Invite = z.infer<typeof InviteListItemDTO>;
 export type AuditLogEntry = z.infer<typeof AuditLogItemDTO>;
 export type UnlockLevel = z.infer<typeof UnlockLevelSchema>;
 

@@ -1,11 +1,7 @@
 import {
-  AdminCreateUserResponseSchema,
   AdminHealthResponseSchema,
   AdminUpdateUserResponseSchema,
   AuditLogResponseSchema,
-  CreateInviteResponseSchema,
-  InviteListResponseSchema,
-  AdminResetPasswordResponseSchema,
   SettingsListResponseSchema,
   UpdateSettingResponseSchema,
   AdminUserListResponseSchema,
@@ -32,11 +28,6 @@ export type UserListParams = {
   status?: 'ACTIVE' | 'DISABLED';
   include_deleted?: boolean;
 };
-export type InviteListParams = {
-  page: number;
-  page_size: number;
-  status?: 'active' | 'used' | 'expired' | 'revoked';
-};
 export type AuditParams = {
   page: number;
   page_size: number;
@@ -54,14 +45,9 @@ export const adminApi = {
       query: { ...p, include_deleted: p.include_deleted ? true : undefined },
       schema: AdminUserListResponseSchema,
     }),
-  createUser: async (body: { email: string; display_name: string; role: 'learner' | 'admin' }) =>
-    (await apiFetch('/admin/users', { method: 'POST', body, schema: AdminCreateUserResponseSchema })).data,
   updateUser: async (userId: string, body: { role?: 'learner' | 'admin'; status?: 'ACTIVE' | 'DISABLED' }) =>
     (await apiFetch(`/admin/users/${userId}`, { method: 'PATCH', body, schema: AdminUpdateUserResponseSchema })).data
       .user,
-  resetPassword: async (userId: string) =>
-    (await apiFetch(`/admin/users/${userId}/reset-password`, { method: 'POST', schema: AdminResetPasswordResponseSchema }))
-      .data,
   deleteUser: async (userId: string) => {
     await apiFetch(`/admin/users/${userId}/delete`, { method: 'POST' });
   },
@@ -73,13 +59,6 @@ export const adminApi = {
         schema: UnlockResponseSchema,
       })
     ).data,
-
-  invites: (p: InviteListParams) => apiFetch('/admin/invites', { query: p, schema: InviteListResponseSchema }),
-  createInvite: async (body: { expires_in_days?: number }) =>
-    (await apiFetch('/admin/invites', { method: 'POST', body, schema: CreateInviteResponseSchema })).data,
-  revokeInvite: async (inviteId: string) => {
-    await apiFetch(`/admin/invites/${inviteId}`, { method: 'DELETE' });
-  },
 
   settings: async () => (await apiFetch('/admin/settings', { schema: SettingsListResponseSchema })).data,
   updateSetting: async (key: string, value: number | string | boolean) =>

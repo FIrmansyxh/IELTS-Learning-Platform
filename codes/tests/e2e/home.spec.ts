@@ -1,16 +1,21 @@
 import { expect, test } from '@playwright/test';
 
-// Catatan: dibutuhkan server + DB hidup (belum dijalankan pada sesi W1 Frontend).
-test('pengguna tanpa sesi yang membuka rute terproteksi dialihkan ke /masuk dengan next', async ({ page }) => {
+// Catatan: dibutuhkan server + DB hidup. Tanpa login (SPEC-025): rute terproteksi menuju pemilih profil.
+test('tanpa profil terpilih, rute terproteksi dialihkan ke /pilih-profil dengan next', async ({ page }) => {
   await page.goto('/profil');
-  await expect(page).toHaveURL(/\/masuk\?next=%2Fprofil$/);
+  await expect(page).toHaveURL(/\/pilih-profil\?next=%2Fprofil$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'id');
-  await expect(page.getByRole('heading', { name: 'Masuk' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Siapa yang belajar?' })).toBeVisible();
 });
 
-test('next berbahaya diabaikan di halaman masuk', async ({ page }) => {
-  await page.goto('/masuk?next=//evil.test');
-  await expect(page.getByRole('heading', { name: 'Masuk' })).toBeVisible();
+test('next berbahaya diabaikan di pemilih profil', async ({ page }) => {
+  await page.goto('/pilih-profil?next=//evil.test&pilih=1');
+  await expect(page.getByRole('heading', { name: 'Siapa yang belajar?' })).toBeVisible();
+});
+
+test('halaman masuk dan daftar sudah tidak ada', async ({ request }) => {
+  expect((await request.get('/masuk')).status()).toBe(404);
+  expect((await request.get('/daftar')).status()).toBe(404);
 });
 
 test('GET /api/health menjawab 200 saat DB tersedia', async ({ request }) => {

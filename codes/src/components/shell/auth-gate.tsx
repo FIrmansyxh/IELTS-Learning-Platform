@@ -9,13 +9,10 @@ import { useMe } from '@/hooks/use-auth';
 import { id } from '@/i18n/id';
 import { isApiError } from '@/lib/api/client';
 
-const CHANGE_PASSWORD_PATH = '/ganti-password';
-
 /**
  * Penjaga sisi klien (UX). Otorisasi sebenarnya tetap di server (`requireUser`).
- * - tanpa sesi -> `/masuk?next=<path>`
- * - `must_change_password` -> paksa `/ganti-password`
- * - galat 401/PASSWORD_CHANGE_REQUIRED dari query mana pun juga memicu pengalihan
+ * Tanpa profil terpilih (SPEC-025) -> `/pilih-profil?next=<path>`; galat 401 dari query mana pun juga
+ * memicu pengalihan (mis. profil dihapus saat tab lain terbuka).
  */
 export function AuthGate({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -29,36 +26,25 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     return qs ? `${pathname}?${qs}` : pathname;
   }, [pathname, search]);
 
-  const toLogin = React.useCallback(() => {
+  const toPicker = React.useCallback(() => {
     qc.clear();
-    router.replace(`/masuk?next=${encodeURIComponent(here)}`);
+    router.replace(`/pilih-profil?next=${encodeURIComponent(here)}`);
   }, [qc, router, here]);
 
-  // Galat otorisasi dari query mana pun (sesi dicabut admin, dsb.).
   React.useEffect(() => {
     return qc.getQueryCache().subscribe((event) => {
       if (event.type !== 'updated' || event.action.type !== 'error') return;
       const err = event.action.error;
-      if (!isApiError(err)) return;
-      if (err.code === 'UNAUTHENTICATED') toLogin();
-      if (err.code === 'PASSWORD_CHANGE_REQUIRED' && pathname !== CHANGE_PASSWORD_PATH) {
-        router.replace(CHANGE_PASSWORD_PATH);
-      }
+      if (isApiError(err) && err.code === 'UNAUTHENTICATED') toPicker();
     });
-  }, [qc, toLogin, router, pathname]);
+  }, [qc, toPicker]);
 
   const user = me.data;
   const unauthenticated = me.isError && isApiError(me.error) && me.error.code === 'UNAUTHENTICATED';
 
   React.useEffect(() => {
-    if (unauthenticated) toLogin();
-  }, [unauthenticated, toLogin]);
-
-  React.useEffect(() => {
-    if (user?.must_change_password && pathname !== CHANGE_PASSWORD_PATH) {
-      router.replace(CHANGE_PASSWORD_PATH);
-    }
-  }, [user, pathname, router]);
+    if (unauthenticated) toPicker();
+  }, [unauthenticated, toPicker]);
 
   if (me.isError && !unauthenticated) {
     return (
@@ -68,7 +54,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!user || unauthenticated || (user.must_change_password && pathname !== CHANGE_PASSWORD_PATH)) {
+  if (!user || unauthenticated) {
     return (
       <div className="mx-auto max-w-lg space-y-4 p-6" role="status" aria-live="polite">
         <span className="sr-only">{id.auth.guard.checking}</span>

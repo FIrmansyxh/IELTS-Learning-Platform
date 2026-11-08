@@ -6,7 +6,7 @@ import { ApiError, isApiError } from './client';
 export function apiErrorMessage(e: unknown): string {
   if (isApiError(e)) {
     if (e.code === 'RATE_LIMITED' && e.retryAfterSec) {
-      return fmt(id.auth.login.rateLimited, { n: Math.max(1, Math.ceil(e.retryAfterSec / 60)) });
+      return fmt(id.common.rateLimited, { n: Math.max(1, Math.ceil(e.retryAfterSec / 60)) });
     }
     return id.apiErrors[e.code] ?? id.apiErrors.UNKNOWN;
   }

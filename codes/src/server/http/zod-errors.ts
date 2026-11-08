@@ -3,6 +3,7 @@ import type { ErrorDetail } from './errors';
 
 const CUSTOM_MESSAGES: Record<string, string> = {
   invalid_email: 'Format email tidak valid.',
+  profile_name_invalid: 'Nama profil harus 2-40 karakter tanpa karakter kontrol.',
   display_name_invalid: 'Nama tampilan harus 2-80 karakter tanpa karakter kontrol.',
   password_too_short: 'Password minimal 10 karakter.',
   password_too_long: 'Password maksimal 128 karakter.',

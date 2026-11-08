@@ -2,15 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { KeyRound, Monitor, Moon, Sun } from 'lucide-react';
-import Link from 'next/link';
+import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { ErrorState } from '@/components/common/state-views';
 import { FormErrorSummary } from '@/components/form/form-error-summary';
-import { LogoutButton } from '@/components/auth/logout-button';
+import { SwitchProfileButton } from '@/components/auth/switch-profile-button';
 import { ShortcutPref } from '@/components/auth/shortcut-pref';
 import { RecordingPreferencesCard } from '@/components/profile/recording-preferences-card';
 import { Button } from '@/components/ui/button';
@@ -106,10 +105,6 @@ function ProfileForm({ user }: { user: User }) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="grid gap-4">
         <FormErrorSummary message={formError} />
-        <div className="grid gap-2">
-          <Label htmlFor="profile-email">{id.profile.email}</Label>
-          <Input id="profile-email" value={user.email} readOnly aria-readonly="true" />
-        </div>
         <FormField
           control={form.control}
           name="display_name"
@@ -195,16 +190,10 @@ export function ProfileCard() {
       <RecordingPreferencesCard />
       <Card>
         <CardHeader>
-          <CardTitle>{id.profile.securityTitle}</CardTitle>
+          <CardTitle>{id.profile.profileSectionTitle}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
-          <Button asChild variant="outline">
-            <Link href="/ganti-password">
-              <KeyRound aria-hidden="true" />
-              {id.profile.changePassword}
-            </Link>
-          </Button>
-          <LogoutButton />
+          <SwitchProfileButton />
         </CardContent>
       </Card>
     </div>

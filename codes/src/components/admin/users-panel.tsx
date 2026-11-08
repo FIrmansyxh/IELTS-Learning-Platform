@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { MoreHorizontal, Plus } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
@@ -23,8 +23,7 @@ import { fmt, id } from '@/i18n/id';
 import { adminApi } from '@/lib/api/admin';
 import { apiErrorMessage } from '@/lib/api/errors';
 import { formatDateTime } from '@/lib/format';
-import { ConfirmDialog, SecretDialog } from './dialogs';
-import { CreateUserSheet, type CreatedUser } from './create-user-sheet';
+import { ConfirmDialog } from './dialogs';
 import { Pagination, ResponsiveList, type Column } from './responsive-list';
 import { UnlockSheet } from './unlock-sheet';
 
@@ -32,7 +31,7 @@ const PAGE_SIZE = 20;
 const ALL = 'all';
 
 type PendingAction =
-  | { kind: 'disable' | 'delete' | 'reset' | 'role'; user: AdminUser }
+  | { kind: 'disable' | 'delete' | 'role'; user: AdminUser }
   | null;
 
 function useDebounced<T>(value: T, ms: number): T {
@@ -67,9 +66,7 @@ export function UsersPanel() {
   const [includeDeleted, setIncludeDeleted] = React.useState(false);
   const debouncedQ = useDebounced(q.trim(), 300);
 
-  const [createOpen, setCreateOpen] = React.useState(false);
   const [pending, setPending] = React.useState<PendingAction>(null);
-  const [secret, setSecret] = React.useState<{ email: string; value: string } | null>(null);
   const [unlockFor, setUnlockFor] = React.useState<AdminUser | null>(null);
 
   React.useEffect(() => setPage(1), [debouncedQ, role, status, includeDeleted]);
@@ -103,18 +100,6 @@ export function UsersPanel() {
       setPending(null);
     },
   });
-  const reset = useMutation({
-    mutationFn: (user: AdminUser) => adminApi.resetPassword(user.id),
-    onSuccess: (res, user) => {
-      setPending(null);
-      setSecret({ email: user.email, value: res.temporary_password });
-      void invalidate();
-    },
-    onError: (e) => {
-      toast.error(apiErrorMessage(e));
-      setPending(null);
-    },
-  });
   const remove = useMutation({
     mutationFn: (user: AdminUser) => adminApi.deleteUser(user.id),
     onSuccess: () => {
@@ -133,7 +118,6 @@ export function UsersPanel() {
     const { kind, user } = pending;
     if (kind === 'disable') update.mutate({ user, body: { status: 'DISABLED' } });
     if (kind === 'role') update.mutate({ user, body: { role: user.role === 'admin' ? 'learner' : 'admin' } });
-    if (kind === 'reset') reset.mutate(user);
     if (kind === 'delete') remove.mutate(user);
   }
 
@@ -141,7 +125,6 @@ export function UsersPanel() {
     ? {
         disable: [id.admin.users.confirmDisableTitle, id.admin.users.confirmDisableBody],
         delete: [id.admin.users.confirmDeleteTitle, id.admin.users.confirmDeleteBody],
-        reset: [id.admin.users.confirmResetTitle, id.admin.users.confirmResetBody],
         role: [id.admin.users.confirmRoleTitle, id.admin.users.confirmRoleBody],
       }[pending.kind]
     : null;
@@ -198,9 +181,6 @@ export function UsersPanel() {
                 <DropdownMenuItem disabled={isSelf} onSelect={() => setPending({ kind: 'role', user: u })}>
                   {u.role === 'admin' ? id.admin.users.makeLearner : id.admin.users.makeAdmin}
                 </DropdownMenuItem>
-                <DropdownMenuItem disabled={isSelf} onSelect={() => setPending({ kind: 'reset', user: u })}>
-                  {id.admin.users.resetPassword}
-                </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => setUnlockFor(u)}>{id.admin.users.unlock}</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -224,10 +204,6 @@ export function UsersPanel() {
     <div className="grid gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-3xl font-bold">{id.admin.users.title}</h1>
-        <Button onClick={() => setCreateOpen(true)}>
-          <Plus aria-hidden="true" />
-          {id.admin.users.add}
-        </Button>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_180px_180px_auto] lg:items-end">
@@ -284,11 +260,6 @@ export function UsersPanel() {
       />
       <Pagination meta={list.data?.meta} onPage={setPage} />
 
-      <CreateUserSheet
-        open={createOpen}
-        onOpenChange={setCreateOpen}
-        onCreated={(c: CreatedUser) => setSecret({ email: c.email, value: c.temporaryPassword })}
-      />
       <UnlockSheet
         open={unlockFor !== null}
         onOpenChange={(o) => !o && setUnlockFor(null)}
@@ -302,18 +273,8 @@ export function UsersPanel() {
         body={dialogCopy ? dialogCopy[1] : ''}
         confirmLabel={id.admin.users.confirm}
         destructive={pending?.kind === 'delete' || pending?.kind === 'disable'}
-        pending={update.isPending || reset.isPending || remove.isPending}
+        pending={update.isPending || remove.isPending}
         onConfirm={confirmPending}
-      />
-      <SecretDialog
-        open={secret !== null}
-        onClose={() => setSecret(null)}
-        title={id.admin.users.tempTitle}
-        description={secret ? `${fmt(id.admin.users.tempFor, { email: secret.email })}. ${id.admin.users.tempMust}` : undefined}
-        warning={id.admin.users.tempWarning}
-        secret={secret?.value ?? ''}
-        secretLabel={id.admin.users.tempTitle}
-        doneLabel={id.admin.users.tempDone}
       />
     </div>
   );

@@ -36,6 +36,7 @@
 | 022 | Learner latihan dari banyak bank soal yang dicampur (manual/otomatis) | ADR-004 (draft, menunggu approval) | P1 | Should | 004, 006, 017, 019, 020 | L |
 | 023 | Learner memilih section (L/R/W/S) untuk simulasi tes IELTS GT dengan band per section | ADR-004 (draft, menunggu approval) | P1 | Should | 006, 009, 011, 012, 014, 022, 024 | XL |
 | 024 | Konten Listening GT: skrip, audio TTS lokal, aset audio | ADR-004 (draft, menunggu approval) | P1 | Should | 004, 011, 018, 022 | L |
+| 025 | Aplikasi lokal satu perangkat: profil lokal tanpa login, CLI pengganti admin, SQLite | ADR-005 (draft, menunggu approval) | P1 | Must (arah human) | 003, 007 | XL |
 
 Catatan prioritas: 014 berlabel P0 (gerbang Tier) tetapi bergantung pada 012/013 (P1) hanya untuk section Writing/Speaking; Boss tetap dapat dirilis dengan set yang berisi hanya Listening + Reading (SPEC-014 Edge Case). Bila jadwal terdesak, 012/013 dapat bergeser setelah 014 tanpa mengubah kontrak.
 
@@ -51,6 +52,7 @@ Catatan prioritas: 014 berlabel P0 (gerbang Tier) tetapi bergantung pada 012/013
 | W6 | 7-8 | 012, 013 | AI Writing dan Speaking (setelah benchmark C-09) |
 | W7 | 8-9 | 014, 015 | Boss Stage dan Placement |
 | W8 | 9-10 | 016, 017, 020 | Gamifikasi, radar + prediksi, kurasi |
+| W10 | pasca-MVP | 025 (Fase 1-4) | Disarankan SEBELUM 021-024 agar fitur baru langsung dibangun di atas SQLite dan tanpa admin; urutan boleh diubah human |
 | W9 | pasca-MVP | 022 (kontrak + bank konten), 024, 023, 021 | Bank soal GT modular lebih dulu (konten dapat divalidasi tanpa DB), lalu Mix Builder dan jalur belajar. Keduanya draft sampai disetujui human (ADR-004) |
 Urutan nomor spec = urutan penerbitan; urutan build memajukan 018 dan 019 (W4) tetapi tetap sesudah dependensinya (001, 002, 004). Konten Tier 1-4 massal (C-01..C-04) berjalan paralel mulai W4.
 

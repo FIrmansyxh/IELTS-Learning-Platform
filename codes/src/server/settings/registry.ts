@@ -14,7 +14,6 @@ const int = (key: string, min: number, max: number, def: number, description: st
 });
 
 export const SETTING_DEFS: readonly SettingDef[] = [
-  { key: 'signup.mode', type: 'enum', options: ['open', 'invite', 'closed'], default: 'invite', description: 'Mode pendaftaran: open, invite, atau closed.' },
   int('learn.min_active_seconds', 10, 3600, 60, 'Waktu belajar aktif minimal sebelum tombol Selesai Belajar (detik).'),
   int('drill.question_count', 1, 50, 10, 'Jumlah soal Active Drill.'),
   int('speed.default_target_ms', 1000, 600000, 20000, 'Target waktu per soal bila soal tidak punya target (milidetik).'),

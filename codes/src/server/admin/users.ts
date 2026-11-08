@@ -4,8 +4,6 @@ import type { AdminUserDTOType } from '@/contracts/admin';
 import { writeAudit } from '../audit';
 import { getDb, type Tx } from '../db';
 import { ApiError } from '../http/errors';
-import { generateTemporaryPassword, hashPassword } from '../auth/password';
-import { insertUser } from '../auth/service';
 
 type UserRow = typeof users.$inferSelect;
 
@@ -56,34 +54,6 @@ export async function listUsers(query: ListUsersQuery) {
     .limit(query.page_size)
     .offset((query.page - 1) * query.page_size);
   return { rows: rows.map(toAdminUserDTO), total: Number(total) };
-}
-
-export async function createUserByAdmin(
-  actorId: string,
-  input: { email: string; display_name: string; role: 'learner' | 'admin' },
-  ipHash: string,
-) {
-  const temporaryPassword = generateTemporaryPassword();
-  const passwordHash = await hashPassword(temporaryPassword);
-  const row = await getDb().transaction(async (tx) => {
-    const r = await insertUser(tx, {
-      email: input.email.trim(),
-      displayName: input.display_name,
-      passwordHash,
-      role: input.role,
-      mustChangePassword: true,
-    });
-    await writeAudit(tx, {
-      actorUserId: actorId,
-      action: 'USER_CREATED_BY_ADMIN',
-      entityType: 'user',
-      entityId: r.id,
-      metadata: { role: input.role },
-      ipHash,
-    });
-    return r;
-  });
-  return { user: toAdminUserDTO(row), temporaryPassword };
 }
 
 /** Jumlah admin aktif selain `exceptId`, dengan baris admin terkunci (mencegah balapan LAST_ADMIN). */
@@ -148,28 +118,6 @@ export async function updateUserByAdmin(
     }
     return toAdminUserDTO(updated!);
   });
-}
-
-export async function resetPasswordByAdmin(actorId: string, userId: string, ipHash: string) {
-  if (userId === actorId) throw new ApiError('CANNOT_MODIFY_SELF');
-  const temporaryPassword = generateTemporaryPassword();
-  const passwordHash = await hashPassword(temporaryPassword);
-  await getDb().transaction(async (tx) => {
-    await lockTarget(tx, userId);
-    await tx
-      .update(users)
-      .set({
-        passwordHash,
-        mustChangePassword: true,
-        tokenVersion: sql`${users.tokenVersion} + 1`,
-        failedLoginCount: 0,
-        lockedUntil: null,
-        updatedAt: new Date(),
-      })
-      .where(eq(users.id, userId));
-    await writeAudit(tx, { actorUserId: actorId, action: 'USER_PASSWORD_RESET', entityType: 'user', entityId: userId, ipHash });
-  });
-  return { temporaryPassword };
 }
 
 export async function deleteUserByAdmin(actorId: string, userId: string, ipHash: string): Promise<void> {

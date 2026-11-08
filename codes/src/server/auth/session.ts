@@ -40,13 +40,13 @@ export async function issueSessionToken(
 }
 
 export function buildSetCookie(value: string, maxAge: number): string {
-  const parts = [`${cookieName()}=${value}`, 'Path=/', `Max-Age=${maxAge}`, 'HttpOnly', 'SameSite=Lax'];
+  const parts = [`${cookieName()}=${value}`, 'Path=/', `Max-Age=${maxAge}`, 'HttpOnly', 'SameSite=Strict'];
   if (config.secureCookie()) parts.push('Secure');
   return parts.join('; ');
 }
 
 export function buildClearCookie(): string {
-  const parts = [`${cookieName()}=`, 'Path=/', 'Max-Age=0', 'Expires=Thu, 01 Jan 1970 00:00:00 GMT', 'HttpOnly', 'SameSite=Lax'];
+  const parts = [`${cookieName()}=`, 'Path=/', 'Max-Age=0', 'Expires=Thu, 01 Jan 1970 00:00:00 GMT', 'HttpOnly', 'SameSite=Strict'];
   if (config.secureCookie()) parts.push('Secure');
   return parts.join('; ');
 }

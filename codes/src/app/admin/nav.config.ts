@@ -2,7 +2,6 @@ import {
   Coins,
   LayoutDashboard,
   Settings,
-  Ticket,
   Users,
   type LucideIcon,
 } from 'lucide-react';
@@ -18,7 +17,6 @@ export type AdminNavItem = { href: string; label: string; icon: LucideIcon };
 export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: '/admin', label: id.nav.adminOverview, icon: LayoutDashboard },
   { href: '/admin/pengguna', label: id.nav.adminUsers, icon: Users },
-  { href: '/admin/undangan', label: id.nav.adminInvites, icon: Ticket },
   { href: '/admin/poin', label: id.nav.adminPoints, icon: Coins },
   { href: '/admin/pengaturan', label: id.nav.adminSettings, icon: Settings },
 ];

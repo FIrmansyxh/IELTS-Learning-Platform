@@ -47,8 +47,21 @@ describe('endpoint guards (SPEC-001): semua route.ts dibungkus withApi dengan au
       const rel = path.relative(API_ROOT, f).replaceAll('\\', '/');
       const src = readFileSync(f, 'utf8');
       if (rel.startsWith('v1/admin/')) expect(src, rel).not.toMatch(/auth:\s*'(public|user)'/);
-      if (rel.startsWith('v1/auth/') && !/signup-config|register|login/.test(rel)) expect(src, rel).toMatch(/auth:\s*'user'/);
+      if (rel.startsWith('v1/auth/')) expect(src, rel).toMatch(/auth:\s*'user'/);
     }
+  });
+
+  it('SPEC-025: satu-satunya endpoint tanpa sesi adalah profil lokal', () => {
+    const publicRoutes = files
+      .filter((f) => /auth:\s*'public'/.test(readFileSync(f, 'utf8')))
+      .map((f) => path.relative(API_ROOT, f).replaceAll('\\', '/'))
+      .sort();
+    expect(publicRoutes).toEqual([
+      'v1/profiles/[profile_id]/route.ts',
+      'v1/profiles/[profile_id]/select/route.ts',
+      'v1/profiles/leave/route.ts',
+      'v1/profiles/route.ts',
+    ]);
   });
 
   it('tidak ada sql.raw di src/server', () => {

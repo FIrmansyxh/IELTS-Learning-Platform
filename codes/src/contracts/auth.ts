@@ -18,13 +18,6 @@ export function passwordLength(p: string): number {
   return [...p.normalize('NFKC')].length;
 }
 
-const emailField = z
-  .string()
-  .trim()
-  .min(3, { message: 'invalid_email' })
-  .max(254, { message: 'invalid_email' })
-  .refine((v) => z.email().safeParse(v).success, { message: 'invalid_email' });
-
 const displayName = z
   .string()
   .trim()
@@ -38,37 +31,9 @@ export const newPasswordField = z.string().superRefine((v, ctx) => {
   else if (n > PASSWORD_MAX) ctx.addIssue({ code: 'custom', message: 'password_too_long' });
 });
 
-export const RegisterRequestSchema = z.strictObject({
-  email: emailField,
-  display_name: displayName,
-  password: newPasswordField,
-  invite_code: z
-    .string()
-    .trim()
-    .regex(INVITE_CODE_RE, { message: 'invalid_invite_format' })
-    .optional(),
-});
-export type RegisterRequest = z.infer<typeof RegisterRequestSchema>;
-
-export const RegisterResponseSchema = z.strictObject({ data: z.strictObject({ user: UserDTO }) });
-
-export const LoginRequestSchema = z.strictObject({
-  email: z.string().trim().min(3).max(254),
-  password: z.string().min(1).max(128),
-});
-export const LoginResponseSchema = RegisterResponseSchema;
-
-export const SignupConfigResponseSchema = z.strictObject({
-  data: z.strictObject({ mode: z.enum(['open', 'invite', 'closed']) }),
-});
-
-export const MeResponseSchema = RegisterResponseSchema;
-
-export const ChangePasswordRequestSchema = z.strictObject({
-  current_password: z.string().min(1).max(128),
-  new_password: newPasswordField,
-});
-export const ChangePasswordResponseSchema = RegisterResponseSchema;
+/** Amplop respons yang membawa profil aktif. */
+export const UserResponseSchema = z.strictObject({ data: z.strictObject({ user: UserDTO }) });
+export const MeResponseSchema = UserResponseSchema;
 
 export const UpdateProfileRequestSchema = z
   .strictObject({
@@ -78,4 +43,4 @@ export const UpdateProfileRequestSchema = z
       .optional(),
   })
   .refine((v) => v.display_name !== undefined || v.target_band !== undefined, { message: 'empty_update' });
-export const UpdateProfileResponseSchema = RegisterResponseSchema;
+export const UpdateProfileResponseSchema = UserResponseSchema;

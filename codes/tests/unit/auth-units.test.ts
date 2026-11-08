@@ -1,58 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { passwordLength, RegisterRequestSchema, UpdateProfileRequestSchema } from '@/contracts/auth';
-import { generateInviteCode, hashInviteCode, normalizeInviteCode } from '@/server/auth/invite-code';
-import { checkPasswordPolicy, generateTemporaryPassword, hashPassword, verifyPassword } from '@/server/auth/password';
-import { loadCommonPasswords } from '@/server/auth/common-passwords';
+import { UpdateProfileRequestSchema } from '@/contracts/auth';
+import { CreateProfileRequestSchema } from '@/contracts/profiles';
 import { buildClearCookie, buildSetCookie, cookieName, issueSessionToken, parseCookies, readSession } from '@/server/auth/session';
 import { maskEmail } from '@/server/audit';
 import { checkSettingValue, findSetting, SETTING_DEFS } from '@/server/settings/registry';
 import { BUCKETS, consume, resetRateLimits } from '@/server/http/rate-limit';
 import { zodDetails } from '@/server/http/zod-errors';
-
-describe('kebijakan password', () => {
-  it('panjang dihitung code point setelah NFKC', () => {
-    expect(passwordLength('😀'.repeat(10))).toBe(10);
-    expect(checkPasswordPolicy('q8Zr!mV3xP', 'a@b.test')).toBeNull();
-    expect(checkPasswordPolicy('q8Zr!mV3x', 'a@b.test')).toBe('password_too_short');
-    expect(checkPasswordPolicy('x'.repeat(129), 'a@b.test')).toBe('password_too_long');
-  });
-
-  it('password umum (huruf besar/kecil tidak dibedakan) dan sama dengan email ditolak', () => {
-    expect(checkPasswordPolicy('PasswordPassword', 'a@b.test')).toBe('password_too_common');
-    expect(checkPasswordPolicy('1234567890', 'a@b.test')).toBe('password_too_common');
-    expect(checkPasswordPolicy('Budi.Santoso@Example.test', 'budi.santoso@example.test')).toBe('password_same_as_email');
-    expect(loadCommonPasswords().size).toBeGreaterThanOrEqual(9000);
-  });
-
-  it('argon2id dengan parameter spesifikasi; verifikasi memakai NFKC', async () => {
-    const h = await hashPassword('kopi-tubruk-2026!');
-    expect(h.startsWith('$argon2id$v=19$m=19456,t=2,p=1$')).toBe(true);
-    expect(await verifyPassword(h, 'kopi-tubruk-2026!')).toBe(true);
-    expect(await verifyPassword(h, 'salah')).toBe(false);
-    expect(await verifyPassword('bukan-hash', 'x')).toBe(false);
-    expect(await verifyPassword(await hashPassword('ｐａｓｓｗｏｒｄ-ｕｎｉｋ-１'), 'password-unik-1')).toBe(true);
-  });
-
-  it('password sementara 16 karakter dari alfabet tanpa karakter membingungkan', () => {
-    const seen = new Set<string>();
-    for (let i = 0; i < 50; i++) {
-      const p = generateTemporaryPassword();
-      expect(p).toMatch(/^[ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789]{16}$/);
-      seen.add(p);
-    }
-    expect(seen.size).toBe(50);
-  });
-});
-
-describe('kode undangan', () => {
-  it('format 5x4 Crockford, normalisasi, hash sha256 stabil', () => {
-    const c = generateInviteCode();
-    expect(c).toMatch(/^[0-9A-HJKMNP-TV-Z]{4}(-[0-9A-HJKMNP-TV-Z]{4}){4}$/);
-    expect(normalizeInviteCode(c.toLowerCase())).toBe(c.replace(/-/g, ''));
-    expect(hashInviteCode(c)).toBe(hashInviteCode(c.toLowerCase().replace(/-/g, '')));
-    expect(hashInviteCode(c)).toMatch(/^[0-9a-f]{64}$/);
-  });
-});
 
 describe('sesi JWT', () => {
   it('terbit, terbaca, dan klaim lengkap; token rusak/ber-salt lain ditolak', async () => {
@@ -67,8 +20,8 @@ describe('sesi JWT', () => {
     expect((await readSession(`other=${t.value}`)).present).toBe(false);
   });
 
-  it('atribut cookie: httpOnly, SameSite=Lax, Path=/, Secure hanya di HTTPS', () => {
-    expect(buildSetCookie('v', 10)).toMatch(/HttpOnly; SameSite=Lax$/);
+  it('atribut cookie: httpOnly, SameSite=Strict, Path=/, Secure hanya di HTTPS', () => {
+    expect(buildSetCookie('v', 10)).toMatch(/HttpOnly; SameSite=Strict$/);
     expect(buildSetCookie('v', 10)).toContain('Path=/');
     expect(buildSetCookie('v', 10)).not.toContain('Secure');
     expect(buildClearCookie()).toContain('Max-Age=0');
@@ -89,16 +42,16 @@ describe('util', () => {
     expect(maskEmail('tanpa-at')).toBe('***');
   });
 
-  it('registri pengaturan: 21 kunci, validasi tipe/rentang/enum', () => {
-    expect(SETTING_DEFS).toHaveLength(21);
-    expect(new Set(SETTING_DEFS.map((d) => d.key)).size).toBe(21);
+  it('registri pengaturan: 20 kunci, validasi tipe/rentang', () => {
+    expect(SETTING_DEFS).toHaveLength(20);
+    expect(new Set(SETTING_DEFS.map((d) => d.key)).size).toBe(20);
     const cd = findSetting('attempt.cooldown_minutes')!;
     expect(checkSettingValue(cd, 45)).toEqual({ ok: true, value: 45 });
     expect(checkSettingValue(cd, 2000)).toEqual({ ok: false, code: 'out_of_range' });
     expect(checkSettingValue(cd, '45')).toEqual({ ok: false, code: 'invalid_type' });
     expect(checkSettingValue(cd, 1.5)).toEqual({ ok: false, code: 'invalid_type' });
     expect(checkSettingValue(cd, true)).toEqual({ ok: false, code: 'invalid_type' });
-    expect(checkSettingValue(findSetting('signup.mode')!, 'x')).toEqual({ ok: false, code: 'invalid_enum' });
+    expect(findSetting('signup.mode')).toBeUndefined();
     expect(findSetting('system.worker_heartbeat_at')).toBeUndefined();
   });
 
@@ -112,17 +65,30 @@ describe('util', () => {
   });
 
   it('zodDetails: kode kontrak dan tanpa nilai input', () => {
-    const r = RegisterRequestSchema.safeParse({ email: 'x', display_name: ' ', password: 'abc', role: 'admin', rahasia: 'nilai-sensitif' });
+    const r = CreateProfileRequestSchema.safeParse({ display_name: ' ', role: 'admin', rahasia: 'nilai-sensitif' });
     expect(r.success).toBe(false);
     if (!r.success) {
       const d = zodDetails(r.error);
       const codes = d.map((x) => `${x.path}:${x.code}`);
-      expect(codes).toContain('email:invalid_email');
-      expect(codes).toContain('display_name:display_name_invalid');
-      expect(codes).toContain('password:password_too_short');
+      expect(codes).toContain('display_name:profile_name_invalid');
       expect(codes).toContain('role:unrecognized_key');
       expect(JSON.stringify(d)).not.toContain('nilai-sensitif');
     }
     expect(UpdateProfileRequestSchema.safeParse({ target_band: 8 }).success).toBe(false);
+  });
+});
+
+describe('isLoopbackHost (SPEC-025 D4)', () => {
+  it('menerima localhost, 127.0.0.1, [::1] dengan atau tanpa port', async () => {
+    const { isLoopbackHost } = await import('@/server/http/withApi');
+    for (const h of ['localhost', 'LOCALHOST', 'localhost:3005', '127.0.0.1', '127.0.0.1:3005', '[::1]', '[::1]:3005']) {
+      expect(isLoopbackHost(h), h).toBe(true);
+    }
+  });
+  it('menolak host lain, subdomain mirip, port tidak valid, dan nilai aneh', async () => {
+    const { isLoopbackHost } = await import('@/server/http/withApi');
+    for (const h of ['evil.example', 'localhost.evil.example', 'evil.example:3005', '127.0.0.1.evil.example', 'localhost:', 'localhost:abc', 'localhost:123456', '[::2]', '', '0.0.0.0', '192.168.1.5:3005', 'localhost@evil.example', 'localhost:3005@evil.example']) {
+      expect(isLoopbackHost(h), h).toBe(false);
+    }
   });
 });

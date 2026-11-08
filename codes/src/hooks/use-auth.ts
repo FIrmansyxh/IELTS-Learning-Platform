@@ -2,11 +2,12 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { authApi } from '@/lib/api/auth';
+import { profilesApi } from '@/lib/api/profiles';
 import type { User } from '@/lib/api/types';
 
 export const ME_KEY = ['me'] as const;
 
-/** Sesi saat ini. 401 berarti belum masuk (ditangani AuthGate). */
+/** Profil aktif. 401 berarti belum ada profil terpilih (ditangani AuthGate). */
 export function useMe() {
   return useQuery({
     queryKey: ME_KEY,
@@ -20,12 +21,12 @@ export function useSetMe() {
   return (user: User) => qc.setQueryData(ME_KEY, user);
 }
 
-export function useLogout() {
+/** Ganti profil: hapus cookie sesi dan seluruh cache agar data profil lama tidak terbawa. */
+export function useLeaveProfile() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: authApi.logout,
+    mutationFn: profilesApi.leave,
     onSuccess: () => {
-      // Bersihkan seluruh cache agar data pengguna tidak bocor ke sesi berikutnya.
       qc.clear();
     },
   });

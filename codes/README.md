@@ -32,16 +32,16 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev-db.ps1 stop
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev-db.ps1 status
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev-db.ps1 reset   # HAPUS cluster + .env buatan skrip, lalu init ulang
 npm run db:migrate && npm run db:seed
-npm run admin:bootstrap          # butuh ADMIN_EMAIL + ADMIN_INITIAL_PASSWORD (>= 16 karakter) di .env
+npm run dev                      # http://127.0.0.1:3005 -> pilih/buat profil di /pilih-profil (tanpa login)
 ```
 Database `ielts` (dev) dan `ielts_test` (`TEST_DATABASE_URL`; dipakai `npm run test:integration` tanpa Docker/Testcontainers). Hanya untuk dev/test lokal: `app_migrator` diberi keanggotaan `app_rw` agar tes hak akses `SET ROLE app_rw` berjalan.
 Jangan menjalankan `next build` dengan `NODE_ENV=development` di environment (mis. setelah `source .env`); biarkan Next yang memuat `.env`.
 
-### CLI konten dan akun (SPEC-001/002/004)
+### Profil lokal dan CLI konten (SPEC-025/004)
+Tanpa login atau daftar: layar `/pilih-profil` memilih atau membuat profil (maks. 10, tanpa password). Server hanya melayani loopback (`Host` asing ditolak 403); jangan membuka port ke jaringan.
 ```bash
 npm run content:validate -- --dir content/golden-sample           # exit 0 valid, 1 ada galat
 npm run content:import   -- --dir content/golden-sample [--dry-run] [--publish]   # exit 0/1/2 (publikasi terhalang)/3
-npm run user:reset-password -- user@example.test                  # password sementara dicetak sekali
 ```
 Tanpa `ffprobe`, durasi audio hanya terbaca untuk WAV (peringatan `ffprobe_unavailable`).
 

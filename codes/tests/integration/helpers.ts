@@ -54,20 +54,25 @@ export async function exec(query: ReturnType<typeof sql>) {
 
 // ---- fabrik pengguna/sesi untuk tes lintas spec ----
 import { users } from '@/db/schema';
-import { hashPassword } from '@/server/auth/password';
-import { POST as loginRoute } from '@/app/api/v1/auth/login/route';
+import { UNUSABLE_PASSWORD_HASH } from '@/server/auth/profiles';
+import { POST as selectRoute } from '@/app/api/v1/profiles/[profile_id]/select/route';
 
 export async function makeUser(over: Partial<typeof users.$inferInsert> = {}, password = STRONG_PASSWORD) {
   const email = over.email ?? uniqueEmail();
   const [u] = await getDb()
     .insert(users)
-    .values({ email, displayName: 'Uji Coba', passwordHash: await hashPassword(password), ...over })
+    // Nama unik per pemanggilan: indeks nama profil unik (SPEC-025).
+    .values({ email, displayName: `Uji ${randomUUID().slice(0, 8)}`, passwordHash: UNUSABLE_PASSWORD_HASH, ...over })
     .returning();
   return { user: u!, email, password };
 }
 
-export async function loginAs(email: string, password: string): Promise<{ status: number; cookie: string | null; json: any }> { // eslint-disable-line @typescript-eslint/no-explicit-any
-  const r = await call(loginRoute, 'POST', '/api/v1/auth/login', { body: { email, password } });
+/** Pilih profil (SPEC-025): menerbitkan cookie sesi tanpa kredensial. `password` diabaikan (kompatibilitas tes lama). */
+export async function loginAs(email: string, _password?: string): Promise<{ status: number; cookie: string | null; json: any }> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  void _password;
+  const rows = (await getDb().execute(sql`SELECT id FROM users WHERE lower(email) = lower(${email}) AND deleted_at IS NULL`)).rows as Array<{ id: string }>;
+  const id = rows[0]?.id ?? '00000000-0000-4000-8000-000000000000';
+  const r = await call(selectRoute, 'POST', `/api/v1/profiles/${id}/select`, { params: { profile_id: id } });
   return { status: r.status, json: r.json, cookie: cookieOf(r.cookie) };
 }
 

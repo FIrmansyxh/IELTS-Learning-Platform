@@ -4,7 +4,6 @@ import { errorBody, mockFetch, renderWithProviders, USER } from '@/components/te
 import { HealthGrid, workerState } from './health-cards';
 import { SecretDialog } from './dialogs';
 import { UsersPanel } from './users-panel';
-import { InvitesPanel } from './invites-panel';
 import { SettingsPanel, groupSettings } from './settings-panel';
 import { buildAuditParams } from './audit-panel';
 
@@ -131,59 +130,6 @@ describe('UsersPanel', () => {
     );
     renderWithProviders(<UsersPanel />);
     expect(await screen.findByRole('button', { name: 'Coba lagi' })).toBeInTheDocument();
-  });
-});
-
-describe('InvitesPanel', () => {
-  it('daftar tidak memuat kode; undangan aktif punya tombol Cabut, yang terpakai tidak', async () => {
-    mockFetch((url) =>
-      url.pathname.endsWith('/admin/invites')
-        ? {
-            body: page([
-              {
-                id: '5e1d7a90-2b3c-4d5e-8f60-718293a4b5c6',
-                status: 'active',
-                expires_at: '2026-11-10T10:00:00.000Z',
-                created_at: '2026-11-03T10:00:00.000Z',
-                used_at: null,
-                used_by_email: null,
-                revoked_at: null,
-              },
-              {
-                id: '5e1d7a90-2b3c-4d5e-8f60-718293a4b5c7',
-                status: 'used',
-                expires_at: '2026-11-10T10:00:00.000Z',
-                created_at: '2026-11-03T10:00:00.000Z',
-                used_at: '2026-11-03T11:30:00.000Z',
-                used_by_email: 'sari.dewi@example.test',
-                revoked_at: null,
-              },
-            ]),
-          }
-        : { status: 404, body: errorBody('NOT_FOUND', 'x') },
-    );
-    renderWithProviders(<InvitesPanel />);
-    expect((await screen.findAllByText('sari.dewi@example.test')).length).toBeGreaterThan(0);
-    expect(screen.getAllByRole('button', { name: 'Cabut' })).toHaveLength(2); // tabel + kartu untuk 1 undangan aktif
-  });
-
-  it('membuat undangan menampilkan kode sekali dalam dialog', async () => {
-    const code = 'K7QM-4XZP-9T2V-HD8W-RJ3N';
-    const calls = mockFetch((url, init) => {
-      if (init.method === 'POST')
-        return {
-          status: 201,
-          body: { data: { id: '5e1d7a90-2b3c-4d5e-8f60-718293a4b5c6', code, expires_at: '2026-11-10T10:00:00.000Z', created_at: '2026-11-03T10:00:00.000Z' } },
-        };
-      return { body: page([]) };
-    });
-    renderWithProviders(<InvitesPanel />);
-    await screen.findByText('Belum ada undangan.');
-    fireEvent.click(screen.getByRole('button', { name: /Buat Undangan/ }));
-    fireEvent.click(await screen.findByRole('button', { name: 'Buat kode' }));
-    expect(await screen.findByTestId('secret-value')).toHaveTextContent(code);
-    const post = calls.find((c) => c.init.method === 'POST')!;
-    expect(post.json).toEqual({ expires_in_days: 7 });
   });
 });
 

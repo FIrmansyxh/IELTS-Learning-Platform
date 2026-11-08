@@ -71,6 +71,13 @@
       "when": 1794118480695,
       "tag": "0009_spec_004_exam_module_tag",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794120129404,
+      "tag": "0010_spec_025_local_profiles",
+      "breakpoints": true
     }
   ]
 }

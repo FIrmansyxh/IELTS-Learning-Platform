@@ -279,7 +279,7 @@ describe('SPEC-018 verifikasi lisensi, daftar, hapus, ringkasan', () => {
     expect(ok.status).toBe(200);
     expect(ok.json.data.rights_status).toBe('OWN_ORIGINAL');
     expect(ok.json.data.license_verified_at).toBeTruthy();
-    expect(ok.json.data.license_verified_by_name).toBe('Uji Coba');
+    expect(ok.json.data.license_verified_by_name).toBe(admin.user.displayName);
     const [a] = await db.select().from(auditLog).where(sql`${auditLog.action} = 'LICENSE_STATUS_CHANGED' AND ${auditLog.entityId} = ${id}`);
     expect(a!.metadata).toMatchObject({ asset_id: id, from: 'UNVERIFIED', to: 'OWN_ORIGINAL' });
     expect((await patch(id, { rights_status: 'EMBED_ONLY' })).json.error.details[0].code).toBe('rights_status_invalid_for_kind');

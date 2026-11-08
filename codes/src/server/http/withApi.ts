@@ -49,8 +49,6 @@ export interface WithApiOptions<B extends z.ZodType, Q extends z.ZodType, P exte
   query?: Q;
   params?: P;
   rateLimit?: Array<RateLimitRule<ApiContext<z.output<B>, z.output<Q>, z.output<P>>>>;
-  /** Izinkan akses saat must_change_password=true (hanya me/logout/change-password). */
-  allowPasswordChangeRequired?: boolean;
   /** Body tidak dibaca/divalidasi sebagai JSON (mis. multipart); handler membaca `ctx.req` sendiri dengan batas ukuran. */
   raw?: boolean;
 }
@@ -71,11 +69,45 @@ export function clientIp(req: Request): string {
   return 'direct';
 }
 
+const LOOPBACK_NAMES = new Set(['localhost', '127.0.0.1', '[::1]']);
+
+/** `Host` loopback sah: nama dari daftar, opsional `:port` berupa 1-5 digit. Tanpa regex (hindari backtracking). */
+export function isLoopbackHost(raw: string): boolean {
+  const h = raw.trim().toLowerCase();
+  const name = h.startsWith('[') ? h.slice(0, h.indexOf(']') + 1) : (h.split(':')[0] ?? '');
+  if (!LOOPBACK_NAMES.has(name)) return false;
+  const rest = h.slice(name.length);
+  if (rest === '') return true;
+  const port = rest.slice(1);
+  return rest.startsWith(':') && port.length >= 1 && port.length <= 5 && [...port].every((c) => c >= '0' && c <= '9');
+}
+
+/**
+ * SPEC-025 D4: aplikasi hanya melayani loopback. Tolak `Host` selain localhost/127.0.0.1/[::1] agar situs
+ * lain tidak dapat mengakses API lewat DNS rebinding. Header `Host` yang tidak ada (mis. pemanggilan
+ * internal/tes) diperiksa lewat hostname URL saja.
+ */
+function checkHost(req: Request): void {
+  const host = req.headers.get('host');
+  if (host !== null && !isLoopbackHost(host)) throw new ApiError('HOST_NOT_ALLOWED');
+  let hostname = '';
+  try {
+    hostname = new URL(req.url).host;
+  } catch {
+    throw new ApiError('HOST_NOT_ALLOWED');
+  }
+  if (!isLoopbackHost(hostname)) throw new ApiError('HOST_NOT_ALLOWED');
+}
+
 function checkCsrf(req: Request): void {
   const origin = req.headers.get('origin');
   if (origin) {
     try {
-      if (config.allowedHosts().includes(new URL(origin).host.toLowerCase())) return;
+      const originHost = new URL(origin).host.toLowerCase();
+      // Same-origin: Origin sama persis dengan Host permintaan (Host sudah dipastikan loopback oleh checkHost).
+      // Port loopback lain TIDAK diterima: SameSite menganggap semua port localhost satu situs.
+      const requestHost = req.headers.get('host')?.trim().toLowerCase();
+      if (config.allowedHosts().includes(originHost) || (requestHost !== undefined && originHost === requestHost)) return;
     } catch {
       /* Origin tidak valid */
     }
@@ -155,6 +187,7 @@ export function withApi<
     const cookies: string[] = [];
     let sawAuth = false;
     try {
+      checkHost(req);
       if (!SAFE_METHODS.has(req.method.toUpperCase())) checkCsrf(req);
 
       const ip = clientIp(req);
@@ -185,10 +218,7 @@ export function withApi<
 
       if (opts.auth !== 'public') {
         sawAuth = true;
-        const auth = await requireUser(req, {
-          allowPasswordChangeRequired: opts.allowPasswordChangeRequired === true,
-          requireAdmin: opts.auth === 'admin',
-        });
+        const auth = await requireUser(req, { requireAdmin: opts.auth === 'admin' });
         ctx.user = auth.user;
         if (auth.refreshedCookie) cookies.push(auth.refreshedCookie);
         limit('general_user', auth.user.id);

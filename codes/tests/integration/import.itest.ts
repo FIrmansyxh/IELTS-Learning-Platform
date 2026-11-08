@@ -29,12 +29,8 @@ let admin: Awaited<ReturnType<typeof adminSession>>;
 beforeAll(async () => {
   admin = await adminSession();
 });
-afterAll(async () => {
-  await closeQueue();
-  await closeDb();
-});
-beforeEach(async () => {
-  resetRateLimits();
+/** Bersihkan artefak impor (sub-modul/modul 1.99 dan turunannya) agar berkas tes lain tidak melihat sisa. */
+async function cleanImportArtifacts() {
   await db.execute(sql`DELETE FROM attempts`);
   await db.execute(sql`DELETE FROM import_batch_items`);
   await db.execute(sql`DELETE FROM async_jobs`);
@@ -46,6 +42,15 @@ beforeEach(async () => {
   await db.execute(sql`DELETE FROM modules WHERE module_code = '1.99'`);
   await db.execute(sql`DELETE FROM content_assets`);
   await db.execute(sql`UPDATE sub_modules SET status='DRAFT', content_version=1`);
+}
+afterAll(async () => {
+  await cleanImportArtifacts();
+  await closeQueue();
+  await closeDb();
+});
+beforeEach(async () => {
+  resetRateLimits();
+  await cleanImportArtifacts();
 });
 
 // ------------------------------------------------------------ fabrik paket

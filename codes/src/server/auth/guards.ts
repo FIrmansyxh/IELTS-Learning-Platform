@@ -51,7 +51,6 @@ export function toUserDTO(u: SessionUser): UserDTOType {
 }
 
 export interface RequireUserOptions {
-  allowPasswordChangeRequired?: boolean;
   requireAdmin?: boolean;
 }
 
@@ -75,7 +74,6 @@ export async function requireUser(
   if (!row || row.status !== 'ACTIVE' || row.tokenVersion !== claims.tv) throw new ApiError('UNAUTHENTICATED');
 
   const user = toSessionUser(row);
-  if (user.mustChangePassword && !opts.allowPasswordChangeRequired) throw new ApiError('PASSWORD_CHANGE_REQUIRED');
   if (opts.requireAdmin && user.role !== 'admin') throw new ApiError('FORBIDDEN');
 
   // Sesi geser: perbarui cookie bila token lebih tua dari updateAge, tidak melewati batas absolut.
@@ -94,9 +92,7 @@ export async function requireAdmin(req: Request) {
 /** Untuk Server Component/loader: baca user dari header Cookie mentah (null bila tidak valid). */
 export async function getUserFromCookieHeader(cookieHeader: string | null): Promise<SessionUser | null> {
   try {
-    const r = await requireUser(new Request('http://internal.invalid/', { headers: cookieHeader ? { cookie: cookieHeader } : {} }), {
-      allowPasswordChangeRequired: true,
-    });
+    const r = await requireUser(new Request('http://internal.invalid/', { headers: cookieHeader ? { cookie: cookieHeader } : {} }));
     return r.user;
   } catch {
     return null;

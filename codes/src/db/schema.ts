@@ -72,7 +72,7 @@ export const users = pgTable('users', {
   id: id(),
   email: varchar('email', { length: 254 }).notNull(),            // PII
   displayName: varchar('display_name', { length: 80 }).notNull(), // PII ringan
-  passwordHash: text('password_hash').notNull(),                  // argon2id/bcrypt, tidak pernah dikembalikan API
+  passwordHash: text('password_hash').notNull(),                  // SPEC-025: tak terpakai ('!'); dibuang saat migrasi SQLite (Fase 3)
   role: userRole('role').notNull().default('learner'),
   status: userStatus('status').notNull().default('ACTIVE'),
   targetBand: band('target_band'),
@@ -91,22 +91,11 @@ export const users = pgTable('users', {
   deletedAt: ts('deleted_at'),                                    // soft delete -> anonymize
 }, (t) => [
   uniqueIndex('users_email_lower_uq').on(sql`lower(${t.email})`),
+  // SPEC-025: nama profil unik (tanpa memedulikan huruf besar/kecil) di antara profil yang belum dihapus.
+  uniqueIndex('users_display_name_lower_uq').on(sql`lower(${t.displayName})`).where(sql`${t.deletedAt} IS NULL`),
   bandCheck('users_target_band_chk', t.targetBand),
 ]);
 
-// SPEC-001: undangan pendaftaran (hanya hash kode yang disimpan)
-export const signupInvites = pgTable('signup_invites', {
-  id: id(),
-  codeHash: varchar('code_hash', { length: 64 }).notNull().unique(), // sha256 hex dari kode ternormalisasi (huruf besar, tanpa '-')
-  createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
-  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-  usedBy: uuid('used_by').references(() => users.id, { onDelete: 'set null' }),
-  usedAt: timestamp('used_at', { withTimezone: true }),
-  revokedAt: timestamp('revoked_at', { withTimezone: true }),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-}, (t) => [index('signup_invites_expires_idx').on(t.expiresAt)]);
-
-// ───────────────────── SUMBER & LISENSI (dibaca duluan: dipakai tabel konten) ─────────────────────
 export const contentSources = pgTable('content_sources', {
   id: id(),
   code: varchar('code', { length: 40 }).notNull().unique(),       // 'NGSL', 'TATOEBA', 'OWN', 'YOUTUBE', 'CAMBRIDGE_REF'
