@@ -1,0 +1,14 @@
+{
+  "contract_version": "1.1",
+  "assets": [
+    {
+      "asset_code": "e2e/listening/exam-tone",
+      "kind": "AUDIO_LISTENING",
+      "title": "Audio uji E2E (sintetis)",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "audio/e2e-exam-tone.wav",
+      "attribution_text": "Audio dibuat dengan suara sintetis."
+    }
+  ]
+}

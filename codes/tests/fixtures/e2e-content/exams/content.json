@@ -1,0 +1,1325 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 1,
+      "module_code": "1.3",
+      "module_category": "READING",
+      "sub_module_code": "1.3.2",
+      "sub_module_title": "E2E Reading Dasar (sintetis)",
+      "passing_score_percent": 60,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## E2E Reading Dasar (sintetis)\n\nMateri sintetis untuk uji E2E ujian dan penilaian."
+      },
+      "active_drill": {
+        "time_limit_seconds": 300,
+        "pass_percent": 60,
+        "questions": [
+          {
+            "question_id": "Q-E2E-X132-D1",
+            "question_type": "MCQ_SINGLE",
+            "skill": "READING",
+            "prompt": "Pick the right answer one.",
+            "options": [
+              "Right one",
+              "Wrong a",
+              "Wrong b",
+              "Wrong c"
+            ],
+            "correct_answers": [
+              "Right one"
+            ],
+            "explanation_id": "Pembahasan uji E2E."
+          },
+          {
+            "question_id": "Q-E2E-X132-D2",
+            "question_type": "MCQ_SINGLE",
+            "skill": "READING",
+            "prompt": "Pick the right answer two.",
+            "options": [
+              "Right two",
+              "Wrong a",
+              "Wrong b",
+              "Wrong c"
+            ],
+            "correct_answers": [
+              "Right two"
+            ],
+            "explanation_id": "Pembahasan uji E2E."
+          },
+          {
+            "question_id": "Q-E2E-X132-D3",
+            "question_type": "MCQ_SINGLE",
+            "skill": "READING",
+            "prompt": "Pick the right answer three.",
+            "options": [
+              "Right three",
+              "Wrong a",
+              "Wrong b",
+              "Wrong c"
+            ],
+            "correct_answers": [
+              "Right three"
+            ],
+            "explanation_id": "Pembahasan uji E2E."
+          }
+        ]
+      }
+    },
+    {
+      "tier_number": 2,
+      "module_code": "2.3",
+      "module_category": "READING",
+      "sub_module_code": "2.3.2",
+      "sub_module_title": "E2E Listening Menengah (sintetis)",
+      "passing_score_percent": 60,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## E2E Listening Menengah (sintetis)\n\nMateri sintetis untuk uji E2E ujian dan penilaian."
+      },
+      "active_drill": {
+        "time_limit_seconds": 300,
+        "pass_percent": 60,
+        "listening_asset_code": "e2e/listening/exam-tone",
+        "questions": [
+          {
+            "question_id": "Q-E2E-X232-D1",
+            "question_type": "MCQ_SINGLE",
+            "skill": "READING",
+            "prompt": "Pick the right answer one.",
+            "options": [
+              "Right one",
+              "Wrong a",
+              "Wrong b",
+              "Wrong c"
+            ],
+            "correct_answers": [
+              "Right one"
+            ],
+            "explanation_id": "Pembahasan uji E2E."
+          },
+          {
+            "question_id": "Q-E2E-X232-D2",
+            "question_type": "MCQ_SINGLE",
+            "skill": "READING",
+            "prompt": "Pick the right answer two.",
+            "options": [
+              "Right two",
+              "Wrong a",
+              "Wrong b",
+              "Wrong c"
+            ],
+            "correct_answers": [
+              "Right two"
+            ],
+            "explanation_id": "Pembahasan uji E2E."
+          },
+          {
+            "question_id": "Q-E2E-X232-D3",
+            "question_type": "MCQ_SINGLE",
+            "skill": "READING",
+            "prompt": "Pick the right answer three.",
+            "options": [
+              "Right three",
+              "Wrong a",
+              "Wrong b",
+              "Wrong c"
+            ],
+            "correct_answers": [
+              "Right three"
+            ],
+            "explanation_id": "Pembahasan uji E2E."
+          }
+        ]
+      }
+    },
+    {
+      "tier_number": 3,
+      "module_code": "3.4",
+      "module_category": "SPEAKING",
+      "sub_module_code": "3.4.1",
+      "sub_module_title": "E2E Speaking Part 1 (sintetis)",
+      "passing_score_percent": 60,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## E2E Speaking Part 1 (sintetis)\n\nMateri sintetis untuk uji E2E ujian dan penilaian.",
+        "mini_task": {
+          "task_type": "AI_SHORT_SPEAKING",
+          "prompt": "Jawab dalam bahasa Inggris: What do you usually do on weekends?",
+          "ai_rubric_criteria": "Fluency, lexical resource, grammar, pronunciation."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 300,
+        "pass_percent": 60,
+        "questions": [
+          {
+            "question_id": "Q-E2E-X341-D1",
+            "question_type": "MCQ_SINGLE",
+            "skill": "READING",
+            "prompt": "Pick the right answer one.",
+            "options": [
+              "Right one",
+              "Wrong a",
+              "Wrong b",
+              "Wrong c"
+            ],
+            "correct_answers": [
+              "Right one"
+            ],
+            "explanation_id": "Pembahasan uji E2E."
+          },
+          {
+            "question_id": "Q-E2E-X341-D2",
+            "question_type": "MCQ_SINGLE",
+            "skill": "READING",
+            "prompt": "Pick the right answer two.",
+            "options": [
+              "Right two",
+              "Wrong a",
+              "Wrong b",
+              "Wrong c"
+            ],
+            "correct_answers": [
+              "Right two"
+            ],
+            "explanation_id": "Pembahasan uji E2E."
+          },
+          {
+            "question_id": "Q-E2E-X341-D3",
+            "question_type": "MCQ_SINGLE",
+            "skill": "READING",
+            "prompt": "Pick the right answer three.",
+            "options": [
+              "Right three",
+              "Wrong a",
+              "Wrong b",
+              "Wrong c"
+            ],
+            "correct_answers": [
+              "Right three"
+            ],
+            "explanation_id": "Pembahasan uji E2E."
+          }
+        ]
+      }
+    }
+  ],
+  "assessment_sets": [
+    {
+      "set_type": "SKIP_MODULE_TEST",
+      "title": "E2E Skip Modul 1.3 (Reading, 2 teks)",
+      "module_code": "1.3",
+      "time_limit_seconds": 600,
+      "pass_percent": 85,
+      "reading_passage_markdown": "# The Saturday Market\n\n[A] Green Lane Market opens every Saturday morning from eight until one. Local farmers sell fresh vegetables and fruit.\n\n[B] Visitors can also buy bread, cheese and flowers. Parking is free for the first two hours.\n\n[C] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[D] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[E] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[F] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[G] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[H] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n===PASSAGE===\n# Library Notice\n\n[A] The city library will close for repairs for one week in March. Books can be returned in the box outside.\n\n[B] Members who borrow books during the closure will receive a one week extension.",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-SK13-R1",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "When does the market open?",
+          "options": [
+            "Every Saturday morning",
+            "Every day",
+            "On Sundays only",
+            "Never"
+          ],
+          "correct_answers": [
+            "Every Saturday morning"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-E2E-SK13-R2",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Parking is free for the whole day.",
+          "correct_answers": [
+            "False"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-E2E-SK13-R3",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Parking is free for the first ___ hours.",
+          "correct_answers": [
+            "two"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-E2E-SK13-R4",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "How long will the library be closed?",
+          "options": [
+            "One week",
+            "One day",
+            "One month",
+            "One year"
+          ],
+          "correct_answers": [
+            "One week"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 2
+        },
+        {
+          "question_id": "Q-E2E-SK13-R5",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Books can be returned during the closure.",
+          "correct_answers": [
+            "True"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 2
+        },
+        {
+          "question_id": "Q-E2E-SK13-R6",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Members receive a one ___ extension.",
+          "correct_answers": [
+            "week"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 2
+        }
+      ]
+    },
+    {
+      "set_type": "SKIP_MODULE_TEST",
+      "title": "E2E Skip Modul 2.3 (Listening, 2 section)",
+      "module_code": "2.3",
+      "time_limit_seconds": 600,
+      "pass_percent": 85,
+      "listening_asset_code": "e2e/listening/exam-tone",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-SK23-L1",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "prompt": "What is the speaker doing?",
+          "options": [
+            "Joining the library",
+            "Buying a ticket",
+            "Booking a hotel",
+            "Ordering food"
+          ],
+          "correct_answers": [
+            "Joining the library"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 1
+        },
+        {
+          "question_id": "Q-E2E-SK23-L2",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "prompt": "Write the surname given by the speaker: ___",
+          "correct_answers": [
+            "Archer"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 1
+        },
+        {
+          "question_id": "Q-E2E-SK23-L3",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "prompt": "Which day is mentioned?",
+          "options": [
+            "Tuesday",
+            "Monday",
+            "Friday",
+            "Sunday"
+          ],
+          "correct_answers": [
+            "Tuesday"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 2
+        },
+        {
+          "question_id": "Q-E2E-SK23-L4",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "prompt": "How many books can a member borrow? ___",
+          "correct_answers": [
+            "six"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 2
+        }
+      ]
+    },
+    {
+      "set_type": "TIER_BOSS_EXAM",
+      "title": "E2E Boss Stage Tier 1",
+      "tier_number": 1,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": []
+    },
+    {
+      "set_type": "BOSS_SECTION",
+      "title": "E2E Boss T1 Listening",
+      "tier_number": 1,
+      "skill_category": "LISTENING",
+      "time_limit_seconds": 600,
+      "listening_asset_code": "e2e/listening/exam-tone",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-B1-L1",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "prompt": "What is the speaker doing?",
+          "options": [
+            "Joining the library",
+            "Buying a ticket",
+            "Booking a hotel",
+            "Ordering food"
+          ],
+          "correct_answers": [
+            "Joining the library"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 1
+        },
+        {
+          "question_id": "Q-E2E-B1-L2",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "prompt": "Write the surname given by the speaker: ___",
+          "correct_answers": [
+            "Archer"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 1
+        },
+        {
+          "question_id": "Q-E2E-B1-L3",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "prompt": "Which day is mentioned?",
+          "options": [
+            "Tuesday",
+            "Monday",
+            "Friday",
+            "Sunday"
+          ],
+          "correct_answers": [
+            "Tuesday"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 2
+        },
+        {
+          "question_id": "Q-E2E-B1-L4",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "prompt": "How many books can a member borrow? ___",
+          "correct_answers": [
+            "six"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 2
+        }
+      ]
+    },
+    {
+      "set_type": "BOSS_SECTION",
+      "title": "E2E Boss T1 Reading",
+      "tier_number": 1,
+      "skill_category": "READING",
+      "time_limit_seconds": 600,
+      "reading_passage_markdown": "# The Saturday Market\n\n[A] Green Lane Market opens every Saturday morning from eight until one. Local farmers sell fresh vegetables and fruit.\n\n[B] Visitors can also buy bread, cheese and flowers. Parking is free for the first two hours.\n\n[C] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[D] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[E] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[F] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[G] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[H] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n===PASSAGE===\n# Library Notice\n\n[A] The city library will close for repairs for one week in March. Books can be returned in the box outside.\n\n[B] Members who borrow books during the closure will receive a one week extension.",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-B1-R1",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "When does the market open?",
+          "options": [
+            "Every Saturday morning",
+            "Every day",
+            "On Sundays only",
+            "Never"
+          ],
+          "correct_answers": [
+            "Every Saturday morning"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-E2E-B1-R2",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Parking is free for the whole day.",
+          "correct_answers": [
+            "False"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-E2E-B1-R3",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Parking is free for the first ___ hours.",
+          "correct_answers": [
+            "two"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-E2E-B1-R4",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "How long will the library be closed?",
+          "options": [
+            "One week",
+            "One day",
+            "One month",
+            "One year"
+          ],
+          "correct_answers": [
+            "One week"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 2
+        },
+        {
+          "question_id": "Q-E2E-B1-R5",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Books can be returned during the closure.",
+          "correct_answers": [
+            "True"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 2
+        },
+        {
+          "question_id": "Q-E2E-B1-R6",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Members receive a one ___ extension.",
+          "correct_answers": [
+            "week"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 2
+        }
+      ]
+    },
+    {
+      "set_type": "BOSS_SECTION",
+      "title": "E2E Boss T1 Writing",
+      "tier_number": 1,
+      "skill_category": "WRITING",
+      "time_limit_seconds": 600,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-B1-W1",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Write a short letter to a neighbour about noise at night.",
+          "task_kind": "TASK1",
+          "min_words": 20,
+          "time_limit_minutes": 20
+        }
+      ]
+    },
+    {
+      "set_type": "BOSS_SECTION",
+      "title": "E2E Boss T1 Speaking",
+      "tier_number": 1,
+      "skill_category": "SPEAKING",
+      "time_limit_seconds": 300,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-B1-S1",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a place you like to visit and explain why.",
+          "part": 2,
+          "prep_seconds": 60,
+          "record_seconds": 120,
+          "cue_points": [
+            "where it is",
+            "what you do there",
+            "why you like it"
+          ]
+        }
+      ]
+    },
+    {
+      "set_type": "TIER_BOSS_EXAM",
+      "title": "E2E Boss Stage Tier 2",
+      "tier_number": 2,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": []
+    },
+    {
+      "set_type": "BOSS_SECTION",
+      "title": "E2E Boss T2 Listening",
+      "tier_number": 2,
+      "skill_category": "LISTENING",
+      "time_limit_seconds": 600,
+      "listening_asset_code": "e2e/listening/exam-tone",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-B2-L1",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "prompt": "What is the speaker doing?",
+          "options": [
+            "Joining the library",
+            "Buying a ticket",
+            "Booking a hotel",
+            "Ordering food"
+          ],
+          "correct_answers": [
+            "Joining the library"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 1
+        },
+        {
+          "question_id": "Q-E2E-B2-L2",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "prompt": "Write the surname given by the speaker: ___",
+          "correct_answers": [
+            "Archer"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 1
+        },
+        {
+          "question_id": "Q-E2E-B2-L3",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "prompt": "Which day is mentioned?",
+          "options": [
+            "Tuesday",
+            "Monday",
+            "Friday",
+            "Sunday"
+          ],
+          "correct_answers": [
+            "Tuesday"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 2
+        },
+        {
+          "question_id": "Q-E2E-B2-L4",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "prompt": "How many books can a member borrow? ___",
+          "correct_answers": [
+            "six"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "section_no": 2
+        }
+      ]
+    },
+    {
+      "set_type": "BOSS_SECTION",
+      "title": "E2E Boss T2 Reading",
+      "tier_number": 2,
+      "skill_category": "READING",
+      "time_limit_seconds": 600,
+      "reading_passage_markdown": "# The Saturday Market\n\n[A] Green Lane Market opens every Saturday morning from eight until one. Local farmers sell fresh vegetables and fruit.\n\n[B] Visitors can also buy bread, cheese and flowers. Parking is free for the first two hours.\n\n[C] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[D] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[E] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[F] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[G] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[H] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n===PASSAGE===\n# Library Notice\n\n[A] The city library will close for repairs for one week in March. Books can be returned in the box outside.\n\n[B] Members who borrow books during the closure will receive a one week extension.",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-B2-R1",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "When does the market open?",
+          "options": [
+            "Every Saturday morning",
+            "Every day",
+            "On Sundays only",
+            "Never"
+          ],
+          "correct_answers": [
+            "Every Saturday morning"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-E2E-B2-R2",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Parking is free for the whole day.",
+          "correct_answers": [
+            "False"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-E2E-B2-R3",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Parking is free for the first ___ hours.",
+          "correct_answers": [
+            "two"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-E2E-B2-R4",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "How long will the library be closed?",
+          "options": [
+            "One week",
+            "One day",
+            "One month",
+            "One year"
+          ],
+          "correct_answers": [
+            "One week"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 2
+        },
+        {
+          "question_id": "Q-E2E-B2-R5",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Books can be returned during the closure.",
+          "correct_answers": [
+            "True"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 2
+        },
+        {
+          "question_id": "Q-E2E-B2-R6",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Members receive a one ___ extension.",
+          "correct_answers": [
+            "week"
+          ],
+          "max_words": 1,
+          "explanation_id": "Pembahasan uji E2E.",
+          "passage_no": 2
+        }
+      ]
+    },
+    {
+      "set_type": "BOSS_SECTION",
+      "title": "E2E Boss T2 Writing",
+      "tier_number": 2,
+      "skill_category": "WRITING",
+      "time_limit_seconds": 600,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-B2-W1",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Write a short letter to a neighbour about noise at night.",
+          "task_kind": "TASK1",
+          "min_words": 20,
+          "time_limit_minutes": 20
+        }
+      ]
+    },
+    {
+      "set_type": "BOSS_SECTION",
+      "title": "E2E Boss T2 Speaking",
+      "tier_number": 2,
+      "skill_category": "SPEAKING",
+      "time_limit_seconds": 300,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-B2-S1",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a place you like to visit and explain why.",
+          "part": 2,
+          "prep_seconds": 60,
+          "record_seconds": 120,
+          "cue_points": [
+            "where it is",
+            "what you do there",
+            "why you like it"
+          ]
+        }
+      ]
+    },
+    {
+      "set_type": "PLACEMENT_TEST",
+      "title": "E2E Placement Test (sintetis, 30 soal)",
+      "time_limit_seconds": 1500,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-E2E-PL-11",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 1 item 1: choose the right option.",
+          "options": [
+            "Right 11",
+            "Wrong 11 a",
+            "Wrong 11 b",
+            "Wrong 11 c"
+          ],
+          "correct_answers": [
+            "Right 11"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-E2E-PL-12",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 1 item 2: choose the right option.",
+          "options": [
+            "Right 12",
+            "Wrong 12 a",
+            "Wrong 12 b",
+            "Wrong 12 c"
+          ],
+          "correct_answers": [
+            "Right 12"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-E2E-PL-13",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 1 item 3: choose the right option.",
+          "options": [
+            "Right 13",
+            "Wrong 13 a",
+            "Wrong 13 b",
+            "Wrong 13 c"
+          ],
+          "correct_answers": [
+            "Right 13"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-E2E-PL-14",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 1 item 4: choose the right option.",
+          "options": [
+            "Right 14",
+            "Wrong 14 a",
+            "Wrong 14 b",
+            "Wrong 14 c"
+          ],
+          "correct_answers": [
+            "Right 14"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-E2E-PL-15",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 1 item 5: choose the right option.",
+          "options": [
+            "Right 15",
+            "Wrong 15 a",
+            "Wrong 15 b",
+            "Wrong 15 c"
+          ],
+          "correct_answers": [
+            "Right 15"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-E2E-PL-16",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 1 item 6: choose the right option.",
+          "options": [
+            "Right 16",
+            "Wrong 16 a",
+            "Wrong 16 b",
+            "Wrong 16 c"
+          ],
+          "correct_answers": [
+            "Right 16"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-E2E-PL-21",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 2 item 1: choose the right option.",
+          "options": [
+            "Right 21",
+            "Wrong 21 a",
+            "Wrong 21 b",
+            "Wrong 21 c"
+          ],
+          "correct_answers": [
+            "Right 21"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-E2E-PL-22",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 2 item 2: choose the right option.",
+          "options": [
+            "Right 22",
+            "Wrong 22 a",
+            "Wrong 22 b",
+            "Wrong 22 c"
+          ],
+          "correct_answers": [
+            "Right 22"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-E2E-PL-23",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 2 item 3: choose the right option.",
+          "options": [
+            "Right 23",
+            "Wrong 23 a",
+            "Wrong 23 b",
+            "Wrong 23 c"
+          ],
+          "correct_answers": [
+            "Right 23"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-E2E-PL-24",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 2 item 4: choose the right option.",
+          "options": [
+            "Right 24",
+            "Wrong 24 a",
+            "Wrong 24 b",
+            "Wrong 24 c"
+          ],
+          "correct_answers": [
+            "Right 24"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-E2E-PL-25",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 2 item 5: choose the right option.",
+          "options": [
+            "Right 25",
+            "Wrong 25 a",
+            "Wrong 25 b",
+            "Wrong 25 c"
+          ],
+          "correct_answers": [
+            "Right 25"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-E2E-PL-26",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 2 item 6: choose the right option.",
+          "options": [
+            "Right 26",
+            "Wrong 26 a",
+            "Wrong 26 b",
+            "Wrong 26 c"
+          ],
+          "correct_answers": [
+            "Right 26"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-E2E-PL-31",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 3 item 1: choose the right option.",
+          "options": [
+            "Right 31",
+            "Wrong 31 a",
+            "Wrong 31 b",
+            "Wrong 31 c"
+          ],
+          "correct_answers": [
+            "Right 31"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-E2E-PL-32",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 3 item 2: choose the right option.",
+          "options": [
+            "Right 32",
+            "Wrong 32 a",
+            "Wrong 32 b",
+            "Wrong 32 c"
+          ],
+          "correct_answers": [
+            "Right 32"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-E2E-PL-33",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 3 item 3: choose the right option.",
+          "options": [
+            "Right 33",
+            "Wrong 33 a",
+            "Wrong 33 b",
+            "Wrong 33 c"
+          ],
+          "correct_answers": [
+            "Right 33"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-E2E-PL-34",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 3 item 4: choose the right option.",
+          "options": [
+            "Right 34",
+            "Wrong 34 a",
+            "Wrong 34 b",
+            "Wrong 34 c"
+          ],
+          "correct_answers": [
+            "Right 34"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-E2E-PL-35",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 3 item 5: choose the right option.",
+          "options": [
+            "Right 35",
+            "Wrong 35 a",
+            "Wrong 35 b",
+            "Wrong 35 c"
+          ],
+          "correct_answers": [
+            "Right 35"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-E2E-PL-36",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 3 item 6: choose the right option.",
+          "options": [
+            "Right 36",
+            "Wrong 36 a",
+            "Wrong 36 b",
+            "Wrong 36 c"
+          ],
+          "correct_answers": [
+            "Right 36"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-E2E-PL-41",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 4 item 1: choose the right option.",
+          "options": [
+            "Right 41",
+            "Wrong 41 a",
+            "Wrong 41 b",
+            "Wrong 41 c"
+          ],
+          "correct_answers": [
+            "Right 41"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-E2E-PL-42",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 4 item 2: choose the right option.",
+          "options": [
+            "Right 42",
+            "Wrong 42 a",
+            "Wrong 42 b",
+            "Wrong 42 c"
+          ],
+          "correct_answers": [
+            "Right 42"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-E2E-PL-43",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 4 item 3: choose the right option.",
+          "options": [
+            "Right 43",
+            "Wrong 43 a",
+            "Wrong 43 b",
+            "Wrong 43 c"
+          ],
+          "correct_answers": [
+            "Right 43"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-E2E-PL-44",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 4 item 4: choose the right option.",
+          "options": [
+            "Right 44",
+            "Wrong 44 a",
+            "Wrong 44 b",
+            "Wrong 44 c"
+          ],
+          "correct_answers": [
+            "Right 44"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-E2E-PL-45",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 4 item 5: choose the right option.",
+          "options": [
+            "Right 45",
+            "Wrong 45 a",
+            "Wrong 45 b",
+            "Wrong 45 c"
+          ],
+          "correct_answers": [
+            "Right 45"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-E2E-PL-46",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 4 item 6: choose the right option.",
+          "options": [
+            "Right 46",
+            "Wrong 46 a",
+            "Wrong 46 b",
+            "Wrong 46 c"
+          ],
+          "correct_answers": [
+            "Right 46"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-E2E-PL-51",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 5 item 1: choose the right option.",
+          "options": [
+            "Right 51",
+            "Wrong 51 a",
+            "Wrong 51 b",
+            "Wrong 51 c"
+          ],
+          "correct_answers": [
+            "Right 51"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 5
+        },
+        {
+          "question_id": "Q-E2E-PL-52",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 5 item 2: choose the right option.",
+          "options": [
+            "Right 52",
+            "Wrong 52 a",
+            "Wrong 52 b",
+            "Wrong 52 c"
+          ],
+          "correct_answers": [
+            "Right 52"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 5
+        },
+        {
+          "question_id": "Q-E2E-PL-53",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 5 item 3: choose the right option.",
+          "options": [
+            "Right 53",
+            "Wrong 53 a",
+            "Wrong 53 b",
+            "Wrong 53 c"
+          ],
+          "correct_answers": [
+            "Right 53"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 5
+        },
+        {
+          "question_id": "Q-E2E-PL-54",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 5 item 4: choose the right option.",
+          "options": [
+            "Right 54",
+            "Wrong 54 a",
+            "Wrong 54 b",
+            "Wrong 54 c"
+          ],
+          "correct_answers": [
+            "Right 54"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 5
+        },
+        {
+          "question_id": "Q-E2E-PL-55",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Placement level 5 item 5: choose the right option.",
+          "options": [
+            "Right 55",
+            "Wrong 55 a",
+            "Wrong 55 b",
+            "Wrong 55 c"
+          ],
+          "correct_answers": [
+            "Right 55"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 5
+        },
+        {
+          "question_id": "Q-E2E-PL-56",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Placement level 5 item 6: choose the right option.",
+          "options": [
+            "Right 56",
+            "Wrong 56 a",
+            "Wrong 56 b",
+            "Wrong 56 c"
+          ],
+          "correct_answers": [
+            "Right 56"
+          ],
+          "explanation_id": "Pembahasan uji E2E.",
+          "difficulty": 5
+        }
+      ]
+    }
+  ]
+}

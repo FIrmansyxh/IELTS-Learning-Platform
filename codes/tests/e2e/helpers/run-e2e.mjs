@@ -20,6 +20,17 @@ import { fileURLToPath } from 'node:url';
 const codesDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const port = process.env.E2E_PORT ?? '3045';
 const base = `http://127.0.0.1:${port}`;
+
+// Penjaga: server lama di port yang sama membuat tes menyambung ke DB basi (hasil menyesatkan). Berhenti bila sudah ada yang menjawab.
+try {
+  const r = await fetch(`${base}/api/health`, { signal: AbortSignal.timeout(2000) });
+  if (r.ok) {
+    console.error(`[e2e] port ${port} sudah dipakai server lain (jawab /api/health). Hentikan dulu atau set E2E_PORT.`);
+    process.exit(2);
+  }
+} catch {
+  /* tidak ada yang menjawab: aman */
+}
 const tmp = mkdtempSync(path.join(tmpdir(), 'ielts-e2e-'));
 const dbPath = path.join(tmp, 'e2e.db');
 const assetsDir = path.join(tmp, 'assets');

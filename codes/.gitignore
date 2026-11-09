@@ -35,3 +35,9 @@ Thumbs.db
 /data/
 
 .local-pg/
+
+# Salinan app sementara untuk run E2E terisolasi
+/.e2e-app-*/
+
+# Bukti screenshot hasil run E2E (dihasilkan ulang tiap run)
+/tests/screenshots/
