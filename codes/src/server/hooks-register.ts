@@ -39,6 +39,9 @@ if (!evaluationGradedHooks.includes(skillScoreEvaluationHook)) {
 }
 
 async function onActivity(tx: Tx, event: ActivityEvent) {
+  // DRILL_SUBMIT dicatat oleh gamificationHook (semua cabangnya memanggil recordActivity). Mencatat di sini
+  // lebih dulu membuat poin harian terkredit sebelum hook, sehingga AttemptResultDTO.points.daily jadi 0.
+  if (event.kind === 'DRILL_SUBMIT') return;
   if (event.kind === 'MINI_TASK_COMPLETE' && event.subModuleId) {
     await handleMiniTaskGamification(tx, event.userId, event.subModuleId);
   } else {

@@ -194,10 +194,11 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
   - Spesifikasi: [spec] ../specifications/017_spec_radar_band_predictor.md
   - Detail: [task] ./TASK-017_radar-band-predictor/TASK-017_radar-band-predictor.md
   - Wave: W8 | Ukuran: L | Dependensi: TASK-006, TASK-007, TASK-009, TASK-012, TASK-013, TASK-014
-  - Current Status: ready_to_test
+  - Current Status: done
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
      - Implementation Complete: [2026-11-04 13:15] (Developer Agent)
+     - Verified Done: [2026-11-10] (Orchestrator) - E2E platform-radar-history 9/9 desktop + 9/9 mobile tanpa perubahan kode. tsc 0 error, eslint 0 error/0 warning, unit 895/895, integrasi 347/347.
 
 ## Priority 1 (High)
 
@@ -232,10 +233,11 @@ Urutan build mengikuti `specifications/_backlog.md` bagian 2 (W0-W8). Task dimul
   - Spesifikasi: [spec] ../specifications/016_spec_gamification.md
   - Detail: [task] ./TASK-016_gamification/TASK-016_gamification.md
   - Wave: W8 | Ukuran: M | Dependensi: TASK-001, TASK-003, TASK-005, TASK-006, TASK-014
-  - Current Status: ready_to_test
+  - Current Status: done
   - Status Logs:
      - Task Created: [2026-11-03 18:30] (PM Agent)
      - Implementation Complete: [2026-11-04 12:43] (Developer Agent)
+     - Verified Done: [2026-11-10] (Orchestrator) - E2E platform-gamification 13/13 desktop + 13/13 mobile. Perbaikan akar masalah: hooks-register.ts melewati DRILL_SUBMIT di onActivity (recordActivity ganda membuat AttemptResultDTO.points.daily=0 dan total 140, seharusnya 5 dan 145). tsc 0 error, eslint 0 error/0 warning, unit 895/895, integrasi 347/347.
 
 - Task 020: Admin Kurasi Konten  [SUPERSEDED oleh SPEC-025 / ADR-005; UI+API admin dihapus, diganti CLI]
   - Spesifikasi: [spec] ../specifications/020_spec_content_curation.md
