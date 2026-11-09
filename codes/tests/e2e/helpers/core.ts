@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Helper E2E domain Inti Belajar (core-*.spec.ts). Tidak mengubah helpers/app.ts maupun run-e2e.mjs; hanya memakainya.
  *

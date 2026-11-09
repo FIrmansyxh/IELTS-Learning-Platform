@@ -9,7 +9,7 @@ import { apiFor, cliRun, getJson, getStats, keepWarm, playDrill, postWarm, putWa
 // SPEC-025 D7/D10 + Fase 4 (CLI pengganti panel admin): profile:*, progress:unlock|reset, points:*, settings:*,
 // band:list, doctor, db backup, serta efeknya yang terlihat di UI. Bentuk argumen mengikuti README (posisional).
 let stopWarm: (() => Promise<void>) | undefined;
-let settingsToRestore: Record<string, string> = {};
+const settingsToRestore: Record<string, string> = {};
 
 // Mesin bersama dengan banyak agen + next dev: beri ruang waktu (bukan perilaku aplikasi).
 test.describe.configure({ timeout: 120_000 });

@@ -67,7 +67,8 @@ const config = [
     },
   },
   {
-    files: ['scripts/**', 'src/server/jobs/**', 'src/server/backup.ts', 'src/server/cli/doctor.ts'],
+    // Jalur berkas berasal dari operator lokal/CLI atau paket konten di repo, bukan dari input jaringan.
+    files: ['scripts/**', 'content/**', 'src/server/db.ts', 'src/server/listening/**', 'src/server/jobs/**', 'src/server/backup.ts', 'src/server/cli/doctor.ts'],
     rules: { 'security/detect-non-literal-fs-filename': 'off', 'security/detect-child-process': 'off' },
   },
 ];

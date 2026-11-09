@@ -1,7 +1,6 @@
 import { randomUUID } from 'node:crypto';
-import { execute, getDb } from '@/server/db';
+import { getDb } from '@/server/db';
 import { assessmentSets, contentAssets, contentSources } from '@/db/schema';
-import { sql } from 'drizzle-orm';
 
 export async function seedSimulationFixtures() {
   const db = getDb();

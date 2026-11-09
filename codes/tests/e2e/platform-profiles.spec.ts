@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { expect, request, test, type Page } from '@playwright/test';
 import { BASE_URL, type TestProfile } from './helpers/app';
 import { cliRun, dropProfile, listProfiles, putWarm, getWarm, wipeAllProfiles } from './helpers/platform';

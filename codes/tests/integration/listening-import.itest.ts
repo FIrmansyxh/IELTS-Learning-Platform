@@ -3,9 +3,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import path from 'node:path';
 import { sql } from 'drizzle-orm';
 import { execute, getDb } from '@/server/db';
-import { assessmentSets, attempts, contentAssets, contentSources, users } from '@/db/schema';
+import { assessmentSets, attempts, contentAssets, contentSources } from '@/db/schema';
 import { validateBankPackage } from '@/server/content/bank-validate';
-import { runBankImport, type BankImportOutcome } from '@/server/content/bank-import';
 import { validateListeningReview } from '@/server/listening/review-gate';
 import { GET as banksRoute } from '@/app/api/v1/banks/route';
 import { GET as attemptGetRoute } from '@/app/api/v1/attempts/[attempt_id]/route';
@@ -14,7 +13,6 @@ import { sha256Hex } from '@/server/content/validate';
 
 describe('Listening Content & Review Gate Integration (AC-A5, AC-A6, AC-A7, AC-A8, AC-A9, AC-A10)', () => {
   const dummyAudio = Buffer.from('RIFF....WAVEfmt ....data....DUMMY_MP3_CONTENT');
-  const dummyAudioHash = sha256Hex(dummyAudio);
   const dummyScript = Buffer.from('---\npart_code: GT-L-S1-001\n---\n[A] Hello\n[B] Hi\n');
   const dummyScriptHash = sha256Hex(dummyScript);
 

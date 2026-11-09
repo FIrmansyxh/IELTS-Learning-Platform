@@ -1,22 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it } from 'vitest';
-import { sql } from 'drizzle-orm';
-import { execute, getDb } from '@/server/db';
+import { getDb } from '@/server/db';
 import { GET as optionsRoute } from '@/app/api/v1/simulations/options/route';
 import { POST as createSimRoute } from '@/app/api/v1/simulations/route';
-import { GET as getSimRoute } from '@/app/api/v1/simulations/[attempt_id]/route';
 import { GET as getSectionRoute } from '@/app/api/v1/simulations/[attempt_id]/sections/[section]/route';
 import { POST as startSectionRoute } from '@/app/api/v1/simulations/[attempt_id]/sections/[section]/start/route';
 import { POST as submitSectionRoute } from '@/app/api/v1/simulations/[attempt_id]/sections/[section]/submit/route';
 import { GET as getResultRoute } from '@/app/api/v1/simulations/[attempt_id]/result/route';
 import { POST as abandonRoute } from '@/app/api/v1/simulations/[attempt_id]/abandon/route';
 import { PUT as answerRoute } from '@/app/api/v1/attempts/[attempt_id]/answers/[question_id]/route';
-import { POST as writingSubRoute } from '@/app/api/v1/submissions/writing/route';
 import { POST as speakingSubRoute } from '@/app/api/v1/submissions/speaking-external/route';
 import { GET as examHistoryRoute } from '@/app/api/v1/me/exam-history/route';
 import { call, learnerSession } from './helpers';
 import { seedSimulationFixtures } from '../fixtures/sim-fixtures';
-import { attempts, attemptSections, userSkillScores } from '@/db/schema';
+import { attempts } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
 const db = getDb();
@@ -25,8 +22,6 @@ type L = Awaited<ReturnType<typeof learnerSession>>;
 const getOptions = (u: L | null) => call(optionsRoute, 'GET', '/api/v1/simulations/options', { cookie: u?.cookie });
 const createSim = (u: L | null, sections: string[]) =>
   call(createSimRoute, 'POST', '/api/v1/simulations', { cookie: u?.cookie, body: { sections } });
-const getSim = (u: L | null, id: string) =>
-  call(getSimRoute, 'GET', `/api/v1/simulations/${id}`, { cookie: u?.cookie, params: { attempt_id: id } });
 const getSection = (u: L | null, id: string, sec: string) =>
   call(getSectionRoute, 'GET', `/api/v1/simulations/${id}/sections/${sec}`, {
     cookie: u?.cookie,

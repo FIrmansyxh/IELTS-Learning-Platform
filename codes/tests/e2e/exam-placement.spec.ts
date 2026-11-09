@@ -1,4 +1,4 @@
-import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
+import { expect, test, type APIRequestContext } from '@playwright/test';
 import { BASE_URL, createProfile, deleteProfile, signIn, type TestProfile } from './helpers/app';
 import { answerVisible, completeSubModule, ensureExamContent, examIds, expectNoHorizontalScroll, solve, type ApiQuestion } from './helpers/exams';
 

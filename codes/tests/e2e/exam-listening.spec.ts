@@ -4,7 +4,6 @@ import { answerVisible, confirmEnd, ensureExamContent, examIds, expectNoHorizont
 
 // SPEC-011 + SPEC-024 (sisi UI): pemutar audio terkunci pada mode ujian (Skip Modul 2.3 = Listening, 4 soal, 2 section;
 // audio sintetis nada 12 detik, WAV 192044 byte). Dijalankan lewat tests/e2e/helpers/run-e2e.mjs.
-const orig = { headers: { Origin: BASE_URL } };
 let profile: TestProfile;
 let other: TestProfile;
 let ids: ExamIds;
