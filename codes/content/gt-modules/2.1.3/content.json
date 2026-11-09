@@ -1,0 +1,353 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 2,
+      "module_code": "2.1",
+      "module_category": "GRAMMAR",
+      "sub_module_title": "Passive Voice untuk Deskripsi Proses & Laporan Ilmiah",
+      "sub_module_code": "2.1.3",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Menyusun kalimat **passive voice** di semua tense dan dengan modal, dalam bentuk positif, negatif, dan tanya.\n2. Memutuskan **kapan** memakai pasif (proses, laporan, pelaku tidak penting) dan **kapan** aktif.\n3. Mengenali kata kerja yang **tidak bisa** dipasifkan (intransitive).\n4. Memakai pasif untuk **deskripsi proses** (Task 1 Academic) dan **laporan ilmiah**, termasuk pola *It is said that...*.\n\n> **Ringkasan 30 detik**\n> - Rumus inti: **be + V3** (am/is/are/was/were/been/being/be + past participle).\n> - Pasif dipakai ketika **yang dikenai tindakan** lebih penting daripada pelaku: *The bridge **was built** in 1990.*\n> - Hanya kata kerja **transitive** (punya objek) yang bisa dipasifkan. *Happen, occur, arrive, die* tidak bisa.\n\n---\n\n## 1. Active vs. Passive\n\n| | Aktif | Pasif |\n|---|---|---|\n| Fokus | **Pelaku** (siapa yang melakukan) | **Penerima tindakan** (apa yang dikenai) |\n| Susunan | Subjek (pelaku) + kata kerja + objek | Subjek (penerima) + **be + V3** + (by + pelaku) |\n| Contoh | The company **built** the bridge. | The bridge **was built** (by the company). |\n\n**Cara mengubah aktif → pasif:**\n1. Ambil **objek** kalimat aktif → jadikan **subjek** kalimat pasif.\n2. Tulis **be** sesuai tense dan subjek baru.\n3. Ubah kata kerja utama menjadi **V3**.\n4. Pelaku (subjek aktif) menjadi *by + pelaku* (atau dihilangkan).\n\n| Aktif | → | Pasif |\n|---|---|---|\n| Workers **clean** the machines every day. | | The machines **are cleaned** (by workers) every day. |\n\n---\n\n## 2. Rumus Pasif di Semua Tense\n\n| Tense | Aktif | Pasif | Rumus pasif |\n|---|---|---|---|\n| Present Simple | They **make** cars here. | Cars **are made** here. | am/is/are + V3 |\n| Present Continuous | They **are making** cars. | Cars **are being made**. | am/is/are + **being** + V3 |\n| Present Perfect | They **have made** cars. | Cars **have been made**. | has/have + **been** + V3 |\n| Simple Past | They **made** cars. | Cars **were made**. | was/were + V3 |\n| Past Continuous | They **were making** cars. | Cars **were being made**. | was/were + **being** + V3 |\n| Past Perfect | They **had made** cars. | Cars **had been made**. | had + **been** + V3 |\n| Simple Future | They **will make** cars. | Cars **will be made**. | will + **be** + V3 |\n| Future Perfect | They **will have made** cars. | Cars **will have been made**. | will have + **been** + V3 |\n| Be going to | They **are going to make** cars. | Cars **are going to be made**. | am/is/are going to + **be** + V3 |\n| Modal | They **must make** cars. | Cars **must be made**. | modal + **be** + V3 |\n| Modal perfect | They **should have made** cars. | Cars **should have been made**. | modal + have + **been** + V3 |\n| Infinitive | They need **to repair** the car. | The car needs **to be repaired**. | to + **be** + V3 |\n| Gerund | He hates people **laughing** at him. | He hates **being laughed** at. | **being** + V3 |\n\n**Pola yang perlu dihafal:** kata *be* mengikuti tense kalimat aktif, V3 selalu menjadi kata kerja utama. Tense perfect memakai **been**, tense continuous memakai **being**.\n\n### 2.1 Negatif dan tanya\n\n| Bentuk | Rumus | Contoh |\n|---|---|---|\n| Positif | S + be + V3 | The report **was written** yesterday. |\n| Negatif | S + be + **not** + V3 | The report **wasn't written** yesterday. |\n| Tanya | Be + S + V3 ? | **Was** the report **written** yesterday? |\n| Tanya WH | WH + be + S + V3 ? | **When was** the report **written**? |\n| Dengan modal | Modal + S + be + V3 ? | **Can** this problem **be solved**? |\n\n:::kesalahan-umum\nPasif **selalu** memakai **be**. Salah: *The window **broken** by a boy.* Benar: *The window **was broken** by a boy.* Salah juga: *The report **is write**.* Benar: *The report **is written**.* V3 harus bentuk past participle yang tepat, terutama untuk kata kerja tak beraturan (written, taken, given, done, seen).\n:::\n\n---\n\n## 3. Kapan Memakai Pasif?\n\n| Situasi | Alasan | Contoh |\n|---|---|---|\n| **Pelaku tidak diketahui** | Tidak ada informasi | My bike **was stolen** last night. |\n| **Pelaku tidak penting** | Fokus pada hasil | The road **was repaired** in 2020. |\n| **Pelaku sudah jelas** | Menghindari pengulangan | The suspect **was arrested**. |\n| **Proses / prosedur** | Urutan langkah | The milk **is heated**, then it **is cooled**. |\n| **Laporan ilmiah / formal** | Nada objektif, tanpa \"I/we\" | Samples **were collected** and **analysed**. |\n| **Pelaku disembunyikan (formal/netral)** | Kesan objektif | Mistakes **were made**. |\n\n### 3.1 Kapan menyebut pelaku (*by*)?\n\nSebut pelaku bila informasinya **penting atau baru**: *The Mona Lisa was painted **by Leonardo da Vinci**.* Jika tidak, hilangkan.\n\n### 3.2 Pasif atau aktif? Pertimbangan gaya\n\n| Gunakan **aktif** bila... | Gunakan **pasif** bila... |\n|---|---|\n| Pelaku penting dan ingin ditonjolkan | Penerima tindakan lebih penting |\n| Kalimat lebih singkat dan langsung | Pelaku tidak diketahui/tidak penting |\n| Gaya percakapan (Speaking) | Proses, laporan, dan tulisan akademik |\n\n---\n\n## 4. Kata Kerja yang Tidak Bisa Dipasifkan\n\nHanya kata kerja **transitive** (diikuti objek) yang bisa dipasifkan. Kata kerja **intransitive** dan sebagian kata kerja state **tidak bisa**.\n\n| Tidak bisa dipasifkan | Salah | Benar (aktif) |\n|---|---|---|\n| happen | The accident *was happened* (salah) | The accident **happened**. |\n| occur | The error *was occurred* (salah) | The error **occurred**. |\n| arrive | He *was arrived* (salah) | He **arrived**. |\n| die | He *was died* (salah) | He **died**. |\n| seem / appear | It *is seemed* (salah) | It **seems** true. |\n| consist of | The team *is consisted of* (salah) | The team **consists of** five people. |\n| exist | Dinosaurs *were existed* (salah) | Dinosaurs **existed**. |\n| fall, rise, go, come | ... *was risen* (salah) | Prices **rose**. |\n| have (memiliki), fit, suit, resemble | *is had* (salah) | She **has** a car. |\n\n> **Catatan:** *The number of students has risen* (aktif, bukan pasif). *Prices were raised by the government* adalah pasif karena *raise* adalah kata kerja transitive.\n\n---\n\n## 5. Pola Pasif Khusus\n\n### 5.1 Pasif dengan dua objek\n\nKata kerja seperti *give, send, show, tell, offer* punya dua objek, sehingga bisa dipasifkan dua cara:\n\n| Aktif | Pasif 1 | Pasif 2 |\n|---|---|---|\n| They **gave** me a prize. | I **was given** a prize. | A prize **was given** to me. |\n\n### 5.2 Pasif pelaporan (*It is said that...*)\n\nPola formal untuk menyampaikan pendapat umum atau laporan; sangat berguna di Writing Task 2 dan Reading.\n\n| Pola | Contoh |\n|---|---|\n| **It is + V3 + that + klausa** | **It is said that** exercise improves memory. |\n| **S + is/are + V3 + to-infinitive** | Exercise **is said to** improve memory. |\n| **S + is/are + V3 + to have + V3** (masa lampau) | He **is believed to have** left the country. |\n\nKata kerja umum: *say, believe, think, consider, expect, report, know, claim, suppose.*\n\n### 5.3 Causative: *have / get something done*\n\n| Pola | Arti | Contoh |\n|---|---|---|\n| **have + object + V3** | Meminta orang lain melakukan sesuatu | I **had my car repaired**. |\n| **get + object + V3** | Sama, lebih informal | She **got her hair cut**. |\n\n### 5.4 *Get* passive\n\n*Get* + V3 untuk kejadian tak terduga (informal): *He **got fired** last week.*\n\n---\n\n## 6. Pasif untuk Deskripsi Proses (Writing Task 1 Academic)\n\nProses **hampir selalu** dideskripsikan dengan **pasif** dan **penanda urutan**.\n\n**Contoh: proses pembuatan cokelat**\n\n| Langkah | Kalimat |\n|---|---|\n| 1 | First, the cocoa beans **are harvested** from the trees. |\n| 2 | Next, they **are fermented** for about a week. |\n| 3 | After that, the beans **are dried** in the sun. |\n| 4 | Then they **are roasted** and **ground** into a paste. |\n| 5 | Finally, the chocolate **is moulded** and **packaged**. |\n\n**Penanda urutan:** *First, Next, Then, After that, Subsequently, Following this, Finally, At the end of the process.*\n\n:::tips-examiner\nDi **Task 1 Academic (proses/diagram)**, penguji mencari **pasif yang akurat** dan **variasi penghubung urutan**. Jangan memulai setiap kalimat dengan *Then*. Variasikan: *After being washed, the fruit is...* (frasa pasif participle) dan *Once the mixture has been heated, it is...*. Hindari kata ganti pribadi (*I, we*) dalam deskripsi proses.\n:::\n\n---\n\n## 7. Variasi Contoh (dari mudah ke sulit)\n\n**Level 1: dasar**\n1. English **is spoken** all over the world.\n2. This house **was built** in 1990.\n3. **Is** coffee **grown** in your country?\n\n**Level 2: sehari-hari (Speaking)**\n4. My phone **was stolen** on the bus, so I **had** a new one **delivered** yesterday.\n5. The best pizza in my city **is made** in a small restaurant that **was opened** by my uncle.\n6. I **was told** that the museum **is being renovated** at the moment.\n\n**Level 3: akademik (Writing, Reading)**\n7. Large amounts of plastic **are dumped** into the ocean every year, and many species **are threatened** as a result.\n8. It **is widely believed** that regular exercise **can be linked** to better mental health.\n9. New policies **have been introduced** to reduce traffic, although their effects **have not yet been measured**.\n\n**Level 4: proses ilmiah**\n10. The samples **were collected**, **labelled**, and **stored** at −20°C before they **were analysed**.\n11. Once the water **has been purified**, it **is pumped** into storage tanks.\n\n---\n\n## 8. Kesalahan Umum Pelajar Indonesia\n\n| # | Kesalahan | Perbaikan | Penjelasan |\n|---|---|---|---|\n| 1 | The accident **was happened**. | The accident **happened**. | *Happen* intransitive. |\n| 2 | The window **broken** yesterday. | The window **was broken**. | Wajib ada *be*. |\n| 3 | The report **is write**. | The report **is written**. | V3 yang benar. |\n| 4 | The team **is consisted of** five people. | The team **consists of** five people. | *Consist of* tidak dipasifkan. |\n| 5 | The cars **are make** in Japan. | The cars **are made** in Japan. | V3 dari *make* = *made*. |\n| 6 | The house **built** in 1990. | The house **was built** in 1990. | Pasif butuh *be*. |\n| 7 | The cars **are being make** now. | The cars **are being made** now. | Continuous pasif: be + **being** + V3. |\n| 8 | I **am agree** with you. | I **agree** with you. | *Agree* bukan pasif. |\n| 9 | The problem **can solved**. | The problem **can be solved**. | Modal + **be** + V3. |\n| 10 | The exam **will be take** next week. | The exam **will be taken** next week. | V3 dari *take* = *taken*. |\n| 11 | The documents **have been send**. | The documents **have been sent**. | V3 dari *send* = *sent*. |\n| 12 | The woman **was stolen** her bag. | The woman **had her bag stolen**. / Her bag **was stolen**. | Yang dicuri adalah barang, bukan orang. |\n\n---\n\n## 9. Strategi IELTS\n\n- **Writing Task 1 Academic (proses):** wajib pasif untuk setiap langkah proses; variasikan penanda urutan dan frasa participle (*After being heated...*). Jangan pakai *I/we*.\n- **Writing Task 1 Academic (grafik):** pasif jarang dipakai; gunakan aktif untuk data (*sales rose*). Pasif untuk kebijakan/perubahan (*The tax was introduced in 2015*).\n- **Writing Task 2:** pola formal untuk kalimat umum: *It is often argued that...*, *It is widely believed that...*, *Measures should be taken to...*. Hindari berlebihan: gabungkan aktif dan pasif.\n- **Speaking:** pasif lebih jarang, tetapi *I was born in..., I was brought up in..., my phone was stolen, it is called...* wajar dan akurat.\n- **Reading:** pasif pelaporan (*is thought to, is believed to*) menandai **opini orang lain**, bukan fakta. Penting untuk T/F/NG dan Yes/No/Not Given.\n- **Listening:** pasif muncul pada proses dan pengumuman (*Tickets must be collected before 5 p.m.*).\n\n---\n\n## 10. Contoh Jawaban Model (Writing Task 1 Academic, proses)\n\n**Diagram:** pembuatan kertas daur ulang.\n\n- **Band 5:** First, people collect paper. Then they put it in water. Then machine make it clean. Then paper dry. Finally we have new paper.\n- **Band 6:** First, used paper is collected and sent to a factory. Then it is mixed with water to make pulp. After that, the pulp is cleaned, and finally it is dried to make new paper.\n- **Band 7:** The process begins when used paper is collected and transported to a recycling plant. Once there, it is mixed with water and broken down into pulp. After the pulp has been cleaned to remove ink and impurities, it is pressed into thin sheets, which are subsequently dried and rolled. Finally, the new paper is cut and packaged for distribution.\n\n**Mengapa naik band?** (1) Pasif akurat dan bervariasi (*is collected, has been cleaned, are pressed*), (2) penanda urutan bervariasi (*begins when, Once there, After, subsequently, Finally*), (3) menggabungkan beberapa langkah dengan relative clause (*which are subsequently dried*).\n\n---\n\n## 11. Ringkasan dan Cek Diri\n\n**Ingat:**\n- Pasif = **be + V3**. Perfect → **been**. Continuous → **being**. Modal → **be**.\n- Hanya kata kerja transitive; *happen, occur, arrive, die, consist of, seem* tidak bisa.\n- Pakai pasif untuk proses, laporan, pelaku tidak penting/tidak diketahui.\n- Pola formal: *It is said that...*, *S is said to...*, *have/get something done*.\n\n**Cek diri (tanpa melihat materi):**\n1. *The bridge ___ (build) in 1995.*\n2. *The problem ___ (can / solve) easily.*\n3. *The results ___ (not / publish) yet.*\n4. *It ___ (believe) that the earthquake caused the fire.*\n5. *The accident ___ (happen) at noon.* (pasif atau aktif?)\n\n**Kunci:** 1. was built. 2. can be solved. 3. have not been published. 4. is believed. 5. happened (aktif; *happen* tidak bisa dipasifkan).",
+        "mini_task": {
+          "task_type": "AI_SHORT_WRITING",
+          "prompt": "Jelaskan sebuah proses sederhana dalam bahasa Inggris (sekitar 100 sampai 130 kata), misalnya membuat teh, mendaur ulang botol plastik, atau mengolah biji kopi menjadi kopi bubuk.\n\nDalam tulisanmu wajib ada:\n- minimal 5 kalimat pasif yang benar (be + V3) untuk langkah-langkah proses\n- penanda urutan yang bervariasi (First, Next, After that, Once..., Finally) tanpa mengulang kata yang sama di setiap kalimat\n- satu pasif dengan modal (can be / must be) dan satu pasif perfect (has been / have been)\n- satu pola pelaporan, mis. \"It is said that...\" atau \"X is believed to...\"\n- tidak memakai I/we dan tidak memasifkan kata kerja intransitive (happen, occur, consist of)",
+          "ai_rubric_criteria": "Grammatical Range and Accuracy: pasif dibentuk dengan be + V3 yang benar di berbagai tense (present simple, perfect, modal); V3 tak beraturan benar (made, written, taken); tidak memasifkan kata kerja intransitive. Task Achievement: proses jelas dan berurutan, semua elemen yang diminta tercakup. Coherence and Cohesion: penanda urutan bervariasi dan alami. Lexical Resource: kosakata proses/teknis sesuai."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 900,
+        "pass_percent": 75,
+        "questions": [
+          {
+            "question_id": "Q-GR213-001",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "English ___ all over the world.",
+            "explanation_id": "Pasif present simple: is/are + V3. Subjek English menerima tindakan.",
+            "options": [
+              "speaks",
+              "is spoken",
+              "spoken",
+              "is speaking"
+            ],
+            "correct_answers": [
+              "is spoken"
+            ]
+          },
+          {
+            "question_id": "Q-GR213-002",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "This house ___ in 1990.",
+            "explanation_id": "Waktu lampau yang spesifik (in 1990) memakai pasif simple past: was + V3.",
+            "options": [
+              "built",
+              "was built",
+              "is built",
+              "has built"
+            ],
+            "correct_answers": [
+              "was built"
+            ]
+          },
+          {
+            "question_id": "Q-GR213-003",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The report ___ yet.",
+            "explanation_id": "Pasif present perfect negatif: has/have not been + V3. \"Yet\" menandakan perfect.",
+            "options": [
+              "has not been published",
+              "is not publish",
+              "did not published",
+              "has not published"
+            ],
+            "correct_answers": [
+              "has not been published"
+            ]
+          },
+          {
+            "question_id": "Q-GR213-004",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The problem can ___ easily.",
+            "explanation_id": "Pasif dengan modal: modal + be + V3.",
+            "options": [
+              "solve",
+              "solved",
+              "be solved",
+              "be solving"
+            ],
+            "correct_answers": [
+              "be solved"
+            ]
+          },
+          {
+            "question_id": "Q-GR213-005",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The cars ___ at the moment.",
+            "explanation_id": "Pasif present continuous: am/is/are + being + V3.",
+            "options": [
+              "are being repaired",
+              "are repaired",
+              "were repairing",
+              "being repaired"
+            ],
+            "correct_answers": [
+              "are being repaired"
+            ]
+          },
+          {
+            "question_id": "Q-GR213-006",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which verb CANNOT be used in the passive?",
+            "explanation_id": "\"Happen\" adalah kata kerja intransitive (tidak punya objek), sehingga tidak bisa dipasifkan.",
+            "options": [
+              "build",
+              "happen",
+              "write",
+              "steal"
+            ],
+            "correct_answers": [
+              "happen"
+            ]
+          },
+          {
+            "question_id": "Q-GR213-007",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which sentence is CORRECT?",
+            "explanation_id": "Happen tidak bisa dipasifkan. Gunakan bentuk aktif.",
+            "options": [
+              "The accident was happened last night.",
+              "The accident happened last night.",
+              "The accident has been happened last night.",
+              "The accident is happened last night."
+            ],
+            "correct_answers": [
+              "The accident happened last night."
+            ]
+          },
+          {
+            "question_id": "Q-GR213-008",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Why is the passive used in this sentence? \"Samples were collected and analysed.\"",
+            "explanation_id": "Laporan ilmiah memakai pasif untuk menekankan prosedur dan hasil, bukan pelaku.",
+            "options": [
+              "The researcher is unknown or unimportant",
+              "The sentence is a question",
+              "The verb is intransitive",
+              "It is a polite request"
+            ],
+            "correct_answers": [
+              "The researcher is unknown or unimportant"
+            ]
+          },
+          {
+            "question_id": "Q-GR213-009",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Choose the correct passive: \"They gave me a prize.\"",
+            "explanation_id": "Pasif simple past: was + V3. V3 dari give adalah given.",
+            "options": [
+              "I was given a prize.",
+              "I gave a prize.",
+              "I was gave a prize.",
+              "A prize gave me."
+            ],
+            "correct_answers": [
+              "I was given a prize."
+            ]
+          },
+          {
+            "question_id": "Q-GR213-010",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which expression is a formal REPORTING passive?",
+            "explanation_id": "Pola formal: It is + V3 + that + klausa.",
+            "options": [
+              "People say that exercise helps.",
+              "It is said that exercise helps memory.",
+              "Exercise is say to help memory.",
+              "It says that exercise helps memory."
+            ],
+            "correct_answers": [
+              "It is said that exercise helps memory."
+            ]
+          },
+          {
+            "question_id": "Q-GR213-011",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan V3 dari \"write\": The letter was ___ by the manager.",
+            "explanation_id": "Pasif simple past: was + V3. V3 dari write adalah written.",
+            "correct_answers": [
+              "written"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR213-012",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan V3 dari \"take\": The photos will be ___ tomorrow.",
+            "explanation_id": "Pasif future: will be + V3. V3 dari take adalah taken.",
+            "correct_answers": [
+              "taken"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR213-013",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: The documents have ___ sent. (been / being)",
+            "explanation_id": "Pasif present perfect: have been + V3.",
+            "correct_answers": [
+              "been"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR213-014",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: The room is ___ cleaned at the moment. (being / been)",
+            "explanation_id": "Pasif present continuous: is being + V3.",
+            "correct_answers": [
+              "being"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR213-015",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan have atau get: I need to ___ my car repaired. (causative)",
+            "explanation_id": "Causative: have/get + objek + V3 berarti meminta orang lain memperbaiki.",
+            "correct_answers": [
+              "have",
+              "get"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR213-016",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat pasif yang benar.",
+            "explanation_id": "Pasif present simple: S + is/are + V3 + keterangan.",
+            "segments": [
+              "The beans",
+              "are dried",
+              "in the sun",
+              "for a week."
+            ]
+          },
+          {
+            "question_id": "Q-GR213-017",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat pasif pelaporan yang benar.",
+            "explanation_id": "Pola: S + is/are + V3 + to-infinitive.",
+            "segments": [
+              "Exercise",
+              "is believed",
+              "to improve",
+              "memory."
+            ]
+          },
+          {
+            "question_id": "Q-GR213-018",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Pasif wajib memakai be: \"was broken\".",
+            "tokens": [
+              "The",
+              "window",
+              "broken",
+              "by",
+              "a",
+              "boy",
+              "yesterday."
+            ],
+            "correct_answers": [
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR213-019",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Setelah be, kata kerja berbentuk V3: made (bukan make).",
+            "tokens": [
+              "These",
+              "cars",
+              "are",
+              "make",
+              "in",
+              "Japan."
+            ],
+            "correct_answers": [
+              3
+            ]
+          },
+          {
+            "question_id": "Q-GR213-020",
+            "skill": "GRAMMAR",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan tense dengan rumus pasifnya.",
+            "explanation_id": "Present continuous: am/is/are being + V3. Present perfect: has/have been + V3. Modal: modal + be + V3.",
+            "points": 3,
+            "matching": {
+              "left": [
+                "Present continuous",
+                "Present perfect",
+                "Modal (can/must)"
+              ],
+              "right": [
+                "is/are being + V3",
+                "has/have been + V3",
+                "modal + be + V3",
+                "was/were + V3"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR213-021",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih SEMUA kalimat yang benar.",
+            "explanation_id": "Consist of dan happen intransitive: tidak dipasifkan. \"Has been completed\" dan \"can be solved\" benar.",
+            "points": 2,
+            "options": [
+              "The team is consisted of five people.",
+              "The project has been completed.",
+              "The accident was happened at noon.",
+              "The problem can be solved."
+            ],
+            "correct_answers": [
+              "The project has been completed.",
+              "The problem can be solved."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

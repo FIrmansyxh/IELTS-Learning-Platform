@@ -1,0 +1,276 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 3,
+      "module_code": "3.2",
+      "module_category": "READING",
+      "sub_module_title": "Taktik True / False / Not Given & Yes / No / Not Given",
+      "sub_module_code": "3.2.1",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Membedakan soal **True / False / Not Given (TFNG)** dan **Yes / No / Not Given (YNNG)**, serta kapan memakai masing-masing.\n2. Memakai **metode 5 langkah** untuk menjawab: tandai kata kunci, temukan lokasi, kenali parafrase, bandingkan makna, putuskan jawaban.\n3. Membedakan **False** dari **Not Given**, kesalahan terbesar pada tipe soal ini.\n4. Mengenali **jebakan umum** (kata mutlak, kuantitas, sebab-akibat, opini vs fakta) dan mengelola waktu.\n\n> **Ringkasan 30 detik**\n> - **TFNG** = apakah pernyataan sesuai **informasi** dalam teks. **YNNG** = apakah sesuai **pendapat/klaim penulis**.\n> - **True/Yes** = maknanya sama. **False/No** = **bertentangan langsung**. **Not Given** = teks **tidak memberi informasi** tentang hal itu.\n> - Jawab dari **teks**, bukan dari pengetahuan atau pendapatmu sendiri.\n\n---\n\n## 1. Gambaran Soal Reading\n\n| Hal | Keterangan |\n|---|---|\n| Waktu | **60 menit** untuk 3 bagian (tidak ada waktu tambahan menyalin jawaban) |\n| Jumlah soal | **40 soal** |\n| Urutan | TFNG/YNNG **mengikuti urutan teks**: soal 1 ada sebelum soal 2 |\n| Waktu per bagian | Sekitar **20 menit**, lebih cepat untuk bagian awal |\n\nPada General Training, bagian awal berisi teks sehari-hari yang pendek dan bagian akhir berisi satu teks yang lebih panjang dan padat. Tipe TFNG/YNNG muncul di semua bagian.\n\n---\n\n## 2. TFNG vs. YNNG\n\n| | **True / False / Not Given** | **Yes / No / Not Given** |\n|---|---|---|\n| Menguji | **Fakta dan informasi** dalam teks | **Pendapat, klaim, atau keyakinan penulis** |\n| Teks | Biasanya faktual (deskripsi, laporan) | Biasanya opini atau argumen |\n| Pertanyaan | *Do the statements agree with the information?* | *Do the statements agree with the claims/views of the writer?* |\n| Pilihan | True / False / Not Given | Yes / No / Not Given |\n\n### 2.1 Definisi tiga jawaban\n\n| Jawaban | Arti | Cara menguji |\n|---|---|---|\n| **True / Yes** | Pernyataan **sama maknanya** dengan teks | Ada kalimat di teks yang menyatakan hal yang sama (mungkin dengan kata berbeda) |\n| **False / No** | Pernyataan **bertentangan** dengan teks | Ada kalimat di teks yang menyatakan hal berlawanan |\n| **Not Given** | Teks **tidak memberi informasi** untuk memutuskan | Tidak ada kalimat yang mengonfirmasi atau membantah |\n\n:::kesalahan-umum\n**False dan Not Given adalah dua hal berbeda.** Pilih **False** hanya jika kamu bisa **menunjuk kalimat yang berlawanan** dengan pernyataan. Jika kamu mencari dan **tidak menemukan** informasinya sama sekali, jawabannya **Not Given**. Menjawab False karena \"tidak ada di teks\" adalah kesalahan paling umum di tipe soal ini.\n:::\n\n---\n\n## 3. Metode 5 Langkah\n\n| Langkah | Tindakan | Contoh |\n|---|---|---|\n| **1. Tandai kata kunci** | Garis bawahi kata penting di pernyataan (nama, angka, kata benda utama), **bukan** kata umum | *The **coordinator** works **full time**.* |\n| **2. Temukan lokasi** | Cari kata kunci atau sinonimnya di teks, mulai dari akhir soal sebelumnya | Paragraf E menyebut *twelve hours a week* |\n| **3. Baca kalimat sekitar** | Baca sebelum dan sesudah, jangan hanya satu kalimat | Pastikan konteks tidak mengubah arti |\n| **4. Bandingkan makna** | Apakah pernyataan = teks, berlawanan, atau tidak dibahas? | *full time* ≠ *twelve hours a week* → berlawanan |\n| **5. Putuskan** | True / False / Not Given | **False** |\n\n**Tips lokasi:** kata kunci yang berupa **nama, angka, tahun** paling mudah dicari. Sinonim dan parafrase untuk kata benda umum perlu dicari dengan makna.\n\n---\n\n## 4. Mengenali Parafrase\n\nPernyataan hampir **tidak pernah memakai kata yang sama** dengan teks. Kemampuan mengenali parafrase adalah inti keterampilan ini.\n\n| Jenis parafrase | Teks | Pernyataan |\n|---|---|---|\n| **Sinonim** | The programme *cost the school little*. | The programme was *inexpensive* for the school. |\n| **Antonim + negasi** | Participation *rose*. | Participation did *not fall*. |\n| **Perubahan kelas kata** | The study *showed an increase* in walking. | More children *walked*. |\n| **Struktur kalimat berbeda** | *Volunteers, who are unpaid, lead the groups.* | The groups are led by people who *receive no payment*. |\n| **Angka dan pecahan** | *About a fifth* of pupils stopped. | *20%* of pupils stopped. (kira-kira) |\n| **Generalisasi / spesifik** | *Retired residents and parents* volunteer. | *Adults* volunteer. |\n\n---\n\n## 5. Jebakan Umum\n\n### 5.1 Kata mutlak dan pembatas\n\n| Kata di pernyataan | Risiko | Contoh |\n|---|---|---|\n| **all, every, always, never, only, none, completely** | Teks hanya berkata *some, often, many* | *All parents supported the plan.* vs. teks: *Most parents*. → **False** |\n| **some, a few, many, most** | Bandingkan dengan jumlah di teks | *Most* ≠ *a few* |\n| **may, might, could, can** vs. **will, must, is** | Kemungkinan vs kepastian | *The tax will reduce traffic.* vs. teks: *might reduce*. → **False** |\n\n### 5.2 Sebab dan akibat\n\nTeks menyebut dua hal terjadi bersamaan, pernyataan menyebut **yang satu menyebabkan yang lain**. Jika teks **tidak** menyatakan hubungan sebab, jawabannya **Not Given** (atau False bila teks membantah).\n\n| Teks | Pernyataan | Jawaban |\n|---|---|---|\n| Sales rose after the advertising campaign. | The campaign **caused** sales to rise. | **Not Given** (teks tidak menyatakan sebab) |\n\n### 5.3 Perbandingan, angka, dan waktu\n\n| Jebakan | Contoh |\n|---|---|\n| **Angka berbeda** | Teks: *nine routes*. Pernyataan: *seven routes* → False |\n| **Urutan waktu** | Teks: *before* 2016. Pernyataan: *after* 2016 → False |\n| **Perbandingan terbalik** | Teks: *A is bigger than B*. Pernyataan: *B is bigger than A* → False |\n| **Tempat/orang berbeda** | Pernyataan memakai subjek lain (*teachers* bukan *parents*) → cek |\n\n### 5.4 Opini vs. fakta (khusus YNNG)\n\n| Teks | Pernyataan | Jawaban |\n|---|---|---|\n| *Critics say the plan is too costly, but I disagree.* | The writer thinks the plan is too costly. | **No** (itu pendapat kritikus, bukan penulis) |\n| *Several studies suggest, though involving few students.* | The writer is certain the studies prove the point. | **No** |\n\n:::tips-examiner\nPerhatikan **kata-kata sikap penulis**: *I believe, it seems, arguably, unfortunately, clearly, undeniably.* Pada YNNG, bedakan **pendapat penulis** dari **pendapat orang lain yang dikutip**. Pendapat orang lain tidak otomatis pendapat penulis.\n:::\n\n---\n\n## 6. Contoh Bertahap (dengan Analisis)\n\n**Teks pendek:**\n\n> The walking bus began with three routes and 41 children. Two years later, it covered nine routes. Volunteers, who include parents and retired residents, are unpaid, but the council pays a coordinator for twelve hours a week. Some parents were worried about safety.\n\n| # | Pernyataan | Jawaban | Alasan |\n|---|---|---|---|\n| 1 | The walking bus started with more routes than it later had. | **False** | Mulai 3 rute, lalu 9: lebih sedikit di awal. |\n| 2 | Retired residents volunteer for the programme. | **True** | *include parents and retired residents*. |\n| 3 | The volunteers receive a wage. | **False** | *unpaid*, bertentangan langsung. |\n| 4 | The coordinator works full time. | **False** | *twelve hours a week* bukan full time. |\n| 5 | Some parents were concerned about safety. | **True** | *worried about safety* = *concerned*. |\n| 6 | The programme will be introduced in other towns. | **Not Given** | Teks tidak membahas rencana kota lain. |\n| 7 | Most parents supported the programme. | **Not Given** | Hanya *some parents were worried*; tidak ada informasi tentang mayoritas. |\n\n**Catatan nomor 7:** *Some parents were worried* **tidak** berarti *most supported*. Karena tidak ada data tentang mayoritas, jawabannya **Not Given**, bukan False.\n\n---\n\n## 7. Contoh Cara Berpikir (Pendekatan Lemah vs. Kuat)\n\n**Pernyataan:** *Children who joined the walking bus performed better in exams.*\n\n**Teks:** *Teachers said pupils who walked arrived more alert, though attention was not measured by tests.*\n\n| | **Pendekatan lemah** | **Pendekatan kuat** |\n|---|---|---|\n| Proses | \"Alert itu bagus untuk belajar, jadi mungkin True.\" | \"Teks hanya menyebut *alert* (menurut guru). Tidak ada hasil ujian. Bahkan disebut *not measured by tests*.\" |\n| Kesalahan | Memakai logika sendiri | Mencari bukti di teks |\n| Jawaban | True (salah) | **Not Given** (tidak ada informasi hasil ujian) |\n\n**Aturan:** jawab hanya berdasarkan **apa yang tertulis**, bukan apa yang **masuk akal**.\n\n---\n\n## 8. Strategi IELTS: Waktu dan Taktik\n\n### 8.1 Pembagian waktu\n\n| Bagian | Waktu | Catatan |\n|---|---|---|\n| Section 1 (teks pendek) | ± 15 menit | Lebih mudah; selesaikan cepat |\n| Section 2 | ± 20 menit | Teks kerja/pekerjaan |\n| Section 3 (teks panjang) | ± 25 menit | Paling sulit; sisakan waktu |\n| Per soal TFNG | ± 1–1,5 menit | Jika buntu, tandai dan lanjut |\n\n### 8.2 Taktik\n\n- **Baca pernyataan dulu**, baru cari di teks. Jangan membaca seluruh teks lebih dulu untuk soal TFNG.\n- **Soal berurutan dengan teks.** Jawaban nomor 6 ada **setelah** nomor 5. Lanjutkan pencarian dari posisi terakhir.\n- **Tandai di teks** kata yang cocok dengan kata kunci soal.\n- **Tebak jika perlu.** Tidak ada pengurangan nilai untuk jawaban salah; **jangan kosongkan jawaban**.\n- **Hindari menjawab dengan pengetahuan umum.** Semua jawaban harus berdasarkan teks.\n- **Waspadai kata sambung kontras** (*however, but, although*): informasi penentu sering ada **setelahnya**.\n\n### 8.3 Latihan sehari-hari\n\n| Latihan | Tujuan |\n|---|---|\n| Ambil satu artikel, tulis 5 pernyataan T/F/NG sendiri | Memahami cara penyusun soal membuat jebakan |\n| Parafrase 10 kalimat dengan sinonim dan antonim | Melatih pengenalan parafrase |\n| Catat \"kata mutlak\" yang kamu lewatkan | Mengurangi kesalahan berulang |\n\n---\n\n## 9. Kesalahan Umum Pelajar Indonesia\n\n| # | Kesalahan | Perbaikan |\n|---|---|---|\n| 1 | Menjawab **False** ketika informasi **tidak ada** | Jawab **Not Given** |\n| 2 | Menjawab dari **pengetahuan umum** | Jawab hanya dari teks |\n| 3 | Mengabaikan **kata mutlak** (*all, only, never*) | Garis bawahi kata pembatas |\n| 4 | Membaca **satu kalimat** saja | Baca kalimat sebelum dan sesudahnya |\n| 5 | Tidak memperhatikan **angka dan tahun** | Cocokkan angka persis |\n| 6 | Mencampur **opini penulis** dengan **opini yang dikutip** (YNNG) | Cari kata sikap penulis |\n| 7 | Mencari **kata yang sama persis** | Cari **sinonim dan makna** |\n| 8 | Menghabiskan **5 menit** di satu soal | Tandai, lanjut, kembali jika ada waktu |\n| 9 | Menyimpulkan **sebab-akibat** yang tidak disebut teks | Not Given |\n| 10 | Mengosongkan jawaban | Tebak; tidak ada penalti |\n| 11 | Menganggap **some** = **most** | Perhatikan kuantitas |\n| 12 | Tidak mengikuti **urutan teks** | Lanjutkan dari lokasi soal sebelumnya |\n\n---\n\n## 10. Contoh Jawaban Model: Penalaran dari Soal ke Jawaban\n\n**Teks:** *The programme works best in compact neighbourhoods. Children living more than two kilometres away rarely joined, and winter participation fell by about a fifth.*\n\n| Pernyataan | Penalaran | Jawaban |\n|---|---|---|\n| The programme succeeds in every type of neighbourhood. | *works best in compact* berarti tidak di semua jenis. Kata mutlak *every* bertentangan. | **False** |\n| Fewer children took part in winter. | *fell by about a fifth* = lebih sedikit. | **True** |\n| Parents of children in distant areas asked for a bus service. | Teks hanya menyebut anak jauh jarang ikut; tidak ada soal permintaan bus. | **Not Given** |\n| Children living 3 km away often joined. | *rarely joined* bertentangan dengan *often*. | **False** |\n\n**Pola penalaran Band 7:** (1) tandai kata kunci, (2) temukan lokasi, (3) tulis dalam hati kata kerja bukti (*\"teks bilang ...\"*), (4) bandingkan dan pilih. Jangan menjawab dengan perasaan.\n\n---\n\n## 11. Ringkasan dan Cek Diri\n\n**Ingat:**\n- TFNG = informasi; YNNG = pendapat penulis.\n- True/Yes = sama makna; False/No = bertentangan; Not Given = tidak ada informasi.\n- 5 langkah: kata kunci → lokasi → konteks → bandingkan → putuskan.\n- Waspadai kata mutlak, kuantitas, sebab-akibat, angka, dan opini vs fakta.\n- Jawab dari teks, jangan dari pengetahuan.\n\n**Cek diri (tanpa melihat materi):**\n1. *Teks: \"Volunteers are unpaid.\" Pernyataan: \"Volunteers receive a wage.\" Jawaban?*\n2. *Teks tidak membahas apakah acara itu akan diulang tahun depan. Pernyataan: \"The event will be repeated next year.\" Jawaban?*\n3. *Mengapa jawaban \"All parents agreed\" bisa False bila teks berkata \"Most parents agreed\"?*\n4. *Apa bedanya TFNG dan YNNG?*\n5. *Apakah jawaban kosong lebih aman daripada menebak?*\n\n**Kunci:** 1. False (bertentangan). 2. Not Given. 3. Karena *all* adalah kata mutlak, sedangkan teks hanya *most*. 4. TFNG menguji informasi/fakta; YNNG menguji pendapat penulis. 5. Tidak; tidak ada penalti, jadi tebak.",
+        "mini_task": {
+          "task_type": "SELF_CHECK",
+          "prompt": "Latihan mandiri (tanpa penilaian AI). Ambil satu paragraf berbahasa Inggris (berita, artikel, atau buku) sepanjang 100 sampai 150 kata. Lalu:\n1. Tulis 6 pernyataan: 2 yang True, 2 yang False (bertentangan dengan teks), dan 2 yang Not Given (masuk akal tetapi tidak disebut).\n2. Untuk setiap pernyataan, tulis kutipan teks yang menjadi buktinya (untuk True/False) atau catat \"tidak ada informasi\" (untuk Not Given).\n3. Tukar dengan teman atau kerjakan lagi esok hari tanpa melihat kunci, lalu periksa: apakah kamu bisa membedakan False dari Not Given?",
+          "ai_rubric_criteria": "Daftar periksa mandiri: (a) setiap pernyataan True/False punya kutipan bukti; (b) pernyataan False benar-benar bertentangan, bukan sekadar tidak disebut; (c) pernyataan Not Given benar-benar tidak punya informasi; (d) pernyataan memakai parafrase, bukan menyalin teks; (e) minimal satu pernyataan memakai kata mutlak atau kuantitas sebagai jebakan."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 1200,
+        "pass_percent": 75,
+        "reading_passage_markdown": "## Walking to School: A Small Town's Experiment\n\n[A] Over the past three decades, the share of children who walk to school has fallen in many countries. Parents cite busy roads, tight morning schedules and fears about safety, and the result is a daily queue of cars outside school gates. In 2016, a primary school in the coastal town of Marlow Bay decided to try a different approach. It introduced a \"walking bus\", a scheme in which groups of children travel to school on foot along fixed routes, led by adult volunteers.\n\n[B] The scheme began modestly, with three routes and 41 children. Each route has several stops where children join the group, and every group is accompanied by at least two adults. The volunteers include parents and retired residents of the town, and none of them is paid. The council provided high-visibility vests for the children and funds a coordinator, who works twelve hours a week arranging timetables and training new volunteers. By its second year the scheme had grown to nine routes, serving 187 of the school's 410 pupils.\n\n[C] A research team from a nearby university studied the scheme over its first two years. Before it began, only 12% of pupils walked to school; after two years, the figure had risen to 46%. Counts taken outside the school gate during the morning drop-off showed that the number of cars had fallen by about a third. The researchers also looked for evidence that traffic had simply moved to neighbouring streets, but they found none.\n\n[D] The effects on the children themselves were harder to measure. Pupils who joined the scheme took, on average, about 2,500 more steps a day than those who did not. Teachers reported that these pupils arrived at class more alert, but the researchers point out that this impression comes from teachers' reports and was not measured by any test. They therefore describe the finding as encouraging rather than proven.\n\n[E] Not everyone was convinced at the start. Some parents were worried about the safety of children walking in groups, and a few felt that supervising other people's children was too great a responsibility for volunteers. The school responded by requiring all volunteers to complete safety training and by publishing the route plans online so that parents could see exactly where each group would walk.\n\n[F] The researchers are careful not to claim that the walking bus would work everywhere. It succeeds best in compact neighbourhoods; children who live more than two kilometres from the school rarely joined, and participation in winter dropped by about a fifth. The team now plans to follow the same pupils for a further three years to see whether the habit of walking lasts as they grow older.\n\n===PASSAGE===\n\n## Is Handwriting Still Worth Teaching?\n\nFor several years, many schools have reduced the time they spend on handwriting. The argument is simple: children will type for most of their adult lives, so why teach a skill that the keyboard has made old-fashioned? I find this reasoning too hasty.\n\nTyping is undeniably faster, and no sensible teacher should deny pupils the chance to learn it. Yet when students take notes by hand, they are forced to select and summarise, because nobody can write as fast as a lecturer speaks. That effort of choosing, I believe, is exactly what helps ideas stay in the mind. Several small studies point in the same direction, although they involve too few students to be conclusive.\n\nI would therefore not abolish handwriting but shorten it: ten minutes a day would be enough to keep the skill alive. Critics may say that even this is a waste of time. I disagree. A child who can write legibly by hand is rarely left helpless when a battery dies, and the habit of slowing down to think is hard to teach in any other way.",
+        "questions": [
+          {
+            "question_id": "Q-RD321-001",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "The walking bus began with more routes than it had two years later.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf B: mulai dengan tiga rute dan pada tahun kedua menjadi sembilan rute. Jadi di awal rutenya lebih sedikit, bukan lebih banyak."
+          },
+          {
+            "question_id": "Q-RD321-002",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "The proportion of pupils walking to school more than tripled during the study period.",
+            "correct_answers": [
+              "True"
+            ],
+            "explanation_id": "Paragraf C: 12% naik menjadi 46%. 46 dibagi 12 sekitar 3,8, jadi lebih dari tiga kali lipat."
+          },
+          {
+            "question_id": "Q-RD321-003",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "The researchers found that car traffic had moved to the streets near the school.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf C: peneliti mencari bukti bahwa lalu lintas berpindah ke jalan sekitar \"but they found none\". Teks bertentangan langsung."
+          },
+          {
+            "question_id": "Q-RD321-004",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "Most of the children who joined the scheme came from low-income families.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Teks tidak menyebut latar ekonomi keluarga anak-anak di mana pun."
+          },
+          {
+            "question_id": "Q-RD321-005",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "Retired residents are among the volunteers.",
+            "correct_answers": [
+              "True"
+            ],
+            "explanation_id": "Paragraf B: \"The volunteers include parents and retired residents\"."
+          },
+          {
+            "question_id": "Q-RD321-006",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "The coordinator works full time.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf B: koordinator bekerja \"twelve hours a week\", bukan penuh waktu."
+          },
+          {
+            "question_id": "Q-RD321-007",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "The scheme will be introduced in other towns next year.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Teks tidak membahas rencana memperluas program ke kota lain. Rencana yang disebut hanya menindaklanjuti murid yang sama (paragraf F)."
+          },
+          {
+            "question_id": "Q-RD321-008",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "Fewer children took part in the scheme in winter than at other times of year.",
+            "correct_answers": [
+              "True"
+            ],
+            "explanation_id": "Paragraf F: \"participation in winter dropped by about a fifth\"."
+          },
+          {
+            "question_id": "Q-RD321-009",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "The researchers say the walking bus would succeed in any neighbourhood.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf F: peneliti berhati-hati untuk tidak mengklaim bahwa program ini akan berhasil di mana-mana; paling berhasil di lingkungan yang padat."
+          },
+          {
+            "question_id": "Q-RD321-010",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "Children who joined the scheme achieved better exam results.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Paragraf D hanya menyebut guru melaporkan murid lebih waspada (bukan diukur dengan tes). Tidak ada informasi hasil ujian."
+          },
+          {
+            "question_id": "Q-RD321-011",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "What do the researchers say about the teachers' reports that pupils arrived more alert?",
+            "options": [
+              "The reports were confirmed by tests.",
+              "The reports come from teachers, were not measured by a test, and make the finding encouraging rather than proven.",
+              "The reports prove that walking improves learning.",
+              "The reports were ignored in the study."
+            ],
+            "correct_answers": [
+              "The reports come from teachers, were not measured by a test, and make the finding encouraging rather than proven."
+            ],
+            "explanation_id": "Paragraf D: kesan itu berasal dari laporan guru, tidak diukur dengan tes, sehingga dinilai \"encouraging rather than proven\"."
+          },
+          {
+            "question_id": "Q-RD321-012",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "How did the school respond to parents' worries about safety?",
+            "options": [
+              "It stopped the scheme in winter.",
+              "It hired paid supervisors.",
+              "It required safety training for volunteers and published the route plans online.",
+              "It limited the scheme to children under seven."
+            ],
+            "correct_answers": [
+              "It required safety training for volunteers and published the route plans online."
+            ],
+            "explanation_id": "Paragraf E: sekolah mewajibkan pelatihan keselamatan bagi relawan dan menerbitkan rencana rute secara daring."
+          },
+          {
+            "question_id": "Q-RD321-013",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "SHORT_ANSWER",
+            "prompt": "Who funds the coordinator? (Maximum TWO words)",
+            "correct_answers": [
+              "the council",
+              "council"
+            ],
+            "max_words": 2,
+            "explanation_id": "Paragraf B: \"The council provided ... and funds a coordinator\"."
+          },
+          {
+            "question_id": "Q-RD321-014",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "The researchers plan to follow the same pupils for a further ___ years. (ONE word)",
+            "correct_answers": [
+              "three",
+              "3"
+            ],
+            "max_words": 1,
+            "explanation_id": "Paragraf F: \"follow the same pupils for a further three years\"."
+          },
+          {
+            "question_id": "Q-RD321-015",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Which paragraph contains each piece of information? (Paragraphs A-F)",
+            "matching": {
+              "left": [
+                "The number of cars outside the school fell by about a third.",
+                "Some parents had doubts about safety.",
+                "The scheme works best in compact neighbourhoods.",
+                "Pupils took more steps each day."
+              ],
+              "right": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F"
+              ],
+              "allow_reuse": false
+            },
+            "points": 4,
+            "correct_answers": [
+              2,
+              4,
+              5,
+              3
+            ],
+            "explanation_id": "Mobil berkurang sepertiga: C. Orang tua ragu soal keselamatan: E. Berhasil di lingkungan padat: F. Langkah harian bertambah: D."
+          },
+          {
+            "question_id": "Q-RD321-016",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "YNNG",
+            "prompt": "The writer believes that taking notes by hand can help people remember ideas.",
+            "correct_answers": [
+              "Yes"
+            ],
+            "explanation_id": "Paragraf 2: \"That effort of choosing, I believe, is exactly what helps ideas stay in the mind.\" Penulis menyatakan keyakinannya."
+          },
+          {
+            "question_id": "Q-RD321-017",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "YNNG",
+            "prompt": "The writer thinks schools should stop teaching typing.",
+            "correct_answers": [
+              "No"
+            ],
+            "explanation_id": "Paragraf 2: \"no sensible teacher should deny pupils the chance to learn it\" menolak gagasan itu."
+          },
+          {
+            "question_id": "Q-RD321-018",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "YNNG",
+            "prompt": "The writer states that employers prefer applicants with neat handwriting.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Penulis tidak membahas preferensi pemberi kerja."
+          },
+          {
+            "question_id": "Q-RD321-019",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "YNNG",
+            "prompt": "The writer is certain that the studies prove his argument.",
+            "correct_answers": [
+              "No"
+            ],
+            "explanation_id": "Paragraf 2: studi itu \"involve too few students to be conclusive\", jadi penulis tidak menganggapnya pasti."
+          }
+        ]
+      }
+    }
+  ]
+}

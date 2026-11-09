@@ -1,6 +1,6 @@
 {
   "project_name": "ielts-learning-platform",
-  "last_updated": "2026-11-09",
+  "last_updated": "2026-11-10",
   "last_agent": "orchestrator",
   "current_sprint": "Pivot General Training + Aplikasi Lokal Satu Perangkat (ADR-004/005)",
   "active_tasks": [
@@ -8,5 +8,5 @@
     "Utang terbuka: CI GitHub belum dijalankan; uji manual Windows; konten Reading/Listening nyata; uji dengar Listening"
   ],
   "blocked_tasks": [],
-  "notes": "2026-11-09: Audit independen atas commit 874ca6a mengoreksi klaim sebelumnya. Fitur pasca-MVP: SPEC-025 Fase 4 (commit 4803c95) dan SPEC-022 (commit 307b017) disetujui human; SPEC-021, SPEC-024, SPEC-023 sudah dibangun (874ca6a) dan diperbaiki pasca-audit tetapi gerbang code review human BELUM disetujui. Terverifikasi setelah perbaikan: tsc 0 error, unit 895, integrasi 347, next build OK, Playwright 52/52, coverage gabungan src/server 75,26%. Lihat state/pipeline_log.md entri Audit Teknis. Prompt serah-terima: state/handoff/continue-build-feature-F3-F5.md (basi untuk F3-F5; sudah terlaksana). Berikutnya: tinjauan gerbang human, lalu /test-feature dan /harden-release."
+  "notes": "2026-11-10 (lanjutan): Fase 4 DITAHAN atas permintaan human; seluruh 33 sub-modul (backlog C-12) kini diperkaya: artikel 1.800-3.000 kata, drill 12-21 soal, mini-task, sumber di codes/content/_src (build.mjs). Catatan: 3.3.3 hanya artikelnya (drill dikunci E2E); 3.3.1 dan 4.1.1 bertag ACADEMIC; drill Listening berbasis transkrip (tanpa audio); materi ditulis AI dan belum direview human. Tes baru content-articles.test.tsx menjaga standar C-12 dan kebocoran jawaban soal isian; tes integrasi P4-13 dibuat asinkron. Berikutnya: review human atas materi, lalu keputusan Fase 4 (Hardening & Release). 2026-11-10: Wave W8 SELESAI (TASK-016 gamifikasi 13/13 dan TASK-017 radar 9/9, desktop+mobile; tsc/eslint bersih; unit 895/895; integrasi 347/347). Perbaikan: hooks-register.ts melewati DRILL_SUBMIT (poin harian ganda-dihitung di DTO). Catatan lingkungan: worktree dengan core.autocrlf=true mengubah hash skrip Listening GT-L-S1-001.md (perlu LF). Berikutnya: persetujuan human sebelum Fase 4 (Hardening & Release). 2026-11-09: Audit independen atas commit 874ca6a mengoreksi klaim sebelumnya. Fitur pasca-MVP: SPEC-025 Fase 4 (commit 4803c95) dan SPEC-022 (commit 307b017) disetujui human; SPEC-021, SPEC-024, SPEC-023 sudah dibangun (874ca6a) dan diperbaiki pasca-audit tetapi gerbang code review human BELUM disetujui. Terverifikasi setelah perbaikan: tsc 0 error, unit 895, integrasi 347, next build OK, Playwright 52/52, coverage gabungan src/server 75,26%. Lihat state/pipeline_log.md entri Audit Teknis. Prompt serah-terima: state/handoff/continue-build-feature-F3-F5.md (basi untuk F3-F5; sudah terlaksana). Berikutnya: tinjauan gerbang human, lalu /test-feature dan /harden-release."
 }

@@ -1,0 +1,362 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 4,
+      "module_code": "4.3",
+      "module_category": "READING",
+      "sub_module_title": "Menyelesaikan 3 Reading Passages (40 Soal) dalam 50 Menit dengan Akurasi >= 30/40",
+      "sub_module_code": "4.3.1",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Menyusun **rencana waktu** untuk 3 teks dan 40 soal, termasuk **target latihan 50 menit** untuk menyisakan waktu pengecekan.\n2. Mengurutkan soal berdasarkan **tingkat kesulitan** (kerjakan yang cepat dulu) dan memakai **triage** untuk soal yang menyita waktu.\n3. Mengenali dan menghindari **jebakan** (kata mutlak, parafrase menyesatkan, pengecoh MCQ, batas kata).\n4. Membangun **stamina membaca**, **log kesalahan**, dan **rencana latihan 4 minggu** untuk mencapai akurasi **sekitar 30/40 atau lebih**.\n\n> **Ringkasan 30 detik**\n> - Tes resmi: **60 menit, 3 teks, 40 soal**. Target latihan: selesaikan dalam **sekitar 50 menit** agar punya **10 menit cadangan** untuk soal sulit dan pengecekan.\n> - Kerjakan **soal cepat dulu** (completion, short answer, matching information), tunda soal lama (headings, T/F/NG rumit).\n> - **Jangan kosongkan jawaban**; tidak ada penalti. Akurasi naik dari **log kesalahan**, bukan hanya banyak latihan.\n\n---\n\n## 1. Peta Tes dan Target\n\n| Hal | Keterangan |\n|---|---|\n| **Waktu** | 60 menit untuk 3 teks (tanpa waktu tambahan menyalin) |\n| **Soal** | 40 soal; urutan dari teks 1 ke teks 3 |\n| **Panjang total** | sekitar 2.000–2.750 kata |\n| **Kesulitan** | Meningkat dari teks 1 ke teks 3 |\n| **Target kecepatan latihan** | 3 teks dalam **sekitar 50 menit** |\n| **Target akurasi** | Sekitar **30/40 atau lebih** (konversi band bergantung pada jenis tes; General Training umumnya menuntut skor mentah lebih tinggi untuk band yang sama; tabel di platform bersifat perkiraan) |\n\n### 1.1 Pembagian waktu yang realistis\n\n| Teks | Waktu target latihan | Waktu resmi (acuan) | Catatan |\n|---|---|---|---|\n| **Teks 1** | 13–14 menit | 15–17 | Termudah; capai akurasi tinggi |\n| **Teks 2** | 16–17 menit | 18–20 | Sedang |\n| **Teks 3** | 19–20 menit | 22–25 | Tersulit; sisa waktu dari teks 1–2 membantu |\n| **Cadangan** | — | 3–5 | Pengecekan, tebak soal kosong |\n\nTarget 50 menit melatih kecepatan. Di tes sebenarnya, **gunakan seluruh 60 menit** secara terkendali.\n\n:::tips-examiner\nBanyak kandidat **kehabisan waktu di teks 3**, bukan karena teksnya terlalu sulit, tetapi karena menghabiskan 25 menit di teks 1. **Disiplin waktu per teks** adalah keterampilan, bukan bakat: gunakan timer pada setiap latihan dan hentikan teks 1 pada menit ke-15 apa pun yang terjadi.\n:::\n\n---\n\n## 2. Alur Kerja per Teks (Workflow)\n\n| Langkah | Tindakan | Waktu |\n|---|---|---|\n| **1. Skim** | Judul, kalimat pertama tiap paragraf; tulis **peta teks** | 1–2 menit |\n| **2. Baca soal per kelompok** | Garis bawahi kata kunci; tentukan teknik | 1 menit |\n| **3. Kerjakan soal cepat** | Completion, short answer, matching info | 5–7 menit |\n| **4. Kerjakan soal sedang** | MCQ, T/F/NG | 5–6 menit |\n| **5. Soal berat (headings dll.)** | Dengan peta teks | 3–4 menit |\n| **6. Cek singkat** | Ejaan, batas kata, jawaban kosong | 1 menit |\n\nLihat Modul 2.3.1 (skimming dan scanning) dan 3.2 (tipe soal) untuk teknik tiap tipe.\n\n---\n\n## 3. Triage Soal: Mana yang Dikerjakan Dulu?\n\n| Tipe soal | Kecepatan | Kesulitan | Strategi |\n|---|---|---|---|\n| **Sentence/summary/note completion** | Cepat | Rendah–sedang | Scanning kata kunci; salin persis |\n| **Short answer** | Cepat | Rendah–sedang | Scanning angka/nama |\n| **Matching information** | Sedang | Sedang | Peta teks |\n| **MCQ (detail)** | Sedang | Sedang | Eliminasi opsi |\n| **T/F/NG, Y/N/NG** | Sedang–lambat | Sedang–tinggi | Bedakan False dan Not Given |\n| **Matching headings** | Lambat | Tinggi | Ide pokok; kerjakan terakhir |\n| **MCQ (opini/tujuan)** | Lambat | Tinggi | Baca teliti |\n\n**Aturan:** kerjakan **cepat dulu**, **tandai** soal yang menyita waktu lebih dari **1,5 menit**, dan **kembali** setelah soal lain selesai. Soal yang terlewat tetap **ditebak** sebelum waktu habis.\n\n### 3.1 Aturan 90 detik\n\n| Situasi | Tindakan |\n|---|---|\n| Soal selesai < 1 menit | Lanjut |\n| Soal menyita > 1,5 menit | **Tandai**, tebak, lanjut |\n| Soal masih ragu di akhir | Kembali jika ada waktu |\n\n---\n\n## 4. Jebakan yang Harus Dihindari (Trap Evasion)\n\n| Jebakan | Contoh | Cara menghindari |\n|---|---|---|\n| **Kata mutlak** | *all, only, never, always* di pernyataan | Cek apakah teks sekuat itu |\n| **Parafrase menyesatkan** | Kata sama, makna beda | Cocokkan **makna**, bukan kata |\n| **Pengecoh MCQ** | Opsi memuat kata dari teks tetapi menjawab hal lain | Baca konteks kalimat |\n| **Angka dan satuan** | *12%* vs *12 percentage points* | Cocokkan persis |\n| **Sebab-akibat tersirat** | Teks hanya menyebut dua hal bersamaan | Not Given jika tidak dinyatakan |\n| **Opini vs fakta** | Pendapat orang lain, bukan penulis | Cari kata sikap |\n| **Batas kata** | *NO MORE THAN TWO WORDS* | Hitung kata |\n| **Bentuk kata** | Tunggal/jamak, ejaan | Salin persis |\n| **Soal berurutan** | Mencari dari awal setiap soal | Lanjutkan dari posisi terakhir |\n\n:::kesalahan-umum\n**Menghabiskan waktu pada satu soal sulit** adalah penyebab utama skor turun. Satu soal bernilai **satu poin**, sama dengan soal mudah. Menghabiskan 5 menit untuk satu soal berarti kehilangan 3–4 soal mudah di akhir. Tandai, tebak, dan lanjut.\n:::\n\n---\n\n## 5. Stamina: Membaca 60 Menit Tanpa Turun Fokus\n\n### 5.1 Latihan stamina\n\n| Latihan | Cara | Tujuan |\n|---|---|---|\n| **Tes penuh seminggu sekali** | 3 teks, 40 soal, timer 50 menit | Ketahanan |\n| **Baca ekstensif** | 20–30 menit artikel Inggris per hari | Kecepatan dan kosakata |\n| **Latihan satu teks** | Satu teks dalam 17 menit | Kecepatan |\n| **Latihan tipe soal** | Satu tipe 3 kali seminggu | Keahlian |\n\n### 5.2 Menjaga fokus saat tes\n\n| Tindakan | Alasan |\n|---|---|\n| **Sarapan dan tidur cukup** | Otak membutuhkan energi |\n| **Ambil napas** saat pindah teks (5 detik) | Reset fokus |\n| **Jangan melihat jam terus-menerus** | Cek di titik tertentu |\n| **Lanjutkan setelah soal sulit** | Hindari panik |\n| **Gunakan tangan/jari** menandai teks | Kurangi mata melompat |\n\n---\n\n## 6. Log Kesalahan: Kunci Peningkatan\n\nSetiap latihan, catat **semua soal yang salah** dan **penyebabnya**.\n\n| Penyebab | Contoh | Tindakan perbaikan |\n|---|---|---|\n| **Salah kosakata** | Tidak paham *detrimental* | Catat di kartu kata |\n| **Salah parafrase** | Tidak mengenali sinonim | Latihan parafrase (2.2.2) |\n| **Salah jebakan** | Menjawab False padahal Not Given | Ulas aturan 3.2.1 |\n| **Kehabisan waktu** | Tidak sempat soal terakhir | Latihan triage dan timer |\n| **Ceroboh** | Angka atau ejaan salah | Periksa akhir |\n| **Salah tipe teknik** | Skimming untuk soal detail | Pilih teknik sesuai soal |\n\n### 6.1 Contoh log\n\n| No | Tipe | Salah | Penyebab | Perbaikan |\n|---|---|---|---|---|\n| 7 | T/F/NG | Jawab False | Teks tidak membahas (Not Given) | Cari kalimat bertentangan |\n| 12 | Heading | Pilih judul pengecoh | Cocok kata, bukan ide | Tulis ide dulu |\n| 28 | Completion | Salah ejaan | Terburu-buru | Cek ejaan |\n\n**Ulas log sebelum latihan berikutnya**; polanya menunjukkan prioritas belajarmu.\n\n---\n\n## 7. Rencana Latihan 4 Minggu\n\n| Minggu | Fokus | Kegiatan |\n|---|---|---|\n| **1** | Teknik dasar | Satu teks per hari tanpa timer; ulas jawaban; mulai log |\n| **2** | Kecepatan | Satu teks dengan timer 17 menit; latihan triage |\n| **3** | Stamina | Tes penuh (3 teks) 2 kali; perbaiki kelemahan di log |\n| **4** | Simulasi | Tes penuh 3 kali dalam 50 menit; evaluasi akurasi (target 30/40+) |\n\n### 7.1 Menentukan target akurasi\n\n| Skor mentah latihan | Tindakan |\n|---|---|\n| **< 25** | Perkuat tipe soal dan kosakata; kurangi kecepatan dulu |\n| **25–29** | Perbaiki jebakan dan manajemen waktu |\n| **30–34** | Fokus pada konsistensi; kurangi kesalahan ceroboh |\n| **35+** | Pertahankan; latihan teks tersulit |\n\n---\n\n## 8. Contoh Jawaban Model: Sesi Latihan 50 Menit\n\n| Menit | Kegiatan |\n|---|---|\n| **0–1** | Skim teks 1, buat peta |\n| **1–13** | Teks 1: completion cepat, MCQ, T/F/NG |\n| **13–14** | Cek teks 1 (ejaan, batas kata) |\n| **14–15** | Skim teks 2 |\n| **15–30** | Teks 2: matching information, completion, heading terakhir |\n| **30–32** | Skim teks 3 dan buat peta |\n| **32–47** | Teks 3: soal cepat, kemudian soal berat |\n| **47–50** | Cek akhir: tebak soal kosong, periksa batas kata |\n\n**Hasil contoh:** 32/40 dengan log kesalahan: 3 soal T/F/NG (False vs Not Given), 2 soal heading (pengecoh), 3 soal ceroboh (ejaan/angka). Rencana perbaikan: ulas 3.2.1, latihan heading, dan cek ejaan di akhir.\n\n**Pola:** disiplin waktu + triage + log kesalahan menghasilkan peningkatan yang terukur.\n\n---\n\n## 9. Kesalahan Umum Pelajar Indonesia\n\n| # | Kesalahan | Perbaikan | Penjelasan |\n|---|---|---|---|\n| 1 | Membaca **semua teks** sebelum soal | Skim, lalu soal | Boros waktu |\n| 2 | Terpaku pada **satu soal** | Aturan 90 detik | Kehilangan soal lain |\n| 3 | **Mengosongkan** jawaban | Tebak | Tidak ada penalti |\n| 4 | Menjawab dari **pengetahuan sendiri** | Cari di teks | Hanya teks yang dihitung |\n| 5 | **False** untuk **Not Given** | Cek ada tidaknya kalimat bertentangan | Definisi |\n| 6 | **Melebihi batas kata** | Hitung | Jawaban salah |\n| 7 | **Salah ejaan** | Salin persis | Poin hilang |\n| 8 | **Tidak membuat peta teks** | Tulis 2–4 kata per paragraf | Efisiensi |\n| 9 | **Tidak mencatat kesalahan** | Log kesalahan | Tidak berkembang |\n| 10 | Latihan **tanpa timer** | Latih timer | Tes berwaktu |\n| 11 | **Panik** saat waktu menipis | Napas, tebak, lanjut | Fokus |\n| 12 | Latihan hanya **satu tipe** | Variasi tipe | Keseimbangan |\n\n---\n\n## 10. Strategi IELTS: Hari Tes\n\n- **Sebelum:** tidur cukup, siapkan pensil dan penghapus, datang lebih awal.\n- **Teks 1:** cepat dan akurat; jangan lewat 17 menit.\n- **Teks 2:** pertahankan ritme; tandai soal sulit.\n- **Teks 3:** mulai dari soal cepat; sisakan soal heading untuk akhir.\n- **5 menit terakhir:** tebak semua soal kosong; cek ejaan dan batas kata.\n- **Jangan menyalin ulang** jawaban; tulis langsung di lembar jawaban dengan jelas.\n\n---\n\n## 11. Ringkasan dan Cek Diri\n\n**Ingat:**\n- 60 menit, 3 teks, 40 soal; latih dalam sekitar 50 menit untuk cadangan 10 menit.\n- Alur: skim + peta, soal cepat dulu, tandai yang lama, cek akhir.\n- Hindari jebakan; jangan kosongkan jawaban.\n- Log kesalahan dan rencana 4 minggu menghasilkan peningkatan terukur.\n\n**Cek diri (tanpa melihat materi):**\n1. *Berapa batas waktu per soal sebelum kamu menandainya?*\n2. *Tipe soal mana yang dikerjakan terakhir?*\n3. *Apa gunanya log kesalahan?*\n4. *Mengapa soal kosong sebaiknya ditebak?*\n5. *Berapa target waktu latihan untuk 3 teks?*\n\n**Kunci:** 1. Sekitar 90 detik. 2. Matching headings (dan soal sulit lain). 3. Menemukan pola kesalahan untuk diperbaiki. 4. Tidak ada penalti untuk jawaban salah. 5. Sekitar 50 menit.",
+        "mini_task": {
+          "task_type": "SELF_CHECK",
+          "prompt": "Simulasi mandiri bertimer (tanpa penilaian AI), sekitar 70 menit:\n1. Ambil satu set Reading lengkap (3 teks, 40 soal) dari sumber latihan yang kamu miliki. Atur timer 50 menit dan kerjakan dengan alur: skim + peta teks, soal cepat dulu, tandai soal lebih dari 90 detik, tebak semua soal kosong sebelum waktu habis.\n2. Catat waktu selesai tiap teks dan skor mentah per teks.\n3. Buat LOG KESALAHAN: nomor soal, tipe soal, penyebab (kosakata, parafrase, jebakan False vs Not Given, waktu, ceroboh), dan tindakan perbaikan.\n4. Tentukan satu prioritas perbaikan untuk simulasi berikutnya dan jadwalkan ulang minggu depan. Target: 30/40 atau lebih.",
+          "ai_rubric_criteria": "Daftar periksa mandiri: (a) simulasi dilakukan dengan timer dan alur yang disepakati; (b) waktu per teks dicatat dan disiplin triage (90 detik) diterapkan; (c) semua soal salah dimasukkan ke log dengan penyebab yang spesifik; (d) ada satu prioritas perbaikan yang terukur; (e) tidak ada jawaban kosong."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 1200,
+        "pass_percent": 75,
+        "reading_passage_markdown": "## How Cities Cool Themselves\n\n[A] Cities are often several degrees warmer than the countryside around them, a pattern known as the urban heat island effect. Dark surfaces such as asphalt and roofing absorb sunlight, and heat released from air conditioners and engines adds to the problem. In the summer of 2019, one southern city recorded night-time temperatures up to 6°C higher in its centre than in nearby farmland.\n\n[B] Planting trees is the best-known response. Leaves provide shade and release water vapour, which cools the air. A study of 20 streets found that those with continuous tree cover were on average 2.5°C cooler at midday than streets without trees. However, trees need years to grow, require regular watering in dry seasons, and compete for space with underground pipes.\n\n[C] A faster alternative is to change the colour of roofs. Painting a roof white can reflect up to 80% of sunlight, compared with about 10% for a dark roof. In one housing district, residents who applied reflective paint reported that their top-floor rooms were about 4°C cooler. The main drawback is that the benefit fades as dirt builds up, so roofs must be repainted every few years.\n\n[D] Some cities are experimenting with water. Fountains, shallow ponds and misting systems in public squares can lower local temperatures by several degrees. The effect is temporary, however, and in regions facing water shortages such schemes are controversial.\n\n[E] Planners increasingly argue that no single measure is enough. The most successful programmes combine trees, reflective surfaces and water features with building rules that require shaded windows and ventilation. A city official quoted in the study noted that the cheapest approach is often to protect the green spaces that already exist.",
+        "questions": [
+          {
+            "question_id": "Q-RD431-001",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Choose the correct heading for each paragraph (A-E). There are more headings than paragraphs.",
+            "matching": {
+              "left": [
+                "Paragraph A",
+                "Paragraph B",
+                "Paragraph C",
+                "Paragraph D",
+                "Paragraph E"
+              ],
+              "right": [
+                "Why cities become hotter",
+                "The benefits and limits of trees",
+                "A quick fix with a short life",
+                "Temporary cooling with water",
+                "The case for combined solutions",
+                "The history of urban planning",
+                "Health risks of extreme heat"
+              ],
+              "allow_reuse": false
+            },
+            "points": 5,
+            "correct_answers": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "explanation_id": "A: penyebab kota lebih panas. B: manfaat dan keterbatasan pohon. C: cat atap putih, cepat tetapi memudar. D: air, sifatnya sementara. E: solusi gabungan. Dua judul lain adalah pengecoh."
+          },
+          {
+            "question_id": "Q-RD431-002",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "Heat from air conditioners adds to the urban heat island effect.",
+            "correct_answers": [
+              "True"
+            ],
+            "explanation_id": "Paragraf A: \"heat released from air conditioners and engines adds to the problem\"."
+          },
+          {
+            "question_id": "Q-RD431-003",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "Streets with continuous tree cover were about 5°C cooler at midday than streets without trees.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf B: rata-rata 2,5°C lebih dingin, bukan 5°C."
+          },
+          {
+            "question_id": "Q-RD431-004",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "The cooling effect of white roof paint lasts permanently.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf C: manfaat memudar saat kotoran menumpuk, sehingga atap harus dicat ulang."
+          },
+          {
+            "question_id": "Q-RD431-005",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "Water cooling schemes are cheaper than planting trees.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Teks tidak membandingkan biaya sistem air dan penanaman pohon."
+          },
+          {
+            "question_id": "Q-RD431-006",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "A dark roof reflects about ___% of sunlight.",
+            "explanation_id": "Paragraf C: \"compared with about 10% for a dark roof\".",
+            "correct_answers": [
+              "10",
+              "ten"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-RD431-007",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Residents who used reflective paint found their top-floor rooms about ___°C cooler.",
+            "explanation_id": "Paragraf C: \"about 4°C cooler\".",
+            "correct_answers": [
+              "4",
+              "four"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-RD431-008",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Roofs must be repainted every ___ years.",
+            "explanation_id": "Paragraf C: \"repainted every few years\".",
+            "correct_answers": [
+              "few"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-RD431-009",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Fountains, ponds and misting systems can lower local temperatures by ___ degrees.",
+            "explanation_id": "Paragraf D: \"lower local temperatures by several degrees\".",
+            "correct_answers": [
+              "several"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-RD431-010",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "SHORT_ANSWER",
+            "prompt": "According to the writer, what do the most successful programmes combine with trees and water features? (Maximum THREE words)",
+            "correct_answers": [
+              "reflective surfaces",
+              "reflective surface"
+            ],
+            "max_words": 3,
+            "explanation_id": "Paragraf E: \"combine trees, reflective surfaces and water features\"."
+          },
+          {
+            "question_id": "Q-RD431-011",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "What is the main purpose of the text?",
+            "explanation_id": "Teks membahas beberapa cara (pohon, atap putih, air, kombinasi) beserta kelebihan dan keterbatasannya.",
+            "options": [
+              "To compare different ways cities can reduce heat",
+              "To argue that trees are useless",
+              "To explain how air conditioners work",
+              "To describe the history of one city"
+            ],
+            "correct_answers": [
+              "To compare different ways cities can reduce heat"
+            ]
+          },
+          {
+            "question_id": "Q-RD431-012",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "What do planners increasingly argue?",
+            "explanation_id": "Paragraf E: \"Planners increasingly argue that no single measure is enough\".",
+            "options": [
+              "No single measure is enough",
+              "Trees are the only solution",
+              "Reflective paint is too expensive",
+              "Cities cannot be cooled"
+            ],
+            "correct_answers": [
+              "No single measure is enough"
+            ]
+          },
+          {
+            "question_id": "Q-RD431-013",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Which paragraph contains each piece of information? (Paragraphs A-E)",
+            "matching": {
+              "left": [
+                "a drawback of a quick solution",
+                "a comparison with farmland",
+                "advice from a city official"
+              ],
+              "right": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E"
+              ],
+              "allow_reuse": false
+            },
+            "points": 3,
+            "correct_answers": [
+              2,
+              0,
+              4
+            ],
+            "explanation_id": "Kekurangan solusi cepat (cat atap memudar): C. Perbandingan dengan lahan pertanian: A. Saran pejabat kota: E."
+          },
+          {
+            "question_id": "Q-RD431-014",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "You have spent 2 minutes on one question and still cannot decide. What is the best action?",
+            "explanation_id": "Satu soal bernilai satu poin; menandai, menebak, dan lanjut menghemat waktu untuk soal lain.",
+            "options": [
+              "Mark it, make a guess and move on",
+              "Stay until you are sure",
+              "Leave it blank",
+              "Skip the rest of the section"
+            ],
+            "correct_answers": [
+              "Mark it, make a guess and move on"
+            ]
+          },
+          {
+            "question_id": "Q-RD431-015",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which question types are usually the quickest to answer first?",
+            "explanation_id": "Completion dan short answer dijawab dengan scanning sehingga biasanya paling cepat.",
+            "options": [
+              "Completion and short-answer questions",
+              "Matching headings",
+              "Opinion-based multiple choice",
+              "Questions about the writer's purpose"
+            ],
+            "correct_answers": [
+              "Completion and short-answer questions"
+            ]
+          },
+          {
+            "question_id": "Q-RD431-016",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi urutan alur kerja per teks yang benar.",
+            "explanation_id": "Skim dan peta teks, kerjakan soal cepat, lalu soal sulit, dan cek di akhir.",
+            "segments": [
+              "Skim and make a text map,",
+              "answer the quick questions,",
+              "then the difficult ones,",
+              "and check at the end."
+            ]
+          },
+          {
+            "question_id": "Q-RD431-017",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan masalah dengan perbaikannya.",
+            "explanation_id": "Kehabisan waktu: triage dan timer. False vs Not Given: periksa kalimat bertentangan. Salah ejaan: cek di akhir.",
+            "points": 3,
+            "matching": {
+              "left": [
+                "running out of time",
+                "False vs Not Given confusion",
+                "careless spelling mistakes"
+              ],
+              "right": [
+                "practise triage with a timer",
+                "check for a contradicting sentence",
+                "check spelling at the end",
+                "read the whole text first"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "question_id": "Q-RD431-018",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih DUA hal yang sebaiknya dicatat dalam log kesalahan.",
+            "explanation_id": "Tipe soal dan penyebab kesalahan membantu menemukan pola dan prioritas perbaikan. Warna pena atau suasana hati tidak relevan.",
+            "points": 2,
+            "options": [
+              "The question type",
+              "The cause of the mistake",
+              "The colour of your pen",
+              "Your mood that day"
+            ],
+            "correct_answers": [
+              "The question type",
+              "The cause of the mistake"
+            ]
+          },
+          {
+            "question_id": "Q-RD431-019",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih DUA cara yang baik untuk membangun stamina membaca.",
+            "explanation_id": "Tes penuh bertimer dan membaca ekstensif melatih ketahanan dan kecepatan. Membaca tanpa timer sekali sebulan atau menghindari soal sulit tidak membantu.",
+            "points": 2,
+            "options": [
+              "Do a full timed test every week",
+              "Read English articles for 20-30 minutes a day",
+              "Practise only without a timer",
+              "Avoid the hardest question types"
+            ],
+            "correct_answers": [
+              "Do a full timed test every week",
+              "Read English articles for 20-30 minutes a day"
+            ]
+          },
+          {
+            "question_id": "Q-RD431-020",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Tulis angka: In the real test, there are ___ questions in total.",
+            "explanation_id": "Reading IELTS terdiri dari 40 soal dalam 3 teks dan 60 menit.",
+            "correct_answers": [
+              "40",
+              "forty"
+            ],
+            "max_words": 1
+          }
+        ]
+      }
+    }
+  ]
+}

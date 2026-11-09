@@ -1,0 +1,320 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 1,
+      "module_code": "1.3",
+      "module_category": "READING",
+      "sub_module_title": "Menangkap Ide Pokok & Informasi Spesifik pada Teks Pendek",
+      "sub_module_code": "1.3.2",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Membedakan **topik**, **ide pokok (main idea)**, dan **detail pendukung** dalam teks pendek.\n2. Menemukan **ide pokok** dengan membaca judul, kalimat pertama, dan kata kunci (**skimming**).\n3. Menemukan **informasi spesifik** (angka, nama, hari, harga, aturan) dengan cepat (**scanning**).\n4. Menangani jenis teks sehari-hari: **pengumuman, iklan, email, jadwal, dan artikel pendek**.\n\n> **Ringkasan 30 detik**\n> - **Topik** = tentang apa (*perpustakaan*). **Ide pokok** = pesan utama (*jam buka perpustakaan berubah mulai Desember*). **Detail** = rincian pendukung (*jam, denda, biaya*).\n> - **Ide pokok**: baca judul dan kalimat pertama. **Informasi spesifik**: cari **angka, nama, dan kata kunci** di teks.\n> - Jawab dari **teks**, bukan dari pengetahuan atau tebakan.\n\n---\n\n## 1. Topik, Ide Pokok, dan Detail\n\n| Istilah | Penjelasan | Contoh (pengumuman perpustakaan) |\n|---|---|---|\n| **Topik** | Hal yang dibicarakan, satu atau dua kata | *library hours* |\n| **Ide pokok** | Pesan utama: **apa yang dikatakan tentang topik** | *The library will change its opening hours from December.* |\n| **Detail pendukung** | Fakta, angka, contoh, aturan | *Opens at 9.30; closes at 5.00 p.m. on Tuesdays; fines are 20p a day.* |\n\n**Uji ide pokok:** jika kamu menghapus satu detail, teks tetap punya makna utama. Jika kamu menghapus ide pokok, teks kehilangan arah.\n\n### 1.1 Letak ide pokok\n\n| Posisi | Seberapa sering | Tanda |\n|---|---|---|\n| **Judul** | Sangat sering | Subjudul/header |\n| **Kalimat pertama** | Paling umum | Topic sentence |\n| **Kalimat terakhir** | Kadang | *In short, Therefore* |\n| **Tersirat** | Jarang di teks pendek | Gabungan detail |\n\n:::tips-examiner\nPada teks pendek sehari-hari (General Training Section 1), **judul dan kalimat pertama** biasanya memuat ide pokok. Dalam 10 detik pertama, tanyakan: **\"Siapa menulis ini, kepada siapa, dan untuk apa?\"** Jawaban itu memberi tujuan teks (informasi, saran, iklan, peringatan) dan membantu semua soal berikutnya.\n:::\n\n---\n\n## 2. Skimming dan Scanning: Dua Cara Membaca\n\n| | **Skimming** | **Scanning** |\n|---|---|---|\n| **Tujuan** | Ide pokok, gambaran umum | Informasi spesifik |\n| **Cara** | Judul, kalimat pertama tiap paragraf, kata kunci | Mata mencari angka, nama, kata kunci |\n| **Kecepatan** | Cepat, tidak membaca semua | Sangat cepat, melompati teks |\n| **Dipakai untuk** | Soal ide pokok, judul, tujuan | Soal angka, hari, harga, nama |\n\n### 2.1 Langkah skimming (10–20 detik)\n\n| Langkah | Tindakan |\n|---|---|\n| **1** | Baca **judul** dan subjudul |\n| **2** | Baca **kalimat pertama** (dan terakhir) |\n| **3** | Perhatikan **kata yang dicetak tebal**, angka, dan daftar |\n| **4** | Tebak **tujuan** dan **ide pokok** |\n\n### 2.2 Langkah scanning\n\n| Langkah | Tindakan |\n|---|---|\n| **1** | Baca **pertanyaan** dan garis bawahi **kata kunci** (nama, angka, hari) |\n| **2** | Tentukan **jenis informasi** (angka? nama orang? hari?) |\n| **3** | **Telusuri teks** dengan mata, cari kata kunci atau sinonim |\n| **4** | Baca **kalimat sekitar** jawaban untuk memastikan |\n\nLihat Modul 2.3.1 untuk pembahasan lanjutan skimming dan scanning.\n\n---\n\n## 3. Jenis Teks Sehari-hari dan Ciri Khasnya\n\n| Jenis teks | Tujuan | Informasi yang sering ditanyakan |\n|---|---|---|\n| **Pengumuman/notice** | Memberi tahu perubahan atau aturan | Tanggal, jam, aturan, biaya |\n| **Iklan/advertisement** | Menawarkan produk/layanan | Harga, fitur, kontak |\n| **Email/surat** | Menyampaikan informasi atau permintaan | Tanggal, tempat, tindakan, siapa |\n| **Jadwal/timetable** | Memberi urutan waktu | Jam, hari, tempat |\n| **Brosur** | Menjelaskan layanan | Syarat, tarif, cara mendaftar |\n| **Artikel pendek** | Menjelaskan topik | Ide pokok, fakta, contoh |\n\n### 3.1 Kata kunci dalam teks pendek\n\n| Kategori | Contoh kata |\n|---|---|\n| **Waktu** | from, until, between, on weekdays, every Monday, by Friday |\n| **Aturan** | must, should, not allowed, only, required, may |\n| **Biaya** | free, per hour, £5, discount, fee, deposit |\n| **Pilihan** | or, either, optional |\n| **Kontras** | but, however, instead of, except |\n\n---\n\n## 4. Contoh Bertahap dengan Analisis\n\n**Teks pendek:**\n\n> **Greenfield Swimming Pool: New Timetable.** From Monday 3 March, the pool will open at 7.00 a.m. instead of 6.30 a.m. on weekdays. Lessons for children are held on Saturdays from 9.00 to 11.00. Adults may swim for free on Sundays, but they must bring their own towels.\n\n| Pertanyaan | Jenis | Cara menjawab | Jawaban |\n|---|---|---|---|\n| Apa tujuan teks? | Ide pokok | Judul: *New Timetable* | Menginformasikan jadwal baru kolam |\n| Kapan kolam buka di hari kerja? | Scanning (waktu) | Cari *weekdays* | 7.00 a.m. |\n| Berapa lama pelajaran anak? | Hitung | 9.00 sampai 11.00 | 2 jam |\n| Apakah dewasa membayar pada hari Minggu? | Detail | Cari *Sundays* | Tidak (gratis) |\n| Apa yang harus dibawa dewasa? | Detail | *bring their own towels* | Handuk sendiri |\n\n### 4.1 Variasi contoh pertanyaan dan jawabannya\n\n**Level 1: informasi langsung**\n1. *When does the pool open on weekdays?* → **7.00 a.m.**\n2. *What do adults need to bring?* → **their own towels**\n\n**Level 2: perbandingan sederhana**\n3. *Is the pool opening earlier or later than before?* → **later** (7.00 bukan 6.30)\n4. *How long are the children's lessons?* → **two hours**\n\n**Level 3: kesimpulan dari beberapa kalimat**\n5. *What is the main idea of the notice?* → **The pool has a new timetable, with some times and rules.**\n\n---\n\n## 5. Jenis Soal pada Teks Pendek\n\n| Jenis soal | Ciri | Strategi |\n|---|---|---|\n| **Pilihan ganda (main idea)** | Pilih tujuan/ide pokok | Skimming; cocokkan dengan keseluruhan |\n| **Isian singkat (fill/short answer)** | Satu angka/kata/nama | Scanning; salin persis |\n| **True / False / Not Given** | Cocokkan pernyataan | Cari kalimat; bedakan False dan Not Given |\n| **Matching** | Cocokkan pernyataan dengan teks | Peta teks |\n| **Tabel/formulir** | Isi dari teks | Scanning |\n\n### 5.1 Jebakan umum\n\n| Jebakan | Contoh | Cara menghindari |\n|---|---|---|\n| **Detail sebagai ide pokok** | Memilih *\"Fines are 20p a day\"* sebagai ide pokok | Pilih yang mewakili seluruh teks |\n| **Angka mirip** | *9.30* vs *9.00* | Cocokkan persis |\n| **Kata mutlak** | *always, only, never* | Cek apakah teks sebesar itu |\n| **Informasi lama vs baru** | *instead of* | Perhatikan perubahan |\n| **Mengira sesuatu ada** | Informasi tidak disebut | Jawab Not Given |\n\n:::kesalahan-umum\n**Memilih ide pokok dari satu detail.** Teks tentang jadwal baru perpustakaan memuat banyak detail (denda, komputer, ruang belajar), tetapi **ide pokoknya** adalah \"jam buka berubah\". Jawaban yang menyebut satu detail saja biasanya pengecoh. Selalu tanyakan: *apakah pernyataan ini mencakup seluruh teks?*\n:::\n\n---\n\n## 6. Cara Menjawab Tiap Jenis\n\n### 6.1 Ide pokok (MCQ)\n\n| Langkah | Tindakan |\n|---|---|\n| 1 | Skim judul dan kalimat pertama |\n| 2 | Baca pilihan; coret yang **terlalu sempit** (satu detail) atau **terlalu luas** (tidak dibahas) |\n| 3 | Pilih yang **mencakup seluruh teks** |\n\n### 6.2 Informasi spesifik (isian)\n\n| Langkah | Tindakan |\n|---|---|\n| 1 | Garis bawahi kata kunci soal |\n| 2 | Scan teks untuk kata kunci/angka |\n| 3 | Salin jawaban persis (angka, ejaan, satuan) |\n| 4 | Periksa **batas kata** |\n\n### 6.3 True / False / Not Given\n\n| Jawaban | Syarat |\n|---|---|\n| **True** | Maknanya sama dengan teks |\n| **False** | Bertentangan langsung dengan teks |\n| **Not Given** | Teks tidak membahas sama sekali |\n\nLihat Modul 3.2.1 untuk pembahasan lengkap.\n\n---\n\n## 7. Contoh Jawaban Model: Penalaran Langkah demi Langkah\n\n**Teks:** *Riverside Community Library: From Monday 1 December, the library will open at 9.30 a.m. instead of 9.00 a.m. on weekdays. Members may borrow up to eight books for three weeks. Children under twelve pay no fines.*\n\n| Soal | Penalaran | Jawaban |\n|---|---|---|\n| What is the main purpose of the notice? | Judul + kalimat pertama = perubahan jam buka | **To announce changes to the opening hours** |\n| What time will the library open on weekdays? | Scan *weekdays* | **9.30 a.m.** |\n| The library will open earlier than before. (T/F/NG) | *9.30 instead of 9.00* = lebih lambat | **False** |\n| How many books may members borrow? | Scan *borrow* | **eight** |\n| Children pay fines. (T/F/NG) | *Children under twelve pay no fines* | **False** |\n| The library will sell old books next month. | Tidak dibahas | **Not Given** |\n\n**Pola penalaran:** tandai kata kunci, lokasikan, baca kalimat sekitar, bandingkan makna, pilih jawaban.\n\n---\n\n## 8. Kesalahan Umum Pelajar Indonesia\n\n| # | Kesalahan | Perbaikan | Penjelasan |\n|---|---|---|---|\n| 1 | Membaca **seluruh teks kata per kata** | Skim dulu, scan untuk detail | Boros waktu |\n| 2 | Menjawab **dari pengetahuan sendiri** | Jawab dari teks | Hanya teks yang dihitung |\n| 3 | Memilih **detail** sebagai ide pokok | Pilih yang mencakup seluruh teks | Pengecoh |\n| 4 | **Salah angka** (9.30 vs 9.00) | Salin persis | Ketelitian |\n| 5 | Mengabaikan **instead of / but / except** | Baca kata kontras | Perubahan makna |\n| 6 | Mengisi dengan **lebih banyak kata** dari batas | Hitung kata | Jawaban salah |\n| 7 | **Not Given** dijawab False | Cek apakah teks bertentangan | Definisi |\n| 8 | Tidak membaca **kalimat sekitar** | Konfirmasi konteks | Salah paham |\n| 9 | **Satuan** terlewat (£, per hour) | Salin satuan | Data lengkap |\n| 10 | Terlalu lama di satu soal | Tandai, lanjut | Manajemen waktu |\n| 11 | **Mengabaikan judul** | Baca judul dulu | Petunjuk utama |\n| 12 | Menghafal kata tanpa konteks | Pahami kalimat | Pemahaman |\n\n---\n\n## 9. Strategi IELTS: Latihan dan Taktik\n\n### 9.1 Latihan sehari-hari (15 menit)\n\n| Latihan | Cara | Tujuan |\n|---|---|---|\n| **Skim 5 notice/iklan** | Tulis ide pokok dalam satu kalimat | Skimming |\n| **Scan jadwal/menu** | Cari 5 informasi spesifik dengan timer | Scanning |\n| **Ringkas** | Ringkas email pendek jadi 1 kalimat | Ide pokok |\n| **Buat soal sendiri** | Tulis 3 pertanyaan dari satu teks | Memahami pembuat soal |\n| **Baca teks asli** | Baca papan pengumuman, brosur, email | Realistis |\n\n### 9.2 Saat tes\n\n- **Baca judul dan soal** terlebih dahulu.\n- **Garis bawahi kata kunci** di soal.\n- **Tentukan jenis informasi** sebelum mencari.\n- **Jangan terpaku**; tandai dan lanjut.\n- **Cek jawaban**: angka, ejaan, satuan, batas kata.\n\n---\n\n## 10. Ringkasan dan Cek Diri\n\n**Ingat:**\n- Topik ≠ ide pokok ≠ detail. Ide pokok = pesan utama tentang topik.\n- Ide pokok di **judul dan kalimat pertama**; informasi spesifik dengan **scanning**.\n- Pilih jawaban yang **mencakup seluruh teks**, bukan satu detail.\n- Salin angka dan ejaan persis; cek batas kata.\n\n**Cek diri (tanpa melihat materi):**\n1. *Apa perbedaan topik dan ide pokok?*\n2. *Di mana ide pokok biasanya ada pada teks pendek?*\n3. *Apa yang kamu cari saat scanning?*\n4. *Teks: \"9.30 instead of 9.00\". Apakah perpustakaan buka lebih awal?*\n5. *Mengapa jawaban ide pokok yang menyebut satu detail biasanya salah?*\n\n**Kunci:** 1. Topik = tentang apa; ide pokok = pesan utama tentang topik. 2. Judul dan kalimat pertama. 3. Angka, nama, hari, kata kunci. 4. Tidak, lebih lambat. 5. Karena detail tidak mewakili seluruh teks.",
+        "mini_task": {
+          "task_type": "SELF_CHECK",
+          "prompt": "Latihan mandiri (tanpa penilaian AI), sekitar 20 menit. Ambil tiga teks pendek berbahasa Inggris dari kehidupan nyata (pengumuman, iklan, email, atau jadwal). Untuk setiap teks:\n1. Dalam 15 detik, baca judul dan kalimat pertama, lalu tulis satu kalimat ide pokok.\n2. Garis bawahi 4 detail (angka, nama, hari, aturan) dan tulis satu pertanyaan scanning untuk tiap detail.\n3. Tulis 2 pernyataan True/False/Not Given tentang teks itu, satu False dan satu Not Given.\n4. Periksa: apakah ide pokokmu mencakup seluruh teks, bukan hanya satu detail?",
+          "ai_rubric_criteria": "Daftar periksa mandiri: (a) ide pokok satu kalimat dan mencakup seluruh teks; (b) pertanyaan scanning menanyakan detail spesifik yang benar-benar ada; (c) pernyataan False benar-benar bertentangan, pernyataan Not Given benar-benar tidak disebut; (d) angka, hari, dan ejaan disalin persis."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 900,
+        "pass_percent": 75,
+        "reading_passage_markdown": "## Riverside Community Library: Changes from 1 December\n\nFrom Monday 1 December, the library will open at 9.30 a.m. instead of 9.00 a.m. on weekdays. It will close at 7.00 p.m. on Mondays and Thursdays, and at 5.00 p.m. on Tuesdays, Wednesdays and Fridays. On Saturdays the library opens from 10.00 a.m. to 2.00 p.m., and it is closed on Sundays.\n\nMembers may borrow up to eight books for three weeks. Fines for late books are 20 pence a day, but children under twelve pay no fines. The computer room is free for members for one hour a day; guests pay £1 per hour. A new study room can be booked at the front desk for a maximum of two hours.\n\nThe library will be closed on 25 and 26 December and on 1 January.\n\n===PASSAGE===\n\n## From: Ms Hart (Year 9 Teacher)\n\nHi Mia,\n\nThank you for your message about the school trip to the science museum. The trip is on Friday 14 March. We leave school at 8.15 a.m. by coach and return at about 4.30 p.m.\n\nPlease bring a packed lunch and a water bottle. There is a café at the museum, but it is expensive, so students do not have to buy lunch there. Students should wear their school uniform and comfortable shoes.\n\nThe cost is £12, which includes the coach and the entry ticket. If you cannot pay by Friday 7 March, please talk to Mr Collins in the school office. Please also tell me about any allergies.\n\nBest wishes,\nMs Hart",
+        "questions": [
+          {
+            "question_id": "Q-RD132-001",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "What is the main purpose of the library notice?",
+            "explanation_id": "Judul dan kalimat pertama menyebut perubahan jam buka mulai 1 Desember, dilengkapi aturan. Pilihan lain hanya detail atau tidak disebut.",
+            "options": [
+              "To announce changes to the opening hours and rules",
+              "To advertise a new computer course",
+              "To sell second-hand books",
+              "To ask members to pay fines"
+            ],
+            "correct_answers": [
+              "To announce changes to the opening hours and rules"
+            ]
+          },
+          {
+            "question_id": "Q-RD132-002",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "From 1 December, the library will open at ___ a.m. on weekdays.",
+            "explanation_id": "Teks: \"will open at 9.30 a.m. instead of 9.00 a.m. on weekdays\".",
+            "correct_answers": [
+              "9.30",
+              "9:30"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-RD132-003",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Members may borrow up to ___ books.",
+            "explanation_id": "Teks: \"Members may borrow up to eight books for three weeks\".",
+            "correct_answers": [
+              "eight",
+              "8"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-RD132-004",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "SHORT_ANSWER",
+            "prompt": "How much do guests pay per hour for the computer room? (Maximum TWO words)",
+            "correct_answers": [
+              "£1",
+              "1 pound",
+              "one pound"
+            ],
+            "max_words": 2,
+            "explanation_id": "Teks: \"guests pay £1 per hour\"."
+          },
+          {
+            "question_id": "Q-RD132-005",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "The library will open earlier than before on weekdays.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Teks: \"9.30 instead of 9.00\", artinya buka lebih lambat, bukan lebih awal."
+          },
+          {
+            "question_id": "Q-RD132-006",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "Children under twelve have to pay fines for late books.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Teks: \"children under twelve pay no fines\"."
+          },
+          {
+            "question_id": "Q-RD132-007",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "The library closes at 7.00 p.m. on Mondays and Thursdays.",
+            "correct_answers": [
+              "True"
+            ],
+            "explanation_id": "Teks: \"It will close at 7.00 p.m. on Mondays and Thursdays\"."
+          },
+          {
+            "question_id": "Q-RD132-008",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "The library will sell old books next month.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Teks tidak membahas penjualan buku bekas."
+          },
+          {
+            "question_id": "Q-RD132-009",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "On which days does the library close at 5.00 p.m.?",
+            "explanation_id": "Teks: \"at 5.00 p.m. on Tuesdays, Wednesdays and Fridays\".",
+            "options": [
+              "Tuesdays, Wednesdays and Fridays",
+              "Mondays and Thursdays",
+              "Saturdays and Sundays",
+              "Every weekday"
+            ],
+            "correct_answers": [
+              "Tuesdays, Wednesdays and Fridays"
+            ]
+          },
+          {
+            "question_id": "Q-RD132-010",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Why is Ms Hart writing this email?",
+            "explanation_id": "Kalimat pertama merespons pertanyaan tentang school trip dan seluruh email berisi detail perjalanan itu.",
+            "options": [
+              "To give details about a school trip",
+              "To ask for money for a new uniform",
+              "To invite Mia to a party",
+              "To report an accident"
+            ],
+            "correct_answers": [
+              "To give details about a school trip"
+            ]
+          },
+          {
+            "question_id": "Q-RD132-011",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "The coach leaves school at ___ a.m.",
+            "explanation_id": "Teks: \"We leave school at 8.15 a.m. by coach\".",
+            "correct_answers": [
+              "8.15",
+              "8:15"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-RD132-012",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "The trip costs £___.",
+            "explanation_id": "Teks: \"The cost is £12\".",
+            "correct_answers": [
+              "12"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-RD132-013",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "SHORT_ANSWER",
+            "prompt": "Who should parents talk to if they cannot pay by 7 March? (Maximum TWO words)",
+            "correct_answers": [
+              "Mr Collins",
+              "Collins"
+            ],
+            "max_words": 2,
+            "explanation_id": "Teks: \"please talk to Mr Collins in the school office\"."
+          },
+          {
+            "question_id": "Q-RD132-014",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "TFNG",
+            "prompt": "Students must buy lunch at the museum café.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Teks: \"students do not have to buy lunch there\" dan diminta membawa bekal."
+          },
+          {
+            "question_id": "Q-RD132-015",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "TFNG",
+            "prompt": "Parents are allowed to join the trip.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Teks tidak menyebut apakah orang tua boleh ikut."
+          },
+          {
+            "question_id": "Q-RD132-016",
+            "skill": "READING",
+            "passage_no": 2,
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik detail yang salah menurut email: \"The trip is on Friday 7 March.\"",
+            "explanation_id": "Tanggal perjalanan adalah 14 Maret; 7 Maret adalah batas pembayaran.",
+            "tokens": [
+              "The",
+              "trip",
+              "is",
+              "on",
+              "Friday",
+              "7",
+              "March."
+            ],
+            "correct_answers": [
+              5
+            ]
+          },
+          {
+            "question_id": "Q-RD132-017",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan setiap teks dengan tujuan utamanya.",
+            "explanation_id": "Pengumuman perpustakaan menyampaikan perubahan jam dan aturan; email guru menyampaikan detail dan syarat perjalanan sekolah.",
+            "points": 2,
+            "matching": {
+              "left": [
+                "Library notice",
+                "Email from Ms Hart"
+              ],
+              "right": [
+                "to announce changes and rules",
+                "to give trip details and requirements",
+                "to advertise a product"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1
+            ]
+          },
+          {
+            "question_id": "Q-RD132-018",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi langkah scanning yang benar.",
+            "explanation_id": "Baca soal dan tandai kata kunci, lalu telusuri teks untuk kata itu.",
+            "segments": [
+              "Read the question",
+              "and underline key words,",
+              "then scan the text",
+              "for those words."
+            ]
+          },
+          {
+            "question_id": "Q-RD132-019",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih DUA jenis kata yang paling mudah dicari saat scanning.",
+            "explanation_id": "Angka/tanggal dan nama berhuruf kapital menonjol di teks. Kata umum (the) dan ide abstrak sulit dicari.",
+            "points": 2,
+            "options": [
+              "Numbers and dates",
+              "Names with capital letters",
+              "Very common words such as \"the\"",
+              "Long abstract ideas"
+            ],
+            "correct_answers": [
+              "Numbers and dates",
+              "Names with capital letters"
+            ]
+          },
+          {
+            "question_id": "Q-RD132-020",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which sentence describes the MAIN IDEA, not a detail?",
+            "explanation_id": "Ide pokok mencakup seluruh teks; tiga pilihan lain hanya detail.",
+            "options": [
+              "The library has new opening hours from 1 December.",
+              "Fines are 20 pence a day.",
+              "Guests pay £1 per hour for computers.",
+              "The library is closed on 1 January."
+            ],
+            "correct_answers": [
+              "The library has new opening hours from 1 December."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

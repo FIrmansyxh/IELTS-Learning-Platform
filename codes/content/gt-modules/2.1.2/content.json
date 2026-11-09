@@ -1,0 +1,356 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 2,
+      "module_code": "2.1",
+      "module_category": "GRAMMAR",
+      "sub_module_title": "Relative Clauses (who, which, that, whose, where)",
+      "sub_module_code": "2.1.2",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Memilih relative pronoun yang tepat: **who, whom, which, that, whose, where, when, why**.\n2. Membedakan **defining** dan **non-defining relative clause**, termasuk penggunaan koma.\n3. Menghilangkan relative pronoun dengan benar dan memendekkan klausa menjadi **participle phrase**.\n4. Menggabungkan dua kalimat pendek menjadi satu kalimat kompleks yang natural untuk Writing dan Speaking.\n\n> **Ringkasan 30 detik**\n> - **who** untuk orang, **which** untuk benda, **that** untuk keduanya (hanya defining), **whose** untuk kepemilikan, **where/when/why** untuk tempat/waktu/alasan.\n> - **Defining** (tanpa koma, informasi penting) vs. **non-defining** (dengan koma, informasi tambahan).\n> - Relative clause menggantikan kata benda yang diulang: *The man **who lives next door** is a doctor.* Jangan menulis *who **he** lives*.\n\n---\n\n## 1. Apa Itu Relative Clause?\n\nRelative clause adalah **klausa yang menerangkan kata benda** (padanan \"yang...\" dalam bahasa Indonesia). Ia memberi informasi tentang noun tepat di depannya.\n\n| Dua kalimat pendek | Digabung dengan relative clause |\n|---|---|\n| I met a woman. She speaks five languages. | I met a woman **who speaks five languages**. |\n| This is the book. I told you about it. | This is the book **(that) I told you about**. |\n| The city is beautiful. I was born there. | The city **where I was born** is beautiful. |\n\nDalam bahasa Indonesia, \"yang\" dipakai untuk semuanya. Dalam bahasa Inggris, pilihan kata bergantung pada **jenis noun** dan **peran pronoun dalam klausa**.\n\n---\n\n## 2. Relative Pronouns dan Adverbs\n\n### 2.1 Tabel lengkap\n\n| Kata | Untuk | Peran dalam klausa | Contoh |\n|---|---|---|---|\n| **who** | orang | subjek | The teacher **who** helped me is kind. |\n| **whom** | orang | objek (formal) | The teacher **whom** I admire is kind. |\n| **which** | benda / hewan | subjek atau objek | The laptop **which** I bought is fast. |\n| **that** | orang atau benda | subjek atau objek (defining saja) | The book **that** I read was long. |\n| **whose** | kepemilikan | menggantikan his/her/its/their | The girl **whose** bag was stolen is upset. |\n| **where** | tempat | menggantikan *in/at which* | This is the café **where** we met. |\n| **when** | waktu | menggantikan *in/on which* | I remember the day **when** we met. |\n| **why** | alasan | setelah *reason* | That is the reason **why** I left. |\n\n### 2.2 Subjek atau objek?\n\n| Jika pronoun adalah... | Contoh | Boleh dihilangkan? |\n|---|---|---|\n| **Subjek** klausa (diikuti kata kerja) | The man **who lives** next door... | **Tidak** |\n| **Objek** klausa (diikuti subjek baru) | The man **(whom) I met**... | **Ya** |\n\n**Cara cepat:** lihat kata setelah relative pronoun. Jika langsung **kata kerja** → subjek (tidak bisa dihilangkan). Jika **subjek lain** (I, she, the police) → objek (boleh dihilangkan).\n\n- *The film **that** won the award is long.* (that + kata kerja *won* → tidak bisa dihilangkan)\n- *The film **(that)** we watched is long.* (that + subjek *we* → boleh: *The film we watched...*)\n\n:::kesalahan-umum\n**Jangan mengulang kata ganti.** Salah: *The man who **he** lives next door is a doctor.* Benar: *The man who lives next door is a doctor.* Relative pronoun **sudah berperan** sebagai subjek/objek di klausa itu, jadi tidak perlu *he/she/it/them* lagi.\n:::\n\n---\n\n## 3. Defining vs. Non-Defining Relative Clause\n\n### 3.1 Perbedaan utama\n\n| | **Defining** | **Non-defining** |\n|---|---|---|\n| Fungsi | Informasi **penting** untuk mengenali noun | Informasi **tambahan** |\n| Tanda baca | **Tanpa koma** | Diapit **koma** |\n| Boleh *that*? | Ya | **Tidak** (pakai who/which) |\n| Boleh dihilangkan pronoun-nya (objek)? | Ya | **Tidak** |\n| Contoh | The students **who passed** were happy. | My brother, **who lives in Bali**, is a chef. |\n\n### 3.2 Perbandingan makna\n\n| Kalimat | Arti |\n|---|---|\n| The students **who studied hard** passed. | Hanya siswa yang rajin (yang lain tidak lulus). |\n| The students, **who studied hard**, passed. | Semua siswa rajin dan semuanya lulus. |\n\n**Aturan:** noun yang **sudah unik** (nama orang, *my mother*, *Jakarta*) memakai **non-defining**: *My mother, who is a nurse, works at night.* Tidak: *My mother who is a nurse...*\n\n### 3.3 *Which* untuk seluruh klausa\n\n*Which* (dengan koma) dapat merujuk pada **seluruh kalimat sebelumnya**, bukan hanya satu noun.\n\n- *Prices rose sharply, **which** surprised many economists.* (kenaikan harga yang mengejutkan)\n- *He passed the exam, **which** made his parents proud.*\n\n### 3.4 Preposisi dengan relative pronoun\n\n| Informal | Formal |\n|---|---|\n| The person **(who)** I spoke **to**... | The person **to whom** I spoke... |\n| The company **(which)** she works **for**... | The company **for which** she works... |\n| The topic **(that)** we talked **about**... | The topic **about which** we talked... |\n\nSetelah preposisi, **tidak boleh** *who* atau *that*: pakai **whom** (orang) atau **which** (benda).\n\n---\n\n## 4. Memendekkan Relative Clause (Reduced Relative Clause)\n\nRelative pronoun + *be* dapat dihilangkan, atau klausa diubah menjadi frasa participle.\n\n| Bentuk lengkap | Bentuk pendek | Aturan |\n|---|---|---|\n| The man **who is standing** by the door is my uncle. | The man **standing** by the door is my uncle. | aktif → **V-ing** |\n| The book **which was written** by Orwell is famous. | The book **written** by Orwell is famous. | pasif → **V3** |\n| The students **who live** in the dorm... | The students **living** in the dorm... | kata kerja biasa aktif → V-ing |\n| The city **which is located** in the north... | The city **located** in the north... | pasif → V3 |\n\n:::tips-examiner\nRelative clause adalah salah satu penanda utama **Grammatical Range** (Band 6+). Kemampuan **memendekkan** klausa menjadi participle (*the policy introduced last year*) menunjukkan kontrol Band 7. Namun hindari kalimat yang terlalu panjang dan membingungkan: satu kalimat, maksimal satu atau dua relative clause.\n:::\n\n---\n\n## 5. Variasi Contoh (dari mudah ke sulit)\n\n**Level 1: dasar**\n1. The girl **who** sits next to me is my best friend.\n2. This is the phone **that** I bought yesterday.\n3. That is the restaurant **where** we had dinner.\n\n**Level 2: sehari-hari (Speaking)**\n4. My neighbour, **who** is a retired teacher, often helps me with my English.\n5. The café **(that)** I go to every weekend serves the best coffee in town.\n6. I have a friend **whose** parents run a small hotel in Lombok.\n\n**Level 3: akademik (Writing, Reading)**\n7. People **who** live in large cities tend to be more exposed to air pollution, **which** can cause serious health problems.\n8. The policy **introduced** last year has reduced traffic congestion, **which** was the main goal of the government.\n9. Universities **whose** graduates quickly find employment attract more applicants.\n\n**Level 4: formal**\n10. The report, **to which** several experts contributed, highlights the need for reform.\n11. The period **during which** the economy grew most rapidly was the 1990s.\n\n---\n\n## 6. Memilih Pronoun yang Tepat: Alur Keputusan\n\n| Pertanyaan | Jawaban | Pilih |\n|---|---|---|\n| Apakah noun orang? | Ya, subjek | **who** (atau *that*, defining) |\n| | Ya, objek | **whom / who / that / Ø** |\n| | Ya, kepemilikan | **whose** |\n| Apakah noun benda? | Ya | **which / that / Ø (objek)** |\n| Apakah noun tempat? | Ya | **where** (atau *in which*) |\n| Apakah noun waktu? | Ya | **when** (atau *at which*) |\n| Apakah noun *reason*? | Ya | **why** |\n| Apakah informasi tambahan (dengan koma)? | Ya | **who / which** saja, bukan *that* |\n\n---\n\n## 7. Kesalahan Umum Pelajar Indonesia\n\n| # | Kesalahan | Perbaikan | Penjelasan |\n|---|---|---|---|\n| 1 | The man who **he** lives here... | The man who lives here... | Pronoun ganda. |\n| 2 | The book which I read **it** was good. | The book (which) I read was good. | Objek sudah diwakili *which*. |\n| 3 | The girl **which** is tall... | The girl **who** is tall... | Orang = *who*, bukan *which*. |\n| 4 | My mother, **that** is a nurse... | My mother, **who** is a nurse... | Non-defining tidak memakai *that*. |\n| 5 | The man who I spoke **to him**... | The man (who) I spoke **to**... | Hilangkan *him*. |\n| 6 | This is the house **where** I live **in**. | This is the house **where** I live. / the house **which** I live **in**. | *Where* sudah mengandung makna *in which*. |\n| 7 | The day **which** we met... | The day **when** we met... | Waktu = *when*. |\n| 8 | A person **whose** his job is... | A person **whose** job is... | *Whose* menggantikan *his*. |\n| 9 | The teacher **whom** teaches us... | The teacher **who** teaches us... | *Whom* untuk objek; subjek = *who*. |\n| 10 | My brother **who** lives in Bali **is** a chef. (tanpa koma, satu-satunya saudara) | My brother, **who** lives in Bali, is a chef. | Informasi tambahan = koma. |\n| 11 | The man **that** I spoke **with** whom... | The man **with whom** I spoke... | Jangan campur *that* dan *whom*. |\n| 12 | **Whom** do you think is right? | **Who** do you think is right? | Subjek = *who*. |\n\n---\n\n## 8. Strategi IELTS\n\n- **Writing Task 2:** gabungkan kalimat pendek dengan relative clause untuk menaikkan **Grammatical Range**: *Governments should support industries **that** create jobs, **which** would reduce unemployment.*\n- **Writing Task 1 GT (surat):** *I am writing about the heater **that** you installed last week.* *My landlord, **who** lives upstairs, refuses to fix it.*\n- **Speaking Part 2:** relative clause adalah cara mudah memperpanjang jawaban dan menambah detail: *It's a place **where** I can relax*, *a friend **whose** advice I always trust*.\n- **Speaking Part 1/3:** *the kind of person **who**..., the sort of thing **that**...* sangat umum.\n- **Reading:** relative clause sering memuat **informasi penentu** dalam T/F/NG. Perhatikan apakah informasi itu *defining* (membatasi) atau *non-defining* (tambahan).\n- **Listening:** frasa seperti *the one **that**..., the person **who**...* membantu mengidentifikasi objek yang ditanyakan di soal MCQ.\n\n---\n\n## 9. Contoh Jawaban Model (Speaking Part 2)\n\n**Cue card:** *Describe a person who has influenced you.*\n\n- **Band 5:** My teacher is a person. She is very kind. She teach me English. I like her.\n- **Band 6:** The person who has influenced me most is my English teacher. She is the one who encouraged me to study abroad.\n- **Band 7:** The person who has influenced me most is my English teacher, Ms Rina, whose patience and sense of humour made every lesson enjoyable. She is the one who first encouraged me to apply for a scholarship, which eventually changed my life. I still remember the day when she told me I had real potential.\n\n**Mengapa naik band?** (1) Relative clause **bervariasi** (*who, whose, which, when*), (2) non-defining dengan koma untuk informasi tambahan, (3) *which* merujuk pada seluruh klausa (*scholarship, which eventually...*), tidak sekadar menambah kalimat pendek.\n\n---\n\n## 10. Ringkasan dan Cek Diri\n\n**Ingat:**\n- who/whom (orang), which (benda), that (keduanya, defining), whose (milik), where/when/why.\n- Defining: tanpa koma; non-defining: dengan koma, bukan *that*.\n- Pronoun objek boleh dihilangkan; pronoun subjek tidak.\n- Jangan mengulang pronoun (*who he*). Setelah preposisi: *whom/which*.\n- Klausa dapat dipendekkan: aktif → V-ing; pasif → V3.\n\n**Cek diri (tanpa melihat materi):**\n1. *The girl ___ (who / which) sits next to me is my best friend.*\n2. *This is the café ___ (where / which) we first met.*\n3. *My brother, ___ (that / who) lives in Bali, is a chef.*\n4. *The man ___ (whose / who) car was stolen called the police.*\n5. *The book (___) I borrowed from you was excellent.* (boleh dikosongkan?)\n\n**Kunci:** 1. who. 2. where. 3. who. 4. whose. 5. Ya, boleh dikosongkan karena objek (*The book I borrowed...*).",
+        "mini_task": {
+          "task_type": "AI_SHORT_WRITING",
+          "prompt": "Gabungkan dan kembangkan ide-ide berikut menjadi satu paragraf (sekitar 100 sampai 120 kata) dalam bahasa Inggris tentang kota atau tempat tinggalmu.\n\nParagrafmu wajib memuat:\n- satu defining relative clause dengan who (mis. \"people who...\")\n- satu non-defining relative clause dengan koma (mis. \"My city, which is...,\")\n- satu relative clause dengan whose, dan satu dengan where atau when\n- satu klausa yang dipendekkan (participle: \"the park located near...\", \"buildings built in...\")\n- tidak ada pengulangan pronoun (mis. \"who he\") dan tidak ada \"that\" setelah koma",
+          "ai_rubric_criteria": "Grammatical Range and Accuracy: pilihan who/which/that/whose/where tepat; defining tanpa koma dan non-defining dengan koma (tanpa that); pronoun tidak diulang; participle phrase benar (V-ing untuk aktif, V3 untuk pasif). Task Achievement: semua unsur yang diminta muncul. Coherence: kalimat gabungan terbaca wajar dan tidak terlalu panjang. Lexical Resource: kosakata tentang tempat tinggal sesuai."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 900,
+        "pass_percent": 75,
+        "questions": [
+          {
+            "question_id": "Q-GR212-001",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The girl ___ sits next to me is my best friend.",
+            "explanation_id": "Noun orang yang berperan sebagai subjek memakai who.",
+            "options": [
+              "who",
+              "which",
+              "whose",
+              "where"
+            ],
+            "correct_answers": [
+              "who"
+            ]
+          },
+          {
+            "question_id": "Q-GR212-002",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "This is the laptop ___ I bought yesterday.",
+            "explanation_id": "Noun benda memakai which (atau that).",
+            "options": [
+              "who",
+              "which",
+              "whose",
+              "where"
+            ],
+            "correct_answers": [
+              "which"
+            ]
+          },
+          {
+            "question_id": "Q-GR212-003",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The man ___ car was stolen called the police.",
+            "explanation_id": "Whose menyatakan kepemilikan (his car -> whose car).",
+            "options": [
+              "who",
+              "which",
+              "whose",
+              "whom"
+            ],
+            "correct_answers": [
+              "whose"
+            ]
+          },
+          {
+            "question_id": "Q-GR212-004",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "This is the café ___ we first met.",
+            "explanation_id": "Where dipakai untuk tempat (= in which).",
+            "options": [
+              "which",
+              "that",
+              "where",
+              "whose"
+            ],
+            "correct_answers": [
+              "where"
+            ]
+          },
+          {
+            "question_id": "Q-GR212-005",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "I remember the day ___ we graduated.",
+            "explanation_id": "When dipakai untuk waktu.",
+            "options": [
+              "when",
+              "where",
+              "who",
+              "whose"
+            ],
+            "correct_answers": [
+              "when"
+            ]
+          },
+          {
+            "question_id": "Q-GR212-006",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "My brother, ___ lives in Bali, is a chef.",
+            "explanation_id": "Non-defining (dengan koma) tidak memakai that. Untuk orang: who.",
+            "options": [
+              "that",
+              "who",
+              "which",
+              "whom"
+            ],
+            "correct_answers": [
+              "who"
+            ]
+          },
+          {
+            "question_id": "Q-GR212-007",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which sentence is CORRECT?",
+            "explanation_id": "Pronoun relative sudah menjadi subjek, jadi tidak perlu mengulang he. Orang = who, bukan which.",
+            "options": [
+              "The man who he lives here is a doctor.",
+              "The man who lives here is a doctor.",
+              "The man which lives here is a doctor.",
+              "The man whose lives here is a doctor."
+            ],
+            "correct_answers": [
+              "The man who lives here is a doctor."
+            ]
+          },
+          {
+            "question_id": "Q-GR212-008",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "In which sentence can the relative pronoun be OMITTED?",
+            "explanation_id": "Pronoun objek (diikuti subjek I) boleh dihilangkan. Pronoun subjek (diikuti kata kerja) tidak.",
+            "options": [
+              "The man who lives next door is a doctor.",
+              "The book that I read was long.",
+              "The film that won the award is long.",
+              "The student who passed is happy."
+            ],
+            "correct_answers": [
+              "The book that I read was long."
+            ]
+          },
+          {
+            "question_id": "Q-GR212-009",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Prices rose sharply, ___ surprised many economists.",
+            "explanation_id": "Which (dengan koma) dapat merujuk pada seluruh klausa sebelumnya.",
+            "options": [
+              "that",
+              "which",
+              "what",
+              "who"
+            ],
+            "correct_answers": [
+              "which"
+            ]
+          },
+          {
+            "question_id": "Q-GR212-010",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Choose the correct reduced form: \"The book which was written by Orwell is famous.\"",
+            "explanation_id": "Klausa pasif dipendekkan menjadi V3 (written).",
+            "options": [
+              "The book writing by Orwell is famous.",
+              "The book written by Orwell is famous.",
+              "The book wrote by Orwell is famous.",
+              "The book which written by Orwell is famous."
+            ],
+            "correct_answers": [
+              "The book written by Orwell is famous."
+            ]
+          },
+          {
+            "question_id": "Q-GR212-011",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan who atau which: The company ___ employs 500 people is expanding.",
+            "explanation_id": "Noun benda (company) memakai which atau that.",
+            "correct_answers": [
+              "which",
+              "that"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR212-012",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: The person to ___ I spoke was very helpful. (whom / who)",
+            "explanation_id": "Setelah preposisi (to) memakai whom, bukan who.",
+            "correct_answers": [
+              "whom"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR212-013",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: That is the reason ___ I left early. (why / which)",
+            "explanation_id": "Setelah reason dipakai why.",
+            "correct_answers": [
+              "why"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR212-014",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan bentuk V-ing: The students ___ (live) in the dormitory are noisy.",
+            "explanation_id": "Klausa aktif dipendekkan menjadi V-ing: students living in the dormitory.",
+            "correct_answers": [
+              "living"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR212-015",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: The woman ___ daughter is a pilot works at the bank. (who / whose)",
+            "explanation_id": "Whose menyatakan kepemilikan (her daughter).",
+            "correct_answers": [
+              "whose"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR212-016",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat yang benar.",
+            "explanation_id": "Pola: noun + who + kata kerja + pelengkap + klausa utama.",
+            "segments": [
+              "The teacher",
+              "who helped me",
+              "is very",
+              "kind."
+            ]
+          },
+          {
+            "question_id": "Q-GR212-017",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat dengan non-defining clause.",
+            "explanation_id": "Non-defining clause diapit koma dan memakai who untuk orang.",
+            "segments": [
+              "My mother,",
+              "who is a nurse,",
+              "works",
+              "at night."
+            ]
+          },
+          {
+            "question_id": "Q-GR212-018",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Pronoun diulang. Relative pronoun \"which\" sudah menjadi objek, jadi \"it\" dihapus.",
+            "tokens": [
+              "The",
+              "book",
+              "which",
+              "I",
+              "read",
+              "it",
+              "was",
+              "good."
+            ],
+            "correct_answers": [
+              5
+            ]
+          },
+          {
+            "question_id": "Q-GR212-019",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Untuk orang gunakan who, bukan which.",
+            "tokens": [
+              "The",
+              "girl",
+              "which",
+              "is",
+              "tall",
+              "is",
+              "my",
+              "sister."
+            ],
+            "correct_answers": [
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR212-020",
+            "skill": "GRAMMAR",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan relative word dengan pemakaiannya.",
+            "explanation_id": "Whose = kepemilikan; where = tempat; why = alasan.",
+            "points": 3,
+            "matching": {
+              "left": [
+                "whose",
+                "where",
+                "why"
+              ],
+              "right": [
+                "kepemilikan",
+                "tempat",
+                "alasan",
+                "waktu"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR212-021",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih SEMUA kalimat yang benar.",
+            "explanation_id": "Non-defining memakai who dengan koma, bukan that. Subjek pronoun tidak diulang. Objek pronoun boleh dihilangkan.",
+            "points": 2,
+            "options": [
+              "My mother, that is a nurse, works at night.",
+              "My mother, who is a nurse, works at night.",
+              "The film we watched was long.",
+              "The man who he lives here is kind."
+            ],
+            "correct_answers": [
+              "My mother, who is a nurse, works at night.",
+              "The film we watched was long."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,343 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 2,
+      "module_code": "2.3",
+      "module_category": "READING",
+      "sub_module_title": "Mengenali Distractors (Koreksi Informasi & Jebakan Sinonim dalam Audio)",
+      "sub_module_code": "2.3.2",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Mengenali **distractor** (pengecoh) di Listening: **koreksi pembicara**, **beberapa pilihan disebut**, **negasi**, **jebakan sinonim**, dan **angka/waktu yang berubah**.\n2. Mengikuti **alur percakapan** dan memilih **jawaban akhir**, bukan yang disebut pertama.\n3. Memakai strategi **memprediksi**, **menandai kata kunci**, dan **mendengar kata sambung kontras** (*but, however, actually, in fact*).\n4. Menjawab **Multiple Choice, Matching, dan Form/Map completion** dengan akurat meski audio hanya diputar **satu kali**.\n\n> **Ringkasan 30 detik**\n> - Di Listening, **informasi yang disebut belum tentu jawabannya**. Pembicara sering **berubah pikiran**, **menolak**, atau **membandingkan beberapa pilihan**.\n> - Dengarkan kata sambung seperti **but, however, actually, in fact, I mean, rather, no wait**: jawaban sering ada **setelahnya**.\n> - Pilih berdasarkan **makna**, bukan kata yang sama dengan soal. Pengecoh sengaja memakai **kata yang sama**.\n\n---\n\n## 1. Mengapa Ada Distractor?\n\nListening IELTS **tidak menguji kemampuan menangkap kata**, tetapi **memahami makna dan alur**. Penyusun soal menambahkan pengecoh agar kandidat yang hanya \"mendengar kata yang cocok\" **terjebak**.\n\n| Hal yang diuji | Cara pengecoh bekerja |\n|---|---|\n| Memahami **perubahan pendapat** | Pembicara menyebut A, lalu memilih B |\n| Memahami **penolakan/negasi** | *\"I thought about Tuesday, but it's no good.\"* |\n| Memahami **perbandingan** | *\"X is cheap, but Y is better value.\"* |\n| Memahami **parafrase** | Kata di soal berbeda dari audio |\n| Memahami **angka** | *\"Thirty... no, sorry, thirteen.\"* |\n\nAudio diputar **sekali saja**, jadi strategi harus dilakukan **saat mendengar**, bukan setelah.\n\n---\n\n## 2. Jenis Pengecoh (Distractor) Utama\n\n### 2.1 Koreksi diri (self-correction)\n\nPembicara menyebut satu hal lalu **menggantinya**.\n\n| Audio | Jawaban |\n|---|---|\n| *\"The meeting is on Tuesday... no, sorry, Wednesday.\"* | **Wednesday** |\n| *\"It costs forty... sorry, fourteen pounds.\"* | **14** |\n| *\"Room 21, no, 12.\"* | **12** |\n\n**Kata penanda koreksi:** *no, sorry, I mean, actually, let me correct that, wait, rather, instead.*\n\n### 2.2 Beberapa pilihan disebut (list distractor)\n\nPembicara menyebut **semua opsi** soal, tetapi hanya **satu** yang menjadi jawaban.\n\n> *\"We could go by bus, which is cheap, or by train, which is faster, but in the end we decided to take a taxi because of the luggage.\"*\n\nSoal: *How will they travel?* → **taxi** (keputusan akhir), bukan bus atau train.\n\n### 2.3 Negasi dan penolakan\n\n| Audio | Makna |\n|---|---|\n| *\"I don't think the museum is worth visiting.\"* | Museum **tidak** dipilih |\n| *\"We considered the beach, but it was too crowded.\"* | Pantai **ditolak** |\n| *\"Not the first option, the second.\"* | Pilihan kedua |\n\n### 2.4 Perubahan rencana\n\n| Audio | Jawaban |\n|---|---|\n| *\"We planned to leave at nine, but because of the traffic we left at ten.\"* | **ten** |\n| *\"The class used to be on Mondays; now it's on Thursdays.\"* | **Thursdays** |\n\n### 2.5 Jebakan sinonim dan parafrase\n\nSoal memakai kata yang **berbeda** dari audio. Kata yang **identik** dengan soal sering **pengecoh**.\n\n| Soal | Audio | Catatan |\n|---|---|---|\n| *The speaker is worried about the cost.* | *\"The price is much higher than I expected.\"* | *price* = *cost*; makna sama (benar) |\n| *He enjoyed the film.* | *\"The film was fine, but the ending was disappointing.\"* | Kata *film* identik, makna **tidak** sama |\n| *free* | *\"There's no charge.\"* | parafrase |\n\n:::tips-examiner\nPerhatikan **kata sambung kontras**: *but, however, although, in fact, actually, on the other hand*. Informasi **sebelum** kata ini sering **pengecoh**, dan informasi **setelahnya** sering **jawaban**. Contoh: *\"It looks cheap, but it's actually quite expensive.\"* Jawaban: **expensive**.\n:::\n\n### 2.6 Angka, waktu, dan tempat yang membingungkan\n\n| Pengecoh | Contoh |\n|---|---|\n| **-teen/-ty** | thirteen vs thirty |\n| **Tanggal** | the fifth vs the fifteenth |\n| **Waktu** | quarter to vs quarter past |\n| **Tempat** | *next to* vs *opposite* |\n| **Harga** | £2.50 vs £25 |\n\nLihat Modul 1.3.1 untuk angka, ejaan, waktu, dan alamat.\n\n---\n\n## 3. Strategi Sebelum, Saat, dan Sesudah Mendengar\n\n### 3.1 Sebelum audio (30–45 detik)\n\n| Tindakan | Alasan |\n|---|---|\n| **Baca soal dan pilihan**, garis bawahi kata kunci | Tahu apa yang dicari |\n| **Perkirakan jenis jawaban** (angka, nama, tempat, alasan) | Mendengar lebih terarah |\n| **Perhatikan pilihan yang mirip** | Itu tempat pengecoh |\n| **Tandai batas kata** | Tulis jawaban sesuai |\n\n### 3.2 Saat audio\n\n| Tindakan | Alasan |\n|---|---|\n| **Ikuti soal secara berurutan** | Soal mengikuti urutan audio |\n| **Jangan menjawab pada kata pertama yang cocok** | Mungkin pengecoh |\n| **Tunggu penutup ide** (*so, in the end, finally*) | Jawaban akhir |\n| **Coret pilihan yang ditolak** | Mengurangi pilihan |\n| **Tulis singkat** (kata kunci) | Tidak kehilangan audio |\n| **Lanjutkan** bila ketinggalan | Jangan terpaku |\n\n### 3.3 Sesudah audio (di akhir bagian)\n\n| Tindakan | Alasan |\n|---|---|\n| **Periksa ejaan dan tata bahasa** | Poin hilang karena salah ejaan |\n| **Cek batas kata** | Jawaban terlalu panjang = salah |\n| **Pindahkan jawaban** dengan rapi | Penulisan jelas |\n| **Tebak** yang kosong | Tidak ada penalti |\n\n---\n\n## 4. Multiple Choice: Cara Menghindari Pengecoh\n\n### 4.1 Pola umum soal pilihan ganda\n\n| Soal | Pola pengecoh |\n|---|---|\n| *Why did she change her mind?* | Ketiga alasan disebut; hanya satu alasan sebenarnya |\n| *What will the students do first?* | Semua kegiatan disebut; urutan menentukan |\n| *Which problem does the speaker mention?* | Beberapa masalah disebut; satu yang dialami |\n\n### 4.2 Contoh bertahap\n\n**Audio (transkrip):**\n\n> *\"I was going to book the cheapest hotel, but the reviews were terrible. Then I thought about a hostel, but it was too far from the station. In the end I chose the guesthouse because it was close to the station and the price was reasonable.\"*\n\n| Soal | Pilihan | Jawaban | Alasan |\n|---|---|---|---|\n| Where will she stay? | A cheapest hotel / B hostel / C guesthouse | **C** | *In the end I chose the guesthouse* |\n| Why did she reject the hostel? | A reviews / B distance / C price | **B (distance)** | *too far from the station* |\n\n**Pengecoh:** *cheapest hotel* dan *hostel* disebut tetapi **ditolak**.\n\n### 4.3 Variasi contoh\n\n**Level 1: koreksi sederhana**\n1. *\"The tickets cost twenty... no, sorry, twelve pounds.\"* → **£12**\n2. *\"The class is on Monday. Oh, actually, Tuesday.\"* → **Tuesday**\n\n**Level 2: daftar pilihan**\n3. *\"We could meet at the library, the café, or the park. The park is best because it's quiet.\"* → **park**\n\n**Level 3: sinonim dan negasi**\n4. *\"I wasn't impressed by the food, but the service was excellent.\"* → opini positif tentang **service**\n\n---\n\n## 5. Matching dan Form/Map Completion\n\n### 5.1 Matching (mencocokkan)\n\n| Tantangan | Strategi |\n|---|---|\n| Beberapa item dibahas bergantian | Catat item per item sambil mendengar |\n| Jawaban muncul **berurutan** | Ikuti urutan audio |\n| Satu item bisa disebut berkali-kali | Pilih yang **terakhir/penutup** |\n\n### 5.2 Form/note completion\n\n| Tantangan | Strategi |\n|---|---|\n| Angka berubah | Ambil angka **akhir** |\n| Ejaan nama | Tulis persis yang dieja |\n| Batas kata | Hitung kata |\n\n### 5.3 Map/plan labelling\n\n| Kata | Arti |\n|---|---|\n| **opposite** | berseberangan |\n| **next to / beside** | di sebelah |\n| **between** | di antara |\n| **in front of / behind** | di depan / belakang |\n| **on the left / right** | di kiri / kanan |\n| **at the end of** | di ujung |\n| **turn left at...** | belok kiri di... |\n\n**Strategi:** tentukan **titik awal** dan ikuti arah; perhatikan *turn left/right* dan *go past*.\n\n:::kesalahan-umum\n**Menjawab saat mendengar kata pertama yang cocok.** Pembicara sering berkata *\"We could go to the cinema... but actually we decided to stay home.\"* Pelajar yang menulis *cinema* kehilangan poin. Latih kebiasaan: **tunggu sampai ide selesai**, lalu pilih jawaban dari **keputusan akhir**.\n:::\n\n---\n\n## 6. Contoh Jawaban Model: Mengikuti Alur Audio\n\n**Audio (transkrip):**\n\n*Student: I'd like to book a room for Friday, please.*\n*Clerk: Single or double?*\n*Student: A double, I think... no, actually a single will do. It's only for me.*\n*Clerk: The single is eighty pounds a night. Would you like breakfast?*\n*Student: How much is it?*\n*Clerk: Ten pounds. Oh, no, sorry, twelve.*\n*Student: That's fine. I'll take breakfast, but not dinner.*\n\n| Soal | Jawaban | Alasan |\n|---|---|---|\n| Room type | **single** | Koreksi: *actually a single will do* |\n| Price per night | **£80** | Tidak berubah |\n| Breakfast price | **£12** | Koreksi: *ten... sorry, twelve* |\n| Meals included | **breakfast** | *but not dinner* |\n\n**Mengapa benar?** (1) Koreksi diikuti, (2) pilihan ditolak (*double*, *dinner*) dicoret, (3) angka akhir diambil.\n\n---\n\n## 7. Kesalahan Umum Pelajar Indonesia\n\n| # | Kesalahan | Perbaikan | Penjelasan |\n|---|---|---|---|\n| 1 | Menjawab pada **kata pertama** yang cocok | Tunggu keputusan akhir | Pengecoh |\n| 2 | **Mengabaikan koreksi** (*no, sorry*) | Ikuti koreksi | Jawaban berubah |\n| 3 | Memilih opsi yang **sama persis** kata dengan audio | Cocokkan makna | Jebakan |\n| 4 | **Terpaku** pada soal yang terlewat | Lanjut | Kehilangan soal berikutnya |\n| 5 | Tidak membaca soal **sebelum** audio | Gunakan waktu persiapan | Tidak terarah |\n| 6 | **Mengabaikan negasi** | Dengarkan *not, never, no* | Makna terbalik |\n| 7 | **Salah dengar angka** | Waspada -teen/-ty | Angka |\n| 8 | **Salah ejaan** | Salin huruf | Poin hilang |\n| 9 | Melebihi **batas kata** | Hitung | Jawaban salah |\n| 10 | Tidak mengenali **parafrase** | Cari sinonim | Makna |\n| 11 | Mengosongkan jawaban | Tebak | Tidak ada penalti |\n| 12 | **Panik** | Tarik napas; lanjut | Fokus |\n\n---\n\n## 8. Strategi IELTS: Latihan dan Taktik\n\n### 8.1 Latihan sehari-hari (20 menit)\n\n| Latihan | Cara | Tujuan |\n|---|---|---|\n| **Dengarkan percakapan pendek** (podcast/video) | Catat kata yang menandai koreksi | Sensitivitas |\n| **Dikte** | Dengarkan satu kalimat, tulis, periksa | Akurasi |\n| **Cari pengecoh** | Setelah mendengar, tulis pilihan yang ditolak dan alasannya | Pola |\n| **Prediksi** | Baca soal, tebak 3 jawaban sebelum audio | Antisipasi |\n| **Shadowing** | Tiru percakapan | Pengenalan bunyi |\n| **Latihan penuh** | Satu section dalam 10 menit | Stamina |\n\n### 8.2 Saat tes\n\n- **Gunakan waktu persiapan** untuk membaca soal dan memperkirakan pengecoh.\n- **Dengarkan kata sambung kontras** (*but, however, actually*).\n- **Coret opsi yang ditolak**; ambil yang **dipilih akhir**.\n- **Tulis ringkas**; periksa ejaan di akhir.\n- **Jangan menjawab dari pengetahuan** sendiri.\n\n---\n\n## 9. Ringkasan dan Cek Diri\n\n**Ingat:**\n- Pengecoh: **koreksi, daftar pilihan, negasi, perubahan rencana, sinonim, angka**.\n- Jawaban biasanya di **keputusan akhir**, setelah *but, actually, in the end*.\n- Baca soal sebelum audio; ikuti urutan; coret pilihan yang ditolak.\n- Periksa ejaan dan batas kata; tebak yang kosong.\n\n**Cek diri (tanpa melihat materi):**\n1. *Sebutkan tiga kata penanda koreksi.*\n2. *Audio: \"We could go by bus or train, but in the end we took a taxi.\" Jawabannya?*\n3. *Mengapa kata yang sama persis dengan soal bisa pengecoh?*\n4. *Informasi sebelum atau sesudah \"but\" yang sering menjadi jawaban?*\n5. *Kapan sebaiknya memilih jawaban?*\n\n**Kunci:** 1. no sorry, I mean, actually. 2. taxi. 3. Pembicara menyebut kata itu tetapi maknanya berbeda atau ditolak. 4. Sesudah. 5. Setelah pembicara menyelesaikan ide/keputusan.",
+        "mini_task": {
+          "task_type": "SELF_CHECK",
+          "prompt": "Latihan mandiri (tanpa penilaian AI), sekitar 20 menit.\n1. Pilih satu percakapan atau wawancara berbahasa Inggris berdurasi 3 sampai 5 menit (podcast, video, atau rekaman latihan dengan transkrip).\n2. Dengarkan sekali, dan setiap kali pembicara memperbaiki diri, menolak sebuah pilihan, atau memakai but/actually/in the end, catat: (a) apa yang disebut lebih dulu, (b) apa jawaban akhirnya.\n3. Buat 3 soal pilihan ganda sendiri dengan 3 opsi yang semuanya disebut di audio, lalu minta teman menjawabnya.\n4. Periksa dengan transkrip: berapa pengecoh yang berhasil kamu kenali, dan kata penanda apa yang paling sering muncul?",
+          "ai_rubric_criteria": "Daftar periksa mandiri: (a) setiap koreksi/penolakan dicatat dengan jawaban akhir yang benar; (b) soal buatan memakai pengecoh yang benar-benar disebut di audio; (c) kata penanda (but, actually, in the end, no sorry) diidentifikasi; (d) jawaban diperiksa terhadap transkrip, bukan ingatan."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 900,
+        "pass_percent": 75,
+        "questions": [
+          {
+            "question_id": "Q-LS232-001",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Transkrip: \"The meeting is on Tuesday... no, sorry, Wednesday.\" When is the meeting?",
+            "explanation_id": "Pembicara mengoreksi diri; jawaban akhir adalah Wednesday.",
+            "options": [
+              "Wednesday",
+              "Tuesday",
+              "Monday",
+              "Thursday"
+            ],
+            "correct_answers": [
+              "Wednesday"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-002",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Transkrip: \"We could go by bus, which is cheap, or by train, which is faster, but in the end we decided to take a taxi because of the luggage.\" How will they travel?",
+            "explanation_id": "Bus dan train hanya disebut sebagai opsi; keputusan akhir adalah taxi (\"in the end\").",
+            "options": [
+              "By taxi",
+              "By bus",
+              "By train",
+              "On foot"
+            ],
+            "correct_answers": [
+              "By taxi"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-003",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Transkrip: \"It looks cheap, but it's actually quite expensive.\" What does the speaker think about the price?",
+            "explanation_id": "Informasi setelah \"but\" dan \"actually\" adalah pendapat sebenarnya: expensive.",
+            "options": [
+              "It is expensive",
+              "It is cheap",
+              "It is free",
+              "It is reasonable"
+            ],
+            "correct_answers": [
+              "It is expensive"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-004",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Transkrip: \"I thought about the beach, but it was too crowded, so we went to the museum.\" Where did they go?",
+            "explanation_id": "Pantai ditolak (\"too crowded\"); mereka pergi ke museum.",
+            "options": [
+              "The museum",
+              "The beach",
+              "The park",
+              "The station"
+            ],
+            "correct_answers": [
+              "The museum"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-005",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Transkrip: \"The class used to be on Mondays; now it is on Thursdays.\" When is the class now?",
+            "explanation_id": "\"Used to ... now\" menunjukkan perubahan; jadwal sekarang adalah Thursdays.",
+            "options": [
+              "Thursdays",
+              "Mondays",
+              "Fridays",
+              "Tuesdays"
+            ],
+            "correct_answers": [
+              "Thursdays"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-006",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Transkrip: \"We planned to leave at nine, but because of the traffic we left at ten.\" When did they leave?",
+            "explanation_id": "Rencana (nine) berubah karena lalu lintas; mereka berangkat pukul sepuluh.",
+            "options": [
+              "At ten",
+              "At nine",
+              "At eleven",
+              "At eight"
+            ],
+            "correct_answers": [
+              "At ten"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-007",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Transkrip: \"I wasn't impressed by the food, but the service was excellent.\" What did the speaker like?",
+            "explanation_id": "\"Wasn't impressed\" = tidak suka makanan; \"excellent\" = suka pelayanan.",
+            "options": [
+              "The service",
+              "The food",
+              "Both the food and the service",
+              "Neither"
+            ],
+            "correct_answers": [
+              "The service"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-008",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Why are distractors included in Listening questions?",
+            "explanation_id": "Pengecoh menguji pemahaman makna dan alur, bukan sekadar kata yang cocok.",
+            "options": [
+              "To test understanding of meaning and the whole conversation, not just matching words",
+              "To make the audio longer",
+              "To confuse native speakers",
+              "Because the audio is played twice"
+            ],
+            "correct_answers": [
+              "To test understanding of meaning and the whole conversation, not just matching words"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-009",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "How many times is the Listening audio played in the real test?",
+            "explanation_id": "Audio hanya diputar satu kali, sehingga strategi dilakukan saat mendengar.",
+            "options": [
+              "Once",
+              "Twice",
+              "Three times",
+              "As many times as you want"
+            ],
+            "correct_answers": [
+              "Once"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-010",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which words often signal that the information AFTER them is the answer?",
+            "explanation_id": "Kata kontras dan koreksi menandai bahwa informasi setelahnya sering menjadi jawaban.",
+            "options": [
+              "but, actually, in fact",
+              "and, also, too",
+              "the, a, an",
+              "maybe, perhaps, possibly"
+            ],
+            "correct_answers": [
+              "but, actually, in fact"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-011",
+            "skill": "LISTENING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Transkrip: \"Room twenty-one... no, I mean twelve.\" Tulis nomor kamar:",
+            "explanation_id": "Koreksi \"no, I mean\" menetapkan jawaban akhir: 12.",
+            "correct_answers": [
+              "12"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-LS232-012",
+            "skill": "LISTENING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Transkrip: \"It costs forty... sorry, fourteen pounds.\" Tulis harga dalam angka:",
+            "explanation_id": "Koreksi: forty diganti fourteen = 14.",
+            "correct_answers": [
+              "14"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-LS232-013",
+            "skill": "LISTENING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Transkrip: \"The single is eighty pounds. Breakfast is ten... oh, sorry, twelve.\" Tulis harga sarapan (angka):",
+            "explanation_id": "Jawaban akhir setelah koreksi: twelve = 12.",
+            "correct_answers": [
+              "12"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-LS232-014",
+            "skill": "LISTENING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Transkrip: \"We considered a double room, but a single will do.\" Tulis tipe kamar yang dipilih (satu kata):",
+            "explanation_id": "Double ditolak; yang dipilih adalah single.",
+            "correct_answers": [
+              "single"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-LS232-015",
+            "skill": "LISTENING",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi urutan strategi Listening yang benar.",
+            "explanation_id": "Baca soal dulu, tandai pengecoh, dengarkan sampai ide selesai, lalu pilih jawaban akhir.",
+            "segments": [
+              "Read the questions first,",
+              "listen until the idea",
+              "is finished,",
+              "then choose the final answer."
+            ]
+          },
+          {
+            "question_id": "Q-LS232-016",
+            "skill": "LISTENING",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Transkrip: \"We could meet at the library, the café or the park. The park is best because it's quiet.\" Klik tempat yang SALAH sebagai jawaban akhir dalam catatan siswa: \"They will meet at the library.\"",
+            "explanation_id": "Jawaban akhir adalah the park; library hanya salah satu opsi yang disebut.",
+            "tokens": [
+              "They",
+              "will",
+              "meet",
+              "at",
+              "the",
+              "library."
+            ],
+            "correct_answers": [
+              5
+            ]
+          },
+          {
+            "question_id": "Q-LS232-017",
+            "skill": "LISTENING",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan tipe pengecoh dengan contoh audionya.",
+            "explanation_id": "Koreksi diri: no, sorry. Penolakan: too crowded. Perubahan rencana: planned to... but.",
+            "points": 3,
+            "matching": {
+              "left": [
+                "self-correction",
+                "rejection of an option",
+                "change of plan"
+              ],
+              "right": [
+                "It costs forty... sorry, fourteen pounds.",
+                "We considered the beach, but it was too crowded.",
+                "We planned to leave at nine, but we left at ten.",
+                "The meeting is at noon."
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "question_id": "Q-LS232-018",
+            "skill": "LISTENING",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih DUA kata yang menandai bahwa pembicara mengoreksi dirinya.",
+            "explanation_id": "\"No, sorry\" dan \"I mean\" menandai koreksi. \"Also\" dan \"for example\" menambah informasi atau memberi contoh.",
+            "points": 2,
+            "options": [
+              "no, sorry",
+              "I mean",
+              "also",
+              "for example"
+            ],
+            "correct_answers": [
+              "no, sorry",
+              "I mean"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-019",
+            "skill": "LISTENING",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih DUA kebiasaan baik saat mengerjakan Listening Multiple Choice.",
+            "explanation_id": "Membaca soal sebelum audio dan menunggu keputusan akhir pembicara adalah dua kebiasaan penting. Menjawab pada kata pertama atau terpaku pada soal terlewat merugikan.",
+            "points": 2,
+            "options": [
+              "Read the questions and options before the audio",
+              "Wait for the speaker's final decision",
+              "Choose the first option you hear",
+              "Stay on a missed question until you work it out"
+            ],
+            "correct_answers": [
+              "Read the questions and options before the audio",
+              "Wait for the speaker's final decision"
+            ]
+          },
+          {
+            "question_id": "Q-LS232-020",
+            "skill": "LISTENING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Transkrip: \"He enjoyed the film, but the ending was disappointing.\" Which statement is closest to the speaker's view?",
+            "explanation_id": "Kata \"film\" disebut, tetapi maknanya sebagian positif dan sebagian negatif; pilih makna, bukan kata yang sama.",
+            "options": [
+              "He liked the film overall but not the ending",
+              "He disliked the whole film",
+              "He loved the ending",
+              "He did not see the film"
+            ],
+            "correct_answers": [
+              "He liked the film overall but not the ending"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

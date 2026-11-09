@@ -1,0 +1,353 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 3,
+      "module_code": "3.3",
+      "module_category": "WRITING",
+      "sub_module_title": "Task 1 Academic: Analisis Tren Grafik, Perubahan Peta, & Diagram Proses",
+      "sub_module_code": "3.3.1",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Menulis laporan **Task 1 Academic** dengan struktur yang jelas: **introduction, overview, dan dua paragraf detail**.\n2. Menguasai bahasa **tren** (naik, turun, stabil, puncak), **perbandingan**, dan **proporsi** untuk grafik garis, batang, lingkaran, dan tabel.\n3. Mendeskripsikan **peta** (perubahan sebelum-sesudah) dan **diagram proses** dengan tense dan pasif yang tepat.\n4. Memilih **fitur utama** dari data, bukan menyebut semua angka.\n\n> **Ringkasan 30 detik**\n> - Minimal **150 kata**, sekitar **20 menit**. Task 1 bernilai **sepertiga** skor Writing.\n> - Struktur: **Introduction** (parafrase soal) → **Overview** (2 tren/ciri terbesar, tanpa angka detail) → **Detail 1** → **Detail 2**.\n> - **Jangan beropini, jangan menjelaskan sebab** yang tidak ada di data. Lapor, bandingkan, rangkum.\n\n> **Catatan platform:** sub-modul ini bertag **ACADEMIC**. Dalam mode General Training (bawaan), Task 1 berupa surat (lihat sub-modul 3.3.3), sehingga materi ini hanya tampil bila mode **ACADEMIC** diaktifkan.\n\n---\n\n## 1. Apa yang Dinilai di Task 1 Academic?\n\n| Kriteria | Yang dilihat penguji | Contoh yang menurunkan skor |\n|---|---|---|\n| **Task Achievement** | Ada **overview**, fitur utama dipilih, data akurat | Menyebut semua angka tanpa pola; tanpa overview |\n| **Coherence and Cohesion** | Paragraf teratur, penghubung tepat | Satu paragraf besar; \"First, Second\" berlebihan |\n| **Lexical Resource** | Variasi kata tren dan perbandingan | Mengulang \"increase\" lima kali |\n| **Grammatical Range and Accuracy** | Tense tepat, kalimat bervariasi | Tense campur; angka dan preposisi salah |\n\n**Kesalahan paling mahal:** **tidak ada overview**. Tanpa overview, Task Achievement umumnya tertahan di band 5.\n\n---\n\n## 2. Struktur 4 Paragraf\n\n| Paragraf | Isi | Panjang | Contoh pembuka |\n|---|---|---|---|\n| **1. Introduction** | Parafrase soal (jenis grafik, topik, satuan, periode) | 1–2 kalimat | The line graph illustrates how... |\n| **2. Overview** | 2–3 tren/fitur terbesar **tanpa angka detail** | 2–3 kalimat | Overall, ... **it is clear that**... |\n| **3. Detail 1** | Fitur pertama dengan data pendukung | 3–4 kalimat | Looking at ..., |\n| **4. Detail 2** | Fitur kedua dengan data pembanding | 3–4 kalimat | By contrast, ... |\n\n### 2.1 Cara memarafrase soal (Introduction)\n\n| Soal asli | Parafrase |\n|---|---|\n| The graph shows the number of ... | The line graph **illustrates** the **number of ...** |\n| ... from 2000 to 2020 | **between** 2000 **and** 2020 / **over a 20-year period** |\n| the percentage of | the **proportion** of / the **share** of |\n| people in three countries | **residents** of three countries |\n\n**Pola:** *The [chart type] **shows / illustrates / compares / outlines** [what] in [where] **between** [year] **and** [year].*\n\n### 2.2 Cara menulis overview\n\n| Jenis data | Overview yang baik |\n|---|---|\n| Tren waktu | **Overall**, A rose steadily, whereas B fluctuated and C declined. |\n| Perbandingan | **Overall**, A was by far the largest category, while B was the smallest. |\n| Proses | **Overall**, the process consists of five stages, beginning with... and ending with... |\n| Peta | **Overall**, the village changed from a rural area into a more developed town. |\n\n:::kesalahan-umum\n**Overview bukan angka dan bukan kesimpulan pribadi.** Salah: *Overall, 45% of people used the internet in 2020.* (angka detail) / *Overall, the internet is very useful for people.* (opini). Benar: *Overall, internet use increased in every country, with Country A consistently the highest.*\n:::\n\n---\n\n## 3. Bahasa Tren\n\n### 3.1 Kata kerja dan kata benda\n\n| Arah | Kata kerja | Kata benda | Contoh |\n|---|---|---|---|\n| **Naik** | rise, increase, grow, climb, go up | a rise, an increase, growth | Sales **rose** from 20 to 35. / There was **a rise** in sales. |\n| **Naik tajam** | soar, jump, surge, rocket, shoot up | a jump, a surge | Prices **soared** to 90. |\n| **Turun** | fall, decrease, decline, drop, go down | a fall, a decrease, a decline | Numbers **fell** to 12. |\n| **Turun tajam** | plunge, plummet, collapse | a plunge, a sharp drop | Sales **plummeted**. |\n| **Stabil** | remain stable/steady, stay constant, level off | stability, a plateau | It **remained steady** at 40. |\n| **Berfluktuasi** | fluctuate, vary | fluctuations | Prices **fluctuated** between 30 and 50. |\n| **Puncak / terendah** | peak at, reach a high of / bottom out, hit a low of | a peak, a low | It **peaked at** 80 in 2015. |\n\n### 3.2 Adverbia dan adjektiva (kecepatan perubahan)\n\n| Perubahan | Adverbia (untuk kata kerja) | Adjektiva (untuk kata benda) |\n|---|---|---|\n| Besar / cepat | dramatically, sharply, significantly, rapidly | dramatic, sharp, significant, rapid |\n| Sedang | considerably, steadily, markedly | considerable, steady, marked |\n| Kecil / lambat | slightly, gradually, marginally, modestly | slight, gradual, marginal, modest |\n\n**Dua pola setara:**\n- **Kata kerja + adverbia:** *Sales **rose sharply**.*\n- **There was + adjektiva + kata benda:** ***There was a sharp rise** in sales.*\n\n### 3.3 Preposisi (sumber kesalahan paling umum)\n\n| Preposisi | Fungsi | Contoh |\n|---|---|---|\n| **from ... to ...** | titik awal dan akhir | rose **from** 20% **to** 35% |\n| **by** | besarnya perubahan | rose **by** 15% |\n| **at** | level tertentu / puncak | peaked **at** 80 |\n| **to** | mencapai | rose **to** 90 |\n| **between ... and ...** | rentang | fluctuated **between** 30 and 50 |\n| **in / during / over** | periode | **in** 2010, **during** the 1990s, **over** the period |\n| **of** | nilai | an increase **of** 10% |\n\n:::tips-examiner\nVariasikan kata, tetapi **pastikan makna tepat**: *soar* (naik sangat tajam) tidak cocok untuk kenaikan 2%. Satu kata tepat lebih baik daripada kata dramatis yang salah. Gunakan **kata benda** untuk variasi (*There was a gradual decline in...*) agar tidak terus-menerus memakai kata kerja.\n:::\n\n---\n\n## 4. Bahasa Perbandingan dan Proporsi\n\n### 4.1 Perbandingan\n\n| Pola | Contoh |\n|---|---|\n| **-er than / more ... than** | Sales in Asia were **higher than** in Europe. |\n| **as ... as** | Spending on food was **as high as** spending on housing. |\n| **the highest / the lowest** | Japan had **the highest** figure. |\n| **twice / three times as ... as** | Rent was **twice as high as** food costs. |\n| **whereas / while / by contrast** | A rose, **whereas** B fell. |\n| **similar to / the same as / in line with** | Sweden followed a trend **similar to** Norway. |\n| **the second highest / the third largest** | Chemicals were **the second largest** category. |\n\n### 4.2 Proporsi dan angka\n\n| Pecahan / persen | Cara menulis |\n|---|---|\n| 25% | a quarter, one in four |\n| 50% | a half, half of |\n| 75% | three quarters |\n| 33% | a third, one third |\n| 10% | one tenth, one in ten |\n| sekitar 40% | **approximately / around / roughly / just under / just over** 40% |\n| mayoritas | **the majority of**, **a large proportion of** |\n| minoritas | **a small minority**, **a small proportion** |\n\n---\n\n## 5. Tense Menurut Rentang Waktu\n\n| Situasi | Tense | Contoh |\n|---|---|---|\n| Tahun-tahun di masa lampau (2000–2015) | **Simple Past** | The figure **rose** to 50% in 2010. |\n| Periode sampai sekarang | **Present Perfect** | The figure **has risen** since 2010. |\n| Masa depan (prediksi, 2030) | **will / is expected to / is projected to** | The population **is projected to reach** 9 billion. |\n| Tidak ada waktu (tabel/pie chart statis) | **Simple Present** | Food **accounts for** 30% of spending. |\n| Proses | **Simple Present passive** | The beans **are roasted**. |\n\n:::kesalahan-umum\nJangan mencampur tense tanpa alasan. Jika grafik menunjukkan **2000–2015**, seluruh laporan memakai **Simple Past**. *Sales **rises** in 2005* adalah salah; *Sales **rose** in 2005* benar. Perhatikan juga preposisi: *rose **by** 10%* (besarnya) beda dengan *rose **to** 10%* (levelnya).\n:::\n\n---\n\n## 6. Contoh Jawaban Model: Grafik Garis (Tren)\n\n**Soal (contoh ilustrasi):** *The line graph shows the percentage of households with internet access in three countries between 2000 and 2020.*\n\n- **Band 5:** The graph shows the internet in three countries. Country A is high. Country B is low in 2000 and then it is high. Country C is increase. A is 90% in 2020.\n- **Band 6:** The line graph shows the percentage of households with internet access in Country A, B, and C from 2000 to 2020. Country A increased from 40% to 90%. Country B increased from 10% to 75%, and Country C also increased.\n- **Band 7:** The line graph compares the proportion of households with internet access in three countries over a 20-year period from 2000 to 2020.\n\n  Overall, internet access rose in all three countries, with Country A consistently having the highest figures, whereas Country C remained the lowest throughout.\n\n  In 2000, Country A led with 40% of households, followed by Country B at 10% and Country C at only 5%. Over the next decade, Country A grew steadily to reach 75% in 2010, while Country B rose sharply to 50%.\n\n  By 2020, Country A peaked at 90%. Country B continued its rapid growth and reached 75%, narrowing the gap, whereas Country C rose more gradually to 35%.\n\n**Mengapa naik band?** (1) Ada **overview** yang jelas, (2) fitur dipilih (siapa tertinggi, siapa tercepat), bukan semua angka, (3) kosakata tren bervariasi dan akurat (*led, grew steadily, rose sharply, narrowing the gap*), (4) tense konsisten (Simple Past).\n\n---\n\n## 7. Diagram Proses\n\n### 7.1 Ciri proses\n\n| Jenis | Ciri | Contoh |\n|---|---|---|\n| **Linear** | Awal dan akhir jelas | Pembuatan cokelat, kertas daur ulang |\n| **Siklus** | Tidak ada awal/akhir | Siklus air, siklus hidup kupu-kupu |\n\n### 7.2 Bahasa proses\n\n| Fungsi | Pola | Contoh |\n|---|---|---|\n| Pasif untuk tahap | **be + V3** | The beans **are harvested**. |\n| Penanda urutan | First, Next, Then, After that, Subsequently, Following this, Finally | **Following this**, the paste is moulded. |\n| Menghubungkan tahap | **Once / After + perfect**, V-ing | **Once the beans have been dried**, they are roasted. |\n| Siklus | The cycle **begins with... and ends with... / then repeats** | The cycle **then repeats**. |\n| Alat/bahan | **is used to + V1**, **is made from** | A press **is used to** extract the oil. |\n\n### 7.3 Contoh paragraf (proses)\n\n*The process begins when cocoa pods are harvested from the trees and split open to remove the beans. The beans are then fermented for a week, after which they are spread out and dried in the sun. Once dry, they are roasted at a high temperature and ground into a paste, which is finally moulded into bars and packaged.*\n\n---\n\n## 8. Peta (Perubahan Lokasi)\n\n### 8.1 Bahasa peta\n\n| Fungsi | Kata / pola | Contoh |\n|---|---|---|\n| **Perubahan** | was replaced by, was converted into, was demolished, was constructed/built, was expanded, was relocated, disappeared | The farm **was converted into** a housing estate. |\n| **Penambahan** | a new ... was added/introduced | A **new** car park **was added**. |\n| **Lokasi** | to the north/south/east/west of, in the north-east, next to, opposite, between, adjacent to | The shop is **to the east of** the station. |\n| **Ukuran** | enlarged, reduced, doubled in size | The park **was enlarged**. |\n| **Tidak berubah** | remained unchanged, stayed the same | The school **remained unchanged**. |\n\n### 8.2 Tense peta\n\n| Situasi | Tense |\n|---|---|\n| Dua peta masa lalu (mis. 1990 dan 2010) | **Simple Past** (dan Past Perfect untuk yang lebih dulu) |\n| Peta masa lalu dan **masa depan** (rencana) | Past + **will be / is planned to be** |\n| Dua peta **sekarang** (sebelum/sesudah rencana) | Present |\n\n### 8.3 Contoh paragraf (peta)\n\n*Overall, the village changed from a quiet farming area into a busy residential and commercial centre. In 1990, farmland occupied most of the north, while a small school stood next to the river. By 2010, the farmland had been replaced by housing, and a supermarket had been built to the east of the station, opposite the new car park.*\n\n---\n\n## 9. Kesalahan Umum Pelajar Indonesia\n\n| # | Kesalahan | Perbaikan | Penjelasan |\n|---|---|---|---|\n| 1 | (tanpa overview) | Tambahkan paragraf overview | Wajib untuk Task Achievement. |\n| 2 | The graph **shows about** the internet. | The graph **shows the percentage of** households with internet access. | Parafrase konkret. |\n| 3 | Sales **rose to** 15% (selisih) | Sales **rose by** 15% | *By* = besarnya, *to* = level. |\n| 4 | It **was increased** in 2005. | It **increased** in 2005. | *Increase* intransitive. |\n| 5 | The number **raise** in 2010. | The number **rose** / **increased** | *Raise* transitive; *rise* intransitive. |\n| 6 | The graph **explains why** prices fell. | The graph **shows that** prices fell. | Jangan menjelaskan sebab di luar data. |\n| 7 | In my opinion, the trend is good. | (hapus) | Tidak ada opini di Task 1. |\n| 8 | Prices **rises** in 2008. | Prices **rose** in 2008. | Tense lampau konsisten. |\n| 9 | **The most people** | **The largest proportion of people** | Gunakan *proportion/percentage*. |\n| 10 | 25% **people** | 25% **of people** | *Percent of + noun*. |\n| 11 | Menulis **200+ kata** tentang setiap angka | Pilih fitur utama dalam **150–190** kata | Selektif lebih tinggi nilainya. |\n| 12 | Tidak menyebut **satuan** | Cantumkan satuan (%, million, tonnes) | Data tidak lengkap tanpa satuan. |\n\n---\n\n## 10. Strategi IELTS: Rencana 20 Menit\n\n| Menit | Kegiatan |\n|---|---|\n| 0–3 | Baca soal, identifikasi **jenis grafik, satuan, periode**, lalu temukan **2 fitur utama** (tertinggi, terbesar, perubahan paling besar). |\n| 3–5 | Rencanakan: Intro, Overview, Detail 1 (fitur A), Detail 2 (fitur B). |\n| 5–17 | Tulis. Gunakan **Simple Past** (atau sesuai periode). |\n| 17–20 | Periksa **angka, satuan, preposisi (by/to/at), tense**, dan jumlah kata (>= 150). |\n\n**Aturan strategis:**\n- **Kelompokkan data**: bandingkan *yang naik* vs *yang turun*, bukan menulis per tahun.\n- **Selalu lampirkan data** pada klaim detail (*rose to 75% in 2010*).\n- **Jangan menyalin** soal mentah-mentah sebagai Introduction.\n\n---\n\n## 11. Ringkasan dan Cek Diri\n\n**Ingat:**\n- Struktur: **Introduction → Overview → Detail 1 → Detail 2**; 150+ kata, 20 menit.\n- Overview = tren/ciri terbesar tanpa angka detail. Tanpa overview = skor tertahan.\n- Tren: rise/fall/fluctuate/peak; adverbia (sharply, steadily, slightly); preposisi *by/to/at/from...to*.\n- Tense mengikuti periode data; proses = pasif + penanda urutan; peta = perubahan + lokasi.\n- Tidak beropini, tidak menjelaskan sebab.\n\n**Cek diri (tanpa melihat materi):**\n1. *Sales ___ (rise / raise) from 20 to 35 in 2010.*\n2. *Prices rose ___ (by / to) 15% between 2000 and 2005.* (naik sebesar 15%)\n3. *Which paragraph MUST contain no detailed numbers?* (Introduction / Overview / Detail 1)\n4. *The farm ___ (converted) into a housing estate in 2005.* (pasif simple past)\n5. *The figure peaked ___ (at / in) 80 in 2015.*\n\n**Kunci:** 1. rose. 2. by. 3. Overview. 4. was converted. 5. at.",
+        "mini_task": {
+          "task_type": "AI_SHORT_WRITING",
+          "prompt": "Data (fiktif untuk latihan): persentase rumah tangga dengan internet di tiga negara.\n- Negara A: 2000 = 40%, 2010 = 75%, 2020 = 90%\n- Negara B: 2000 = 10%, 2010 = 50%, 2020 = 75%\n- Negara C: 2000 = 5%, 2010 = 15%, 2020 = 35%\n\nTulis dalam bahasa Inggris (sekitar 120 sampai 150 kata):\n1. Introduction: parafrase soal (satu sampai dua kalimat).\n2. Overview: dua fitur utama TANPA angka detail.\n3. Satu paragraf detail yang membandingkan Negara A dan B dengan data.\n\nGunakan Simple Past, minimal tiga kata kerja tren berbeda (rose, grew, climbed...), preposisi by/to/from...to yang benar, dan satu perbandingan (whereas / higher than).",
+          "ai_rubric_criteria": "Task Achievement: introduction memarafrase soal, overview jelas tanpa angka detail dan menyebut fitur utama (semua naik; A tertinggi; B tercepat), detail akurat terhadap data. Coherence: tiga paragraf teratur, penghubung tepat. Lexical Resource: variasi kata tren dan perbandingan, tanpa pengulangan. Grammar: Simple Past konsisten, preposisi by/to/at/from...to tepat, tidak ada opini atau penjelasan sebab di luar data."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 900,
+        "pass_percent": 75,
+        "questions": [
+          {
+            "question_id": "Q-WR331-001",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "How many words are required for IELTS Writing Task 1, and about how long should you spend?",
+            "explanation_id": "Task 1 minimal 150 kata dalam sekitar 20 menit. 250 kata adalah syarat Task 2.",
+            "options": [
+              "At least 150 words, about 20 minutes",
+              "At least 250 words, about 20 minutes",
+              "At least 150 words, about 40 minutes",
+              "At least 100 words, about 10 minutes"
+            ],
+            "correct_answers": [
+              "At least 150 words, about 20 minutes"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-002",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which paragraph structure is recommended for Task 1 Academic?",
+            "explanation_id": "Struktur empat paragraf: introduction, overview, dua paragraf detail.",
+            "options": [
+              "Introduction, Overview, Detail 1, Detail 2",
+              "Introduction, Opinion, Conclusion",
+              "Detail, Detail, Conclusion",
+              "Background, Advantages, Disadvantages"
+            ],
+            "correct_answers": [
+              "Introduction, Overview, Detail 1, Detail 2"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-003",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "What is the MOST serious mistake in Task 1 Academic?",
+            "explanation_id": "Tanpa overview, Task Achievement umumnya tertahan di sekitar band 5.",
+            "options": [
+              "Using synonyms",
+              "Writing no overview",
+              "Writing 170 words",
+              "Using the passive"
+            ],
+            "correct_answers": [
+              "Writing no overview"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-004",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which sentence is the best OVERVIEW?",
+            "explanation_id": "Overview menyebut tren besar tanpa angka detail dan tanpa opini.",
+            "options": [
+              "In 2020, 90% of households in Country A had internet.",
+              "Overall, internet access rose in all three countries, with Country A the highest throughout.",
+              "I think the internet is very useful.",
+              "Country A rose from 40% to 90%, and B rose from 10% to 75%."
+            ],
+            "correct_answers": [
+              "Overall, internet access rose in all three countries, with Country A the highest throughout."
+            ]
+          },
+          {
+            "question_id": "Q-WR331-005",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which verb means a VERY SHARP rise?",
+            "explanation_id": "Soar, surge, dan rocket menyatakan kenaikan sangat tajam.",
+            "options": [
+              "edge up",
+              "soar",
+              "remain steady",
+              "level off"
+            ],
+            "correct_answers": [
+              "soar"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-006",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Sales rose ___ 20% ___ 35% between 2000 and 2010.",
+            "explanation_id": "\"From ... to ...\" menyatakan titik awal dan akhir. \"By\" menyatakan besarnya perubahan.",
+            "options": [
+              "from / to",
+              "by / to",
+              "at / by",
+              "to / from"
+            ],
+            "correct_answers": [
+              "from / to"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-007",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The figure increased ___ 15% (the change was 15 percentage points).",
+            "explanation_id": "\"By\" menyatakan besarnya perubahan; \"to\" menyatakan level yang dicapai.",
+            "options": [
+              "by",
+              "to",
+              "at",
+              "from"
+            ],
+            "correct_answers": [
+              "by"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-008",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which tense should be used for a graph covering 1995 to 2015?",
+            "explanation_id": "Periode yang sudah selesai di masa lampau memakai Simple Past.",
+            "options": [
+              "Simple Past",
+              "Simple Present",
+              "Future simple",
+              "Present Perfect Continuous"
+            ],
+            "correct_answers": [
+              "Simple Past"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-009",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which sentence is CORRECT?",
+            "explanation_id": "\"Increase\" adalah kata kerja intransitive, sehingga tidak dipasifkan.",
+            "options": [
+              "The number was increased in 2005.",
+              "The number increased in 2005.",
+              "The number has been increase in 2005.",
+              "The number is increase in 2005."
+            ],
+            "correct_answers": [
+              "The number increased in 2005."
+            ]
+          },
+          {
+            "question_id": "Q-WR331-010",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "A process diagram is best described using...",
+            "explanation_id": "Proses umumnya memakai pasif present simple dan penanda urutan seperti First, Then, Finally.",
+            "options": [
+              "Simple Past",
+              "Simple Present passive with sequence words",
+              "Future tense",
+              "Conditionals"
+            ],
+            "correct_answers": [
+              "Simple Present passive with sequence words"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-011",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which is a sequence word for a process?",
+            "explanation_id": "Subsequently berarti setelah itu. Whereas dan although menyatakan kontras.",
+            "options": [
+              "Subsequently",
+              "Whereas",
+              "Despite",
+              "Although"
+            ],
+            "correct_answers": [
+              "Subsequently"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-012",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "In a map task, \"the farm was converted into a housing estate\" describes...",
+            "explanation_id": "Was converted into menyatakan perubahan fungsi lahan antara dua peta.",
+            "options": [
+              "a change",
+              "a trend",
+              "an opinion",
+              "a prediction"
+            ],
+            "correct_answers": [
+              "a change"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-013",
+            "skill": "WRITING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: The figure peaked ___ 80% in 2015. (at / in)",
+            "explanation_id": "\"Peak at\" dipakai dengan level puncak.",
+            "correct_answers": [
+              "at"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-WR331-014",
+            "skill": "WRITING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: There was a sharp ___ in sales. (rise / rises)",
+            "explanation_id": "\"There was a sharp rise\" memakai kata benda tunggal setelah adjektiva.",
+            "correct_answers": [
+              "rise"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-WR331-015",
+            "skill": "WRITING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: Prices ___ between 30 and 50 (they went up and down). (fluctuated / fluctuate)",
+            "explanation_id": "Periode lampau memakai Simple Past: fluctuated between.",
+            "correct_answers": [
+              "fluctuated"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-WR331-016",
+            "skill": "WRITING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan kata penghubung kontras: Country A rose, ___ Country C fell.",
+            "explanation_id": "Whereas/while membandingkan dua hal yang berlawanan dalam satu kalimat.",
+            "correct_answers": [
+              "whereas",
+              "while"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-WR331-017",
+            "skill": "WRITING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: 25% can be written as a ___ of the total.",
+            "explanation_id": "25% = a quarter; 50% = a half; 75% = three quarters.",
+            "correct_answers": [
+              "quarter"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-WR331-018",
+            "skill": "WRITING",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat overview yang benar.",
+            "explanation_id": "Overview: Overall, + fitur utama tanpa angka detail.",
+            "segments": [
+              "Overall,",
+              "internet access",
+              "rose in",
+              "all three",
+              "countries."
+            ]
+          },
+          {
+            "question_id": "Q-WR331-019",
+            "skill": "WRITING",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Tahun 2005 adalah masa lampau, jadi Simple Past: rose. Task 1 tidak mencampur tense tanpa alasan.",
+            "tokens": [
+              "Sales",
+              "rises",
+              "sharply",
+              "in",
+              "2005."
+            ],
+            "correct_answers": [
+              1
+            ]
+          },
+          {
+            "question_id": "Q-WR331-020",
+            "skill": "WRITING",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan kata tren dengan maknanya.",
+            "explanation_id": "Plummet = turun sangat tajam; plateau = mendatar; fluctuate = naik-turun.",
+            "points": 3,
+            "matching": {
+              "left": [
+                "plummet",
+                "level off",
+                "fluctuate"
+              ],
+              "right": [
+                "turun sangat tajam",
+                "mendatar / stabil",
+                "naik-turun",
+                "naik tajam"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "question_id": "Q-WR331-021",
+            "skill": "WRITING",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih SEMUA hal yang SEBAIKNYA ada dalam Task 1 Academic.",
+            "explanation_id": "Overview dan data pendukung diperlukan. Opini pribadi dan penjelasan sebab yang tidak ada di data tidak diperlukan.",
+            "points": 2,
+            "options": [
+              "An overview of the main trends",
+              "The writer's personal opinion",
+              "Accurate data to support key features",
+              "An explanation of why the trend happened"
+            ],
+            "correct_answers": [
+              "An overview of the main trends",
+              "Accurate data to support key features"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

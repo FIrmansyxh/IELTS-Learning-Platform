@@ -3,7 +3,7 @@
  * P4-10, 12, 13, 32..39b, 41, 43, 45, 59. Tiap skenario memakai berkas SQLite sementara sendiri;
  * skrip dijalankan sebagai proses terpisah (seperti `start:local`).
  */
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import {
   existsSync,
   mkdirSync,
@@ -40,6 +40,23 @@ function run(script: string, args: string[], dbPath: string, extra: Record<strin
   delete env.TEST_DATABASE_URL;
   delete env.HOSTNAME;
   return spawnSync(process.execPath, [tsx, script, ...args], { env, encoding: 'utf8', timeout: 120_000 });
+}
+
+/** Versi asinkron `run`: tidak memblokir event loop worker (impor 33 paket konten memakan > 60 dtk jika sinkron). */
+function runAsync(script: string, args: string[], dbPath: string): Promise<{ status: number | null; stdout: string; stderr: string }> {
+  const env: NodeJS.ProcessEnv = { ...process.env, DATABASE_PATH: dbPath };
+  delete env.DATABASE_URL;
+  delete env.DATABASE_MIGRATOR_URL;
+  delete env.TEST_DATABASE_URL;
+  delete env.HOSTNAME;
+  return new Promise((resolve) => {
+    const child = spawn(process.execPath, [tsx, script, ...args], { env });
+    let stdout = '';
+    let stderr = '';
+    child.stdout.on('data', (d) => (stdout += String(d)));
+    child.stderr.on('data', (d) => (stderr += String(d)));
+    child.on('close', (status) => resolve({ status, stdout, stderr }));
+  });
 }
 
 function scalar(file: string, query: string): any {
@@ -358,15 +375,17 @@ describe('proses terpisah: migrate, seed, konten, doctor (P4-10, 12, 13, 41, 43,
     expect(get.stdout).toContain('ai.daily_limit_per_user = 42');
   });
 
-  it('P4-13: impor --publish tiap subfolder content/gt-modules menghasilkan >= 1 sub-modul PUBLISHED', () => {
+  it('P4-13: impor --publish tiap subfolder content/gt-modules menghasilkan >= 1 sub-modul PUBLISHED', async () => {
     expect(scalar(dbPath, "SELECT count(*) FROM sub_modules WHERE status = 'PUBLISHED'")).toBe(0);
     const root2 = path.resolve('content', 'gt-modules');
-    for (const d of readdirSync(root2)) {
-      const r = run('scripts/content-import.ts', ['import', '--dir', path.join(root2, d), '--publish'], dbPath);
-      expect(r.status, `${r.stdout}\n${r.stderr}`).toBe(0);
+    const dirs = readdirSync(root2);
+    for (const d of dirs) {
+      const r = await runAsync('scripts/content-import.ts', ['import', '--dir', path.join(root2, d), '--publish'], dbPath);
+      expect(r.status, `${d}\n${r.stdout}\n${r.stderr}`).toBe(0);
     }
-    expect(scalar(dbPath, "SELECT count(*) FROM sub_modules WHERE status = 'PUBLISHED'")).toBeGreaterThanOrEqual(1);
-  });
+    // Tiap paket berisi satu sub-modul dengan drill, sehingga semuanya harus terbit.
+    expect(scalar(dbPath, "SELECT count(*) FROM sub_modules WHERE status = 'PUBLISHED'")).toBe(dirs.length);
+  }, 300_000);
 
   it('P4-59: urutan start:local pada DB berisi 2 profil dan progres tidak mengubah users/progres', () => {
     expect(run('scripts/cli.ts', ['profile', 'create', 'Ani'], dbPath).status).toBe(0);

@@ -1,0 +1,242 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 3,
+      "module_code": "3.2",
+      "module_category": "READING",
+      "sub_module_title": "Strategi Matching Headings, Matching Information, & Summary Completion",
+      "sub_module_code": "3.2.2",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Menjawab **Matching Headings** dengan menemukan **ide utama** paragraf, bukan sekadar mencocokkan kata.\n2. Menjawab **Matching Information** (mencari paragraf yang memuat informasi tertentu) dengan cepat dan akurat.\n3. Mengerjakan **Summary, Note, dan Sentence Completion**, termasuk aturan batas kata dan bentuk kata yang diminta.\n4. Mengatur waktu dan menghindari jebakan umum pada tipe soal yang menuntut pemahaman struktur teks.\n\n> **Ringkasan 30 detik**\n> - **Matching Headings** = pilih judul yang mewakili **ide utama seluruh paragraf**. Jebakan: judul memuat kata yang ada di paragraf tetapi hanya merujuk **detail kecil**.\n> - **Matching Information** = temukan **paragraf** yang memuat informasi pada pernyataan. Satu paragraf bisa dipakai lebih dari sekali (kecuali ditentukan lain).\n> - **Completion** = isi dengan kata **persis dari teks**, ikuti **batas kata** (*NO MORE THAN TWO WORDS*), dan cek **tata bahasa** kalimat.\n\n---\n\n## 1. Peta Tipe Soal\n\n| Tipe | Menguji | Cara kerja | Kunci |\n|---|---|---|---|\n| **Matching Headings** | Ide utama tiap paragraf | Pilih judul untuk paragraf bertanda | Ide utama, bukan detail |\n| **Matching Information** | Menemukan informasi spesifik | Pilih paragraf (A–F) yang memuat pernyataan | Parafrase dan lokasi |\n| **Summary Completion** | Pemahaman ringkasan | Isi celah dalam ringkasan teks | Kata dari teks; batas kata |\n| **Note / Table / Flow-chart Completion** | Informasi terstruktur | Isi celah dalam catatan atau tabel | Kata dari teks; batas kata |\n| **Sentence Completion** | Detail tunggal | Lengkapi kalimat | Kata dari teks; tata bahasa |\n\nKetiga tipe ini menuntut **memahami struktur teks**, bukan hanya mencari kata. Itu sebabnya latihan **skimming** (membaca cepat untuk ide utama) dan **scanning** (mencari detail spesifik) sangat penting (lihat Modul 2.3).\n\n---\n\n## 2. Matching Headings\n\n### 2.1 Bagaimana soalnya?\n\nKamu diberi **daftar judul (i–viii)** dan **beberapa paragraf bertanda** (mis. B–F). Setiap paragraf cocok dengan **satu judul**. Daftar judul **lebih banyak** daripada paragraf, jadi ada **judul pengecoh**. Satu judul hanya dipakai satu kali.\n\n### 2.2 Metode 5 langkah\n\n| Langkah | Tindakan |\n|---|---|\n| **1. Baca semua judul** | Pahami arti tiap judul; garis bawahi kata kuncinya |\n| **2. Baca kalimat pertama dan terakhir paragraf** | **Ide utama** biasanya ada di awal (topic sentence) atau akhir |\n| **3. Tulis ide utama paragraf** dengan kata sendiri (3–5 kata) | Mis. \"kendala biaya\" |\n| **4. Cocokkan dengan judul** yang maknanya paling mewakili **seluruh** paragraf | Bukan satu detail |\n| **5. Coret judul** yang sudah dipakai | Kurangi pilihan untuk paragraf berikutnya |\n\n### 2.3 Cara mengenali ide utama\n\n| Bagian paragraf | Isi biasa |\n|---|---|\n| **Kalimat pertama** | Topic sentence (ide utama) |\n| **Kalimat tengah** | Penjelasan, contoh, data |\n| **Kalimat terakhir** | Kesimpulan atau transisi |\n| **Kata sambung kontras** (*However, But*) | Sering menandai perubahan arah: ide utama bisa berada setelahnya |\n\n### 2.4 Jebakan utama\n\n| Jebakan | Contoh | Cara menghindari |\n|---|---|---|\n| **Cocok kata (word matching)** | Judul: *The cost of repairing old buildings*. Paragraf menyebut *repair* sekali, tetapi membahas **budaya**. | Cocokkan **ide**, bukan kata |\n| **Detail vs. ide utama** | Judul hanya merujuk **satu kalimat** di tengah | Pilih judul yang mewakili **seluruh** paragraf |\n| **Dua judul mirip** | *Early attempts at reform* vs. *Recent reforms* | Perhatikan **waktu** dan **fokus** |\n| **Judul terlalu luas/sempit** | *Everything about libraries* vs. *One library's budget* | Cari yang **pas**, tidak terlalu umum dan tidak terlalu spesifik |\n\n:::kesalahan-umum\n**Jangan memilih judul hanya karena kata di dalamnya muncul di paragraf.** Pengecoh dirancang untuk memakai kata yang sama dengan paragraf, tetapi **maknanya berbeda dari ide utama**. Selalu tanyakan: *\"Apa pesan utama paragraf ini?\"* sebelum melihat judul.\n:::\n\n### 2.5 Contoh bertahap\n\n**Paragraf:** *Many local libraries have reduced their opening hours in the past decade. Councils say that budgets have been cut, and fewer staff members are available to keep branches open. In some rural areas, a library now opens for only two days a week, which makes it difficult for working people to visit.*\n\n| Judul | Cocok? | Alasan |\n|---|---|---|\n| i. A rise in the number of visitors | Tidak | Tidak dibahas |\n| ii. **Reduced access because of funding limits** | **Ya** | Mewakili seluruh paragraf (jam buka berkurang akibat anggaran) |\n| iii. The history of public libraries | Tidak | Paragraf tentang masa kini |\n| iv. New services for elderly readers | Tidak | Tidak dibahas |\n\n**Ide utama:** jam buka berkurang karena anggaran terbatas → judul **ii**.\n\n---\n\n## 3. Matching Information\n\n### 3.1 Bagaimana soalnya?\n\nKamu diberi **pernyataan** (mis. *a reference to the cost of a scheme*) dan harus menentukan **paragraf** (A–F) yang memuat informasi itu. Satu paragraf **dapat dipakai lebih dari sekali** kecuali soal menyatakan sebaliknya. **Urutan soal tidak mengikuti urutan teks.**\n\n### 3.2 Metode\n\n| Langkah | Tindakan |\n|---|---|\n| **1. Baca semua pernyataan** | Tandai kata kunci (jenis informasi: contoh, alasan, perbandingan, angka) |\n| **2. Peta teks** | Beri label singkat tiap paragraf (A: pembukaan, B: sejarah, C: data ...) |\n| **3. Scan per pernyataan** | Cari parafrase, bukan kata yang sama |\n| **4. Verifikasi** | Baca kalimat sekitar untuk memastikan |\n| **5. Lanjutkan** | Jika buntu, lewati dan kembali |\n\n### 3.3 Jenis pernyataan umum\n\n| Pernyataan | Yang dicari |\n|---|---|\n| *an example of ...* | Contoh konkret (kata: *for instance, such as*) |\n| *a reason why ...* | Alasan (kata: *because, due to, owing to*) |\n| *a comparison between ...* | Perbandingan (kata: *whereas, compared with*) |\n| *a reference to the cost of ...* | Angka uang, biaya, anggaran |\n| *an explanation of how ...* | Penjelasan proses |\n| *a warning about ...* | Peringatan (kata: *should not, risk, danger*) |\n| *the writer's disagreement with ...* | Kontras (kata: *however, but I disagree*) |\n\n:::tips-examiner\nBuat **peta paragraf** (satu frasa per paragraf) saat pertama membaca. Peta itu mempercepat Matching Information dan Matching Headings karena kamu sudah tahu **di mana** hal tertentu dibahas. Jangan membaca ulang seluruh teks untuk tiap pernyataan.\n:::\n\n### 3.4 Jebakan\n\n| Jebakan | Contoh |\n|---|---|\n| **Kata kunci sama di beberapa paragraf** | *Cost* disebut di dua paragraf; hanya satu yang membahas **perbandingan biaya** | \n| **Pernyataan menyebut jenis informasi, bukan topik** | *a reference to ...* mencari **penyebutan** hal itu |\n| **Paragraf mirip** | Baca konteks untuk memastikan |\n\n---\n\n## 4. Summary, Note, dan Sentence Completion\n\n### 4.1 Aturan batas kata\n\n| Instruksi | Arti | Contoh jawaban |\n|---|---|---|\n| **ONE WORD ONLY** | Tepat satu kata | *council* |\n| **NO MORE THAN TWO WORDS** | Satu atau dua kata | *road safety* |\n| **ONE WORD AND/OR A NUMBER** | Satu kata dan/atau angka | *twelve*, *2016* |\n| **NO MORE THAN THREE WORDS AND/OR A NUMBER** | Hingga tiga kata dan/atau angka | *safety training* |\n\n**Aturan penting:**\n- Tulis kata **persis seperti di teks** (ejaan, bentuk).\n- Kata yang dihubungkan tanda hubung dihitung **satu kata** (*well-known* = satu).\n- Melebihi batas kata = **jawaban salah**.\n- Ejaan harus benar; salah eja = salah.\n\n### 4.2 Metode\n\n| Langkah | Tindakan |\n|---|---|\n| **1. Baca ringkasan dulu** | Pahami **topik** dan perkirakan **jenis kata** tiap celah |\n| **2. Prediksi jenis kata** | Celah setelah *a/an/the* + adjektiva → **kata benda**; setelah *to* → **kata kerja dasar**; setelah *very* → **adjektiva** |\n| **3. Temukan bagian teks** | Ringkasan biasanya **mengikuti urutan teks** (tidak selalu untuk Matching) |\n| **4. Cari jawaban** di teks | Kata yang melengkapi **makna dan tata bahasa** |\n| **5. Cek kalimat** | Bacakan kalimat lengkap dengan jawabanmu; apakah benar secara tata bahasa dan makna? |\n\n### 4.3 Menebak jenis kata dari tata bahasa\n\n| Pola di celah | Jenis kata | Contoh |\n|---|---|---|\n| **a / an / the + ___ + noun** | adjektiva (atau noun) | the ___ council |\n| **___ + noun jamak** | adjektiva / kuantitas | many ___ |\n| **to + ___** | kata kerja dasar | want to ___ |\n| **is / are + ___** | adjektiva, V-ing, V3 | is ___ |\n| **___ + verb** | kata benda / pronoun (subjek) | the ___ announced |\n| **of / in / on + ___** | noun / V-ing | the cost of ___ |\n\n:::kesalahan-umum\nKesalahan paling umum pada completion: **melebihi batas kata**, **mengubah bentuk kata** (menulis *volunteers* padahal teks *volunteer*), dan **mengisi dengan kata yang bermakna benar tetapi tata bahasa kalimat salah**. Selalu **baca ulang kalimat lengkap** setelah mengisi.\n:::\n\n### 4.4 Contoh bertahap\n\n**Teks:** *The scheme began with three routes and is funded partly by the council, which pays a coordinator.*\n\n**Ringkasan:** *The scheme started with ___ routes, and a coordinator is paid by the ___.*\n\n| Celah | Prediksi | Jawaban | Alasan |\n|---|---|---|---|\n| 1 | angka | **three** | Teks: *three routes* |\n| 2 | noun (pembayar) | **council** | *the council, which pays* |\n\n---\n\n## 5. Strategi IELTS: Waktu dan Taktik\n\n### 5.1 Urutan pengerjaan yang disarankan\n\n| Tahap | Tindakan | Waktu |\n|---|---|---|\n| 1 | **Skim teks** (kalimat pertama tiap paragraf), buat peta paragraf | 2–3 menit |\n| 2 | **Matching Headings dulu** (butuh peta paragraf) | 3–4 menit |\n| 3 | **Matching Information** | 3–4 menit |\n| 4 | **Completion** (cari detail) | 5–6 menit |\n| 5 | **Cek** jawaban dan batas kata | 1–2 menit |\n\n### 5.2 Taktik umum\n\n- **Jangan membaca setiap kata.** Untuk heading, cukup kalimat pertama dan terakhir. Untuk completion, scan kata kunci.\n- **Tandai di teks** lokasi jawaban; berguna jika harus kembali.\n- **Jangan terpaku** pada satu soal lebih dari 1,5 menit.\n- **Tebak** bila perlu; tidak ada penalti.\n- **Matching Headings: judul pengecoh jumlahnya lebih banyak.** Tidak semua judul dipakai.\n- **Matching Information: satu paragraf bisa muncul dua kali.** Jangan mencoret huruf yang sudah dipakai.\n- **Pada completion, jawaban sering berada setelah kata sambung** seperti *because, which, including*.\n- **Peringatan penulisan:** tulis jawaban di lembar jawaban dengan huruf jelas, ejaan benar, dan batas kata terpenuhi.\n\n### 5.3 Latihan sehari-hari\n\n| Latihan | Tujuan |\n|---|---|\n| Baca artikel, tulis **judul 5 kata** untuk tiap paragraf | Melatih menangkap ide utama |\n| Tulis 3 pernyataan *\"a reference to...\"* lalu cari paragrafnya | Melatih scanning |\n| Ringkas satu paragraf menjadi 2 kalimat, lalu kosongkan 3 kata kunci dan isi ulang | Melatih completion |\n\n---\n\n## 6. Kesalahan Umum Pelajar Indonesia\n\n| # | Kesalahan | Perbaikan |\n|---|---|---|\n| 1 | Memilih heading karena **kata sama** dengan paragraf | Cocokkan **ide utama** |\n| 2 | Membaca **seluruh paragraf** untuk setiap heading | Baca kalimat pertama dan terakhir dulu |\n| 3 | Mencocokkan heading dengan **detail** di tengah paragraf | Pilih yang mewakili seluruh paragraf |\n| 4 | Mengira **setiap huruf hanya sekali** pada Matching Information | Cek instruksi; biasanya boleh berulang |\n| 5 | Mengisi jawaban **melebihi batas kata** | Hitung kata; *NO MORE THAN TWO WORDS* |\n| 6 | **Mengubah bentuk kata** (jamak/tunggal) | Salin persis dari teks |\n| 7 | Salah **ejaan** | Salin ejaan dari teks |\n| 8 | Tidak **membaca kalimat lengkap** setelah mengisi | Cek tata bahasa dan makna |\n| 9 | Menghabiskan waktu **di satu soal** | Lewati dan kembali |\n| 10 | Menjawab dengan **pengetahuan sendiri** | Cari jawaban di teks |\n| 11 | Mencoret **judul terlalu cepat** | Coret hanya yang pasti |\n| 12 | Mengosongkan jawaban | Tebak |\n\n---\n\n## 7. Contoh Jawaban Model: Penalaran dari Soal ke Jawaban\n\n**Contoh paragraf (Matching Headings):**\n\n*Libraries once measured their success by the number of books they lent. Today, many measure it by the number of people who walk through their doors. Study rooms, cafés and computer areas have replaced rows of shelves, and one city library reported that visitor numbers rose by a quarter after it was redesigned.*\n\n| Judul | Penalaran | Hasil |\n|---|---|---|\n| i. A decline in book collections | Ada kata *shelves* tetapi fokusnya pada **pengunjung dan ruang**, bukan penurunan koleksi | Pengecoh |\n| **ii. A shift from lending books to providing space** | Mencakup seluruh ide: ukuran sukses berubah dari buku ke pengunjung, ruang menggantikan rak | **Benar** |\n| iii. The cost of redesigning a library | Tidak dibahas | Pengecoh |\n\n**Contoh Matching Information:**\n\n| Pernyataan | Penalaran | Hasil |\n|---|---|---|\n| *a statistic showing the effect of a redesign* | Mencari angka dan perubahan pada desain ulang: *rose by a quarter after it was redesigned* | Paragraf di atas |\n\n**Contoh Completion:** Ringkasan: *Libraries now measure success by the number of ___ they attract.* → Teks: *the number of people who walk through their doors.* → **people** (satu kata; batas ONE WORD). Bacaan ulang kalimat: *the number of people they attract* → benar.\n\n---\n\n## 8. Ringkasan dan Cek Diri\n\n**Ingat:**\n- **Matching Headings**: ide utama, bukan kata; kalimat pertama/terakhir; pengecoh lebih banyak.\n- **Matching Information**: peta paragraf; cari parafrase; huruf boleh berulang.\n- **Completion**: ikuti batas kata; salin persis; prediksi jenis kata; cek kalimat.\n- Skimming + scanning adalah dasar semua tipe ini.\n\n**Cek diri (tanpa melihat materi):**\n1. *Pada Matching Headings, apa yang dicocokkan: kata atau ide?*\n2. *Berapa kata maksimal untuk instruksi \"NO MORE THAN TWO WORDS\"?*\n3. *Apakah satu paragraf boleh dipakai dua kali di Matching Information?*\n4. *Kata apa yang sering menandai informasi penentu di pernyataan kontras?*\n5. *Mengapa kamu harus membaca ulang kalimat lengkap setelah mengisi completion?*\n\n**Kunci:** 1. Ide. 2. Dua kata. 3. Ya, kecuali instruksi menyatakan sebaliknya. 4. *However, but, although.* 5. Untuk memastikan tata bahasa dan makna benar.",
+        "mini_task": {
+          "task_type": "SELF_CHECK",
+          "prompt": "Latihan mandiri (tanpa penilaian AI). Ambil satu artikel berbahasa Inggris dengan 4 sampai 6 paragraf.\n1. Tanpa membaca isi paragraf secara rinci, baca kalimat pertama dan terakhir tiap paragraf, lalu tulis ide utamanya sebagai judul 3 sampai 6 kata.\n2. Buat 3 pernyataan gaya Matching Information (mis. \"an example of...\", \"a reason for...\", \"a statistic about...\") lalu tulis paragraf yang memuatnya.\n3. Tulis ringkasan 3 kalimat tentang artikel itu, kosongkan 4 kata kunci (satu kata tiap celah), lalu isi ulang besok tanpa melihat teks dan periksa dengan teks aslinya.",
+          "ai_rubric_criteria": "Daftar periksa mandiri: (a) setiap judul mewakili seluruh paragraf, bukan satu detail; (b) judul tidak sekadar menyalin kata dari paragraf; (c) pernyataan Matching Information memakai parafrase; (d) celah ringkasan diisi dengan kata persis dari teks dan memenuhi batas kata; (e) kalimat ringkasan tetap benar secara tata bahasa setelah diisi."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 1200,
+        "pass_percent": 75,
+        "reading_passage_markdown": "## Libraries in a Digital Age\n\n[A] When e-books and search engines became widespread, many commentators predicted the end of the public library. Two decades later, libraries have not disappeared, but what they do has changed considerably. Their story is less one of decline than of adaptation.\n\n[B] The most visible change concerns the collections themselves. Lending figures for printed books have fallen in many places, but digital lending has grown steadily. In one regional network, e-books accounted for about 5% of all loans ten years ago and now account for 22%. Librarians report that they spend as much time choosing digital subscriptions as they once spent buying books.\n\n[C] Libraries have also rethought how their buildings are used. Rather than rows of shelves, many now offer study rooms, cafés and \"makerspaces\" equipped with 3D printers and sewing machines. One city library reported that its visitor numbers rose by a quarter after it was redesigned, and its managers attribute much of the increase to the new study areas.\n\n[D] Staff members have taken on new roles as well. They run language classes, help jobseekers write applications, and teach older residents how to use smartphones and online banking. Because of this work, some librarians describe themselves as guides to information rather than keepers of books.\n\n[E] The picture is not entirely positive. Funding cuts have forced councils to shorten opening hours, and in some rural areas a branch now opens only two days a week. Critics warn that the people most affected are those without internet access at home, who depend on libraries for computers and who often cannot visit during the few hours that remain.\n\n[F] Looking ahead, some councils are testing combined centres in which a library shares a building with a post office or a health clinic. Supporters argue that such centres save money and bring more people through the door. Opponents fear that libraries will lose their identity if they become one service among many.",
+        "questions": [
+          {
+            "question_id": "Q-RD322-001",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Choose the correct heading for each paragraph (B-F) from the list of headings. There are more headings than paragraphs.",
+            "matching": {
+              "left": [
+                "Paragraph B",
+                "Paragraph C",
+                "Paragraph D",
+                "Paragraph E",
+                "Paragraph F"
+              ],
+              "right": [
+                "A shift from lending books to providing space",
+                "Reduced access because of funding limits",
+                "The growth of digital lending",
+                "Teaching and support for local people",
+                "Combining libraries with other services",
+                "The history of public libraries",
+                "A decline in the number of readers",
+                "New technology for children"
+              ],
+              "allow_reuse": false
+            },
+            "points": 5,
+            "correct_answers": [
+              2,
+              0,
+              3,
+              1,
+              4
+            ],
+            "explanation_id": "B: pinjaman digital naik (The growth of digital lending). C: ruang menggantikan rak (A shift from lending books to providing space). D: kelas bahasa, bantuan pelamar kerja (Teaching and support). E: pemangkasan dana dan jam buka (Reduced access because of funding limits). F: pusat gabungan (Combining libraries with other services). Tiga judul lain adalah pengecoh."
+          },
+          {
+            "question_id": "Q-RD322-002",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Which paragraph contains the following information? (Paragraphs A-F)",
+            "matching": {
+              "left": [
+                "an example of a service for older people",
+                "a statistic about growth in digital borrowing",
+                "a warning about people without internet access at home",
+                "the opinions of people who support a new kind of centre"
+              ],
+              "right": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F"
+              ],
+              "allow_reuse": false
+            },
+            "points": 4,
+            "correct_answers": [
+              3,
+              1,
+              4,
+              5
+            ],
+            "explanation_id": "Layanan untuk lansia (smartphone dan perbankan daring): D. Statistik 5% ke 22%: B. Peringatan tentang orang tanpa internet di rumah: E. Pendukung pusat gabungan: F."
+          },
+          {
+            "question_id": "Q-RD322-003",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Many commentators predicted the end of the public ___ after e-books became widespread. (ONE WORD)",
+            "correct_answers": [
+              "library"
+            ],
+            "max_words": 1,
+            "explanation_id": "Paragraf A: \"predicted the end of the public library\"."
+          },
+          {
+            "question_id": "Q-RD322-004",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Some libraries now have study rooms, cafes and ___ with 3D printers. (ONE WORD)",
+            "correct_answers": [
+              "makerspaces",
+              "makerspace"
+            ],
+            "max_words": 1,
+            "explanation_id": "Paragraf C: \"makerspaces equipped with 3D printers and sewing machines\"."
+          },
+          {
+            "question_id": "Q-RD322-005",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Visitor numbers at one city library rose by a ___ after its redesign. (ONE WORD)",
+            "correct_answers": [
+              "quarter"
+            ],
+            "max_words": 1,
+            "explanation_id": "Paragraf C: \"rose by a quarter after it was redesigned\"."
+          },
+          {
+            "question_id": "Q-RD322-006",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Library staff help jobseekers write ___. (ONE WORD)",
+            "correct_answers": [
+              "applications"
+            ],
+            "max_words": 1,
+            "explanation_id": "Paragraf D: \"help jobseekers write applications\"."
+          },
+          {
+            "question_id": "Q-RD322-007",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "In some rural areas, a branch now opens only ___ days a week. (ONE WORD OR A NUMBER)",
+            "correct_answers": [
+              "two",
+              "2"
+            ],
+            "max_words": 1,
+            "explanation_id": "Paragraf E: \"opens only two days a week\"."
+          },
+          {
+            "question_id": "Q-RD322-008",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "SHORT_ANSWER",
+            "prompt": "Besides a post office, what else might share a building with a library? (Maximum TWO words)",
+            "correct_answers": [
+              "health clinic",
+              "clinic"
+            ],
+            "max_words": 2,
+            "explanation_id": "Paragraf F: \"a library shares a building with a post office or a health clinic\"."
+          },
+          {
+            "question_id": "Q-RD322-009",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_SINGLE",
+            "prompt": "How do some librarians describe their role today?",
+            "options": [
+              "As guides to information",
+              "As salespeople for e-books",
+              "As teachers of every subject",
+              "As managers of cafes"
+            ],
+            "correct_answers": [
+              "As guides to information"
+            ],
+            "explanation_id": "Paragraf D: \"some librarians describe themselves as guides to information rather than keepers of books\"."
+          },
+          {
+            "question_id": "Q-RD322-010",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "MCQ_MULTI",
+            "prompt": "Which TWO problems are mentioned in paragraph E?",
+            "options": [
+              "Councils have shortened opening hours.",
+              "Libraries have run out of digital subscriptions.",
+              "People without internet at home may be affected most.",
+              "Staff have refused to teach older residents."
+            ],
+            "points": 2,
+            "correct_answers": [
+              "Councils have shortened opening hours.",
+              "People without internet at home may be affected most."
+            ],
+            "explanation_id": "Paragraf E menyebut jam buka dipersingkat dan bahwa orang tanpa internet di rumah paling terdampak. Dua opsi lain tidak ada di teks."
+          },
+          {
+            "question_id": "Q-RD322-011",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "E-book loans have completely replaced printed book loans in the regional network.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf B: e-book 22% dari semua pinjaman, sehingga buku cetak masih dipinjam. \"Completely\" bertentangan dengan teks."
+          },
+          {
+            "question_id": "Q-RD322-012",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "All councils have decided to combine libraries with other services.",
+            "correct_answers": [
+              "False"
+            ],
+            "explanation_id": "Paragraf F: hanya \"some councils are testing\" pusat gabungan; kata \"All\" bertentangan."
+          },
+          {
+            "question_id": "Q-RD322-013",
+            "skill": "READING",
+            "passage_no": 1,
+            "question_type": "TFNG",
+            "prompt": "Library staff are paid more than they were ten years ago.",
+            "correct_answers": [
+              "Not Given"
+            ],
+            "explanation_id": "Teks tidak membahas gaji staf."
+          }
+        ]
+      }
+    }
+  ]
+}
