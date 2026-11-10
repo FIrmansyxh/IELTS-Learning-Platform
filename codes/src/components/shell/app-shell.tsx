@@ -2,14 +2,16 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import * as React from 'react';
 import { isNavActive, NAV_ITEMS, type NavItem } from '@/app/nav.config';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { id } from '@/i18n/id';
 import { cn } from '@/lib/utils';
+import { usePersistentToggle } from '@/lib/use-persistent-toggle';
 import { HeaderChips } from '@/components/gamification/header-chips';
 
-function DisabledItem({ item, variant }: { item: NavItem; variant: 'side' | 'bottom' }) {
+function DisabledItem({ item, variant, collapsed = false }: { item: NavItem; variant: 'side' | 'bottom'; collapsed?: boolean }) {
   const Icon = item.icon;
   return (
     <Tooltip>
@@ -20,11 +22,11 @@ function DisabledItem({ item, variant }: { item: NavItem; variant: 'side' | 'bot
           tabIndex={0}
           className={cn(
             'flex cursor-not-allowed items-center gap-3 rounded-md text-muted-foreground opacity-60 outline-none focus-visible:ring-2 focus-visible:ring-ring',
-            variant === 'side' ? 'min-h-11 px-3' : 'min-h-14 flex-1 flex-col justify-center gap-1 text-xs',
+            variant === 'side' ? (collapsed ? 'min-h-11 justify-center px-0' : 'min-h-11 px-3') : 'min-h-14 flex-1 flex-col justify-center gap-1 text-xs',
           )}
         >
           <Icon className="size-5" aria-hidden="true" />
-          <span>{item.label}</span>
+          <span className={cn(collapsed && variant === 'side' && 'sr-only')}>{item.label}</span>
         </span>
       </TooltipTrigger>
       <TooltipContent>{id.nav.soon}</TooltipContent>
@@ -32,18 +34,30 @@ function DisabledItem({ item, variant }: { item: NavItem; variant: 'side' | 'bot
   );
 }
 
-function NavLink({ item, pathname, variant }: { item: NavItem; pathname: string; variant: 'side' | 'bottom' }) {
-  if (!item.enabled) return <DisabledItem item={item} variant={variant} />;
+function NavLink({
+  item,
+  pathname,
+  variant,
+  collapsed = false,
+}: {
+  item: NavItem;
+  pathname: string;
+  variant: 'side' | 'bottom';
+  collapsed?: boolean;
+}) {
+  if (!item.enabled) return <DisabledItem item={item} variant={variant} collapsed={collapsed} />;
   const active = isNavActive(item, pathname);
   const Icon = item.icon;
-  return (
+  const link = (
     <Link
       href={item.href}
       aria-current={active ? 'page' : undefined}
       className={cn(
         'relative flex items-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring',
         variant === 'side'
-          ? 'min-h-11 gap-3 px-3 text-sm font-medium hover:bg-accent'
+          ? collapsed
+            ? 'min-h-11 justify-center px-0 text-sm font-medium hover:bg-accent'
+            : 'min-h-11 gap-3 px-3 text-sm font-medium hover:bg-accent'
           : 'min-h-14 flex-1 flex-col justify-center gap-1 text-xs font-medium',
         active ? 'text-[var(--color-primary)]' : 'text-muted-foreground hover:text-foreground',
         active && variant === 'side' && 'bg-accent',
@@ -53,9 +67,18 @@ function NavLink({ item, pathname, variant }: { item: NavItem; pathname: string;
         <span aria-hidden="true" className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-primary" />
       ) : null}
       <Icon className={cn('size-5', active && 'fill-primary/15')} aria-hidden="true" />
-      <span>{item.label}</span>
+      <span className={cn(collapsed && variant === 'side' && 'sr-only')}>{item.label}</span>
     </Link>
   );
+  if (collapsed && variant === 'side') {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>{link}</TooltipTrigger>
+        <TooltipContent side="right">{item.label}</TooltipContent>
+      </Tooltip>
+    );
+  }
+  return link;
 }
 
 /** Pindahkan fokus ke <main> setelah pindah rute (design-system 7). */
@@ -79,25 +102,46 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const items: NavItem[] = NAV_ITEMS;
   const mainRef = React.useRef<HTMLElement | null>(null);
+  const [collapsed, setCollapsed] = usePersistentToggle('ielts.shell.collapsed', false);
 
   return (
     <div className="min-h-dvh">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col border-r bg-card p-4 lg:flex">
-          <p className="mb-6 px-3 font-heading text-lg font-bold">{id.app.name}</p>
-          <nav aria-label={id.nav.main} className="flex flex-col gap-1">
-            {items.map((item) => (
-              <NavLink key={item.href} item={item} pathname={pathname} variant="side" />
-            ))}
-          </nav>
-        </aside>
+      <aside
+        className={cn(
+          'fixed inset-y-0 left-0 z-10 hidden flex-col border-r bg-card transition-[width] duration-200 lg:flex',
+          collapsed ? 'w-16 p-2' : 'w-64 p-4',
+        )}
+      >
+        <div className={cn('mb-6 flex items-center', collapsed ? 'justify-center' : 'justify-between gap-2 px-3')}>
+          {collapsed ? null : <p className="font-heading text-lg font-bold">{id.app.name}</p>}
+          <button
+            type="button"
+            onClick={() => setCollapsed(!collapsed)}
+            aria-label={collapsed ? id.nav.expand : id.nav.collapse}
+            aria-expanded={!collapsed}
+            title={collapsed ? id.nav.expand : id.nav.collapse}
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-md text-muted-foreground outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {collapsed ? <PanelLeftOpen className="size-5" aria-hidden="true" /> : <PanelLeftClose className="size-5" aria-hidden="true" />}
+          </button>
+        </div>
+        <nav aria-label={id.nav.main} className="flex flex-col gap-1">
+          {items.map((item) => (
+            <NavLink key={item.href} item={item} pathname={pathname} variant="side" collapsed={collapsed} />
+          ))}
+        </nav>
+      </aside>
 
       <main
         id="main"
         ref={mainRef}
         tabIndex={-1}
-        className="min-w-0 px-4 py-6 pb-24 outline-none md:px-6 lg:ml-64 lg:px-8 lg:pb-8"
+        className={cn(
+          'min-w-0 px-4 py-6 pb-24 outline-none transition-[margin] duration-200 md:px-6 lg:px-8 lg:pb-8',
+          collapsed ? 'lg:ml-16' : 'lg:ml-64',
+        )}
       >
-        <div className="w-full max-w-7xl 2xl:max-w-[1536px]">
+        <div className="w-full max-w-[1800px]">
           <div className="mb-4 flex items-center justify-end pb-1">
             <HeaderChips />
           </div>

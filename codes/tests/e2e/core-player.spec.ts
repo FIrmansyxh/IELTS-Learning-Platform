@@ -125,7 +125,7 @@ test('alur belajar nyata (ambang bawaan 60 detik): artikel, video, slide, Selesa
   expect(again2.body.data.learn_completed_at).toBe(again.body.data.learn_completed_at);
 });
 
-test('artikel: callout berlabel, tabel lebar digulir di dalam wadah, tautan luar aman, gambar Markdown dibuang, aset tidak bocor', async ({ page, context }) => {
+test('artikel: callout berlabel, tabel mengisi lebar tanpa geser (wadah scroll cadangan), tautan luar aman, gambar Markdown dibuang, aset tidak bocor', async ({ page, context }) => {
   await context.addCookies(reader.cookies);
   await page.goto('/belajar/1.2.1');
   const article = page.locator('article');
@@ -134,11 +134,12 @@ test('artikel: callout berlabel, tabel lebar digulir di dalam wadah, tautan luar
   await expect(article.getByText(MISTAKE_LABEL, { exact: true })).toBeVisible();
   // Heading memiliki id slug; daftar isi sticky di desktop.
   await expect(article.getByRole('heading', { name: 'Mengenal Kata Benda' })).toHaveAttribute('id', 'mengenal-kata-benda');
-  // Tabel lebar: wadah scroll terkurung, halaman tidak melebar.
+  // Tabel mengisi lebar artikel dan teks selnya membungkus, sehingga tidak perlu digeser pada layar lebar;
+  // wadah scroll tetap ada (overflow-x auto) sebagai cadangan, dan halaman tidak melebar.
   const region = article.getByRole('region', { name: 'Tabel dapat digeser ke samping' });
   await expect(region).toBeVisible();
   const dims = await region.evaluate((el) => ({ sw: el.scrollWidth, cw: el.clientWidth, ox: getComputedStyle(el).overflowX }));
-  expect(dims.sw).toBeGreaterThan(dims.cw);
+  expect(dims.sw).toBeLessThanOrEqual(dims.cw + 1);
   expect(dims.ox).toBe('auto');
   const m = await noHorizontalOverflow(page);
   expect(m.sw).toBeLessThanOrEqual(m.w);

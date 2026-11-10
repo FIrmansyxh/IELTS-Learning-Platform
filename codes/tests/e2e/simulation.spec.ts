@@ -1,9 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import { createProfile, deleteProfile, signIn, type TestProfile } from './helpers/app';
 
-// SPEC-023 Simulasi Tes. Prasyarat: dijalankan lewat tests/e2e/helpers/run-e2e.mjs. Bank awal hanya memuat
-// Writing + Speaking yang cukup; Listening (10 soal, 1 bagian) dan Reading (16 soal) belum mencapai 40 soal,
-// jadi keduanya harus tampil tidak tersedia (CONTENT_MISSING).
+// SPEC-023 Simulasi Tes. Prasyarat: dijalankan lewat tests/e2e/helpers/run-e2e.mjs. Bank memuat Writing, Speaking, dan
+// Reading (paket S1/S2/S3 simulasi = tepat 40 soal) yang cukup; Listening (10 soal, 1 bagian) belum mencapai 40 soal,
+// jadi harus tampil tidak tersedia (CONTENT_MISSING).
 test.describe.configure({ mode: 'serial' });
 
 const DISCLAIMER = 'Perkiraan latihan, bukan skor resmi IELTS.';
@@ -25,7 +25,7 @@ function sectionCard(page: Page, name: string) {
   return page.locator('[data-slot="card"]').filter({ has: page.locator('[data-slot="card-title"]', { hasText: new RegExp(`^${name}$`) }) });
 }
 
-test('pemilihan section: Listening/Reading tidak tersedia (CONTENT_MISSING), Writing/Speaking tersedia', async ({ page }) => {
+test('pemilihan section (checkbox): Listening tidak tersedia (CONTENT_MISSING), Reading/Writing/Speaking tersedia', async ({ page }) => {
   await page.goto('/simulasi');
   await expect(page.getByRole('heading', { name: 'Simulasi Tes IELTS General Training', level: 1 })).toBeVisible();
   await expect(page.getByText(DISCLAIMER).first()).toBeVisible();
@@ -36,22 +36,38 @@ test('pemilihan section: Listening/Reading tidak tersedia (CONTENT_MISSING), Wri
   const opts = ((await res.json()) as { data: { sections: Array<{ section: string; available: boolean; unavailable_reason: string | null }> } }).data.sections;
   const by = Object.fromEntries(opts.map((s) => [s.section, s]));
   expect(by.LISTENING).toMatchObject({ available: false, unavailable_reason: 'CONTENT_MISSING' });
-  expect(by.READING).toMatchObject({ available: false, unavailable_reason: 'CONTENT_MISSING' });
+  expect(by.READING).toMatchObject({ available: true, unavailable_reason: null });
   expect(by.WRITING).toMatchObject({ available: true, unavailable_reason: null });
   expect(by.SPEAKING).toMatchObject({ available: true, unavailable_reason: null });
 
   // UI: pesan alasan tampil pada kartu yang tidak tersedia, kartu ditandai tidak dapat dipilih.
   await expect(sectionCard(page, 'Listening')).toContainText('Listening membutuhkan 4 bagian beraudio dengan total 40 soal.');
-  await expect(sectionCard(page, 'Reading')).toContainText('Reading membutuhkan 3 teks dengan total 40 soal.');
+  await expect(sectionCard(page, 'Reading')).not.toContainText('membutuhkan');
   await expect(sectionCard(page, 'Writing')).not.toContainText('membutuhkan');
   await expect(sectionCard(page, 'Speaking')).not.toContainText('membutuhkan');
 
-  // Menekan kartu yang tidak tersedia tidak memilihnya: tetap tersedia hanya Writing (bawaan) dan tombol mulai aktif.
+  // Pilihan section berupa checkbox: bawaan semua section yang tersedia tercentang (Reading + Writing + Speaking),
+  // sedangkan yang tidak tersedia tidak bisa dicentang.
+  await expect(page.getByRole('checkbox', { name: 'Sertakan Reading' })).toBeChecked();
+  await expect(page.getByRole('checkbox', { name: 'Sertakan Writing' })).toBeChecked();
+  await expect(page.getByRole('checkbox', { name: 'Sertakan Speaking' })).toBeChecked();
+  await expect(page.getByRole('checkbox', { name: 'Sertakan Listening' })).toBeDisabled();
   await sectionCard(page, 'Listening').click();
   await sectionCard(page, 'Reading').click();
   await expect(page.getByRole('button', { name: 'Mulai Simulasi' })).toBeEnabled();
-  // Preset "Lengkap" hanya memilih yang tersedia: total waktu = Writing 60 menit (Speaking mandiri).
+  // Membuang centang semua section menonaktifkan tombol mulai; mencentang kembali mengaktifkannya.
+  await page.getByRole('checkbox', { name: 'Sertakan Reading' }).uncheck();
+  await page.getByRole('checkbox', { name: 'Sertakan Writing' }).uncheck();
+  await page.getByRole('checkbox', { name: 'Sertakan Speaking' }).uncheck();
+  await expect(page.getByRole('button', { name: 'Mulai Simulasi' })).toBeDisabled();
+  await page.getByRole('checkbox', { name: 'Sertakan Writing' }).check();
+  await expect(page.getByRole('button', { name: 'Mulai Simulasi' })).toBeEnabled();
+  // Preset "Lengkap" hanya memilih yang tersedia: total waktu = Reading 60 + Writing 60 menit (Speaking mandiri).
   await page.getByRole('button', { name: 'Lengkap (4 Section)' }).click();
+  await expect(page.getByText('120 menit', { exact: true })).toBeVisible();
+  // Hanya Writing: 60 menit.
+  await page.getByRole('checkbox', { name: 'Sertakan Reading' }).uncheck();
+  await page.getByRole('checkbox', { name: 'Sertakan Speaking' }).uncheck();
   await expect(page.getByText('60 menit', { exact: true })).toBeVisible();
 });
 
@@ -69,7 +85,8 @@ test('mode ujian tenang: chip streak/poin tidak tampil di /simulasi (tetap tampi
 test('mulai simulasi 2 section (Writing + Speaking) dan kerjakan Writing', async ({ page }) => {
   await page.goto('/simulasi');
   await expect(sectionCard(page, 'Speaking')).toBeVisible();
-  await sectionCard(page, 'Speaking').click(); // Writing terpilih bawaan; tambah Speaking
+  await expect(page.getByRole('checkbox', { name: 'Sertakan Speaking' })).toBeChecked(); // semua yang tersedia tercentang bawaan
+  await page.getByRole('checkbox', { name: 'Sertakan Reading' }).uncheck(); // tes ini hanya Writing + Speaking
   await page.getByRole('button', { name: 'Mulai Simulasi' }).click();
   await expect(page).toHaveURL(/\/simulasi\/[0-9a-f-]{36}$/, { timeout: 20_000 });
   attemptId = page.url().split('/').pop()!;

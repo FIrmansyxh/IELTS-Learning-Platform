@@ -134,7 +134,9 @@ export async function validateListeningReview(params: {
   }
 
   if (currentScriptBuffer) {
-    const scriptHash = sha256Hex(currentScriptBuffer);
+    // Hash dihitung atas teks dengan akhir baris LF: checkout Windows (core.autocrlf) mengubah LF menjadi CRLF dan
+    // sebelumnya membuat hash skrip "tidak cocok" walau isinya sama.
+    const scriptHash = sha256Hex(Buffer.from(currentScriptBuffer.toString('utf8').split('\r\n').join('\n'), 'utf8'));
     if (scriptHash !== review.script_sha256) {
       return {
         valid: false,

@@ -7,7 +7,6 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   AlertCircle,
   BookOpen,
-  CheckCircle2,
   Clock,
   Headphones,
   Mic,
@@ -21,6 +20,7 @@ import { fmt, id } from '@/i18n/id';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const SECTION_ICONS: Record<SimulationSection, React.ComponentType<{ className?: string }>> = {
@@ -45,15 +45,11 @@ export function SimulationBuilder() {
   const [abandoning, setAbandoning] = React.useState(false);
   const [createError, setCreateError] = React.useState<string | null>(null);
 
-  // Set default selection based on available sections
+  // Bawaan: semua section yang tersedia tercentang (tes lengkap); learner membuang centang yang tidak diinginkan.
   React.useEffect(() => {
     if (data?.sections) {
       const avail = data.sections.filter((s) => s.available).map((s) => s.section);
-      if (avail.includes('WRITING') && avail.includes('READING')) {
-        setSelectedSections(['READING', 'WRITING']);
-      } else if (avail.length > 0) {
-        setSelectedSections([avail[0]!]);
-      }
+      if (avail.length > 0) setSelectedSections(avail);
     }
   }, [data]);
 
@@ -184,6 +180,10 @@ export function SimulationBuilder() {
         </Card>
       )}
 
+      <p className="text-sm text-muted-foreground" id="sim-select-hint">
+        {id.simulation.selectHint}
+      </p>
+
       {/* Preset Cepat */}
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-medium text-muted-foreground">Pilihan Cepat:</span>
@@ -218,7 +218,7 @@ export function SimulationBuilder() {
               }`}
             >
               <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5">
                     <div
                       className={`flex size-9 items-center justify-center rounded-lg ${
@@ -239,16 +239,21 @@ export function SimulationBuilder() {
                       </CardDescription>
                     </div>
                   </div>
-                  {isAvailable && (
-                    <div
-                      className={`flex size-5 items-center justify-center rounded-full border ${
-                        isSelected
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-muted-foreground/30'
-                      }`}
-                    >
-                      {isSelected && <CheckCircle2 className="size-3.5" />}
-                    </div>
+                  {isAvailable ? (
+                    <Checkbox
+                      checked={isSelected}
+                      onCheckedChange={() => handleToggle(sec.section, isAvailable)}
+                      onClick={(e) => e.stopPropagation()}
+                      aria-label={fmt(id.simulation.includeSection, { name: id.simulation.sections[sec.section] })}
+                      className="size-6"
+                    />
+                  ) : (
+                    <Checkbox
+                      checked={false}
+                      disabled
+                      aria-label={fmt(id.simulation.includeSection, { name: id.simulation.sections[sec.section] })}
+                      className="size-6"
+                    />
                   )}
                 </div>
               </CardHeader>

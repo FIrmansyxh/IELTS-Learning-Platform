@@ -1,0 +1,357 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-VC-EVERYDAY",
+      "bank_kind": "VOCAB_GT_EVERYDAY",
+      "title": "Vocab GT: kosakata sehari-hari, sewa, kerja, dan layanan",
+      "skill": "VOCAB",
+      "tags": [
+        "everyday",
+        "work",
+        "services"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-GTVC-001",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Pilih kata yang tepat: Please keep the ___ as proof of payment.",
+          "difficulty": 1,
+          "explanation_id": "Receipt = struk bukti pembayaran.",
+          "options": [
+            "receipt",
+            "vacancy",
+            "deposit",
+            "tenant"
+          ],
+          "correct_answers": [
+            "receipt"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-002",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "A person who rents a flat from a landlord is called a ___.",
+          "difficulty": 1,
+          "explanation_id": "Tenant = penyewa.",
+          "options": [
+            "tenant",
+            "applicant",
+            "colleague",
+            "customer"
+          ],
+          "correct_answers": [
+            "tenant"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-003",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "What does 'non-refundable' mean?",
+          "difficulty": 1,
+          "explanation_id": "Non-refundable = tidak dapat dikembalikan.",
+          "options": [
+            "The money cannot be returned",
+            "The item is free",
+            "The offer is valid for a year",
+            "You can pay in instalments"
+          ],
+          "correct_answers": [
+            "The money cannot be returned"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-004",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Which sentence is correct?",
+          "difficulty": 2,
+          "explanation_id": "Kolokasi: apply for a job/position.",
+          "options": [
+            "I would like to apply for the position.",
+            "I would like to apply to the position.",
+            "I would like to apply the position.",
+            "I would like to apply at the position."
+          ],
+          "correct_answers": [
+            "I would like to apply for the position."
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-005",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "A job that is available for someone to apply for is called a ___.",
+          "difficulty": 1,
+          "explanation_id": "Vacancy = lowongan.",
+          "options": [
+            "vacancy",
+            "receipt",
+            "warranty",
+            "itinerary"
+          ],
+          "correct_answers": [
+            "vacancy"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-006",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Choose the formal alternative to 'I want a refund.'",
+          "difficulty": 2,
+          "explanation_id": "Register formal memakai 'I would like to request...'.",
+          "options": [
+            "I would like to request a refund.",
+            "Gimme my money back.",
+            "Money back now!",
+            "I need refund please."
+          ],
+          "correct_answers": [
+            "I would like to request a refund."
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-007",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "What does RSVP mean on an invitation?",
+          "difficulty": 1,
+          "explanation_id": "RSVP = mohon konfirmasi kehadiran.",
+          "options": [
+            "Please reply to say whether you will come",
+            "Bring your own food",
+            "Dress formally",
+            "Arrive early"
+          ],
+          "correct_answers": [
+            "Please reply to say whether you will come"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-008",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Which word means 'a trial period at the start of a new job'?",
+          "difficulty": 2,
+          "explanation_id": "Probation = masa percobaan kerja.",
+          "options": [
+            "probation",
+            "deposit",
+            "itinerary",
+            "warranty"
+          ],
+          "correct_answers": [
+            "probation"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-009",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Which is correct?",
+          "difficulty": 2,
+          "explanation_id": "Discuss adalah transitive, tanpa 'about'.",
+          "options": [
+            "We will discuss the problem tomorrow.",
+            "We will discuss about the problem tomorrow.",
+            "We will discuss on the problem tomorrow.",
+            "We will discuss with the problem tomorrow."
+          ],
+          "correct_answers": [
+            "We will discuss the problem tomorrow."
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-010",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "Which phrase means 'to cancel a booking and get your money back'?",
+          "difficulty": 2,
+          "explanation_id": "Claim a refund = meminta pengembalian uang.",
+          "options": [
+            "claim a refund",
+            "pay a deposit",
+            "sign a lease",
+            "book a ticket"
+          ],
+          "correct_answers": [
+            "claim a refund"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-011",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "VOCAB",
+          "prompt": "Lengkapi: The landlord asked for a one-month ___ before the tenant moved in. (uang jaminan)",
+          "difficulty": 1,
+          "explanation_id": "Deposit = uang jaminan sewa.",
+          "correct_answers": [
+            "deposit"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTVC-012",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "VOCAB",
+          "prompt": "Lengkapi: The item arrived ___, so I would like a replacement. (rusak)",
+          "difficulty": 1,
+          "explanation_id": "Faulty/damaged/defective/broken = rusak.",
+          "correct_answers": [
+            "faulty",
+            "damaged",
+            "defective",
+            "broken"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTVC-013",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "VOCAB",
+          "prompt": "Lengkapi dengan preposisi: Thank you ___ your help.",
+          "difficulty": 1,
+          "explanation_id": "Thank you for + noun.",
+          "correct_answers": [
+            "for"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTVC-014",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "VOCAB",
+          "prompt": "Lengkapi dengan phrasal verb: Please ___ in the form and return it by Friday. (mengisi)",
+          "difficulty": 1,
+          "explanation_id": "Fill in/out a form = mengisi formulir.",
+          "correct_answers": [
+            "fill"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTVC-015",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "VOCAB",
+          "prompt": "Lengkapi: We will ___ into the matter and get back to you. (menyelidiki)",
+          "difficulty": 2,
+          "explanation_id": "Look into = menyelidiki.",
+          "correct_answers": [
+            "look"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTVC-016",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "VOCAB",
+          "prompt": "Klik kata yang salah.",
+          "difficulty": 2,
+          "explanation_id": "Kolokasi: apply for a job, bukan apply to a job.",
+          "tokens": [
+            "She",
+            "wants",
+            "to",
+            "apply",
+            "to",
+            "a",
+            "new",
+            "job."
+          ],
+          "correct_answers": [
+            4
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-017",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "VOCAB",
+          "prompt": "Klik kata yang salah.",
+          "difficulty": 2,
+          "explanation_id": "'Return back' redundan; cukup 'return'.",
+          "tokens": [
+            "Please",
+            "return",
+            "back",
+            "the",
+            "keys",
+            "to",
+            "the",
+            "landlord."
+          ],
+          "correct_answers": [
+            2
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-018",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "VOCAB",
+          "prompt": "Cocokkan kata dengan artinya.",
+          "difficulty": 2,
+          "explanation_id": "Landlord = pemilik; refund = pengembalian uang; vacancy = lowongan.",
+          "matching": {
+            "left": [
+              "landlord",
+              "refund",
+              "vacancy"
+            ],
+            "right": [
+              "person who owns a property",
+              "money given back",
+              "an available job",
+              "a type of insurance"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            0,
+            1,
+            2
+          ],
+          "points": 3
+        },
+        {
+          "question_id": "Q-GTVC-019",
+          "question_type": "SENTENCE_REORDER",
+          "skill": "VOCAB",
+          "prompt": "Susun menjadi permintaan formal yang benar.",
+          "difficulty": 2,
+          "explanation_id": "Pola: I would be grateful if you could + V1.",
+          "segments": [
+            "I would be grateful",
+            "if you could",
+            "arrange a repair",
+            "as soon as possible."
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-020",
+          "question_type": "MCQ_MULTI",
+          "skill": "VOCAB",
+          "prompt": "Pilih DUA ungkapan yang sesuai untuk surat FORMAL.",
+          "difficulty": 2,
+          "explanation_id": "I wish to complain dan I would appreciate your prompt reply sesuai register formal.",
+          "options": [
+            "I wish to complain about...",
+            "I would appreciate your prompt reply.",
+            "Drop me a line!",
+            "Gimme a refund."
+          ],
+          "correct_answers": [
+            "I wish to complain about...",
+            "I would appreciate your prompt reply."
+          ],
+          "points": 2
+        }
+      ]
+    }
+  ]
+}

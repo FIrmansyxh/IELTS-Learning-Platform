@@ -140,4 +140,14 @@ describe('listening/review-gate (gerbang review audio SPEC-024 D6)', () => {
     expect(s.valid).toBe(false);
     expect(s.reason).toMatch(/skrip/i);
   });
+
+  it('naskah dengan akhir baris CRLF (checkout Windows) tetap cocok dengan hash review berbasis LF', async () => {
+    const lf = Buffer.from('baris satu\nbaris dua\n');
+    const crlf = Buffer.from('baris satu\r\nbaris dua\r\n');
+    const f = write('crlf.json', { ...base(), script_sha256: sha256Hex(lf) });
+    expect((await run(f, { script: lf })).valid).toBe(true);
+    expect((await run(f, { script: crlf })).valid).toBe(true);
+    // isi yang benar-benar berbeda tetap ditolak
+    expect((await run(f, { script: Buffer.from('baris satu\r\nbaris tiga\r\n') })).valid).toBe(false);
+  });
 });

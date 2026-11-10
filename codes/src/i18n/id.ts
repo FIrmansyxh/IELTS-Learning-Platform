@@ -234,6 +234,8 @@ export const id = {
     profile: 'Profil',
     main: 'Navigasi utama',
     soon: 'Segera hadir',
+    collapse: 'Ciutkan menu',
+    expand: 'Perluas menu',
   },
   home: {
     title: 'Beranda',
@@ -550,6 +552,8 @@ export const id = {
       caseHint: 'Studi kasus: pelajari contoh jawaban beserta analisisnya, lalu tulis sendiri di tab Terapkan.',
     },
     toc: 'Daftar isi',
+    tocHide: 'Sembunyikan daftar isi',
+    tocShow: 'Tampilkan daftar isi',
     downloads: 'Unduhan',
     download: 'Unduh {type} ({size})',
     calloutTips: 'Tips Examiner',
@@ -1003,7 +1007,7 @@ export const id = {
   },
   mix: {
     title: 'Latihan campur',
-    subtitle: 'Pilih skill, tipe soal, dan jumlah soal, atau biarkan platform mencampur soal sesuai kelemahan Anda.',
+    subtitle: 'Latihan bebas tanpa timer: pilih skill, tipe soal, dan jumlah soal, atau biarkan platform mencampur soal sesuai kelemahan Anda. Untuk ujian berwaktu dengan perkiraan band, gunakan Simulasi tes.',
     metaTitle: 'Latihan campur',
     loadFailed: 'Bank soal gagal dimuat',
     empty: 'Belum ada bank soal. Tambahkan lewat berkas konten.',
@@ -1131,7 +1135,9 @@ export const id = {
     title: 'Simulasi Tes IELTS General Training',
     disclaimer: 'Perkiraan latihan, bukan skor resmi IELTS.',
     chooseSections: 'Pilih Section Tes',
-    chooseSectionsDesc: 'Pilih satu atau beberapa section untuk disimulasikan sesuai target latihan Anda.',
+    chooseSectionsDesc: 'Simulasi tes berwaktu seperti ujian sebenarnya, dengan perkiraan band. Berbeda dengan Latihan campur yang bebas memilih jenis soal tanpa timer.',
+    selectHint: 'Centang section yang ingin dikerjakan. Semua tercentang = tes lengkap; hilangkan centang untuk melewatkan section tertentu (minimal satu section).',
+    includeSection: 'Sertakan {name}',
     presets: {
       all: 'Lengkap (4 Section)',
       readingWriting: 'Reading + Writing',

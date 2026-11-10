@@ -1,0 +1,670 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-RD-S1-SIM",
+      "bank_kind": "READING_GT_S1",
+      "title": "Reading GT Section 1 (simulasi): iklan kursus, barang hilang, keanggotaan gym",
+      "skill": "READING",
+      "tags": [
+        "simulation",
+        "everyday"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "reading_passage_markdown": "## Section 1: Teks Sehari-hari\n\n### Text A: Harbour Language Centre, Evening Courses\n\nHarbour Language Centre offers evening courses in English, Spanish, French and Japanese. Classes run for ten weeks, twice a week, from 6.30 p.m. to 8.30 p.m. A course costs £180, which includes all books. Students who register before 15 September receive a 10% discount. Beginners can join any course in the first two weeks. A free trial lesson is available every Saturday morning at 10.00 a.m. To register, visit the front desk or call 555 0142. Please note that fees are non-refundable after the second lesson.\n\n### Text B: Lost Property, Central Station\n\nItems found on trains or in the station are kept at the Lost Property Office, next to Platform 1. The office is open Monday to Friday from 8.00 a.m. to 6.00 p.m. and on Saturdays from 9.00 a.m. to 1.00 p.m. It is closed on Sundays and public holidays. Items are kept for 30 days. After that, unclaimed items are given to charity, except valuables such as phones and laptops, which are handed to the police. To collect an item, you must bring photo identification. A fee of £5 is charged for each item collected, except umbrellas and books, which are free.\n\n### Text C: Greenfield Gym, Membership Options\n\nGreenfield Gym has three membership options. Basic membership (£25 a month) gives access to the gym floor from 6.00 a.m. to 4.00 p.m. on weekdays. Standard membership (£35 a month) adds evening access and fitness classes. Premium membership (£50 a month) includes everything in Standard, plus use of the swimming pool and a free personal training session each month. All members pay a one-off joining fee of £20, except students, who pay nothing. Memberships can be cancelled with one month's written notice.",
+      "questions": [
+        {
+          "question_id": "Q-GTSIM1-001",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text A. A course lasts ___ weeks.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'Classes run for ten weeks'.",
+          "correct_answers": [
+            "ten",
+            "10"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-002",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text A. Classes finish at ___ p.m.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'from 6.30 p.m. to 8.30 p.m.'.",
+          "correct_answers": [
+            "8.30",
+            "8:30"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-003",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. The course fee does not include books.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'A course costs £180, which includes all books'. Teks bertentangan.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-004",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. Beginners may join a course after it has started.",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'Beginners can join any course in the first two weeks'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-005",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Text A. When is the free trial lesson? (Maximum TWO words)",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'every Saturday morning at 10.00 a.m.'.",
+          "correct_answers": [
+            "Saturday morning",
+            "Saturday mornings",
+            "Saturdays",
+            "Saturday"
+          ],
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-006",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text B. Where is the Lost Property Office?",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'next to Platform 1'.",
+          "options": [
+            "Next to Platform 1",
+            "Outside the station",
+            "On Platform 5",
+            "Next to the police station"
+          ],
+          "correct_answers": [
+            "Next to Platform 1"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-007",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. Items are kept for ___ days.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'Items are kept for 30 days'.",
+          "correct_answers": [
+            "30",
+            "thirty"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-008",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. The office is open on Sundays.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'It is closed on Sundays and public holidays'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-009",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. Unclaimed phones are given to charity.",
+          "difficulty": 3,
+          "explanation_id": "Text B: valuables such as phones 'are handed to the police', bukan diberikan ke amal.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-010",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Text B. What must you bring to collect an item? (Maximum THREE words)",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'you must bring photo identification'.",
+          "correct_answers": [
+            "photo identification",
+            "photo ID",
+            "photo id"
+          ],
+          "max_words": 3,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-011",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. Passengers can ask for lost items to be sent by post.",
+          "difficulty": 3,
+          "explanation_id": "Teks tidak membahas pengiriman lewat pos.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-012",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text C. Which membership includes use of the swimming pool?",
+          "difficulty": 2,
+          "explanation_id": "Text C: Premium 'plus use of the swimming pool'.",
+          "options": [
+            "Premium",
+            "Basic",
+            "Standard",
+            "Student"
+          ],
+          "correct_answers": [
+            "Premium"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-013",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text C. Standard membership costs £___ a month.",
+          "difficulty": 1,
+          "explanation_id": "Text C: 'Standard membership (£35 a month)'.",
+          "correct_answers": [
+            "35"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM1-014",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text C. Students pay a joining fee.",
+          "difficulty": 2,
+          "explanation_id": "Text C: 'except students, who pay nothing'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        }
+      ]
+    },
+    {
+      "bank_code": "GT-RD-S2-SIM",
+      "bank_kind": "READING_GT_S2",
+      "title": "Reading GT Section 2 (simulasi): kebijakan cuti dan lowongan kerja",
+      "skill": "READING",
+      "tags": [
+        "simulation",
+        "work"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "reading_passage_markdown": "## Section 2: Teks Dunia Kerja\n\n### Text A: Staff Handbook, Annual Leave\n\nAll full-time employees are entitled to 25 days of paid annual leave per year, plus public holidays. Part-time employees receive leave in proportion to their hours. Leave requests must be submitted to your line manager at least two weeks in advance, using the online form. During the busy period from 1 December to 5 January, no more than two members of a team may be on leave at the same time. Unused leave of up to five days can be carried over to the next year; any other unused leave is lost. Employees who leave the company will be paid for any leave they have not taken.\n\n### Text B: Vacancy, Warehouse Supervisor at Eastbridge Distribution\n\nEastbridge Distribution is looking for an experienced warehouse supervisor to join our team at our depot near the ring road. You will manage a team of twelve staff, plan daily shifts and ensure that orders are packed accurately and on time. Applicants should have at least three years' experience in a similar role and hold a valid forklift licence. A degree is not required. The salary is £31,000 a year, rising to £33,500 after a successful six-month probation period. Working hours are 7.00 a.m. to 4.00 p.m., Monday to Friday, with occasional Saturday overtime, which is paid at one and a half times the normal rate. To apply, send your CV and a covering letter to the HR manager by 30 June. Interviews will take place in the first week of July.",
+      "questions": [
+        {
+          "question_id": "Q-GTSIM2-001",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text A. Full-time employees receive ___ days of paid annual leave.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'entitled to 25 days of paid annual leave'.",
+          "correct_answers": [
+            "25",
+            "twenty-five",
+            "twenty five"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-002",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text A. How far in advance must leave requests be made?",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'at least two weeks in advance'.",
+          "options": [
+            "At least two weeks",
+            "At least two days",
+            "At least one month",
+            "On the same day"
+          ],
+          "correct_answers": [
+            "At least two weeks"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-003",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. Part-time employees receive the same amount of leave as full-time employees.",
+          "difficulty": 2,
+          "explanation_id": "Text A: part-time menerima cuti 'in proportion to their hours', bukan jumlah yang sama.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-004",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. Any number of team members can take leave between 1 December and 5 January.",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'no more than two members of a team' pada periode itu.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-005",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Text A. How many unused leave days can be carried over to the next year? (Maximum TWO words)",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'Unused leave of up to five days can be carried over'.",
+          "correct_answers": [
+            "five",
+            "5",
+            "five days",
+            "5 days"
+          ],
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-006",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. Employees who leave the company lose all their unused leave.",
+          "difficulty": 3,
+          "explanation_id": "Text A: 'will be paid for any leave they have not taken'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-007",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. The supervisor will manage a team of ___ staff.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'a team of twelve staff'.",
+          "correct_answers": [
+            "twelve",
+            "12"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-008",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text B. What must applicants hold?",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'hold a valid forklift licence'. Gelar tidak diperlukan.",
+          "options": [
+            "A valid forklift licence",
+            "A university degree",
+            "A first-aid certificate",
+            "A driving licence for lorries"
+          ],
+          "correct_answers": [
+            "A valid forklift licence"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-009",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. A university degree is essential for the job.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'A degree is not required'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-010",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. After the probation period the salary rises to £___ a year.",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'rising to £33,500 after a successful six-month probation period'.",
+          "correct_answers": [
+            "33,500",
+            "33500",
+            "33 500"
+          ],
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-011",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Text B. How is Saturday overtime paid? (Maximum SIX words)",
+          "difficulty": 3,
+          "explanation_id": "Text B: 'paid at one and a half times the normal rate'.",
+          "correct_answers": [
+            "one and a half times the normal rate",
+            "one and a half times",
+            "1.5 times the normal rate",
+            "one and a half times normal rate"
+          ],
+          "max_words": 6,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-012",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Which text contains each piece of information?",
+          "difficulty": 3,
+          "explanation_id": "Cara mengajukan permohonan cuti ada di Text A; jam kerja ada di Text B; batas waktu lamaran ada di Text B.",
+          "matching": {
+            "left": [
+              "Details of how to submit a request",
+              "Information about working hours",
+              "A deadline for applications"
+            ],
+            "right": [
+              "Text A",
+              "Text B"
+            ],
+            "allow_reuse": true
+          },
+          "correct_answers": [
+            0,
+            1,
+            1
+          ],
+          "points": 3,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM2-013",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. Eastbridge Distribution has more than one depot.",
+          "difficulty": 3,
+          "explanation_id": "Teks hanya menyebut 'our depot near the ring road'; jumlah depot tidak dibahas.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "passage_no": 1
+        }
+      ]
+    },
+    {
+      "bank_code": "GT-RD-S3-SIM",
+      "bank_kind": "READING_GT_S3",
+      "title": "Reading GT Section 3 (simulasi): nasib pusat kota",
+      "skill": "READING",
+      "tags": [
+        "simulation",
+        "long-text"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "reading_passage_markdown": "## Section 3: Can the High Street Be Saved?\n\n[A] For decades, the future of the traditional high street has looked bleak. Online shopping, out-of-town retail parks and rising rents have forced thousands of shops to close, leaving many town centres with empty windows and falling visitor numbers. Yet in several towns the picture is beginning to change, and local councils, business owners and residents are experimenting with new ways to bring people back.\n\n[B] One approach is to make town centres more than places to shop. In the town of Ashford Vale, the council converted a disused department store into a mixed building containing a library, a health clinic and a community café. Within a year, daily visitor numbers to the centre rose by almost a third, and nearby independent shops reported higher sales. Planners argue that when people come for services rather than purchases, they are more likely to stay and spend money on other things.\n\n[C] A second strategy focuses on reducing costs for small businesses. Some councils offer reduced business rates for the first two years to new shops willing to occupy empty units. In Marlow Green, this scheme filled 18 of the 25 vacant units within eighteen months. Critics, however, point out that several of these new businesses closed when the discount ended, suggesting that temporary support may only delay the problem.\n\n[D] Technology has also played a part. A number of retailers have adopted a \"click and collect\" model, allowing customers to order online and pick up goods in person. Shop owners say this brings customers through the door who would otherwise never visit, and many of them make additional purchases while they are there. However, the system demands extra staff time, and smaller shops often lack the equipment to manage it.\n\n[E] Transport and access remain a persistent concern. Surveys in several towns show that shoppers rank parking costs and poor bus services among their main reasons for avoiding the high street. Ashford Vale responded by offering the first hour of parking free and extending evening bus services, which, according to the council, contributed to a rise in evening trade of around 15 per cent.\n\n[F] Despite these successes, experts caution against expecting a return to the past. Most agree that high streets will be smaller and more varied than before, combining retail with housing, work spaces and public services. As one researcher put it, the aim should not be to rebuild the old high street but to create a place that people actually want to spend time in.",
+      "questions": [
+        {
+          "question_id": "Q-GTSIM3-001",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Choose the correct heading for each paragraph (B-F). There are more headings than paragraphs.",
+          "difficulty": 4,
+          "explanation_id": "B: layanan publik menarik pengunjung. C: bantuan biaya yang mungkin tidak bertahan. D: pesan online ambil di toko. E: akses dan transportasi. F: masa depan yang lebih kecil tetapi beragam. Tiga judul lain adalah pengecoh.",
+          "matching": {
+            "left": [
+              "Paragraph B",
+              "Paragraph C",
+              "Paragraph D",
+              "Paragraph E",
+              "Paragraph F"
+            ],
+            "right": [
+              "Services that bring people into the centre",
+              "Financial help that may not last",
+              "Online ordering with in-store collection",
+              "Making the town centre easier to reach",
+              "A smaller but more varied future",
+              "The decline of local manufacturing",
+              "The role of tourism in town centres",
+              "A new approach to advertising"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "points": 5,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-002",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Daily visitor numbers in Ashford Vale rose by about a third within a year.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf B: 'rose by almost a third' dalam setahun.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-003",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "In Marlow Green, every vacant unit was filled within eighteen months.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf C: 18 dari 25 unit kosong terisi, bukan semuanya.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-004",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Click and collect is easy for small shops to set up.",
+          "difficulty": 3,
+          "explanation_id": "Paragraf D: toko kecil 'often lack the equipment to manage it'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-005",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Free parking was the only change Ashford Vale made to improve access.",
+          "difficulty": 3,
+          "explanation_id": "Paragraf E: parkir gratis jam pertama DAN perpanjangan layanan bus malam.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-006",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "The Ashford Vale council plans to build a new car park.",
+          "difficulty": 3,
+          "explanation_id": "Teks tidak membahas rencana membangun tempat parkir baru.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-007",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "What do critics say about reduced business rates?",
+          "difficulty": 3,
+          "explanation_id": "Paragraf C: 'temporary support may only delay the problem'.",
+          "options": [
+            "Support that is only temporary may delay the problem",
+            "The scheme is too expensive for councils",
+            "New shops should not be allowed",
+            "The discount should last for five years"
+          ],
+          "correct_answers": [
+            "Support that is only temporary may delay the problem"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-008",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "What do most experts expect about the future of the high street?",
+          "difficulty": 2,
+          "explanation_id": "Paragraf F: 'smaller and more varied than before'.",
+          "options": [
+            "It will be smaller and more varied than before",
+            "It will return to how it was in the past",
+            "It will disappear completely",
+            "It will contain only shops"
+          ],
+          "correct_answers": [
+            "It will be smaller and more varied than before"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-009",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "In Ashford Vale, evening trade rose by around ___ per cent.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf E: 'a rise in evening trade of around 15 per cent'.",
+          "correct_answers": [
+            "15",
+            "fifteen"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-010",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "In Ashford Vale, the first hour of parking is ___.",
+          "difficulty": 1,
+          "explanation_id": "Paragraf E: 'offering the first hour of parking free'.",
+          "correct_answers": [
+            "free"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-011",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "What did the Ashford Vale council convert into a mixed building? (Maximum FOUR words)",
+          "difficulty": 2,
+          "explanation_id": "Paragraf B: 'converted a disused department store'.",
+          "correct_answers": [
+            "a disused department store",
+            "disused department store",
+            "department store"
+          ],
+          "max_words": 4,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-012",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "What is the main purpose of the passage?",
+          "difficulty": 2,
+          "explanation_id": "Seluruh teks membahas beberapa strategi menghidupkan kembali pusat kota beserta kelebihan dan keterbatasannya.",
+          "options": [
+            "To describe ways towns are trying to revive their high streets",
+            "To argue that online shopping should be banned",
+            "To explain how to open a shop",
+            "To compare two towns"
+          ],
+          "correct_answers": [
+            "To describe ways towns are trying to revive their high streets"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM3-013",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Which paragraph contains each piece of information? (Paragraphs A-F)",
+          "difficulty": 3,
+          "explanation_id": "Kekurangan skema sementara: C. Keluhan pembeli soal transportasi: E. Kutipan peneliti: F.",
+          "matching": {
+            "left": [
+              "a drawback of a temporary scheme",
+              "a complaint from shoppers about travel",
+              "a quotation from a researcher"
+            ],
+            "right": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            2,
+            4,
+            5
+          ],
+          "points": 3,
+          "passage_no": 1
+        }
+      ]
+    }
+  ]
+}

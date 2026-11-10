@@ -1,12 +1,13 @@
 'use client';
 
-import { CheckCircle2, Download } from 'lucide-react';
+import { CheckCircle2, Download, PanelRightClose, PanelRightOpen } from 'lucide-react';
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { LearnSubtabType, SubModuleDetail } from '@/contracts/player';
 import { fmt, id } from '@/i18n/id';
 import { formatBytes } from '@/lib/format';
+import { usePersistentToggle } from '@/lib/use-persistent-toggle';
 import { cn } from '@/lib/utils';
 import { extractToc, MarkdownArticle } from './markdown-article';
 import { SlidesCarousel } from './slides-carousel';
@@ -72,6 +73,8 @@ export function LearnTab({
   if (material.slides.length > 0) available.push('SLIDES');
   const active = available.includes(subtab) ? subtab : 'ARTICLE';
   const toc = React.useMemo(() => extractToc(material.article_markdown), [material.article_markdown]);
+  const [tocOpen, setTocOpen] = usePersistentToggle('ielts.learn.toc', true);
+  const showToc = toc.length > 1 && tocOpen;
   const done = progress.learn_completed_at !== null;
   const unmet = unmetRequirements(detail, serverUnmet);
   const canComplete = done || progress.learn_ready;
@@ -91,8 +94,21 @@ export function LearnTab({
       ) : null}
 
       {active === 'ARTICLE' ? (
-        <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start">
+        <div
+          className={cn(
+            'grid grid-cols-[minmax(0,1fr)] gap-6 lg:items-start',
+            showToc && 'lg:grid-cols-[minmax(0,1fr)_16rem]',
+          )}
+        >
           <article>
+            {toc.length > 1 && !tocOpen ? (
+              <div className="mb-2 hidden justify-end lg:flex">
+                <Button type="button" variant="ghost" size="sm" onClick={() => setTocOpen(true)}>
+                  <PanelRightOpen aria-hidden="true" />
+                  {id.player.tocShow}
+                </Button>
+              </div>
+            ) : null}
             <MarkdownArticle markdown={material.article_markdown} />
             {material.attachments.length > 0 ? (
               <section aria-label={id.player.downloads} className="mt-6 flex flex-wrap gap-2">
@@ -108,12 +124,25 @@ export function LearnTab({
               </section>
             ) : null}
             {material.attribution_text ? (
-              <p className="mt-6 max-w-[72ch] text-xs text-muted-foreground">{material.attribution_text}</p>
+              <p className="mt-6 max-w-[110ch] text-xs text-muted-foreground">{material.attribution_text}</p>
             ) : null}
           </article>
-          {toc.length > 1 ? (
-            <nav aria-label={id.player.toc} className="hidden lg:sticky lg:top-6 lg:block">
-              <p className="mb-2 text-sm font-semibold">{id.player.toc}</p>
+          {showToc ? (
+            <nav aria-label={id.player.toc} className="hidden lg:sticky lg:top-6 lg:block lg:max-h-[calc(100dvh-3rem)] lg:overflow-y-auto">
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <p className="text-sm font-semibold">{id.player.toc}</p>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="size-8"
+                  onClick={() => setTocOpen(false)}
+                  aria-label={id.player.tocHide}
+                  title={id.player.tocHide}
+                >
+                  <PanelRightClose aria-hidden="true" />
+                </Button>
+              </div>
               <ul className="grid gap-1 border-l text-sm">
                 {toc.map((t) => (
                   <li key={t.id} className={cn(t.level === 3 && 'pl-3')}>

@@ -137,9 +137,9 @@ function buildComponents(): Components {
     h4: heading('h4', 'mt-5 mb-2 text-lg'),
     h5: heading('h4', 'mt-4 mb-2 text-base'),
     h6: heading('h4', 'mt-4 mb-2 text-base'),
-    p: ({ children }) => <p className="my-3">{children}</p>,
-    ul: ({ children }) => <ul className="my-3 list-disc space-y-1 pl-6">{children}</ul>,
-    ol: ({ children }) => <ol className="my-3 list-decimal space-y-1 pl-6">{children}</ol>,
+    p: ({ children }) => <p className="my-3 max-w-[110ch]">{children}</p>,
+    ul: ({ children }) => <ul className="my-3 max-w-[110ch] list-disc space-y-1 pl-6">{children}</ul>,
+    ol: ({ children }) => <ol className="my-3 max-w-[110ch] list-decimal space-y-1 pl-6">{children}</ol>,
     blockquote: ({ children }) => (
       <blockquote className="my-4 border-l-4 border-border pl-4 text-muted-foreground">{children}</blockquote>
     ),
@@ -150,7 +150,8 @@ function buildComponents(): Components {
     code: ({ children, className }) => (
       <code className={cn('rounded bg-muted px-1 py-0.5 font-mono text-[0.9em]', className)}>{children}</code>
     ),
-    // Tabel responsif dalam wadah scroll terkurung; wadah dapat difokus agar bisa digulir dengan keyboard.
+    // Tabel mengisi lebar penuh dan teks sel membungkus (tanpa geser pada layar lebar); wadah scroll tetap ada sebagai
+    // cadangan untuk tabel yang sangat lebar dan dapat difokus agar bisa digulir dengan keyboard.
     table: ({ children }) => (
       <div
         role="region"
@@ -158,11 +159,11 @@ function buildComponents(): Components {
         aria-label={id.player.tableScroll}
         className="my-4 max-w-full overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <table className="w-full min-w-max border-collapse text-sm">{children}</table>
+        <table className="w-full table-auto border-collapse text-sm">{children}</table>
       </div>
     ),
-    th: ({ children }) => <th className="border-b bg-muted px-3 py-2 text-left font-semibold">{children}</th>,
-    td: ({ children }) => <td className="border-b px-3 py-2 align-top">{children}</td>,
+    th: ({ children }) => <th className="border-b bg-muted px-3 py-2 text-left align-top font-semibold [overflow-wrap:anywhere]">{children}</th>,
+    td: ({ children }) => <td className="border-b px-3 py-2 align-top [overflow-wrap:anywhere]">{children}</td>,
     a: ({ href, children }) => {
       const safe = safeHref(href);
       if (!safe) return <span>{children}</span>;
@@ -196,7 +197,7 @@ function buildComponents(): Components {
 function MarkdownArticleBase({ markdown, className }: { markdown: string; className?: string }) {
   const components = React.useMemo(() => buildComponents(), []);
   return (
-    <div className={cn('max-w-[72ch] text-base leading-[1.7]', className)}>
+    <div className={cn('w-full max-w-none text-base leading-[1.7]', className)}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkDirective, remarkCallouts]}
         components={components}

@@ -26,16 +26,17 @@ async function chooseGrammarOnly(page: import('@playwright/test').Page) {
   await expect(page.locator('output[for="mix-count-input"]')).toHaveText('5 soal');
 }
 
-test('layar Mix Builder: Listening tidak dapat dipilih, skill tanpa bank dinonaktifkan', async ({ page }) => {
+test('layar Mix Builder: Listening tidak dapat dipilih, semua skill lain punya bank', async ({ page }) => {
   await page.goto('/latihan/campur');
   await expect(page.getByRole('heading', { name: 'Latihan campur', level: 1 })).toBeVisible();
   // Tidak ada tombol skill Listening; banknya tampil terkunci dengan keterangan.
   await expect(page.getByRole('button', { name: /^Listening/ })).toHaveCount(0);
   await expect(page.getByText('Listening belum tersedia di latihan campur')).toBeVisible();
   await expect(page.locator('#mix-bank-GT-LIS-S1-001')).toBeDisabled();
-  // Vocabulary belum punya bank: tombol nonaktif.
-  await expect(page.getByRole('button', { name: /^Vocabulary/ })).toBeDisabled();
-  // Skill yang punya bank aktif; Writing/Speaking membawa catatan AI.
+  // Semua skill kini punya bank (termasuk Vocabulary dan Reading): tombolnya aktif.
+  await expect(page.getByRole('button', { name: /^Vocabulary/ })).toBeEnabled();
+  await expect(page.getByRole('button', { name: /^Reading/ })).toBeEnabled();
+  // Writing/Speaking membawa catatan AI.
   await expect(page.getByRole('button', { name: /^Grammar/ })).toBeEnabled();
   await expect(page.getByText('Maksimal 1 soal per sesi').first()).toBeVisible();
 });

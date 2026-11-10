@@ -269,6 +269,9 @@ export function defaultDeps() {
     now: () => Date.now(),
     platform: process.platform,
     countPublished: realCountPublished,
+    // Urutan penting: gt-listening (aset audio) lebih dulu, baru gt-bank (bank soal, termasuk bank Listening).
+    listBankDirs: (cwd) =>
+      ['gt-listening', 'gt-bank'].map((n) => path.join(cwd, 'content', n)).filter((d) => existsSync(path.join(d))),
     listContentDirs: (cwd) => {
       const root = path.join(cwd, 'content', 'gt-modules');
       if (!existsSync(root)) return [];
@@ -477,6 +480,14 @@ export async function runStartLocal(argv, ctx) {
         if (stopping) return await finish(0);
         if (code !== 0) warn(`Impor konten bawaan gagal (kode ${code}): ${path.basename(dir)}. Lanjut tanpa konten tersebut.`);
       }
+    }
+
+    // 8b. bank soal (Latihan campur dan Simulasi tes). Impor idempoten (tanpa perubahan = NOOP), jadi dijalankan setiap
+    // kali agar DB lama ikut mendapat bank dan perubahan bank terbaru.
+    for (const dir of deps.listBankDirs ? deps.listBankDirs(cwd) : []) {
+      const code = await runNode('content:import', [bins.tsx, 'scripts/content-import.ts', 'import', '--dir', dir, '--publish']);
+      if (stopping) return await finish(0);
+      if (code !== 0) warn(`Impor bank soal gagal (kode ${code}): ${path.basename(dir)}. Lanjut tanpa sebagian bank.`);
     }
 
     // 9. build

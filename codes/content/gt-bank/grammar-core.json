@@ -1,0 +1,360 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-GR-CORE",
+      "bank_kind": "GRAMMAR_GT_REGISTER",
+      "title": "Grammar GT: tense, artikel, modal, dan kalimat kondisional",
+      "skill": "GRAMMAR",
+      "tags": [
+        "tenses",
+        "articles",
+        "modals",
+        "conditionals"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "questions": [
+        {
+          "question_id": "Q-GTGC-001",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "My brother ___ in a hospital.",
+          "difficulty": 1,
+          "explanation_id": "Present Simple + he/she/it: kata kerja + s.",
+          "options": [
+            "works",
+            "work",
+            "is work",
+            "working"
+          ],
+          "correct_answers": [
+            "works"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-002",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Look! The children ___ in the garden.",
+          "difficulty": 1,
+          "explanation_id": "'Look!' = sedang terjadi: Present Continuous.",
+          "options": [
+            "are playing",
+            "play",
+            "played",
+            "plays"
+          ],
+          "correct_answers": [
+            "are playing"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-003",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "I ___ this laptop two years ago.",
+          "difficulty": 1,
+          "explanation_id": "Waktu lampau spesifik (two years ago): Simple Past.",
+          "options": [
+            "bought",
+            "have bought",
+            "buy",
+            "was buying"
+          ],
+          "correct_answers": [
+            "bought"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-004",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "She ___ in Medan since 2018.",
+          "difficulty": 2,
+          "explanation_id": "since + titik waktu: Present Perfect.",
+          "options": [
+            "has lived",
+            "lived",
+            "lives",
+            "is living"
+          ],
+          "correct_answers": [
+            "has lived"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-005",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "He is ___ honest man.",
+          "difficulty": 1,
+          "explanation_id": "Honest dimulai bunyi vokal: an.",
+          "options": [
+            "an",
+            "a",
+            "the",
+            "no article"
+          ],
+          "correct_answers": [
+            "an"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-006",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "She gave me some useful ___.",
+          "difficulty": 1,
+          "explanation_id": "Information uncountable.",
+          "options": [
+            "information",
+            "informations",
+            "an information",
+            "many informations"
+          ],
+          "correct_answers": [
+            "information"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-007",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "You ___ park here. It is forbidden.",
+          "difficulty": 2,
+          "explanation_id": "Mustn't = larangan.",
+          "options": [
+            "mustn't",
+            "don't have to",
+            "needn't to",
+            "might not"
+          ],
+          "correct_answers": [
+            "mustn't"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-008",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "If it rains tomorrow, we ___ at home.",
+          "difficulty": 2,
+          "explanation_id": "First conditional: if + present, will + V1.",
+          "options": [
+            "will stay",
+            "stay",
+            "would stay",
+            "stayed"
+          ],
+          "correct_answers": [
+            "will stay"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-009",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "If I ___ you, I would accept the offer.",
+          "difficulty": 2,
+          "explanation_id": "Second conditional: If I were you.",
+          "options": [
+            "were",
+            "am",
+            "was being",
+            "be"
+          ],
+          "correct_answers": [
+            "were"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-010",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "The report ___ yesterday.",
+          "difficulty": 2,
+          "explanation_id": "Pasif simple past: was + V3.",
+          "options": [
+            "was written",
+            "wrote",
+            "is written",
+            "has written"
+          ],
+          "correct_answers": [
+            "was written"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-011",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "The woman ___ daughter is a pilot works at the bank.",
+          "difficulty": 2,
+          "explanation_id": "Whose menyatakan kepemilikan.",
+          "options": [
+            "whose",
+            "who",
+            "which",
+            "whom"
+          ],
+          "correct_answers": [
+            "whose"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-012",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "___ it was raining, we played football.",
+          "difficulty": 2,
+          "explanation_id": "Although + klausa (kontras).",
+          "options": [
+            "Although",
+            "Despite",
+            "Because of",
+            "However"
+          ],
+          "correct_answers": [
+            "Although"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-013",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Lengkapi: She ___ not like spicy food. (negatif, he/she/it)",
+          "difficulty": 1,
+          "explanation_id": "Negatif Present Simple: does not + V1.",
+          "correct_answers": [
+            "does"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGC-014",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Lengkapi dengan V3 dari 'write': She has ___ three essays this week.",
+          "difficulty": 2,
+          "explanation_id": "Present Perfect: has + V3 (written).",
+          "correct_answers": [
+            "written"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGC-015",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Lengkapi: I look forward to ___ from you. (hear)",
+          "difficulty": 2,
+          "explanation_id": "Look forward to + V-ing.",
+          "correct_answers": [
+            "hearing"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGC-016",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Lengkapi dengan preposisi: I have lived here ___ three years.",
+          "difficulty": 1,
+          "explanation_id": "for + durasi.",
+          "correct_answers": [
+            "for"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGC-017",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "GRAMMAR",
+          "prompt": "Klik kata yang salah.",
+          "difficulty": 2,
+          "explanation_id": "Setelah did, kata kerja kembali ke bentuk dasar: go.",
+          "tokens": [
+            "Did",
+            "you",
+            "went",
+            "to",
+            "the",
+            "party",
+            "last",
+            "night?"
+          ],
+          "correct_answers": [
+            2
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-018",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "GRAMMAR",
+          "prompt": "Klik kata yang salah.",
+          "difficulty": 3,
+          "explanation_id": "Surat formal tanpa singkatan dan 'gonna': I am going to.",
+          "tokens": [
+            "I",
+            "am",
+            "writing",
+            "to",
+            "complain",
+            "and",
+            "I",
+            "wanna",
+            "a",
+            "refund."
+          ],
+          "correct_answers": [
+            7
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-019",
+          "question_type": "SENTENCE_REORDER",
+          "skill": "GRAMMAR",
+          "prompt": "Susun menjadi kalimat yang benar.",
+          "difficulty": 3,
+          "explanation_id": "Pola: Not only + did + subjek + V1, but ... also.",
+          "segments": [
+            "Not only did",
+            "the prices rise,",
+            "but wages",
+            "also fell."
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-020",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "GRAMMAR",
+          "prompt": "Cocokkan kalimat dengan tense-nya.",
+          "difficulty": 2,
+          "explanation_id": "Kebiasaan = Present Simple; waktu lampau spesifik = Simple Past; pengalaman = Present Perfect.",
+          "matching": {
+            "left": [
+              "I usually walk to work.",
+              "I walked to work yesterday.",
+              "I have walked to work many times."
+            ],
+            "right": [
+              "Present Simple",
+              "Simple Past",
+              "Present Perfect",
+              "Future Simple"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            0,
+            1,
+            2
+          ],
+          "points": 3
+        }
+      ]
+    }
+  ]
+}
