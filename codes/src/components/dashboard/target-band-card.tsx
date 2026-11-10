@@ -3,10 +3,10 @@
 import Link from 'next/link';
 import { Target } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { TargetBandState } from '@/lib/dashboard';
 import { cn } from '@/lib/utils';
+import { ColorBar } from './color-bar';
 
 /** Kartu Target Band dengan dua kondisi isi (belum ada prediksi / sedang menuju target). */
 export function TargetBandCard({
@@ -19,7 +19,7 @@ export function TargetBandCard({
   className?: string;
 }) {
   if (loading || !state) {
-    return <Skeleton className={cn('h-44 rounded-2xl', className)} role="status" aria-label="Memuat" />;
+    return <Skeleton className={cn('h-32 rounded-2xl', className)} role="status" aria-label="Memuat" />;
   }
   return (
     <Card data-testid="dash-target-band" className={cn('gap-3 rounded-2xl p-5', className)}>
@@ -51,9 +51,10 @@ export function TargetBandCard({
             </span>
             <span className="text-sm text-muted-foreground tabular-nums">/ target {state.target.toFixed(1)}</span>
           </div>
-          <Progress
+          <ColorBar
             value={Math.min(100, Math.round((state.current / state.target) * 100))}
-            aria-label="Kemajuan menuju target band"
+            color="linear-gradient(90deg, var(--chart-1), var(--chart-2))"
+            label="Kemajuan menuju target band"
           />
           <p className="text-sm text-muted-foreground">
             {state.reached ? 'Target band tercapai. Pertahankan konsistensi.' : `Kurang ${state.gap.toFixed(1)} band lagi menuju target.`}

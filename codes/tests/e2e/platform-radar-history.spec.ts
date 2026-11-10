@@ -124,11 +124,10 @@ async function chooseGrammarOnly(page: Page) {
   }
   await expect(page.getByRole('button', { name: /^Grammar/ })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: /^Pilihan ganda\s*\d+$/ }).click();
-  await page.locator('#mix-count-input').fill('5');
-  await expect(page.locator('output[for="mix-count-input"]')).toHaveText('5 soal');
+  await expect(page.getByRole('complementary', { name: 'Ringkasan sesi' })).toContainText('10 soal');
 }
 
-test('lintas-fitur Mix: 5 soal Grammar memperbarui radar; poin, streak dan mahkota tidak berubah', async ({ page }) => {
+test('lintas-fitur Mix: 10 soal Grammar memperbarui radar; poin, streak dan mahkota tidak berubah', async ({ page }) => {
   const beforeStats = await getStats(api);
   const beforeLedger = await getLedger(api);
   await page.goto('/latihan/campur');
@@ -136,8 +135,8 @@ test('lintas-fitur Mix: 5 soal Grammar memperbarui radar; poin, streak dan mahko
   await page.getByRole('button', { name: 'Mulai latihan' }).click();
   await expect(page).toHaveURL(/\/latihan\/campur\/[0-9a-f-]{36}$/);
   mixAttemptId = page.url().split('/').pop()!;
-  await expect(page.getByTestId('question-counter')).toHaveText('Soal 1 dari 5');
-  await finishDrill(page, 5);
+  await expect(page.getByTestId('question-counter')).toHaveText('Soal 1 dari 10');
+  await finishDrill(page, 10);
   await expect(page.getByRole('heading', { name: 'Hasil latihan campur' })).toBeVisible();
 
   const res = await getJson<{ data: { attempt: { score_percent: number; points_awarded: number; passed: boolean | null } } }>(api, `/api/v1/attempts/${mixAttemptId}/result`);
@@ -153,10 +152,10 @@ test('lintas-fitur Mix: 5 soal Grammar memperbarui radar; poin, streak dan mahko
   // Radar: hanya GRAMMAR terisi; sampel tepat 5 -> band dihitung; proksi.
   const r = await radar();
   const g = r.skills.find((s) => s.skill === 'GRAMMAR')!;
-  expect(g.sample_size).toBe(5);
+  expect(g.sample_size).toBe(10);
   expect(g.is_proxy).toBe(true);
   expect(g.score_percent).toBeCloseTo(mixScore, 1);
-  expect(g.estimated_band, 'sampel = 5 -> band dihitung (batas inklusif)').not.toBeNull();
+  expect(g.estimated_band, 'sampel >= 5 -> band dihitung').not.toBeNull();
   expect(g.estimated_band! % 0.5).toBe(0);
   expect(g.updated_at).toMatch(/^\d{4}-\d{2}-\d{2}T/);
   for (const s of r.skills.filter((x) => x.skill !== 'GRAMMAR')) expect(s.sample_size, s.skill).toBe(0);

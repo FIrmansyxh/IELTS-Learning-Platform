@@ -3,13 +3,14 @@
 import * as React from 'react';
 import Link from 'next/link';
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  ReferenceLine,
 } from 'recharts';
 import { CheckCircle2, XCircle, ChevronRight, BarChart2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useBandPredictions, useExamHistory } from '@/hooks/use-skills';
+import { useMe } from '@/hooks/use-auth';
 import { id } from '@/i18n/id';
 import { formatDate } from '@/lib/format';
 
@@ -25,6 +27,8 @@ export function ExamHistoryView() {
   const predictionsQ = useBandPredictions({ page_size: 50 });
   const historyQ = useExamHistory({ page_size: 20 });
 
+  const me = useMe();
+  const targetBand = me.data?.target_band ?? null;
   const predictions = predictionsQ.data?.data ?? [];
   const history = historyQ.data?.data ?? [];
 
@@ -64,47 +68,90 @@ export function ExamHistoryView() {
                   <p>{id.history.chartEmpty}</p>
                 </div>
               ) : (
-                <div className="h-64 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData} margin={{ top: 10, right: 20, bottom: 20, left: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis
-                        dataKey="date"
-                        stroke="hsl(var(--muted-foreground))"
-                        fontSize={11}
-                        tickLine={false}
-                      />
-                      <YAxis
-                        domain={[0, 9]}
-                        ticks={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
-                        stroke="hsl(var(--muted-foreground))"
-                        fontSize={11}
-                        tickLine={false}
-                      />
-                      <Tooltip
-                        content={({ active, payload }) => {
-                          if (!active || !payload?.length) return null;
-                          const item = payload[0]?.payload as typeof chartData[number];
-                          if (!item) return null;
-                          return (
-                            <div className="rounded-md border bg-popover p-2 text-xs shadow-md">
-                              <p className="font-semibold text-popover-foreground">{item.date}</p>
-                              <p className="text-primary font-bold">Band {item.band.toFixed(1)}</p>
-                              <p className="text-muted-foreground">{item.trigger}</p>
-                            </div>
-                          );
-                        }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="band"
-                        stroke="hsl(var(--primary))"
-                        strokeWidth={2.5}
-                        dot={{ r: 4, fill: 'hsl(var(--primary))' }}
-                        activeDot={{ r: 6 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
+                <div className="grid gap-3">
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={chartData} margin={{ top: 12, right: 16, bottom: 4, left: -16 }}>
+                        <defs>
+                          <linearGradient id="band-area" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.5} />
+                            <stop offset="100%" stopColor="var(--chart-2)" stopOpacity={0.04} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 4" stroke="var(--color-border)" vertical={false} />
+                        <XAxis
+                          dataKey="date"
+                          stroke="var(--color-border-strong)"
+                          tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }}
+                          tickLine={false}
+                        />
+                        <YAxis
+                          domain={[4, 9]}
+                          ticks={[4, 5, 6, 7, 8, 9]}
+                          stroke="var(--color-border-strong)"
+                          tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+                        {targetBand !== null ? (
+                          <ReferenceLine
+                            y={Number(targetBand)}
+                            stroke="var(--color-accent)"
+                            strokeDasharray="6 4"
+                            label={{ value: `Target ${Number(targetBand).toFixed(1)}`, fill: 'var(--color-accent-text)', fontSize: 11, position: 'insideTopRight' }}
+                          />
+                        ) : null}
+                        <Tooltip
+                          cursor={{ stroke: 'var(--color-border-strong)' }}
+                          content={({ active, payload }) => {
+                            if (!active || !payload?.length) return null;
+                            const item = payload[0]?.payload as (typeof chartData)[number];
+                            if (!item) return null;
+                            return (
+                              <div className="rounded-md border bg-popover p-2 text-xs shadow-md">
+                                <p className="font-semibold text-popover-foreground">{item.date}</p>
+                                <p className="font-bold text-primary">Band {item.band.toFixed(1)}</p>
+                                <p className="text-muted-foreground">{item.trigger}</p>
+                              </div>
+                            );
+                          }}
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="band"
+                          stroke="var(--chart-1)"
+                          strokeWidth={3}
+                          fill="url(#band-area)"
+                          isAnimationActive={false}
+                          dot={(p: { cx?: number; cy?: number; payload?: (typeof chartData)[number]; index?: number }) => (
+                            <circle
+                              key={p.index}
+                              cx={p.cx}
+                              cy={p.cy}
+                              r={5}
+                              fill={p.payload?.trigger === 'Boss Stage' ? 'var(--chart-4)' : 'var(--chart-1)'}
+                              stroke="var(--color-surface)"
+                              strokeWidth={2}
+                            />
+                          )}
+                          activeDot={{ r: 7 }}
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <ul className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-muted-foreground" aria-label="Keterangan grafik">
+                    <li className="flex items-center gap-1.5">
+                      <span className="size-2.5 rounded-full" style={{ background: 'var(--chart-4)' }} /> Boss Stage
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <span className="size-2.5 rounded-full" style={{ background: 'var(--chart-1)' }} /> Evaluasi
+                    </li>
+                    {targetBand !== null ? (
+                      <li className="flex items-center gap-1.5">
+                        <span className="h-0.5 w-4" style={{ background: 'var(--color-accent)' }} /> Target band
+                      </li>
+                    ) : null}
+                  </ul>
                 </div>
               )}
             </CardContent>

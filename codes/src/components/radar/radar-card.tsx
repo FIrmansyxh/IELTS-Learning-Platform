@@ -20,6 +20,7 @@ import { useRadarData } from '@/hooks/use-skills';
 import { id } from '@/i18n/id';
 import { cn } from '@/lib/utils';
 import type { SkillRadarItemDTO } from '@/contracts/skills';
+import { SKILL_COLOR } from '@/lib/chart-colors';
 
 export function RadarCard({ className }: { className?: string }) {
   const { data, isLoading, isError, refetch } = useRadarData();
@@ -101,6 +102,7 @@ export function RadarCard({ className }: { className?: string }) {
     const hasData = s.estimated_band !== null;
     return {
       skill: rawLabel,
+      key: s.skill,
       fullSkill: id.radar.skills[s.skill],
       band: s.estimated_band ?? 0,
       target: target_band ?? 0,
@@ -174,39 +176,61 @@ export function RadarCard({ className }: { className?: string }) {
 
         {/* Tampilan Visual (Radar Chart atau Alternatif Tabel) */}
         {viewMode === 'chart' ? (
-          <div className="relative h-72 w-full sm:h-80" aria-label={summaryAria} role="img">
+          <div className="relative w-full" aria-label={summaryAria} role="img">
+          <div className="h-64 w-full sm:h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <RadarChart data={chartData} cx="50%" cy="50%" outerRadius="75%">
-                <PolarGrid stroke="hsl(var(--border))" />
+              <RadarChart data={chartData} cx="50%" cy="50%" outerRadius="72%">
+                <defs>
+                  <linearGradient id="radar-fill" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.55} />
+                    <stop offset="100%" stopColor="var(--chart-2)" stopOpacity={0.35} />
+                  </linearGradient>
+                </defs>
+                <PolarGrid stroke="var(--color-border-strong)" strokeOpacity={0.7} />
                 <PolarAngleAxis
                   dataKey="skill"
-                  tick={{ fill: 'hsl(var(--foreground))', fontSize: 12 }}
+                  tick={(props: { x?: number | string; y?: number | string; textAnchor?: 'start' | 'middle' | 'end' | 'inherit'; payload?: { index?: number } }) => {
+                    const item = chartData[props.payload?.index ?? 0];
+                    return (
+                      <text
+                        x={props.x}
+                        y={props.y}
+                        textAnchor={props.textAnchor}
+                        fontSize={12}
+                        fontWeight={600}
+                        fill={item ? SKILL_COLOR[item.key] : 'currentColor'}
+                      >
+                        {item?.skill}
+                      </text>
+                    );
+                  }}
                 />
                 <PolarRadiusAxis
-                  angle={30}
+                  angle={90}
                   domain={[0, 9]}
-                  tickCount={10}
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={10}
+                  tickCount={4}
+                  tick={{ fill: 'var(--color-text-muted)', fontSize: 10 }}
+                  axisLine={false}
                 />
                 {target_band !== null && (
                   <Radar
                     name="Target Band"
                     dataKey="target"
-                    stroke="hsl(var(--secondary))"
+                    stroke="var(--color-accent)"
                     strokeWidth={2}
-                    strokeDasharray="4 4"
+                    strokeDasharray="5 4"
                     fill="transparent"
+                    isAnimationActive={false}
                   />
                 )}
                 <Radar
                   name="Estimasi Band"
                   dataKey="band"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth={2}
-                  fill="hsl(var(--primary))"
-                  fillOpacity={0.2}
-                  dot={{ r: 4, fill: 'hsl(var(--primary))' }}
+                  stroke="var(--chart-1)"
+                  strokeWidth={2.5}
+                  fill="url(#radar-fill)"
+                  isAnimationActive={false}
+                  dot={{ r: 4, fill: 'var(--chart-2)', stroke: 'var(--color-surface)', strokeWidth: 1.5 }}
                 />
                 <Tooltip
                   content={({ active, payload }) => {
@@ -239,6 +263,18 @@ export function RadarCard({ className }: { className?: string }) {
                 />
               </RadarChart>
             </ResponsiveContainer>
+          </div>
+            <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3" aria-hidden="true">
+              {chartData.map((d) => (
+                <li key={d.key} className="flex items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-xs">
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <span className="size-2.5 rounded-full" style={{ background: SKILL_COLOR[d.key] }} />
+                    {d.fullSkill}
+                  </span>
+                  <span className="tabular-nums text-muted-foreground">{d.hasData ? d.band.toFixed(1) : '-'}</span>
+                </li>
+              ))}
+            </ul>
             {isMobile && (
               <div className="mt-2 flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                 <span>Lis = Listening</span>

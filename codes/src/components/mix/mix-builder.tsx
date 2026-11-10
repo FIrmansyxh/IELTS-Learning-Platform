@@ -5,7 +5,6 @@ import {
   BookOpen,
   Check,
   Languages,
-  Lock,
   Mic,
   PenLine,
   Shuffle,
@@ -18,7 +17,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { toast } from 'sonner';
 import { EmptyState, ErrorState } from '@/components/common/state-views';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -30,7 +28,6 @@ import {
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { MIX_COUNT_MAX, MIX_COUNT_MIN, MIX_SKILLS, type MixMode } from '@/contracts/mix';
-import type { BankListItem } from '@/contracts/question-bank';
 import { fmt, id } from '@/i18n/id';
 import { isApiError } from '@/lib/api/client';
 import { apiErrorMessage } from '@/lib/api/errors';
@@ -46,6 +43,9 @@ import {
   skillQuestionCount,
 } from './mix-utils';
 
+/** Jumlah soal otomatis (dibatasi oleh soal yang tersedia). */
+const MIX_COUNT_DEFAULT = 10;
+
 export const MIX_BANKS_KEY = ['mix', 'banks'] as const;
 
 const SKILL_ICON: Record<string, LucideIcon> = {
@@ -58,17 +58,53 @@ const SKILL_ICON: Record<string, LucideIcon> = {
 
 const typeName = (t: string) => id.mix.typeNames[t] ?? t;
 
-function Section({ title, hint, children, titleId }: { title: string; hint?: string; children: React.ReactNode; titleId: string }) {
+function Section({
+  title,
+  hint,
+  children,
+  titleId,
+  step,
+  optional = false,
+}: {
+  title: string;
+  hint?: string;
+  children: React.ReactNode;
+  titleId: string;
+  step?: number;
+  optional?: boolean;
+}) {
   return (
     <section aria-labelledby={titleId} className="grid gap-3 rounded-xl border bg-card p-4 sm:p-5">
-      <div>
-        <h2 id={titleId} className="text-base font-semibold">
-          {title}
-        </h2>
-        {hint ? <p className="text-sm text-muted-foreground">{hint}</p> : null}
+      <div className="flex items-start gap-3">
+        {step ? (
+          <span
+            aria-hidden="true"
+            className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground"
+          >
+            {step}
+          </span>
+        ) : null}
+        <div>
+          <h2 id={titleId} className="flex flex-wrap items-center gap-2 text-base font-semibold">
+            {title}
+            {optional ? (
+              <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{id.mix.optional}</span>
+            ) : null}
+          </h2>
+          {hint ? <p className="text-sm text-muted-foreground">{hint}</p> : null}
+        </div>
       </div>
       {children}
     </section>
+  );
+}
+
+function SummaryRow({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="grid gap-0.5">
+      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</dt>
+      <dd className="break-words font-medium">{children}</dd>
+    </div>
   );
 }
 
@@ -114,7 +150,6 @@ export function MixBuilder() {
   const [skills, setSkills] = React.useState<string[] | null>(null);
   const [types, setTypes] = React.useState<string[]>([]);
   const [bankCodes, setBankCodes] = React.useState<string[] | null>(null);
-  const [count, setCount] = React.useState(10);
   const [diffMin, setDiffMin] = React.useState(1);
   const [diffMax, setDiffMax] = React.useState(5);
   const [serverMax, setServerMax] = React.useState<number | null>(null);
@@ -158,7 +193,7 @@ export function MixBuilder() {
   const capacity = estimateCapacity(scopeBanks, new Set(activeTypes));
   const capByServer = serverMax === null ? MIX_COUNT_MAX : serverMax;
   const maxCount = Math.max(MIX_COUNT_MIN, Math.min(MIX_COUNT_MAX, capacity, capByServer));
-  const effectiveCount = clampCount(count, maxCount);
+  const effectiveCount = clampCount(MIX_COUNT_DEFAULT, maxCount);
   const lowCapacity = Math.min(capacity, capByServer) < MIX_COUNT_MIN;
   const hasAi = visibleBanks.some((b) => b.skill === 'WRITING' || b.skill === 'SPEAKING');
 
@@ -181,11 +216,6 @@ export function MixBuilder() {
     resetServerError();
     setTypes((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : [...cur, t]));
   };
-  const toggleBank = (code: string) => {
-    resetServerError();
-    setBankCodes((cur) => ((cur ?? []).includes(code) ? (cur ?? []).filter((x) => x !== code) : [...(cur ?? []), code]));
-  };
-
   const start = useMutation({
     mutationFn: (mode: MixMode) => {
       if (mode === 'AUTO_WEAKNESS') return mixApi.start(buildAutoRequest(effectiveCount));
@@ -231,7 +261,7 @@ export function MixBuilder() {
   }
   if (pool.length === 0) {
     return (
-      <div className="grid max-w-6xl gap-4">
+      <div className="grid w-full gap-4">
         <Header />
         <EmptyState message={id.mix.empty} />
       </div>
@@ -241,8 +271,22 @@ export function MixBuilder() {
   const canStart = selectedSkills.length > 0 && !lowCapacity && !start.isPending;
   const errorText = startError ?? (lowCapacity && selectedSkills.length > 0 ? id.mix.notEnoughNone : null);
 
+  const diffPreset = (min: number, max: number) => {
+    resetServerError();
+    setDiffMin(min);
+    setDiffMax(max);
+  };
+  const presetOn = (min: number, max: number) => diffMin === min && diffMax === max;
+  const presets: Array<{ key: string; min: number; max: number }> = [
+    { key: 'ALL', min: 1, max: 5 },
+    { key: 'EASY', min: 1, max: 2 },
+    { key: 'MEDIUM', min: 3, max: 3 },
+    { key: 'HARD', min: 4, max: 5 },
+  ];
+  const autoDisabled = start.isPending || Math.min(pool.reduce((n, b) => n + b.question_count, 0), capByServer) < MIX_COUNT_MIN;
+
   return (
-    <div className="grid max-w-6xl gap-5">
+    <div className="grid w-full gap-5">
       <Header />
 
       {active ? (
@@ -259,192 +303,209 @@ export function MixBuilder() {
         </div>
       ) : null}
 
-      <Section title={id.mix.skillsTitle} hint={id.mix.skillsHint} titleId="mix-skills">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {MIX_SKILLS.map((s) => {
-            const Icon = SKILL_ICON[s] ?? BookOpen;
-            const total = skillQuestionCount(pool, s);
-            const selected = selectedSkills.includes(s);
-            const disabled = total === 0;
-            return (
-              <button
-                key={s}
-                type="button"
-                aria-pressed={selected}
-                disabled={disabled}
-                onClick={() => toggleSkill(s)}
-                className={cn(
-                  'relative flex min-h-24 flex-col items-start gap-1 rounded-xl border p-3 text-left outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
-                  selected ? 'border-primary bg-primary/5' : 'bg-background hover:bg-accent',
-                )}
-              >
-                <span className="flex w-full items-center justify-between">
-                  <Icon className="size-5 text-primary" aria-hidden="true" />
-                  {selected ? <Check className="size-4 text-primary" aria-hidden="true" /> : null}
-                </span>
-                <span className="font-semibold">{id.mix.skillNames[s]}</span>
-                <span className="text-xs text-muted-foreground">
-                  {disabled ? id.mix.skillNoBank : fmt(id.mix.skillQuestions, { n: total })}
-                </span>
-                {s === 'WRITING' || s === 'SPEAKING' ? (
-                  <span className="text-xs text-muted-foreground">{id.mix.skillAiNote}</span>
+      <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_22rem]">
+        <div className="grid gap-5">
+          <Section step={1} title={id.mix.skillsTitle} hint={id.mix.skillsHint} titleId="mix-skills">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+              {MIX_SKILLS.map((s) => {
+                const Icon = SKILL_ICON[s] ?? BookOpen;
+                const total = skillQuestionCount(pool, s);
+                const selected = selectedSkills.includes(s);
+                const disabled = total === 0;
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    aria-pressed={selected}
+                    disabled={disabled}
+                    onClick={() => toggleSkill(s)}
+                    className={cn(
+                      'relative flex min-h-24 flex-col items-start gap-1 rounded-xl border p-3 text-left outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
+                      selected ? 'border-primary bg-primary/5' : 'bg-background hover:bg-accent',
+                    )}
+                  >
+                    <span className="flex w-full items-center justify-between">
+                      <Icon className="size-5 text-primary" aria-hidden="true" />
+                      {selected ? <Check className="size-4 text-primary" aria-hidden="true" /> : null}
+                    </span>
+                    <span className="font-semibold">{id.mix.skillNames[s]}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {disabled ? id.mix.skillNoBank : fmt(id.mix.skillQuestions, { n: total })}
+                    </span>
+                    {s === 'WRITING' || s === 'SPEAKING' ? (
+                      <span className="text-xs text-muted-foreground">{id.mix.skillAiNote}</span>
+                    ) : null}
+                  </button>
+                );
+              })}
+            </div>
+            {(all ?? []).some((b) => !b.selectable_in_mix) ? (
+              <p className="text-xs text-muted-foreground">{id.mix.bankListening}</p>
+            ) : null}
+          </Section>
+
+          <Section step={2} optional title={id.mix.typesTitle} hint={id.mix.typesHint} titleId="mix-types">
+            {typeOptions.length === 0 ? (
+              <p className="text-sm text-muted-foreground">{id.mix.typesNone}</p>
+            ) : (
+              <>
+                <div role="group" aria-labelledby="mix-types" className="flex flex-wrap gap-2">
+                  {typeOptions.map((t) => {
+                    const on = activeTypes.includes(t.question_type);
+                    return (
+                      <button
+                        key={t.question_type}
+                        type="button"
+                        aria-pressed={on}
+                        title={id.mix.typeHelp[t.question_type]}
+                        onClick={() => toggleType(t.question_type)}
+                        className={cn(
+                          'inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3.5 text-sm font-medium outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50',
+                          on ? 'border-primary bg-primary text-primary-foreground' : 'bg-background hover:bg-accent',
+                        )}
+                      >
+                        {on ? <Check className="size-4" aria-hidden="true" /> : null}
+                        {typeName(t.question_type)}
+                        <span className={cn('text-xs tabular-nums', on ? 'opacity-80' : 'text-muted-foreground')}>{t.count}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                {activeTypes.length > 0 ? (
+                  <ul className="grid gap-1 rounded-lg bg-muted/50 p-3 text-sm" data-testid="mix-type-help">
+                    {activeTypes.map((t) => (
+                      <li key={t}>
+                        <strong>{typeName(t)}:</strong> <span className="text-muted-foreground">{id.mix.typeHelp[t] ?? ''}</span>
+                      </li>
+                    ))}
+                  </ul>
                 ) : null}
-              </button>
-            );
-          })}
-        </div>
-      </Section>
+              </>
+            )}
+          </Section>
 
-      <Section title={id.mix.typesTitle} hint={id.mix.typesHint} titleId="mix-types">
-        {typeOptions.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{id.mix.typesNone}</p>
-        ) : (
-          <div role="group" aria-labelledby="mix-types" className="flex flex-wrap gap-2">
-            {typeOptions.map((t) => {
-              const on = activeTypes.includes(t.question_type);
-              return (
-                <button
-                  key={t.question_type}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => toggleType(t.question_type)}
-                  className={cn(
-                    'inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3.5 text-sm font-medium outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50',
-                    on ? 'border-primary bg-primary text-primary-foreground' : 'bg-background hover:bg-accent',
-                  )}
-                >
-                  {on ? <Check className="size-4" aria-hidden="true" /> : null}
-                  {typeName(t.question_type)}
-                  <span className={cn('text-xs tabular-nums', on ? 'opacity-80' : 'text-muted-foreground')}>{t.count}</span>
-                </button>
-              );
-            })}
+          <div className="grid gap-5">
+            <Section step={3} optional title={id.mix.difficultyTitle} hint={id.mix.difficultyHint} titleId="mix-difficulty">
+              <div role="group" aria-label={id.mix.presetTitle} className="flex flex-wrap gap-2">
+                {presets.map((pr) => (
+                  <button
+                    key={pr.key}
+                    type="button"
+                    aria-pressed={presetOn(pr.min, pr.max)}
+                    onClick={() => diffPreset(pr.min, pr.max)}
+                    className={cn(
+                      'inline-flex min-h-11 items-center rounded-full border px-3.5 text-sm font-medium outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50',
+                      presetOn(pr.min, pr.max) ? 'border-primary bg-primary text-primary-foreground' : 'bg-background hover:bg-accent',
+                    )}
+                  >
+                    {id.mix.presets[pr.key]}
+                  </button>
+                ))}
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="grid gap-1 text-sm font-medium">
+                  {id.mix.difficultyMinAria}
+                  <input
+                    type="range"
+                    min={1}
+                    max={5}
+                    step={1}
+                    value={diffMin}
+                    onChange={(e) => {
+                      resetServerError();
+                      const v = Number(e.target.value);
+                      setDiffMin(v);
+                      if (v > diffMax) setDiffMax(v);
+                    }}
+                    aria-valuetext={String(diffMin)}
+                    className="h-11 w-full cursor-pointer accent-[var(--color-primary)]"
+                  />
+                </label>
+                <label className="grid gap-1 text-sm font-medium">
+                  {id.mix.difficultyMaxAria}
+                  <input
+                    type="range"
+                    min={1}
+                    max={5}
+                    step={1}
+                    value={diffMax}
+                    onChange={(e) => {
+                      resetServerError();
+                      const v = Number(e.target.value);
+                      setDiffMax(v);
+                      if (v < diffMin) setDiffMin(v);
+                    }}
+                    aria-valuetext={String(diffMax)}
+                    className="h-11 w-full cursor-pointer accent-[var(--color-primary)]"
+                  />
+                </label>
+              </div>
+              <p className="text-sm font-medium tabular-nums" data-testid="mix-difficulty-range">
+                {fmt(id.mix.difficultyRange, { min: diffMin, max: diffMax })}
+              </p>
+            </Section>
           </div>
-        )}
-      </Section>
-
-      <Section title={id.mix.banksTitle} hint={id.mix.banksHint} titleId="mix-banks">
-        <ul className="grid gap-2">
-          {(all ?? [])
-            .filter((b) => selectedSkills.includes(b.skill) || !b.selectable_in_mix)
-            .map((b) => (
-              <BankRow
-                key={b.bank_code}
-                bank={b}
-                checked={(bankCodes ?? []).includes(b.bank_code)}
-                onToggle={() => toggleBank(b.bank_code)}
-              />
-            ))}
-        </ul>
-      </Section>
-
-      <Section title={id.mix.countTitle} titleId="mix-count">
-        <div className="grid gap-2">
-          <div className="flex items-center justify-between">
-            <label htmlFor="mix-count-input" className="text-sm font-medium">
-              {id.mix.countAria}
-            </label>
-            <output htmlFor="mix-count-input" className="text-lg font-bold tabular-nums">
-              {fmt(id.mix.countValue, { n: effectiveCount })}
-            </output>
-          </div>
-          <input
-            id="mix-count-input"
-            type="range"
-            min={MIX_COUNT_MIN}
-            max={maxCount}
-            step={1}
-            value={effectiveCount}
-            disabled={lowCapacity || maxCount <= MIX_COUNT_MIN}
-            onChange={(e) => {
-              setStartError(null);
-              setCount(Number(e.target.value));
-            }}
-            aria-valuetext={fmt(id.mix.countValue, { n: effectiveCount })}
-            className="h-11 w-full cursor-pointer accent-[var(--color-primary)] disabled:cursor-not-allowed disabled:opacity-50"
-          />
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{MIX_COUNT_MIN}</span>
-            <span>{maxCount}</span>
-          </div>
-          {maxCount < MIX_COUNT_MAX && !lowCapacity ? (
-            <p className="text-xs text-muted-foreground">{fmt(id.mix.countMax, { n: maxCount })}</p>
-          ) : null}
         </div>
-      </Section>
 
-      <Section title={id.mix.difficultyTitle} hint={id.mix.difficultyHint} titleId="mix-difficulty">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <label className="grid gap-1 text-sm font-medium">
-            {id.mix.difficultyMinAria}
-            <input
-              type="range"
-              min={1}
-              max={5}
-              step={1}
-              value={diffMin}
-              onChange={(e) => {
-                resetServerError();
-                const v = Number(e.target.value);
-                setDiffMin(v);
-                if (v > diffMax) setDiffMax(v);
-              }}
-              aria-valuetext={String(diffMin)}
-              className="h-11 w-full cursor-pointer accent-[var(--color-primary)]"
-            />
-          </label>
-          <label className="grid gap-1 text-sm font-medium">
-            {id.mix.difficultyMaxAria}
-            <input
-              type="range"
-              min={1}
-              max={5}
-              step={1}
-              value={diffMax}
-              onChange={(e) => {
-                resetServerError();
-                const v = Number(e.target.value);
-                setDiffMax(v);
-                if (v < diffMin) setDiffMin(v);
-              }}
-              aria-valuetext={String(diffMax)}
-              className="h-11 w-full cursor-pointer accent-[var(--color-primary)]"
-            />
-          </label>
-        </div>
-        <p className="text-sm font-medium tabular-nums" data-testid="mix-difficulty-range">
-          {fmt(id.mix.difficultyRange, { min: diffMin, max: diffMax })}
-        </p>
-      </Section>
+        <aside aria-label={id.mix.summaryTitle} className="grid gap-4 rounded-xl border bg-card p-4 sm:p-5 xl:sticky xl:top-4">
+          <h2 className="text-base font-semibold">{id.mix.summaryTitle}</h2>
+          <dl className="grid gap-2 text-sm">
+            <SummaryRow label={id.mix.summarySkills}>
+              {selectedSkills.length > 0 ? selectedSkills.map((s) => id.mix.skillNames[s] ?? s).join(', ') : id.mix.summaryNone}
+            </SummaryRow>
+            <SummaryRow label={id.mix.summaryTypes}>
+              {activeTypes.length > 0 ? activeTypes.map(typeName).join(', ') : id.mix.summaryAllTypes}
+            </SummaryRow>
+            {chosenBanks.length > 0 ? (
+              <SummaryRow label={id.mix.summaryBanks}>
+                <span className="flex flex-wrap items-center gap-2">
+                  {chosenBanks.map((b) => b.title).join(', ')}
+                  <button
+                    type="button"
+                    className="text-xs font-medium text-primary underline underline-offset-2"
+                    onClick={() => setBankCodes([])}
+                  >
+                    {id.mix.clearBank}
+                  </button>
+                </span>
+              </SummaryRow>
+            ) : null}
+            <SummaryRow label={id.mix.summaryCount}>{fmt(id.mix.countAuto, { n: effectiveCount })}</SummaryRow>
+            <SummaryRow label={id.mix.summaryDifficulty}>{fmt(id.mix.difficultyRange, { min: diffMin, max: diffMax })}</SummaryRow>
+          </dl>
 
-      {hasAi ? <p className="text-sm text-muted-foreground">{id.mix.aiNote}</p> : null}
+          {hasAi ? <p className="text-xs text-muted-foreground">{id.mix.aiNote}</p> : null}
 
-      <div aria-live="polite" role="status" className="min-h-0">
-        {selectedSkills.length === 0 ? <p className="text-sm text-destructive">{id.mix.needSkill}</p> : null}
-        {errorText ? (
-          <p role="alert" className="text-sm font-medium text-destructive">
-            {errorText}
-          </p>
-        ) : null}
+          <div aria-live="polite" role="status" className="min-h-0">
+            {selectedSkills.length === 0 ? <p className="text-sm text-destructive">{id.mix.needSkill}</p> : null}
+            {errorText ? (
+              <p role="alert" className="text-sm font-medium text-destructive">
+                {errorText}
+              </p>
+            ) : null}
+          </div>
+
+          <Button size="lg" disabled={!canStart} loading={start.isPending && start.variables === 'MANUAL'} onClick={() => requestStart('MANUAL')}>
+            {start.isPending && start.variables === 'MANUAL' ? id.mix.starting : id.mix.start}
+          </Button>
+
+          <div className="grid gap-2 border-t pt-4">
+            <p className="text-xs font-medium text-muted-foreground">{id.mix.orQuick}</p>
+            <Button
+              size="lg"
+              variant="outline"
+              disabled={autoDisabled}
+              loading={start.isPending && start.variables === 'AUTO_WEAKNESS'}
+              onClick={() => requestStart('AUTO_WEAKNESS')}
+            >
+              <Sparkles aria-hidden="true" />
+              {id.mix.auto}
+            </Button>
+            <p className="text-xs text-muted-foreground">{id.mix.autoHint}</p>
+          </div>
+          <p className="text-xs text-muted-foreground">{id.mix.noPoints}</p>
+        </aside>
       </div>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <Button size="lg" disabled={!canStart} loading={start.isPending && start.variables === 'MANUAL'} onClick={() => requestStart('MANUAL')}>
-          {start.isPending && start.variables === 'MANUAL' ? id.mix.starting : id.mix.start}
-        </Button>
-        <Button
-          size="lg"
-          variant="outline"
-          disabled={start.isPending || Math.min(pool.reduce((n, b) => n + b.question_count, 0), capByServer) < MIX_COUNT_MIN}
-          loading={start.isPending && start.variables === 'AUTO_WEAKNESS'}
-          onClick={() => requestStart('AUTO_WEAKNESS')}
-        >
-          <Sparkles aria-hidden="true" />
-          {id.mix.auto}
-        </Button>
-      </div>
-      <p className="text-sm text-muted-foreground">{id.mix.autoHint}</p>
-      <p className="text-sm text-muted-foreground">{id.mix.noPoints}</p>
 
       <Dialog open={pendingMode !== null} onOpenChange={(o) => !o && setPendingMode(null)}>
         <DialogContent>
@@ -474,56 +535,19 @@ export function MixBuilder() {
 
 function Header() {
   return (
-    <header className="grid gap-1">
+    <header className="grid gap-2">
       <h1 className="flex items-center gap-2 text-2xl font-bold">
         <Shuffle className="size-6 text-primary" aria-hidden="true" />
         {id.mix.title}
       </h1>
-      <p className="text-muted-foreground">{id.mix.subtitle}</p>
+      <p className="max-w-4xl text-muted-foreground">{id.mix.subtitle}</p>
+      <ol className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-foreground" aria-label={id.mix.howTitle}>
+        {id.mix.howSteps.map((t, i) => (
+          <li key={t}>
+            <strong className="text-foreground">{fmt(id.mix.stepLabel, { n: i + 1 })}:</strong> {t}
+          </li>
+        ))}
+      </ol>
     </header>
-  );
-}
-
-function BankRow({ bank, checked, onToggle }: { bank: BankListItem; checked: boolean; onToggle: () => void }) {
-  const locked = !bank.selectable_in_mix;
-  const inputId = `mix-bank-${bank.bank_code}`;
-  return (
-    <li>
-      <label
-        htmlFor={inputId}
-        className={cn(
-          'flex min-h-11 items-start gap-3 rounded-lg border p-3',
-          locked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:bg-accent',
-          checked && 'border-primary bg-primary/5',
-        )}
-      >
-        <input
-          id={inputId}
-          type="checkbox"
-          className="mt-1 size-4 accent-[var(--color-primary)]"
-          checked={checked}
-          disabled={locked}
-          onChange={onToggle}
-        />
-        <span className="grid min-w-0 flex-1 gap-0.5">
-          <span className="flex flex-wrap items-center gap-2 text-sm font-medium">
-            {bank.title}
-            {bank.has_passage ? <Badge variant="secondary">{id.mix.bankPassage}</Badge> : null}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {locked ? (
-              <span className="inline-flex items-center gap-1">
-                <Lock className="size-3" aria-hidden="true" />
-                {id.mix.bankListening}
-              </span>
-            ) : (
-              <>
-                {id.mix.skillNames[bank.skill] ?? bank.skill} · {fmt(id.mix.bankCount, { n: bank.question_count })}
-              </>
-            )}
-          </span>
-        </span>
-      </label>
-    </li>
   );
 }

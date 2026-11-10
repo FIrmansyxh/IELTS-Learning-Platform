@@ -22,8 +22,7 @@ async function chooseGrammarOnly(page: import('@playwright/test').Page) {
   }
   await expect(page.getByRole('button', { name: /^Grammar/ })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: /^Pilihan ganda\s*\d+$/ }).click();
-  await page.locator('#mix-count-input').fill('5');
-  await expect(page.locator('output[for="mix-count-input"]')).toHaveText('5 soal');
+  await expect(page.getByRole('complementary', { name: 'Ringkasan sesi' })).toContainText('10 soal');
 }
 
 test('layar Mix Builder: Listening tidak dapat dipilih, semua skill lain punya bank', async ({ page }) => {
@@ -32,7 +31,7 @@ test('layar Mix Builder: Listening tidak dapat dipilih, semua skill lain punya b
   // Tidak ada tombol skill Listening; banknya tampil terkunci dengan keterangan.
   await expect(page.getByRole('button', { name: /^Listening/ })).toHaveCount(0);
   await expect(page.getByText('Listening belum tersedia di latihan campur')).toBeVisible();
-  await expect(page.locator('#mix-bank-GT-LIS-S1-001')).toBeDisabled();
+  await expect(page.getByRole('checkbox')).toHaveCount(0); // bank tidak ditampilkan
   // Semua skill kini punya bank (termasuk Vocabulary dan Reading): tombolnya aktif.
   await expect(page.getByRole('button', { name: /^Vocabulary/ })).toBeEnabled();
   await expect(page.getByRole('button', { name: /^Reading/ })).toBeEnabled();
@@ -48,9 +47,9 @@ test('MANUAL Grammar sampai selesai, lihat hasil, dan tidak ada poin', async ({ 
   await expect(page.getByText('Latihan campur tidak menambah poin atau streak', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Mulai latihan' }).click();
   await expect(page).toHaveURL(/\/latihan\/campur\/[0-9a-f-]{36}$/);
-  await expect(page.getByTestId('question-counter')).toHaveText('Soal 1 dari 5');
+  await expect(page.getByTestId('question-counter')).toHaveText('Soal 1 dari 10');
 
-  await finishDrill(page, 5);
+  await finishDrill(page, 10);
 
   await expect(page.getByRole('heading', { name: 'Hasil latihan campur' })).toBeVisible();
   await expect(page.getByTestId('score-percent')).toContainText('%');

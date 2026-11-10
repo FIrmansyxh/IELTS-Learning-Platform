@@ -75,54 +75,59 @@ export function Dashboard() {
         </Card>
       )}
 
-      <div id="dashboard-slots" data-slot="dashboard-slots" className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-        <ResumeLearningCard
-          placementAvailable={Boolean(placementQ.data?.available)}
-          className="md:col-span-2 xl:col-span-2"
-        />
-        <StreakHero
-          loading={statsQ.isPending}
-          data={
-            statsQ.data
-              ? {
-                  streakDays: statsQ.data.daily_streak_days,
-                  longestStreak: statsQ.data.longest_daily_streak,
-                  totalPoints: statsQ.data.total_points,
-                  dailyTargetDone: isDailyTargetDone(statsQ.data.last_active_date),
-                  streakAtRisk: statsQ.data.streak_at_risk,
-                }
-              : null
-          }
-          className="xl:col-span-2 md:col-span-1"
-        />
-        <TargetBandCard
-          loading={radarQ.isPending}
-          state={radarQ.data ? buildTargetBandState(radarQ.data.target_band, predicted) : { kind: 'NO_TARGET' }}
-          className="xl:col-span-2 md:col-span-1"
-        />
-        <RadarCompetencyCard className="md:col-span-2 xl:col-span-3" />
-        <TierProgressCard
-          loading={treeQ.isPending}
-          tiers={tiers ? buildTierProgress(tiers) : null}
-          className="md:col-span-2 xl:col-span-3"
-        />
-        <CrownCollectionGrid
-          loading={treeQ.isPending}
-          collection={tiers ? buildCrownCollection(tiers) : null}
-          className="md:col-span-2 xl:col-span-3"
-        />
-        <RecentExamHistory
-          loading={historyQ.isPending}
-          items={historyQ.data?.data ?? null}
-          className="md:col-span-2 xl:col-span-3"
-        />
-        {statsQ.data && (
-          <StatsCard
-            stats={statsQ.data}
-            onOpenHistory={() => setHistoryOpen(true)}
-            className="md:col-span-2 xl:col-span-6"
+      {/* Bento: dua kolom yang tingginya mengikuti isi (tanpa meregangkan card). Di bawah xl menjadi satu kolom dengan urutan `order`. */}
+      <div id="dashboard-slots" data-slot="dashboard-slots" className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+        <div className="contents xl:grid xl:gap-4">
+          <ResumeLearningCard
+            placementAvailable={Boolean(placementQ.data?.available)}
+            className="order-1 xl:order-none"
           />
-        )}
+          <RadarCompetencyCard className="order-4 xl:order-none" />
+          {statsQ.data && (
+            <StatsCard
+              stats={statsQ.data}
+              onOpenHistory={() => setHistoryOpen(true)}
+              className="order-8 xl:order-none"
+            />
+          )}
+        </div>
+        <div className="contents xl:grid xl:gap-4">
+          <StreakHero
+            loading={statsQ.isPending}
+            data={
+              statsQ.data
+                ? {
+                    streakDays: statsQ.data.daily_streak_days,
+                    longestStreak: statsQ.data.longest_daily_streak,
+                    totalPoints: statsQ.data.total_points,
+                    dailyTargetDone: isDailyTargetDone(statsQ.data.last_active_date),
+                    streakAtRisk: statsQ.data.streak_at_risk,
+                  }
+                : null
+            }
+            className="order-2 xl:order-none"
+          />
+          <TargetBandCard
+            loading={radarQ.isPending}
+            state={radarQ.data ? buildTargetBandState(radarQ.data.target_band, predicted) : { kind: 'NO_TARGET' }}
+            className="order-3 xl:order-none"
+          />
+          <TierProgressCard
+            loading={treeQ.isPending}
+            tiers={tiers ? buildTierProgress(tiers) : null}
+            className="order-5 xl:order-none"
+          />
+          <CrownCollectionGrid
+            loading={treeQ.isPending}
+            collection={tiers ? buildCrownCollection(tiers) : null}
+            className="order-6 xl:order-none"
+          />
+          <RecentExamHistory
+            loading={historyQ.isPending}
+            items={historyQ.data?.data ?? null}
+            className="order-7 xl:order-none"
+          />
+        </div>
       </div>
       <PointsHistorySheet open={historyOpen} onOpenChange={setHistoryOpen} />
     </div>

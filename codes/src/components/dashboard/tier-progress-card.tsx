@@ -4,12 +4,13 @@ import Link from 'next/link';
 import { Lock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
+import { TIER_COLOR } from '@/lib/chart-colors';
 import type { TierProgress } from '@/lib/dashboard';
 import { cn } from '@/lib/utils';
+import { ColorBar } from './color-bar';
 
-/** Progres 4 tier kurikulum; badge "Skip Test" bila tier bisa dilompati lewat tes. */
+/** Progres 4 tier kurikulum (satu warna per tier); badge "Skip Test" bila tier bisa dilompati lewat tes. */
 export function TierProgressCard({
   tiers,
   loading = false,
@@ -20,10 +21,10 @@ export function TierProgressCard({
   className?: string;
 }) {
   if (loading || !tiers) {
-    return <Skeleton className={cn('h-72 rounded-2xl', className)} role="status" aria-label="Memuat" />;
+    return <Skeleton className={cn('h-56 rounded-2xl', className)} role="status" aria-label="Memuat" />;
   }
   return (
-    <Card data-testid="dash-tiers" className={cn('gap-4 rounded-2xl p-5', className)}>
+    <Card data-testid="dash-tiers" className={cn('gap-3 rounded-2xl p-5', className)}>
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-muted-foreground">Progres Kurikulum</h2>
         <Link href="/peta" className="text-sm font-medium text-primary underline underline-offset-2">
@@ -33,25 +34,31 @@ export function TierProgressCard({
       {tiers.length === 0 ? (
         <p className="text-sm text-muted-foreground">Kurikulum belum tersedia.</p>
       ) : (
-        <ol className="grid gap-3">
-          {tiers.map((t) => (
-            <li key={t.tier_number} data-testid={`dash-tier-${t.tier_number}`} className={cn('grid gap-1.5', t.locked && 'opacity-60')}>
-              <div className="flex items-center justify-between gap-2 text-sm">
-                <span className="flex min-w-0 items-center gap-2 font-medium">
-                  {t.locked && <Lock className="size-3.5 shrink-0" aria-label="Terkunci" />}
-                  <span className="truncate">
-                    Tier {t.tier_number} · {t.title}
+        <ol className="grid gap-3.5">
+          {tiers.map((t) => {
+            const color = TIER_COLOR[t.tier_number] ?? 'var(--chart-1)';
+            return (
+              <li key={t.tier_number} data-testid={`dash-tier-${t.tier_number}`} className={cn('grid gap-1.5', t.locked && 'opacity-60')}>
+                <div className="flex items-center justify-between gap-2 text-sm">
+                  <span className="flex min-w-0 items-center gap-2 font-medium">
+                    <span className="size-2.5 shrink-0 rounded-full" style={{ background: color }} aria-hidden="true" />
+                    {t.locked && <Lock className="size-3.5 shrink-0" aria-label="Terkunci" />}
+                    <span className="truncate">
+                      Tier {t.tier_number} · {t.title}
+                    </span>
+                    <span className="shrink-0 text-xs text-muted-foreground">{t.cefr_level}</span>
                   </span>
-                  <span className="shrink-0 text-xs text-muted-foreground">{t.cefr_level}</span>
-                </span>
-                <span className="flex shrink-0 items-center gap-2">
-                  {t.skip_test_available && <Badge variant="outline">Skip Test</Badge>}
-                  <span className="tabular-nums text-muted-foreground">{t.progress_percent}%</span>
-                </span>
-              </div>
-              <Progress value={t.progress_percent} aria-label={`Progres Tier ${t.tier_number}`} />
-            </li>
-          ))}
+                  <span className="flex shrink-0 items-center gap-2">
+                    {t.skip_test_available && <Badge variant="outline">Skip Test</Badge>}
+                    <span className="tabular-nums font-semibold" style={{ color }}>
+                      {t.progress_percent}%
+                    </span>
+                  </span>
+                </div>
+                <ColorBar value={t.progress_percent} color={color} label={`Progres Tier ${t.tier_number}`} />
+              </li>
+            );
+          })}
         </ol>
       )}
     </Card>
