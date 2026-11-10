@@ -105,7 +105,7 @@ export function ExamIntroView({ intro }: { intro: ExamIntroData }) {
 
   const minutes = Math.max(1, Math.round(intro.time_limit_seconds / 60));
   return (
-    <div className="mx-auto grid max-w-2xl gap-5">
+    <div className="mx-auto grid max-w-3xl gap-5">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
@@ -232,7 +232,7 @@ export function ExamIntro({ assessmentSetId }: { assessmentSetId: string }) {
     queryFn: ({ signal }) => examsApi.intro(assessmentSetId, signal),
     staleTime: 0,
   });
-  if (q.isPending) return <Skeleton className="mx-auto h-96 max-w-2xl rounded-xl" role="status" aria-label={id.common.loading} />;
+  if (q.isPending) return <Skeleton className="mx-auto h-96 max-w-3xl rounded-xl" role="status" aria-label={id.common.loading} />;
   if (q.isError) {
     const e = q.error;
     if (isApiError(e) && (e.status === 404 || e.status === 400)) {

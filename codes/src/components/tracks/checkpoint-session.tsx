@@ -35,7 +35,7 @@ export function CheckpointSession({ attemptId }: { attemptId: string }) {
   if (resultQ.data) return <CheckpointResultView result={resultQ.data} />;
 
   if (attemptQ.isPending || resultQ.isPending) {
-    return <Skeleton className="h-96 w-full max-w-3xl mx-auto rounded-xl" role="status" aria-label="Memuat sesi..." />;
+    return <Skeleton className="h-96 w-full max-w-5xl mx-auto rounded-xl" role="status" aria-label="Memuat sesi..." />;
   }
 
   if (attemptQ.isError) {
@@ -68,7 +68,7 @@ export function CheckpointSession({ attemptId }: { attemptId: string }) {
   }
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto max-w-5xl">
       <ActiveDrill
         attempt={attempt}
         onFinished={(res: AttemptResult) => {

@@ -97,7 +97,7 @@ test('pengguna baru: kartu "Berikutnya untuk Anda" paling atas, satu CTA primer,
   await expect(page.getByRole('link', { name: /Lanjutkan Belajar/ })).toHaveCount(1);
   const cardBox = (await card.boundingBox())!;
   const slots = (await page.locator('#dashboard-slots').boundingBox())!;
-  expect(cardBox.y).toBeLessThan(slots.y);
+  expect(cardBox.y).toBeLessThanOrEqual(slots.y + 1);
   const m = await noHorizontalOverflow(page);
   expect(m.sw).toBeLessThanOrEqual(m.w);
   await shot(page, `resume-fallback-${test.info().project.name}`);

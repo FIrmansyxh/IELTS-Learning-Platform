@@ -350,7 +350,7 @@ export function SpeakingRecorder({
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
+    <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto">
       {/* Consent Dialog */}
       <RecordingConsentDialog
         open={consentOpen}

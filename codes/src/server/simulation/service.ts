@@ -304,7 +304,8 @@ export class SimulationService {
     // Ambil questions tanpa kunci/penjelasan
     const publicQuestions = secConfig.questions.map((q) => {
       const rawQ = q.question as unknown as Question;
-      let served: Record<string, unknown> = {};
+      // Soal non-MCQ (matching, reorder, dst.) memakai `served` yang sudah dibangun saat perakitan simulasi.
+      let served: Record<string, unknown> = (state.served?.[q.question_id] as Record<string, unknown> | undefined) ?? {};
       if (rawQ.question_type === 'MCQ_SINGLE' || rawQ.question_type === 'MCQ_MULTI') {
         const rawOpts = 'options' in rawQ ? (rawQ as { options?: string[] }).options : undefined;
         if (Array.isArray(rawOpts)) {

@@ -78,7 +78,7 @@ export function ExamResultView({ result, onRefetch }: { result: AttemptResult; o
   const firstCode = skip && !skip.passed ? firstSubModuleCode(tree.data, skip.scope) : null;
 
   return (
-    <div className="mx-auto grid max-w-2xl gap-5">
+    <div className="mx-auto grid max-w-3xl gap-5">
       <div className="grid gap-4 rounded-xl border bg-card p-5 sm:p-6">
         <h1 ref={headingRef} tabIndex={-1} className="flex items-center gap-2 text-2xl font-bold outline-none">
           {skip?.passed ? <FastForward className="size-6" aria-hidden="true" /> : null}
@@ -191,7 +191,7 @@ export function ExamResult({ attemptId }: { attemptId: string }) {
   React.useEffect(() => {
     if (notFinished) router.replace(`/ujian/${attemptId}`);
   }, [notFinished, router, attemptId]);
-  if (q.isPending || notFinished) return <Skeleton className="mx-auto h-96 max-w-2xl rounded-xl" role="status" aria-label={id.common.loading} />;
+  if (q.isPending || notFinished) return <Skeleton className="mx-auto h-96 max-w-3xl rounded-xl" role="status" aria-label={id.common.loading} />;
   if (q.isError) {
     if (isApiError(q.error) && q.error.status === 404) {
       return (

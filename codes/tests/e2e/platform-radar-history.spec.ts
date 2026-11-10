@@ -118,7 +118,7 @@ test('UI /riwayat dialihkan ke /riwayat/ujian; kondisi kosong, tab Ujian | Penil
 });
 
 async function chooseGrammarOnly(page: Page) {
-  for (const s of ['Reading', 'Writing', 'Speaking']) {
+  for (const s of ['Vocabulary', 'Reading', 'Writing', 'Speaking']) {
     const btn = page.getByRole('button', { name: new RegExp(`^${s}`) });
     if ((await btn.getAttribute('aria-pressed')) === 'true') await btn.click();
   }
@@ -248,10 +248,9 @@ test('riwayat ujian: simulasi Speaking selesai muncul sebagai entri MOCK_TEST be
   page.on('dialog', (d) => void d.accept());
   await page.goto('/simulasi');
   await expect(page.getByRole('heading', { name: 'Simulasi Tes IELTS General Training', level: 1 })).toBeVisible();
-  // Bawaan: Writing terpilih; ganti ke Speaking saja.
-  const card = (name: string) => page.locator('[data-slot="card"]').filter({ has: page.locator('[data-slot="card-title"]', { hasText: new RegExp(`^${name}$`) }) });
-  await card('Speaking').click();
-  await card('Writing').click();
+  // Bawaan: semua section tersedia tercentang; sisakan Speaking saja.
+  await page.getByRole('checkbox', { name: 'Sertakan Reading' }).uncheck();
+  await page.getByRole('checkbox', { name: 'Sertakan Writing' }).uncheck();
   await page.getByRole('button', { name: 'Mulai Simulasi' }).click();
   await expect(page).toHaveURL(/\/simulasi\/[0-9a-f-]{36}$/, { timeout: 20_000 });
   const simId = page.url().split('/').pop()!;

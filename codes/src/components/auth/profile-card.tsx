@@ -167,7 +167,7 @@ export function ProfileCard() {
   if (me.isError) return <ErrorState title={id.profile.loadFailed} onRetry={() => void me.refetch()} />;
 
   return (
-    <div className="mx-auto grid max-w-2xl gap-6">
+    <div className="mx-auto grid max-w-4xl gap-6">
       <h1 className="text-3xl font-bold">{id.profile.title}</h1>
       <Card>
         <CardHeader>

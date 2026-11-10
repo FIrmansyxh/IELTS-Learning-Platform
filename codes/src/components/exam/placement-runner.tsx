@@ -160,7 +160,7 @@ export function PlacementRunner({ attempt }: { attempt: Attempt }) {
       </div>
 
       {/* Main Container */}
-      <main className="mx-auto grid w-full max-w-2xl gap-6 px-4 py-6 sm:py-8">
+      <main className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-6 sm:py-8">
         {currentQ ? (
           <section className="grid gap-6">
             <div className="rounded-xl border bg-card p-4 sm:p-6 shadow-xs">

@@ -135,7 +135,7 @@ export function SimulationRunner({ attemptId }: { attemptId: string }) {
 
   if (simLoading) {
     return (
-      <div className="mx-auto max-w-4xl space-y-6 py-12">
+      <div className="mx-auto max-w-6xl space-y-6 py-12">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-40 w-full" />
       </div>
@@ -144,7 +144,7 @@ export function SimulationRunner({ attemptId }: { attemptId: string }) {
 
   if (!sim || !currentSectionState) {
     return (
-      <div className="mx-auto max-w-4xl py-12 text-center">
+      <div className="mx-auto max-w-6xl py-12 text-center">
         <AlertCircle className="mx-auto size-12 text-destructive" />
         <h2 className="mt-4 text-xl font-bold">Simulasi tidak ditemukan</h2>
       </div>
@@ -161,7 +161,7 @@ export function SimulationRunner({ attemptId }: { attemptId: string }) {
   const isLowTime = timeLeft !== null && timeLeft <= 300;
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 pb-12 pt-2">
+    <div className="mx-auto max-w-7xl space-y-6 pb-12 pt-2">
       {/* Top Header Runner */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
         <div>

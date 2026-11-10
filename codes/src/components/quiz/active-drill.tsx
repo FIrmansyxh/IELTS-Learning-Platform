@@ -109,15 +109,22 @@ export function ActiveDrill({
   }, [totalRemaining]);
 
   /* ---------- fokus & laporan posisi ---------- */
+  // Callback induk sering dibuat ulang tiap render (mis. SubModulePlayer yang render berkala). Bila efek fokus bergantung
+  // padanya, legend soal merebut fokus dari kolom isian setiap kali induk render ulang, sehingga learner harus klik
+  // kolom lagi. Simpan callback di ref dan picu efek HANYA saat soal berganti.
+  const onIndexChangeRef = React.useRef(onIndexChange);
+  React.useEffect(() => {
+    onIndexChangeRef.current = onIndexChange;
+  }, [onIndexChange]);
   const firstRender = React.useRef(true);
   React.useEffect(() => {
-    onIndexChange?.(index, attempt.id);
+    onIndexChangeRef.current?.(index, attempt.id);
     if (firstRender.current) {
       firstRender.current = false;
       return;
     }
     legendRef.current?.focus();
-  }, [index, attempt.id, onIndexChange]);
+  }, [index, attempt.id]);
 
   if (!q) return null;
 

@@ -350,7 +350,7 @@ export function ExamRunner({ attemptId }: { attemptId: string }) {
     if (finished) router.replace(`/ujian/${attemptId}/hasil`);
   }, [finished, router, attemptId]);
 
-  if (q.isPending || finished) return <Skeleton className="mx-auto mt-10 h-96 max-w-3xl rounded-xl" role="status" aria-label={id.common.loading} />;
+  if (q.isPending || finished) return <Skeleton className="mx-auto mt-10 h-96 max-w-5xl rounded-xl" role="status" aria-label={id.common.loading} />;
   if (q.isError) {
     if (isApiError(q.error) && q.error.status === 404) {
       return (

@@ -64,7 +64,7 @@ export function MixPassageCard({ passage }: { passage: MixPassageRef }) {
 }
 
 function SessionSkeleton() {
-  return <Skeleton className="h-96 w-full max-w-3xl rounded-xl" role="status" aria-label={id.common.loading} />;
+  return <Skeleton className="h-96 w-full max-w-5xl rounded-xl" role="status" aria-label={id.common.loading} />;
 }
 
 /** Memuat hasil attempt yang sudah selesai (muat ulang halaman / buka dari tautan). */
@@ -129,7 +129,7 @@ export function MixSession({ attemptId }: { attemptId: string }) {
   }
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-5xl">
       <ActiveDrill
         key={attempt.id}
         attempt={attempt}

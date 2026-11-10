@@ -4,6 +4,7 @@ import path from 'node:path';
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { extractToc, MarkdownArticle } from '../../src/components/player/markdown-article';
+import { enhanceMarkdown } from '../../src/components/player/markdown-enhance';
 
 /**
  * Standar Materi Diperkaya (backlog C-12): artikel panjang dan terstruktur, banyak tabel dan contoh,
@@ -77,6 +78,27 @@ describe('Materi Diperkaya (C-12)', () => {
       });
     });
   }
+
+  it('materi interaktif (C-14): Cek diri menjadi komponen, tanpa sintaks directive mentah yang bocor', () => {
+    for (const code of MODUL_DIPERKAYA) {
+      const md = load(code).materials.article_markdown;
+      const enhanced = enhanceMarkdown(md);
+      expect(enhanced, `${code}: Cek diri gagal dikonversi`).toContain(':::selfcheck');
+      expect(enhanced, `${code}: kunci masih tampil sebagai teks`).not.toContain('**Kunci:**');
+      const { container, unmount } = render(<MarkdownArticle markdown={md} />);
+      expect(container.textContent ?? '', `${code}: directive mentah bocor`).not.toMatch(/:::|Q\| |A\| /);
+      expect(container.querySelector('figure[aria-label="Cek diri"]'), `${code}: komponen Cek diri tidak dirender`).not.toBeNull();
+      unmount();
+    }
+  });
+
+  it('diagram interaktif (C-14): materi utama memuat minimal 25 blok diagram/komponen', () => {
+    let n = 0;
+    for (const code of MODUL_DIPERKAYA) {
+      n += (load(code).materials.article_markdown.match(/^:::(flow|timeline|layers|compare|flip|quiz|checklist)$/gm) ?? []).length;
+    }
+    expect(n).toBeGreaterThanOrEqual(25);
+  });
 
   it('soal isian tidak membocorkan jawaban lewat kurung petunjuk (semua opsi di kurung = jawaban yang diterima)', () => {
     for (const e of readdirSync(ROOT, { withFileTypes: true })) {

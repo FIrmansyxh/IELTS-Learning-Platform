@@ -7,6 +7,8 @@ import remarkGfm from 'remark-gfm';
 import { id } from '@/i18n/id';
 import { cn } from '@/lib/utils';
 import { Callout, type CalloutVariant } from './callout';
+import { InteractiveBlock } from './interactive-blocks';
+import { BLOCK_DIRECTIVES, enhanceMarkdown, type BlockName } from './markdown-enhance';
 
 /* ---------- plugin directive (tanpa dependensi tambahan) ---------- */
 
@@ -22,7 +24,19 @@ const CALLOUTS: readonly string[] = ['tips-examiner', 'kesalahan-umum'];
 
 function plainText(node: MdNode): string {
   if (typeof node.value === 'string') return node.value;
+  if (node.type === 'break') return '\n';
   return (node.children ?? []).map(plainText).join('');
+}
+
+/** Isi blok interaktif: teks polos per baris (paragraf dipisah baris; soft/hard break menjadi baris baru). */
+function blockLines(node: MdNode): string[] {
+  return (node.children ?? [])
+    .filter((c) => !(c.data && c.data.directiveLabel))
+    .map(plainText)
+    .join('\n')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
 }
 
 function visitDirectives(node: MdNode, seen: Map<string, number>): void {
@@ -45,6 +59,12 @@ function visitDirectives(node: MdNode, seen: Map<string, number>): void {
         // Buang label directive ("[judul]"); label ditampilkan komponen.
         child.children = (child.children ?? []).filter((c) => !(c.data && c.data.directiveLabel));
         child.data = { ...(child.data ?? {}), hName: 'div', hProperties: { 'data-callout': name } };
+      } else if ((BLOCK_DIRECTIVES as readonly string[]).includes(name)) {
+        // Blok interaktif: isi diambil sebagai teks polos (tanpa HTML) dan dirender komponen React.
+        const lines = blockLines(child);
+        child.children = [];
+        child.data = { ...(child.data ?? {}), hName: 'div', hProperties: { 'data-block': name, 'data-lines': lines.join('\n') } };
+        continue;
       } else {
         child.data = { ...(child.data ?? {}), hName: 'div' };
       }
@@ -181,6 +201,11 @@ function buildComponents(): Components {
     // Gambar Markdown dibuang: visual disampaikan lewat Slide.
     img: () => null,
     div: (props) => {
+      const block = (props as { 'data-block'?: string })['data-block'];
+      if (block && (BLOCK_DIRECTIVES as readonly string[]).includes(block)) {
+        const raw = (props as { 'data-lines'?: string })['data-lines'] ?? '';
+        return <InteractiveBlock name={block as BlockName} lines={raw.split('\n')} />;
+      }
       const variant = (props as { 'data-callout'?: string })['data-callout'];
       if (variant && CALLOUTS.includes(variant)) {
         return <Callout variant={variant as CalloutVariant}>{props.children}</Callout>;
@@ -196,6 +221,7 @@ function buildComponents(): Components {
  */
 function MarkdownArticleBase({ markdown, className }: { markdown: string; className?: string }) {
   const components = React.useMemo(() => buildComponents(), []);
+  const source = React.useMemo(() => enhanceMarkdown(markdown), [markdown]);
   return (
     <div className={cn('w-full max-w-none text-base leading-[1.7]', className)}>
       <ReactMarkdown
@@ -203,7 +229,7 @@ function MarkdownArticleBase({ markdown, className }: { markdown: string; classN
         components={components}
         urlTransform={(url) => safeHref(url) ?? ''}
       >
-        {markdown}
+        {source}
       </ReactMarkdown>
     </div>
   );

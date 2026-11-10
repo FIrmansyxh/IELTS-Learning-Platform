@@ -79,7 +79,7 @@ export function ExamShell({
       <p className="sr-only" role="status" aria-live="polite">
         {announce}
       </p>
-      <main className="mx-auto grid w-full max-w-4xl gap-6 px-4 py-6 md:px-8">
+      <main className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-6 md:px-8">
         {navigator}
         {children}
       </main>

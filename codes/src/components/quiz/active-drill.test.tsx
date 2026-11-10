@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Attempt } from '@/contracts/attempts';
@@ -191,5 +192,36 @@ describe('DrillResult', () => {
     const r = makeResult({ passed: true, score: 75 });
     renderWithProviders(<DrillResult result={r} onRetry={noop} retrying={false} onReviewMaterial={noop} />);
     expect(screen.getByText('Lulus')).toBeInTheDocument();
+  });
+});
+
+describe('ActiveDrill: fokus kolom isian (regresi)', () => {
+  it('induk yang render ulang dengan callback baru tidak merebut fokus dari kolom isian', async () => {
+    const seen: number[] = [];
+    function Parent() {
+      const [tick, setTick] = React.useState(0);
+      // Callback baru di setiap render, seperti SubModulePlayer yang render berkala.
+      const onIndexChange = (i: number) => seen.push(i);
+      return (
+        <>
+          <button type="button" onClick={() => setTick((t) => t + 1)}>
+            tick {tick}
+          </button>
+          <ActiveDrill attempt={makeAttempt([Q.fill, Q.mcq])} onFinished={vi.fn()} onIndexChange={onIndexChange} />
+        </>
+      );
+    }
+    renderWithProviders(<Parent />);
+    const input = screen.getByRole('textbox');
+    input.focus();
+    fireEvent.change(input, { target: { value: 'are sorted' } });
+    expect(input).toHaveFocus();
+    for (let i = 0; i < 5; i += 1) fireEvent.click(screen.getByRole('button', { name: /tick/ }));
+    await waitFor(() => expect(screen.getByRole('button', { name: 'tick 5' })).toBeInTheDocument());
+    // Fokus dan isi tetap di kolom; callback indeks hanya dilaporkan sekali untuk soal yang sama.
+    expect(screen.getByRole('textbox')).toBe(input);
+    expect(input).toHaveFocus();
+    expect(input).toHaveValue('are sorted');
+    expect(seen).toEqual([0]);
   });
 });
