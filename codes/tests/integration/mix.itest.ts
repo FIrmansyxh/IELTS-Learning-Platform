@@ -84,7 +84,7 @@ describe('impor bank lewat CLI service (AC-12, AC-11c)', () => {
   it('bank awal terimpor dan terbit; hitungan per kind sesuai AC-2', async () => {
     const r = await rows(sql`SELECT bank_kind, sum(question_count) AS n, min(status) AS st FROM assessment_sets WHERE assessment_type = 'QUESTION_BANK' GROUP BY bank_kind`);
     const by = Object.fromEntries(r.map((x) => [x.bank_kind, Number(x.n)]));
-    expect(by).toMatchObject({ WRITING_GT_T1_FORMAL: 3, WRITING_GT_T1_SEMI: 3, WRITING_GT_T1_INFORMAL: 3, WRITING_GT_T2: 9, SPEAKING_P1: 9, SPEAKING_P2: 6, SPEAKING_P3: 6, READING_GT_S1: 8, READING_GT_S2: 8 });
+    expect(by).toMatchObject({ WRITING_GT_T1_FORMAL: 3, WRITING_GT_T1_SEMI: 3, WRITING_GT_T1_INFORMAL: 3, WRITING_GT_T2: 9, SPEAKING_P1: 9, SPEAKING_P2: 6, SPEAKING_P3: 6, READING_GT_S1: 22, READING_GT_S2: 21, READING_GT_S3: 13 }); // termasuk bank simulasi (SIM) dan bank pelengkap
     expect(by.GRAMMAR_GT_REGISTER).toBeGreaterThanOrEqual(16);
     expect(r.every((x) => x.st === 'PUBLISHED')).toBe(true);
   });
@@ -206,6 +206,8 @@ describe('POST /mix-sessions', () => {
   it('AC-9 + passage_index: bank Reading satu teks 8 soal, count 5 -> 5 soal pertama paket, teks utuh tanpa pemisah, passage_count 1', async () => {
     // D4 menang atas kalimat AC-9 lama: satuan Reading = paket (bank, passage_no). Bank fixture ini satu teks 8 soal;
     // bank awal repo (S1: 3/3/2, S2: 4/4) dibuktikan terpisah di bawah (paket utuh per passage_no).
+    // Bank simulasi S3 (GT-RD-S3-SIM) disisihkan agar hanya bank uji yang bertipe READING_GT_S3.
+    await execute(db, sql`UPDATE assessment_sets SET status = 'DRAFT' WHERE bank_code = 'GT-RD-S3-SIM'`);
     const tmp = mkdtempSync(path.join(tmpdir(), 'bank-r-'));
     const qs = Array.from({ length: 8 }, (_, i) => ({ question_id: `Q-GTRT-00${i + 1}`, question_type: 'TFNG', skill: 'READING', prompt: `Pernyataan ${i + 1} benar?`, correct_answers: ['True'], explanation_id: 'Lihat teks.', difficulty: 2, passage_no: 1 }));
     writeFileSync(path.join(tmp, 'r.json'), JSON.stringify({ bank_contract_version: '1.0', banks: [{ bank_code: 'GT-RD-S3-TEST', bank_kind: 'READING_GT_S3', title: 'Reading uji', skill: 'READING', exam_module: 'GENERAL_TRAINING', origin: 'ORIGINAL_AUTHORED', reading_passage_markdown: 'Teks tunggal untuk pengujian.', questions: qs }] }));
@@ -223,9 +225,11 @@ describe('POST /mix-sessions', () => {
     expect(dto.questions.every((q: any) => q.passage_index === 0 && q.bank_code === 'GT-RD-S3-TEST')).toBe(true);
     await execute(db, sql`DELETE FROM attempts`);
     await execute(db, sql`DELETE FROM assessment_sets WHERE bank_code = 'GT-RD-S3-TEST'`);
+    await execute(db, sql`UPDATE assessment_sets SET status = 'PUBLISHED' WHERE bank_code = 'GT-RD-S3-SIM'`);
 
     // Bank asli S1 (paket 3/3/2): setiap paket yang terbawa utuh kecuali yang terpotong di akhir; soal satu paket berurutan.
     const SIZE: Record<number, number> = { 1: 3, 2: 3, 3: 2 };
+    await execute(db, sql`UPDATE assessment_sets SET status = 'DRAFT' WHERE bank_code = 'GT-RD-S1-SIM'`); // ukuran paket bank simulasi berbeda
     for (const seed of ['p1', 'p2', 'p3', 'p4', 'p5']) {
       const m = await mix(u, { bank_kinds: ['READING_GT_S1'], count: 5, mode: 'MANUAL', seed });
       expect(m.status).toBe(201);
@@ -248,6 +252,7 @@ describe('POST /mix-sessions', () => {
     const rd = (await getAttempt(u, real.json.data.attempt_id)).json.data;
     expect(rd.passages.every((p: any) => !p.markdown.includes('===PASSAGE==='))).toBe(true);
     expect(real.json.data.passage_count).toBe(rd.passages.length);
+    await execute(db, sql`UPDATE assessment_sets SET status = 'PUBLISHED' WHERE bank_code = 'GT-RD-S1-SIM'`);
     expect(dto.title).toContain('Latihan campur');
     expect(dto.time_limit_seconds).toBe(0);
     expect(dto.assessment_set_id).toBeNull();
@@ -276,11 +281,11 @@ describe('POST /mix-sessions', () => {
 
   it('AC-10: bank DRAFT dan Listening tidak pernah terpilih', async () => {
     const u = await learnerSession();
-    await execute(db, sql`UPDATE assessment_sets SET status = 'DRAFT' WHERE bank_code = 'GT-GR-REGISTER'`);
+    await execute(db, sql`UPDATE assessment_sets SET status = 'DRAFT' WHERE bank_code IN ('GT-GR-REGISTER', 'GT-GR-CORE')`);
     const r = await mix(u, { skills: ['GRAMMAR'], count: 5, mode: 'MANUAL' });
     expect(r.status).toBe(422);
     expect(r.json.error.details[0].code).toBe('max_available:0');
-    await execute(db, sql`UPDATE assessment_sets SET status = 'PUBLISHED' WHERE bank_code = 'GT-GR-REGISTER'`);
+    await execute(db, sql`UPDATE assessment_sets SET status = 'PUBLISHED' WHERE bank_code IN ('GT-GR-REGISTER', 'GT-GR-CORE')`);
     const all = await mix(u, { count: 30, mode: 'MANUAL', seed: 'x' });
     expect(all.status, JSON.stringify(all.json)).toBe(201);
     const qs = (await getAttempt(u, all.json.data.attempt_id)).json.data.questions;
@@ -373,7 +378,8 @@ describe('alur attempt MIX_PRACTICE sampai submit (AC-7, AC-8, AC-16)', () => {
     expect(second.json.data.feedback.is_correct).toBe(false);
     // attempt_answers.assessment_set_id = bank asal soal
     const ans = await rows(sql`SELECT a.assessment_set_id, s.bank_code FROM attempt_answers a JOIN assessment_sets s ON s.id = a.assessment_set_id WHERE a.attempt_id = ${id}`);
-    expect(ans.map((x) => x.bank_code)).toEqual(['GT-GR-REGISTER', 'GT-GR-REGISTER']);
+    expect(ans).toHaveLength(2);
+    expect(ans.every((x) => /^GT-GR-/.test(String(x.bank_code)))).toBe(true);
 
     const s = await submit(u, id);
     expect(s.status, JSON.stringify(s.json)).toBe(200);
@@ -382,7 +388,8 @@ describe('alur attempt MIX_PRACTICE sampai submit (AC-7, AC-8, AC-16)', () => {
     expect(s.json.data.attempt.raw_score).toBe(1);
     expect(s.json.data.attempt.max_score).toBe(6); // soal tak terjawab dihitung salah
     expect(s.json.data.mix.per_skill).toEqual([{ skill: 'GRAMMAR', answered: 2, correct: 1, percent: 50 }]);
-    expect(s.json.data.mix.suggested_banks[0]).toMatchObject({ bank_code: 'GT-GR-REGISTER', reason: 'SKILL_TERLEMAH' });
+    expect(s.json.data.mix.suggested_banks[0]).toMatchObject({ reason: 'SKILL_TERLEMAH' });
+    expect(String(s.json.data.mix.suggested_banks[0].bank_code)).toMatch(/^GT-GR-/);
     expect((await result(u, id)).json.data.mix).toEqual(s.json.data.mix); // idempoten
 
     expect(await snapshot(u.user.id)).toBe(before);

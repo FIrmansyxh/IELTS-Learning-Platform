@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Monitor, Moon, Sun } from 'lucide-react';
+import { Flame, Monitor, Moon, Sparkles, Target, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,6 +21,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMe, useSetMe } from '@/hooks/use-auth';
+import { useGamificationStats } from '@/hooks/use-gamification';
 import { id } from '@/i18n/id';
 import { authApi } from '@/lib/api/auth';
 import { apiErrorMessage, applyValidationDetails } from '@/lib/api/errors';
@@ -126,7 +127,7 @@ function ProfileForm({ user }: { user: User }) {
               <FormLabel>{id.profile.targetBand}</FormLabel>
               <Select value={field.value} onValueChange={field.onChange}>
                 <FormControl>
-                  <SelectTrigger className="w-full sm:w-64">
+                  <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                 </FormControl>
@@ -153,6 +154,48 @@ function ProfileForm({ user }: { user: User }) {
   );
 }
 
+function ProfileSummary({ user }: { user: User }) {
+  const stats = useGamificationStats();
+  const initials =
+    user.display_name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((w) => w.charAt(0).toUpperCase())
+      .join('') || '?';
+  const items = [
+    { icon: Target, label: 'Target band', value: user.target_band !== null ? Number(user.target_band).toFixed(1) : 'Belum diatur' },
+    { icon: Flame, label: 'Streak harian', value: stats.data ? `${stats.data.daily_streak_days} hari` : '-' },
+    { icon: Sparkles, label: 'Total poin', value: stats.data ? stats.data.total_points.toLocaleString('id-ID') : '-' },
+  ];
+  return (
+    <Card data-testid="profile-summary">
+      <CardContent className="flex flex-wrap items-center gap-x-8 gap-y-4">
+        <div className="flex items-center gap-4">
+          <span
+            aria-hidden="true"
+            className="grid size-16 place-items-center rounded-full bg-primary text-xl font-bold text-primary-foreground"
+          >
+            {initials}
+          </span>
+          <p className="text-xl font-semibold">{user.display_name}</p>
+        </div>
+        <dl className="flex flex-1 flex-wrap gap-x-10 gap-y-3 sm:justify-end">
+          {items.map(({ icon: Icon, label, value }) => (
+            <div key={label} className="grid gap-0.5">
+              <dt className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                <Icon className="size-3.5" aria-hidden="true" />
+                {label}
+              </dt>
+              <dd className="text-lg font-bold tabular-nums">{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function ProfileCard() {
   const me = useMe();
 
@@ -166,36 +209,44 @@ export function ProfileCard() {
   }
   if (me.isError) return <ErrorState title={id.profile.loadFailed} onRetry={() => void me.refetch()} />;
 
+  const user = me.data;
   return (
-    <div className="mx-auto grid max-w-4xl gap-6">
+    <div className="grid w-full gap-6">
       <h1 className="text-3xl font-bold">{id.profile.title}</h1>
-      <Card>
-        <CardHeader>
-          <CardTitle>{id.profile.cardTitle}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ProfileForm key={me.data.id + me.data.display_name + String(me.data.target_band)} user={me.data} />
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent>
-          <ThemePicker />
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent>
-          <ShortcutPref />
-        </CardContent>
-      </Card>
-      <RecordingPreferencesCard />
-      <Card>
-        <CardHeader>
-          <CardTitle>{id.profile.profileSectionTitle}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-wrap gap-3">
-          <SwitchProfileButton />
-        </CardContent>
-      </Card>
+      <ProfileSummary user={user} />
+      <div className="grid items-start gap-6 lg:grid-cols-2">
+        <div className="grid gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>{id.profile.cardTitle}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ProfileForm key={user.id + user.display_name + String(user.target_band)} user={user} />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent>
+              <ThemePicker />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>{id.profile.profileSectionTitle}</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-3">
+              <SwitchProfileButton />
+            </CardContent>
+          </Card>
+        </div>
+        <div className="grid gap-6">
+          <Card>
+            <CardContent>
+              <ShortcutPref />
+            </CardContent>
+          </Card>
+          <RecordingPreferencesCard />
+        </div>
+      </div>
     </div>
   );
 }

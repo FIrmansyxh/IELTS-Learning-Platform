@@ -139,6 +139,11 @@ jobs:
             if ! kill -0 "$pid" 2> /dev/null; then break; fi
             sleep 2
           done
+          # start-local mencetak "Aplikasi siap" setelah pemeriksaan kesiapannya sendiri; beri waktu agar log tidak balapan dengan curl di atas.
+          for i in $(seq 1 30); do
+            if grep -qF "Aplikasi siap: $base" /tmp/start-local.log; then break; fi
+            sleep 1
+          done
           cat /tmp/start-local.log
           test "$ready" = 1
           grep -F "Aplikasi siap: $base" /tmp/start-local.log

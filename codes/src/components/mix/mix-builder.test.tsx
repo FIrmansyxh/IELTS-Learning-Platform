@@ -97,8 +97,8 @@ describe('MixBuilder', () => {
       expect(skillCard(name)).toHaveAttribute('aria-pressed', 'true');
     }
     expect(screen.queryByRole('button', { name: /^Listening/ })).not.toBeInTheDocument();
-    // Bank Listening tampil terkunci dan tidak dapat dicentang.
-    expect(screen.getByRole('checkbox', { name: /Listening S1/ })).toBeDisabled();
+    // Bank tidak ditampilkan; Listening hanya diberi keterangan.
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
     expect(screen.getByText('Listening belum tersedia di latihan campur')).toBeInTheDocument();
     // Skill tanpa bank dinonaktifkan dengan keterangan.
     expect(skillCard('Vocabulary')).toBeDisabled();
@@ -133,21 +133,35 @@ describe('MixBuilder', () => {
     await heading();
   });
 
-  it('MANUAL: mengirim skill, chip tipe, kesulitan, dan jumlah; tanpa user_id atau skor; lalu membuka sesi', async () => {
+  it('ramah pengguna: preset kesulitan, penjelasan tipe terpilih, dan ringkasan sesi', async () => {
+    setup();
+    renderWithProviders(<MixBuilder />);
+    await heading();
+    const summary = screen.getByRole('complementary', { name: 'Ringkasan sesi' });
+    expect(summary).toHaveTextContent('Semua tipe');
+    fireEvent.click(screen.getByRole('button', { name: 'Sulit' }));
+    expect(screen.getByTestId('mix-difficulty-range')).toHaveTextContent('4 sampai 5');
+    expect(screen.getByRole('button', { name: 'Sulit' })).toHaveAttribute('aria-pressed', 'true');
+    expect(summary).toHaveTextContent('4 sampai 5');
+    fireEvent.click(screen.getByRole('button', { name: /^Pilihan ganda/ }));
+    expect(screen.getByTestId('mix-type-help')).toHaveTextContent('Pilih satu jawaban benar');
+    expect(summary).toHaveTextContent('Pilihan ganda');
+  });
+
+  it('MANUAL: mengirim skill, chip tipe, kesulitan, dan jumlah otomatis; tanpa user_id atau skor; lalu membuka sesi', async () => {
     const calls = setup();
     renderWithProviders(<MixBuilder />);
     await heading();
     fireEvent.click(skillCard('Reading'));
     fireEvent.click(skillCard('Writing'));
     fireEvent.click(screen.getByRole('button', { name: /^Pilihan ganda/ }));
-    fireEvent.change(screen.getByRole('slider', { name: 'Jumlah soal' }), { target: { value: '12' } });
     fireEvent.change(screen.getByRole('slider', { name: 'Kesulitan terendah' }), { target: { value: '2' } });
     fireEvent.change(screen.getByRole('slider', { name: 'Kesulitan tertinggi' }), { target: { value: '4' } });
     expect(screen.getByTestId('mix-difficulty-range')).toHaveTextContent('2 sampai 4');
     fireEvent.click(screen.getByRole('button', { name: 'Mulai latihan' }));
     await waitFor(() => expect(push).toHaveBeenCalledWith(`/latihan/campur/${ATTEMPT}`));
     expect(postCalls(calls)[0]!.json).toEqual({
-      count: 12,
+      count: 10,
       mode: 'MANUAL',
       skills: ['GRAMMAR'],
       question_types: ['MCQ_SINGLE'],
@@ -156,34 +170,25 @@ describe('MixBuilder', () => {
     });
   });
 
-  it('memilih bank mengirim bank_kinds-nya', async () => {
-    const calls = setup();
-    renderWithProviders(<MixBuilder />);
-    await heading();
-    fireEvent.click(screen.getByRole('checkbox', { name: /Reading S1/ }));
-    fireEvent.click(screen.getByRole('button', { name: 'Mulai latihan' }));
-    await waitFor(() => expect(postCalls(calls)).toHaveLength(1));
-    expect(postCalls(calls)[0]!.json).toMatchObject({ bank_kinds: ['READING_GT_S1'], mode: 'MANUAL' });
-  });
-
-  it('?bank= (saran dari hasil) memilih bank itu dan skill-nya saja', async () => {
+  it('?bank= (saran dari hasil) memilih bank itu dan skill-nya saja, dapat dilepas', async () => {
     search = 'bank=GT-RD-S1-EVERYDAY';
     setup();
     renderWithProviders(<MixBuilder />);
     await heading();
-    expect(screen.getByRole('checkbox', { name: /Reading S1/ })).toBeChecked();
     expect(skillCard('Reading')).toHaveAttribute('aria-pressed', 'true');
     expect(skillCard('Grammar')).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('complementary', { name: 'Ringkasan sesi' })).toHaveTextContent('Reading');
+    fireEvent.click(screen.getByRole('button', { name: 'Lepas' }));
+    expect(screen.queryByRole('button', { name: 'Lepas' })).not.toBeInTheDocument();
   });
 
   it('Campur otomatis: mode AUTO_WEAKNESS hanya dengan count', async () => {
     const calls = setup({ mixBody: { data: { ...session.data, mode: 'AUTO_WEAKNESS' } } });
     renderWithProviders(<MixBuilder />);
     await heading();
-    fireEvent.change(screen.getByRole('slider', { name: 'Jumlah soal' }), { target: { value: '15' } });
     fireEvent.click(screen.getByRole('button', { name: 'Campur otomatis (fokus kelemahan)' }));
     await waitFor(() => expect(push).toHaveBeenCalled());
-    expect(postCalls(calls)[0]!.json).toEqual({ count: 15, mode: 'AUTO_WEAKNESS' });
+    expect(postCalls(calls)[0]!.json).toEqual({ count: 10, mode: 'AUTO_WEAKNESS' });
   });
 
   it('tanpa skill terpilih: tombol Mulai nonaktif dengan pesan', async () => {
@@ -195,7 +200,7 @@ describe('MixBuilder', () => {
     expect(screen.getByText('Pilih minimal satu skill.')).toBeInTheDocument();
   });
 
-  it('MIX_NOT_ENOUGH_QUESTIONS: pesan "Hanya N soal tersedia" dan penggeser dikunci ke N', async () => {
+  it('MIX_NOT_ENOUGH_QUESTIONS: pesan "Hanya N soal tersedia" dan jumlah otomatis turun ke N', async () => {
     setup({
       mixStatus: 422,
       mixBody: errorBody('MIX_NOT_ENOUGH_QUESTIONS', 'x', [
@@ -204,12 +209,9 @@ describe('MixBuilder', () => {
     });
     renderWithProviders(<MixBuilder />);
     await heading();
-    fireEvent.change(screen.getByRole('slider', { name: 'Jumlah soal' }), { target: { value: '20' } });
     fireEvent.click(screen.getByRole('button', { name: 'Mulai latihan' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('Hanya 7 soal tersedia untuk pilihan ini.');
-    const slider = screen.getByRole('slider', { name: 'Jumlah soal' }) as HTMLInputElement;
-    expect(slider.max).toBe('7');
-    expect(slider.value).toBe('7');
+    expect(screen.getByRole('complementary', { name: 'Ringkasan sesi' })).toHaveTextContent('7 soal');
     expect(push).not.toHaveBeenCalled();
   });
 
