@@ -232,6 +232,7 @@ export const id = {
     simulation: 'Simulasi tes',
     mixShort: 'Latihan',
     simulationShort: 'Simulasi',
+    glossary: 'Glosarium',
     history: 'Riwayat',
     profile: 'Profil',
     main: 'Navigasi utama',

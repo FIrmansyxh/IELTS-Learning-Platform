@@ -17,6 +17,7 @@ const ROUTES: Route[] = [
   { name: 'Beranda', path: '/', ready: /Halo, /, chrome: true },
   { name: 'Peta', path: '/peta', ready: /Pilihan Jalur Belajar|Peta/i, chrome: true },
   { name: 'Riwayat', path: '/riwayat/ujian', ready: 'Riwayat Ujian & Evaluasi', chrome: true },
+  { name: 'Glosarium', path: '/glosarium', ready: 'Verb Forms', chrome: true },
   { name: 'Profil', path: '/profil', ready: 'Data profil', chrome: true },
   { name: 'Latihan campur', path: '/latihan/campur', ready: 'Latihan campur', chrome: true },
   { name: 'Simulasi', path: '/simulasi', ready: 'Simulasi Tes IELTS General Training', chrome: true },
@@ -127,8 +128,8 @@ test('navigasi utama: 6 tautan, aria-current pada rute aktif, tidak ada menu Adm
   const navs = page.getByRole('navigation', { name: 'Navigasi utama' });
   const visibleNav = isMobile ? navs.last() : navs.first();
   const links = visibleNav.getByRole('link');
-  await expect(links).toHaveCount(6);
-  expect((await links.allTextContents()).map((t) => t.trim())).toEqual(['Beranda', 'Peta', 'Latihan campur', 'Simulasi tes', 'Riwayat', 'Profil']);
+  await expect(links).toHaveCount(7);
+  expect((await links.allTextContents()).map((t) => t.trim())).toEqual(['Beranda', 'Peta', 'Latihan campur', 'Simulasi tes', 'Glosarium', 'Riwayat', 'Profil']);
   await expect(visibleNav.getByRole('link', { name: 'Beranda' })).toHaveAttribute('aria-current', 'page');
   for (const bad of ['Admin', 'Masuk', 'Daftar', 'Keluar']) await expect(page.getByRole('link', { name: bad, exact: true })).toHaveCount(0);
   if (isMobile) {
