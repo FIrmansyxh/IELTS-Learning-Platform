@@ -480,7 +480,7 @@ function ObjectiveQuestionCard({
           {index}
         </span>
         <div className="flex-1 space-y-3">
-          <p className="text-sm font-medium">{question.prompt}</p>
+          <p className="whitespace-pre-line text-sm font-medium">{question.prompt}</p>
 
           {isMcq && question.options && (
             <div className="space-y-2">

@@ -49,6 +49,16 @@
   --motion-fast: 120ms;
   --motion-base: 200ms;
   --motion-slow: 300ms;
+  /* Visual Refresh v1.1 (design-system 11) */
+  --gradient-brand: linear-gradient(135deg, #1d4ed8 0%, #0e7490 100%);
+  --gradient-hero: linear-gradient(135deg, #1d4ed8 0%, #0e7490 100%);
+  --glow-1: rgb(29 78 216 / 0.1);
+  --glow-2: rgb(8 145 178 / 0.09);
+  --shadow-soft: 0 1px 2px rgb(11 27 51 / 0.05), 0 2px 8px rgb(11 27 51 / 0.04);
+  --shadow-lift: 0 4px 12px rgb(11 27 51 / 0.07), 0 12px 28px rgb(11 27 51 / 0.09);
+  --shadow-pop: 0 12px 32px rgb(11 27 51 / 0.16);
+  --shadow-brand: 0 6px 18px -6px rgb(29 78 216 / 0.5);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Pemetaan ke token shadcn */
   --background: var(--color-bg);
@@ -111,6 +121,14 @@
   --chart-6: #fbbf24;
 
   /* Samudra gelap: tombol primary biru terang + teks navy gelap (kontras 5:1; teks putih pada biru terang hanya 3,7:1) */
+  --gradient-brand: linear-gradient(135deg, #3b82f6 0%, #22d3ee 100%);
+  --gradient-hero: linear-gradient(135deg, #1e40af 0%, #0e7490 100%);
+  --glow-1: rgb(59 130 246 / 0.16);
+  --glow-2: rgb(34 211 238 / 0.1);
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-lift: 0 8px 24px rgb(0 0 0 / 0.38);
+  --shadow-pop: 0 16px 40px rgb(0 0 0 / 0.5);
+  --shadow-brand: 0 6px 18px -6px rgb(37 99 235 / 0.6);
   --primary: #3b82f6;
   --primary-foreground: #06142b;
 }
@@ -152,6 +170,14 @@
     --chart-4: #fb923c;
     --chart-5: #34d399;
     --chart-6: #fbbf24;
+    --gradient-brand: linear-gradient(135deg, #3b82f6 0%, #22d3ee 100%);
+    --gradient-hero: linear-gradient(135deg, #1e40af 0%, #0e7490 100%);
+    --glow-1: rgb(59 130 246 / 0.16);
+    --glow-2: rgb(34 211 238 / 0.1);
+    --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-lift: 0 8px 24px rgb(0 0 0 / 0.38);
+    --shadow-pop: 0 16px 40px rgb(0 0 0 / 0.5);
+    --shadow-brand: 0 6px 18px -6px rgb(37 99 235 / 0.6);
     --primary: #3b82f6;
     --primary-foreground: #06142b;
   }
@@ -190,10 +216,104 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    /* Latar ambient statis (design-system 11.1): dua cahaya lembut di belakang konten. */
+    background-image:
+      radial-gradient(60rem 40rem at 100% -10%, var(--glow-1), transparent 60%),
+      radial-gradient(50rem 36rem at -10% 110%, var(--glow-2), transparent 60%);
+    background-attachment: fixed;
+  }
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary {
+    cursor: pointer;
   }
   h1, h2, h3, h4 {
     font-family: var(--font-heading), system-ui, sans-serif;
   }
+}
+
+/* ---------- Visual Refresh v1.1: utilitas (design-system 11) ---------- */
+@utility bg-gradient-brand {
+  background-image: var(--gradient-brand);
+}
+@utility bg-gradient-hero {
+  background-image: var(--gradient-hero);
+}
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+@utility shadow-lift {
+  box-shadow: var(--shadow-lift);
+}
+@utility shadow-pop {
+  box-shadow: var(--shadow-pop);
+}
+@utility shadow-brand {
+  box-shadow: var(--shadow-brand);
+}
+/* Kartu interaktif: terangkat 2px + bayangan saat hover/fokus, transform saja (tanpa layout shift). */
+@utility card-lift {
+  transition:
+    transform var(--motion-base) var(--ease-out-expo),
+    box-shadow var(--motion-base) var(--ease-out-expo),
+    border-color var(--motion-base) var(--ease-out-expo);
+  &:hover,
+  &:focus-within {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+    border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  }
+}
+/* Masuk halaman: fade-up 400ms; urutan lewat --stagger (indeks blok), 50ms per blok. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@utility animate-fade-up {
+  animation: fade-up 400ms var(--ease-out-expo) both;
+  animation-delay: calc(var(--stagger, 0) * 50ms);
+}
+/* Anak langsung masuk berurutan (maks. 6 langkah); dipakai kolom bento beranda. */
+@utility stagger-in {
+  & > * {
+    animation: fade-up 400ms var(--ease-out-expo) both;
+  }
+  & > *:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  & > *:nth-child(2) {
+    animation-delay: 110ms;
+  }
+  & > *:nth-child(3) {
+    animation-delay: 160ms;
+  }
+  & > *:nth-child(4) {
+    animation-delay: 210ms;
+  }
+  & > *:nth-child(5) {
+    animation-delay: 260ms;
+  }
+  & > *:nth-child(n + 6) {
+    animation-delay: 310ms;
+  }
+}
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(4deg);
+  }
+}
+@utility animate-float {
+  animation: float-soft 9s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

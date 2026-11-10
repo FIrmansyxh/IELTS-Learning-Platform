@@ -74,7 +74,7 @@ function Body(props: RendererProps) {
 export const QuestionRenderer = React.forwardRef<HTMLLegendElement, RendererProps>(function QuestionRenderer(props, ref) {
   return (
     <fieldset className="m-0 grid min-w-0 gap-4 border-0 p-0">
-      <legend ref={ref} tabIndex={-1} className="mb-1 text-lg font-semibold leading-snug outline-none">
+      <legend ref={ref} tabIndex={-1} className="mb-1 whitespace-pre-line text-lg font-semibold leading-snug outline-none">
         {props.question.prompt}
       </legend>
       <Body {...props} />

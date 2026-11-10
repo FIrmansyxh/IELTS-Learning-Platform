@@ -158,8 +158,20 @@ function buildComponents(): Components {
     h5: heading('h4', 'mt-4 mb-2 text-base'),
     h6: heading('h4', 'mt-4 mb-2 text-base'),
     p: ({ children }) => <p className="my-3 max-w-[110ch]">{children}</p>,
-    ul: ({ children }) => <ul className="my-3 max-w-[110ch] list-disc space-y-1 pl-6">{children}</ul>,
-    ol: ({ children }) => <ol className="my-3 max-w-[110ch] list-decimal space-y-1 pl-6">{children}</ol>,
+    ul: ({ children }) => (
+      <ul className="my-3 max-w-[110ch] list-disc space-y-1.5 pl-6 marker:text-muted-foreground">{children}</ul>
+    ),
+    // `start` diteruskan agar daftar bernomor yang dilanjutkan (mis. contoh Level 2 mulai dari 4) tidak kembali ke 1.
+    ol: ({ children, start }) => (
+      <ol
+        start={start}
+        className="my-3 max-w-[110ch] list-decimal space-y-1.5 pl-6 marker:font-semibold marker:text-muted-foreground"
+      >
+        {children}
+      </ol>
+    ),
+    // Sub-daftar di dalam butir dibuat rapat agar hierarki terbaca jelas.
+    li: ({ children }) => <li className="pl-1 [&>ol]:my-1.5 [&>p]:my-1 [&>ul]:my-1.5">{children}</li>,
     blockquote: ({ children }) => (
       <blockquote className="my-4 border-l-4 border-border pl-4 text-muted-foreground">{children}</blockquote>
     ),

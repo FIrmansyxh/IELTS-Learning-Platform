@@ -243,6 +243,13 @@ export const id = {
   home: {
     title: 'Beranda',
     greeting: 'Halo, {name}',
+    timeGreeting: {
+      morning: 'Selamat pagi',
+      day: 'Selamat siang',
+      afternoon: 'Selamat sore',
+      night: 'Selamat malam',
+    },
+    heroSubtitle: 'Sedikit demi sedikit setiap hari, band impianmu makin dekat. Yuk lanjutkan belajarmu.',
     placeholderTitle: 'Mulai belajar',
     placeholderBody:
       'Dashboard lengkap akan hadir segera. Sementara itu, buka peta belajar untuk melihat jalur Anda.',
