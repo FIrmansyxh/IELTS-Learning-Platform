@@ -57,7 +57,7 @@ export function MixResultView({ result }: { result: AttemptResult }) {
   const hasObjective = mix ? objectiveAnswered > 0 : true;
 
   return (
-    <div className="grid max-w-6xl gap-5">
+    <div className="mx-auto grid w-full max-w-6xl gap-5">
       <div className="grid gap-3 rounded-xl border bg-card p-5 sm:p-6">
         <h1 ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
           {id.mix.result.title}

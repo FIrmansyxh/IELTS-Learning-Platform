@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ielts-dev",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["-e", "process.chdir('codes');process.argv=[process.argv[0],'next','dev','--turbopack','-H','127.0.0.1','-p','3017'];require(require('path').resolve('node_modules/next/dist/bin/next'))"],
+      "port": 3017,
+      "url": "http://127.0.0.1:3017"
+    }
+  ]
+}

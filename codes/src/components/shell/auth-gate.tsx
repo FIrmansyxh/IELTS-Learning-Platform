@@ -26,7 +26,12 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     return qs ? `${pathname}?${qs}` : pathname;
   }, [pathname, search]);
 
+  // qc.clear() membuat useMe memuat ulang dan menerima 401 lagi; tanpa penanda ini pengalihan dipicu berulang
+  // (permintaan /auth/me beruntun dan navigasi yang terus dibatalkan saat halaman tujuan lambat dimuat).
+  const redirectedFrom = React.useRef<string | null>(null);
   const toPicker = React.useCallback(() => {
+    if (redirectedFrom.current === here) return;
+    redirectedFrom.current = here;
     qc.clear();
     router.replace(`/pilih-profil?next=${encodeURIComponent(here)}`);
   }, [qc, router, here]);

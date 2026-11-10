@@ -1,7 +1,7 @@
 import { SimulationRunner } from '@/components/simulation/simulation-runner';
 
 export const metadata = {
-  title: 'Ujian Simulasi IELTS GT | IELTS Learning Platform',
+  title: 'Ujian Simulasi IELTS GT',
   description: 'Simulasi tes IELTS General Training.',
 };
 

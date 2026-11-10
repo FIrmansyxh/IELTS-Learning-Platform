@@ -6,6 +6,7 @@ import * as React from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { isApiError } from '@/lib/api/client';
+import { invalidateLearnerState, LEARNER_STATE_EVENT } from '@/lib/learner-state';
 
 function shouldRetry(count: number, error: unknown): boolean {
   // Galat 4xx dari kontrak tidak diulang; jaringan/5xx maksimal 2 kali.
@@ -25,6 +26,12 @@ export function makeQueryClient() {
 /** Penyedia global: tema (kunci `theme` di localStorage), TanStack Query, Tooltip, Toast. */
 export function Providers({ children }: { children: React.ReactNode }) {
   const [client] = React.useState(() => makeQueryClient());
+  // Setelah drill/ujian/simulasi dikirim atau profil diubah, segarkan data turunan (chip header, dashboard, peta).
+  React.useEffect(() => {
+    const onChanged = () => invalidateLearnerState(client);
+    window.addEventListener(LEARNER_STATE_EVENT, onChanged);
+    return () => window.removeEventListener(LEARNER_STATE_EVENT, onChanged);
+  }, [client]);
   return (
     <ThemeProvider
       attribute={['class', 'data-theme']}

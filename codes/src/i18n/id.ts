@@ -230,6 +230,8 @@ export const id = {
     map: 'Peta',
     mix: 'Latihan campur',
     simulation: 'Simulasi tes',
+    mixShort: 'Latihan',
+    simulationShort: 'Simulasi',
     history: 'Riwayat',
     profile: 'Profil',
     main: 'Navigasi utama',

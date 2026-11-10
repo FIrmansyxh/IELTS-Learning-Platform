@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { CrownBadge } from './crown-badge';
 import type { StatsDTO } from '@/contracts/gamification';
 import { fmt, id } from '@/i18n/id';
+import { cn } from '@/lib/utils';
 
 export interface StatsCardProps {
   stats: StatsDTO;
@@ -16,8 +17,8 @@ export interface StatsCardProps {
 
 export function StatsCard({ stats, onOpenHistory, className }: StatsCardProps) {
   return (
-    <Card className={className} data-testid="stats-card">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <Card className={cn('gap-3 py-5', className)} data-testid="stats-card">
+      <CardHeader className="flex flex-row items-center justify-between gap-3">
         <div>
           <CardTitle className="text-base font-semibold">{id.gamification.statsTitle}</CardTitle>
           <CardDescription className="text-xs">
@@ -44,7 +45,7 @@ export function StatsCard({ stats, onOpenHistory, className }: StatsCardProps) {
         )}
       </CardHeader>
 
-      <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+      <CardContent className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* Total Poin */}
         <div className="flex flex-col gap-1 rounded-lg border bg-card p-3 shadow-2xs">
           <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">

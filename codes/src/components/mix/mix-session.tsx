@@ -64,7 +64,7 @@ export function MixPassageCard({ passage }: { passage: MixPassageRef }) {
 }
 
 function SessionSkeleton() {
-  return <Skeleton className="h-96 w-full max-w-5xl rounded-xl" role="status" aria-label={id.common.loading} />;
+  return <Skeleton className="mx-auto h-96 w-full max-w-5xl rounded-xl" role="status" aria-label={id.common.loading} />;
 }
 
 /** Memuat hasil attempt yang sudah selesai (muat ulang halaman / buka dari tautan). */
@@ -102,7 +102,7 @@ export function MixSession({ attemptId }: { attemptId: string }) {
   if (q.isError) {
     if (isApiError(q.error) && q.error.status === 404) {
       return (
-        <div className="grid max-w-md gap-3 rounded-lg border bg-card p-6">
+        <div className="mx-auto grid max-w-md gap-3 rounded-lg border bg-card p-6">
           <h1 className="text-xl font-bold">{id.mix.run.notFound}</h1>
           <Button asChild className="w-fit">
             <Link href="/latihan/campur">{id.mix.title}</Link>
@@ -116,7 +116,7 @@ export function MixSession({ attemptId }: { attemptId: string }) {
   const attempt = q.data;
   if (attempt.status === 'ABANDONED') {
     return (
-      <div className="grid max-w-md gap-3 rounded-lg border bg-card p-6">
+      <div className="mx-auto grid max-w-md gap-3 rounded-lg border bg-card p-6">
         <h1 className="text-xl font-bold">{id.mix.run.abandoned}</h1>
         <Button asChild className="w-fit">
           <Link href="/latihan/campur">{id.mix.title}</Link>
@@ -129,7 +129,7 @@ export function MixSession({ attemptId }: { attemptId: string }) {
   }
 
   return (
-    <div className="max-w-5xl">
+    <div className="mx-auto w-full max-w-5xl">
       <ActiveDrill
         key={attempt.id}
         attempt={attempt}

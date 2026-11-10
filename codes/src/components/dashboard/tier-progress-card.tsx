@@ -20,7 +20,7 @@ export function TierProgressCard({
   className?: string;
 }) {
   if (loading || !tiers) {
-    return <Skeleton className={cn('h-72 rounded-2xl', className)} role="status" aria-label="Memuat" />;
+    return <Skeleton className={cn('h-56 rounded-2xl', className)} role="status" aria-label="Memuat" />;
   }
   return (
     <Card data-testid="dash-tiers" className={cn('gap-4 rounded-2xl p-5', className)}>

@@ -24,7 +24,7 @@ export function ResumeCard({ card }: { card: ResumeCardData }) {
       className="bg-gradient-to-br from-[var(--color-primary-subtle)] to-[var(--color-surface)] rounded-2xl"
     >
       <CardHeader>
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
             {fallback ? id.resume.labelFallback : id.resume.label}
           </p>

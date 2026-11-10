@@ -22,11 +22,17 @@ function DisabledItem({ item, variant, collapsed = false }: { item: NavItem; var
           tabIndex={0}
           className={cn(
             'flex cursor-not-allowed items-center gap-3 rounded-md text-muted-foreground opacity-60 outline-none focus-visible:ring-2 focus-visible:ring-ring',
-            variant === 'side' ? (collapsed ? 'min-h-11 justify-center px-0' : 'min-h-11 px-3') : 'min-h-14 flex-1 flex-col justify-center gap-1 text-xs',
+            variant === 'side'
+              ? collapsed
+                ? 'min-h-11 justify-center px-0'
+                : 'min-h-11 px-3'
+              : 'min-h-14 min-w-0 flex-1 flex-col justify-center gap-1 px-0.5 text-[11px] leading-none whitespace-nowrap',
           )}
         >
           <Icon className="size-5" aria-hidden="true" />
-          <span className={cn(collapsed && variant === 'side' && 'sr-only')}>{item.label}</span>
+          <span className={cn(collapsed && variant === 'side' && 'sr-only')}>
+            {variant === 'bottom' ? (item.shortLabel ?? item.label) : item.label}
+          </span>
         </span>
       </TooltipTrigger>
       <TooltipContent>{id.nav.soon}</TooltipContent>
@@ -52,13 +58,14 @@ function NavLink({
     <Link
       href={item.href}
       aria-current={active ? 'page' : undefined}
+      aria-label={variant === 'bottom' && item.shortLabel ? item.label : undefined}
       className={cn(
         'relative flex items-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring',
         variant === 'side'
           ? collapsed
             ? 'min-h-11 justify-center px-0 text-sm font-medium hover:bg-accent'
             : 'min-h-11 gap-3 px-3 text-sm font-medium hover:bg-accent'
-          : 'min-h-14 flex-1 flex-col justify-center gap-1 text-xs font-medium',
+          : 'min-h-14 min-w-0 flex-1 flex-col justify-center gap-1 px-0.5 text-[11px] leading-none font-medium whitespace-nowrap',
         active ? 'text-[var(--color-primary)]' : 'text-muted-foreground hover:text-foreground',
         active && variant === 'side' && 'bg-accent',
       )}
@@ -67,7 +74,9 @@ function NavLink({
         <span aria-hidden="true" className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-primary" />
       ) : null}
       <Icon className={cn('size-5', active && 'fill-primary/15')} aria-hidden="true" />
-      <span className={cn(collapsed && variant === 'side' && 'sr-only')}>{item.label}</span>
+      <span className={cn(collapsed && variant === 'side' && 'sr-only')}>
+        {variant === 'bottom' ? (item.shortLabel ?? item.label) : item.label}
+      </span>
     </Link>
   );
   if (collapsed && variant === 'side') {
@@ -103,6 +112,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const items: NavItem[] = NAV_ITEMS;
   const mainRef = React.useRef<HTMLElement | null>(null);
   const [collapsed, setCollapsed] = usePersistentToggle('ielts.shell.collapsed', false);
+  const showChips = !pathname.startsWith('/simulasi');
 
   return (
     <div className="min-h-dvh">
@@ -137,14 +147,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         ref={mainRef}
         tabIndex={-1}
         className={cn(
-          'min-w-0 px-4 py-6 pb-24 outline-none transition-[margin] duration-200 md:px-6 lg:px-8 lg:pb-8',
+          'min-w-0 px-4 pt-4 pb-24 outline-none transition-[margin] duration-200 md:px-6 md:pt-6 lg:px-8 lg:pb-8',
           collapsed ? 'lg:ml-16' : 'lg:ml-64',
         )}
       >
-        <div className="w-full max-w-[1800px]">
-          <div className="mb-4 flex items-center justify-end pb-1">
-            <HeaderChips />
-          </div>
+        <div className="mx-auto w-full max-w-[1800px]">
+          {/* Chip streak/poin disembunyikan pada Simulasi: jangan sisakan baris kosong di atas konten. */}
+          {showChips ? (
+            <div className="mb-3 flex min-h-8 items-center justify-end">
+              <HeaderChips />
+            </div>
+          ) : null}
           {children}
         </div>
       </main>

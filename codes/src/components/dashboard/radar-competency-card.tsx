@@ -15,8 +15,9 @@ export function RadarCompetencyCard({ className }: { className?: string }) {
   const { data } = useRadarData();
   const weak = data ? findWeakArea(data.skills) : null;
   return (
-    <div className={cn('grid content-start gap-3', className)} data-testid="dash-radar">
-      <RadarCard />
+    <div className={cn('flex flex-col gap-3', className)} data-testid="dash-radar">
+      {/* flex-1: kartu radar mengisi tinggi baris bento agar sejajar dengan kolom di sebelahnya */}
+      <RadarCard className="flex-1" />
       {weak && (
         <div
           data-testid="dash-weak-area"

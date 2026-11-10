@@ -18,9 +18,9 @@ function TreeSkeleton() {
       {[0, 1, 2].map((i) => (
         <div key={i} className="grid gap-4">
           <Skeleton className="h-36 w-full rounded-lg" />
-          <div className="grid gap-4 xl:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             <Skeleton className="h-48 w-full rounded-lg" />
-            <Skeleton className="hidden h-48 w-full rounded-lg xl:block" />
+            <Skeleton className="hidden h-48 w-full rounded-lg md:block" />
           </div>
         </div>
       ))}

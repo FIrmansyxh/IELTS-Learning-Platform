@@ -113,8 +113,8 @@ export function RadarCard({ className }: { className?: string }) {
 
   return (
     <Card className={className}>
-      <CardHeader className="flex flex-row items-start justify-between gap-4 pb-2">
-        <div>
+      <CardHeader className="flex flex-col items-start justify-between gap-3 pb-2 sm:flex-row sm:gap-4">
+        <div className="min-w-0">
           <CardTitle>{id.radar.title}</CardTitle>
           <p className="text-sm text-muted-foreground">{id.radar.subtitle}</p>
         </div>
@@ -174,26 +174,28 @@ export function RadarCard({ className }: { className?: string }) {
 
         {/* Tampilan Visual (Radar Chart atau Alternatif Tabel) */}
         {viewMode === 'chart' ? (
-          <div className="relative h-72 w-full sm:h-80" aria-label={summaryAria} role="img">
+          <div aria-label={summaryAria} role="img">
+            {/* Tinggi tetap hanya untuk grafik; legenda singkatan di bawahnya tidak boleh menimpa catatan berikutnya. */}
+            <div className="relative h-72 w-full sm:h-80">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={chartData} cx="50%" cy="50%" outerRadius="75%">
-                <PolarGrid stroke="hsl(var(--border))" />
+                <PolarGrid stroke="var(--border)" />
                 <PolarAngleAxis
                   dataKey="skill"
-                  tick={{ fill: 'hsl(var(--foreground))', fontSize: 12 }}
+                  tick={{ fill: 'var(--foreground)', fontSize: 12 }}
                 />
                 <PolarRadiusAxis
                   angle={30}
                   domain={[0, 9]}
                   tickCount={10}
-                  stroke="hsl(var(--muted-foreground))"
+                  stroke="var(--muted-foreground)"
                   fontSize={10}
                 />
                 {target_band !== null && (
                   <Radar
                     name="Target Band"
                     dataKey="target"
-                    stroke="hsl(var(--secondary))"
+                    stroke="var(--color-secondary)"
                     strokeWidth={2}
                     strokeDasharray="4 4"
                     fill="transparent"
@@ -202,11 +204,11 @@ export function RadarCard({ className }: { className?: string }) {
                 <Radar
                   name="Estimasi Band"
                   dataKey="band"
-                  stroke="hsl(var(--primary))"
+                  stroke="var(--primary)"
                   strokeWidth={2}
-                  fill="hsl(var(--primary))"
+                  fill="var(--primary)"
                   fillOpacity={0.2}
-                  dot={{ r: 4, fill: 'hsl(var(--primary))' }}
+                  dot={{ r: 4, fill: 'var(--primary)' }}
                 />
                 <Tooltip
                   content={({ active, payload }) => {
@@ -239,6 +241,7 @@ export function RadarCard({ className }: { className?: string }) {
                 />
               </RadarChart>
             </ResponsiveContainer>
+            </div>
             {isMobile && (
               <div className="mt-2 flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                 <span>Lis = Listening</span>

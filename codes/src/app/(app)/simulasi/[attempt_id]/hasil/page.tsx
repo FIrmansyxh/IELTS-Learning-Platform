@@ -1,7 +1,7 @@
 import { SimulationResultView } from '@/components/simulation/simulation-result';
 
 export const metadata = {
-  title: 'Hasil Simulasi Tes IELTS GT | IELTS Learning Platform',
+  title: 'Hasil Simulasi Tes IELTS GT',
   description: 'Hasil simulasi tes IELTS General Training.',
 };
 

@@ -29,7 +29,8 @@ import { RecentExamHistory } from '@/components/dashboard/recent-exam-history';
 
 /**
  * Dashboard `/` (SPEC-007, C-15): bento grid action-first. Baris atas: Lanjutkan Belajar (aksi utama) + streak/target
- * harian + Target Band; lalu radar, progres tier, mahkota, statistik, dan ujian terakhir.
+ * harian + Target Band; lalu radar di kiri dengan tumpukan progres tier, mahkota, dan ujian terakhir di kanan (tinggi
+ * kedua kolom seimbang); statistik di baris penutup. Mobile 1 kolom, tablet 2 kolom, desktop 12 kolom.
  */
 export function Dashboard() {
   const me = useMe();
@@ -75,10 +76,10 @@ export function Dashboard() {
         </Card>
       )}
 
-      <div id="dashboard-slots" data-slot="dashboard-slots" className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
+      <div id="dashboard-slots" data-slot="dashboard-slots" className="grid gap-4 md:grid-cols-2 xl:grid-cols-12 [&_[data-slot=card]]:rounded-2xl">
         <ResumeLearningCard
           placementAvailable={Boolean(placementQ.data?.available)}
-          className="md:col-span-2 xl:col-span-2"
+          className="md:col-span-2 xl:col-span-6"
         />
         <StreakHero
           loading={statsQ.isPending}
@@ -93,34 +94,28 @@ export function Dashboard() {
                 }
               : null
           }
-          className="xl:col-span-2 md:col-span-1"
+          className="xl:col-span-3"
         />
         <TargetBandCard
           loading={radarQ.isPending}
           state={radarQ.data ? buildTargetBandState(radarQ.data.target_band, predicted) : { kind: 'NO_TARGET' }}
-          className="xl:col-span-2 md:col-span-1"
+          className="xl:col-span-3"
         />
-        <RadarCompetencyCard className="md:col-span-2 xl:col-span-3" />
-        <TierProgressCard
-          loading={treeQ.isPending}
-          tiers={tiers ? buildTierProgress(tiers) : null}
-          className="md:col-span-2 xl:col-span-3"
-        />
-        <CrownCollectionGrid
-          loading={treeQ.isPending}
-          collection={tiers ? buildCrownCollection(tiers) : null}
-          className="md:col-span-2 xl:col-span-3"
-        />
-        <RecentExamHistory
-          loading={historyQ.isPending}
-          items={historyQ.data?.data ?? null}
-          className="md:col-span-2 xl:col-span-3"
-        />
+        <RadarCompetencyCard className="md:col-span-2 xl:col-span-7" />
+        <div className="grid content-start gap-4 md:col-span-2 md:grid-cols-2 xl:col-span-5 xl:grid-cols-1">
+          <TierProgressCard
+            loading={treeQ.isPending}
+            tiers={tiers ? buildTierProgress(tiers) : null}
+            className="md:col-span-2 xl:col-span-1"
+          />
+          <CrownCollectionGrid loading={treeQ.isPending} collection={tiers ? buildCrownCollection(tiers) : null} />
+          <RecentExamHistory loading={historyQ.isPending} items={historyQ.data?.data ?? null} />
+        </div>
         {statsQ.data && (
           <StatsCard
             stats={statsQ.data}
             onOpenHistory={() => setHistoryOpen(true)}
-            className="md:col-span-2 xl:col-span-6"
+            className="md:col-span-2 xl:col-span-12"
           />
         )}
       </div>

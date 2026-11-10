@@ -109,6 +109,27 @@ export function LearnTab({
                 </Button>
               </div>
             ) : null}
+            {toc.length > 1 ? (
+              // Di bawah lg daftar isi samping tidak tampil: sediakan versi lipat agar artikel panjang tetap bisa dilompati.
+              <details className="mb-4 rounded-lg border bg-card lg:hidden" data-testid="toc-mobile">
+                <summary className="flex min-h-11 cursor-pointer items-center px-4 text-sm font-semibold">
+                  {id.player.toc} ({toc.length})
+                </summary>
+                <ul className="grid max-h-[50dvh] gap-0.5 overflow-y-auto border-t px-2 py-2 text-sm">
+                  {toc.map((t) => (
+                    <li key={t.id} className={cn(t.level === 3 && 'pl-3')}>
+                      <a
+                        href={`#${t.id}`}
+                        onClick={(e) => e.currentTarget.closest('details')?.removeAttribute('open')}
+                        className="flex min-h-9 items-center rounded-md px-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+                      >
+                        {t.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ) : null}
             <MarkdownArticle markdown={material.article_markdown} />
             {material.attachments.length > 0 ? (
               <section aria-label={id.player.downloads} className="mt-6 flex flex-wrap gap-2">

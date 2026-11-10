@@ -67,17 +67,17 @@ export function ExamHistoryView() {
                 <div className="h-64 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartData} margin={{ top: 10, right: 20, bottom: 20, left: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                       <XAxis
                         dataKey="date"
-                        stroke="hsl(var(--muted-foreground))"
+                        stroke="var(--muted-foreground)"
                         fontSize={11}
                         tickLine={false}
                       />
                       <YAxis
                         domain={[0, 9]}
                         ticks={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
-                        stroke="hsl(var(--muted-foreground))"
+                        stroke="var(--muted-foreground)"
                         fontSize={11}
                         tickLine={false}
                       />
@@ -98,9 +98,9 @@ export function ExamHistoryView() {
                       <Line
                         type="monotone"
                         dataKey="band"
-                        stroke="hsl(var(--primary))"
+                        stroke="var(--primary)"
                         strokeWidth={2.5}
-                        dot={{ r: 4, fill: 'hsl(var(--primary))' }}
+                        dot={{ r: 4, fill: 'var(--primary)' }}
                         activeDot={{ r: 6 }}
                       />
                     </LineChart>

@@ -17,7 +17,7 @@ export function RecentExamHistory({
   className?: string;
 }) {
   if (loading || !items) {
-    return <Skeleton className={cn('h-56 rounded-2xl', className)} role="status" aria-label="Memuat" />;
+    return <Skeleton className={cn('h-44 rounded-2xl', className)} role="status" aria-label="Memuat" />;
   }
   const recent = items.slice(0, 3);
   const queue = items.filter((i) => i.status === 'AWAITING_GRADING' || i.status === 'GRADING');

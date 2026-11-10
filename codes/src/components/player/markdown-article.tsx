@@ -182,8 +182,8 @@ function buildComponents(): Components {
         <table className="w-full table-auto border-collapse text-sm">{children}</table>
       </div>
     ),
-    th: ({ children }) => <th className="border-b bg-muted px-3 py-2 text-left align-top font-semibold [overflow-wrap:anywhere]">{children}</th>,
-    td: ({ children }) => <td className="border-b px-3 py-2 align-top [overflow-wrap:anywhere]">{children}</td>,
+    th: ({ children }) => <th className="border-b bg-muted px-3 py-2 text-left align-top font-semibold [overflow-wrap:break-word]">{children}</th>,
+    td: ({ children }) => <td className="border-b px-3 py-2 align-top [overflow-wrap:break-word]">{children}</td>,
     a: ({ href, children }) => {
       const safe = safeHref(href);
       if (!safe) return <span>{children}</span>;

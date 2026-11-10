@@ -231,7 +231,7 @@ export function MixBuilder() {
   }
   if (pool.length === 0) {
     return (
-      <div className="grid max-w-6xl gap-4">
+      <div className="mx-auto grid w-full max-w-6xl gap-4">
         <Header />
         <EmptyState message={id.mix.empty} />
       </div>
@@ -242,7 +242,7 @@ export function MixBuilder() {
   const errorText = startError ?? (lowCapacity && selectedSkills.length > 0 ? id.mix.notEnoughNone : null);
 
   return (
-    <div className="grid max-w-6xl gap-5">
+    <div className="mx-auto grid w-full max-w-6xl gap-5">
       <Header />
 
       {active ? (

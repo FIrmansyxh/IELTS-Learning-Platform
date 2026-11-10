@@ -135,10 +135,10 @@ export function SimulationBuilder() {
   const totalMinutes = Math.ceil(totalSeconds / 60);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8 py-6">
+    <div className="mx-auto max-w-6xl space-y-6 pb-6 md:py-4">
       {/* Header */}
       <div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <h1 className="font-heading text-2xl font-bold tracking-tight md:text-3xl">
             {id.simulation.title}
           </h1>
@@ -154,8 +154,8 @@ export function SimulationBuilder() {
 
       {/* Banner Sesi Berjalan */}
       {data.in_progress_attempt_id && (
-        <Card className="border-amber-500/50 bg-amber-500/10">
-          <CardHeader className="pb-3">
+        <Card className="gap-3 border-amber-500/50 bg-amber-500/10 py-4">
+          <CardHeader>
             <CardTitle className="text-base font-semibold text-amber-900 dark:text-amber-200">
               {id.simulation.activeBanner.title}
             </CardTitle>
@@ -209,7 +209,7 @@ export function SimulationBuilder() {
             <Card
               key={sec.section}
               onClick={() => handleToggle(sec.section, isAvailable)}
-              className={`relative cursor-pointer transition-all ${
+              className={`relative cursor-pointer gap-3 py-5 transition-all ${
                 !isAvailable
                   ? 'cursor-not-allowed border-dashed bg-muted/30 opacity-60'
                   : isSelected
@@ -217,11 +217,11 @@ export function SimulationBuilder() {
                     : 'hover:border-primary/50'
               }`}
             >
-              <CardHeader className="pb-2">
+              <CardHeader>
                 <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex min-w-0 items-center gap-2.5">
                     <div
-                      className={`flex size-9 items-center justify-center rounded-lg ${
+                      className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${
                         isSelected && isAvailable
                           ? 'bg-primary text-primary-foreground'
                           : 'bg-muted text-muted-foreground'
@@ -257,7 +257,7 @@ export function SimulationBuilder() {
                   )}
                 </div>
               </CardHeader>
-              <CardContent className="pt-0">
+              <CardContent>
                 <p className="text-xs text-muted-foreground">
                   {id.simulation.sectionDesc[sec.section]}
                 </p>
@@ -279,8 +279,8 @@ export function SimulationBuilder() {
       )}
 
       {/* Ringkasan & Tombol Mulai */}
-      <Card className="bg-card">
-        <CardContent className="flex flex-col items-center justify-between gap-4 p-5 sm:flex-row">
+      <Card className="bg-card py-0">
+        <CardContent className="flex flex-col items-stretch justify-between gap-4 p-5 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3">
             <Clock className="size-5 text-muted-foreground" />
             <div>

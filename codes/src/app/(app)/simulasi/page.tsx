@@ -1,7 +1,7 @@
 import { SimulationBuilder } from '@/components/simulation/simulation-builder';
 
 export const metadata = {
-  title: 'Simulasi Tes IELTS GT | IELTS Learning Platform',
+  title: 'Simulasi Tes IELTS GT',
   description: 'Simulasi tes IELTS General Training dengan pilihan section fleksibel.',
 };
 

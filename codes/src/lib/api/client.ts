@@ -1,5 +1,6 @@
 import type { z } from 'zod';
 import { ErrorBodySchema } from '@/contracts/common';
+import { changesLearnerState, emitLearnerStateChanged } from '@/lib/learner-state';
 
 export type ApiErrorDetail = { path: string; code: string; message: string };
 
@@ -121,6 +122,9 @@ export async function apiFetch<S extends z.ZodType | undefined = undefined>(
       retryAfterSec,
     });
   }
+
+  // Poin, streak, radar, riwayat, dan peta diturunkan dari hasil ini: beri tahu penyedia query agar tidak basi.
+  if (changesLearnerState(method, path)) emitLearnerStateChanged();
 
   if (!req.schema) {
     return undefined as S extends z.ZodType ? z.infer<S> : void;

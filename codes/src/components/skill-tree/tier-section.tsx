@@ -59,7 +59,8 @@ export function TierSection({
   const skipSet = tier.skip_test.available ? tier.skip_test.assessment_set_id : null;
 
   return (
-    <li>
+    // Jumlah kolom modul mengikuti lebar wadah (bukan viewport): sidebar dan panel detail ikut menyempitkan area ini.
+    <li className="@container">
       <section aria-labelledby={headingId} className="grid gap-4">
         <header className="grid gap-3 rounded-lg border bg-card p-4 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-3">
@@ -94,7 +95,7 @@ export function TierSection({
         </header>
 
         {tier.modules.length > 0 ? (
-          <ol aria-label={fmt(id.tree.tierLabel, { n: tier.tier_number })} className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+          <ol aria-label={fmt(id.tree.tierLabel, { n: tier.tier_number })} className="grid items-start gap-4 @2xl:grid-cols-2 @6xl:grid-cols-3">
             {tier.modules.map((m) => (
               <ModuleCard
                 key={m.id}

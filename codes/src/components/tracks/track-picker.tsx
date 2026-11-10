@@ -50,7 +50,7 @@ export function TrackPicker({ selectedTrackCode, onSelectTrack }: TrackPickerPro
 
   if (tracksQ.isPending) {
     return (
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" role="status" aria-label={id.common.loading}>
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4" role="status" aria-label={id.common.loading}>
         {[1, 2, 3, 4].map((i) => (
           <Skeleton key={i} className="h-40 w-full rounded-xl" />
         ))}
@@ -67,8 +67,8 @@ export function TrackPicker({ selectedTrackCode, onSelectTrack }: TrackPickerPro
   const activeCode = selectedTrackCode ?? currentActiveTrack?.code ?? 'GT-STRUCT';
 
   return (
-    <section aria-label="Pilihan Jalur Belajar" className="grid gap-3">
-      <div className="flex items-center justify-between gap-2">
+    <section aria-label="Pilihan Jalur Belajar" className="@container grid min-w-0 gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
         <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <Compass className="size-4 text-primary" aria-hidden="true" />
           <span>Pilih Jalur Belajar</span>
@@ -81,7 +81,8 @@ export function TrackPicker({ selectedTrackCode, onSelectTrack }: TrackPickerPro
         ) : null}
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Layar sempit: deretan geser horizontal agar peta tidak terdorong jauh ke bawah; kolom mengikuti lebar wadah. */}
+      <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-px py-1 @xl:grid @xl:snap-none @xl:grid-cols-2 @xl:overflow-visible @4xl:grid-cols-4">
         {tracks.map((track) => {
           const isSelected = track.code === activeCode;
           const isProfileActive = track.is_active;
@@ -104,7 +105,7 @@ export function TrackPicker({ selectedTrackCode, onSelectTrack }: TrackPickerPro
                 }
               }}
               className={cn(
-                'group relative flex flex-col justify-between cursor-pointer border p-4 transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                'group relative flex w-[82%] shrink-0 snap-start flex-col justify-between gap-0 cursor-pointer border p-4 transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary @xl:w-auto @xl:shrink',
                 isSelected
                   ? 'border-primary bg-primary/5 shadow-sm ring-1 ring-primary'
                   : 'hover:border-primary/50 hover:bg-accent/40',
@@ -138,7 +139,7 @@ export function TrackPicker({ selectedTrackCode, onSelectTrack }: TrackPickerPro
                 </div>
               </div>
 
-              <div className="mt-4 grid gap-2 border-t pt-3">
+              <div className="mt-3 grid gap-2 border-t pt-3">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Progres materi</span>
                   <span className="font-medium text-foreground">
