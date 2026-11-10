@@ -595,6 +595,7 @@ export const id = {
     download: 'Unduh {type} ({size})',
     calloutTips: 'Tips Examiner',
     calloutMistake: 'Kesalahan Umum',
+    calloutIntro: 'Pengantar',
     tableScroll: 'Tabel dapat digeser ke samping',
     video: {
       section: 'Bagian {from}–{to}',

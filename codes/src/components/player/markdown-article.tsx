@@ -20,7 +20,7 @@ type MdNode = {
   data?: Record<string, unknown>;
 };
 
-const CALLOUTS: readonly string[] = ['tips-examiner', 'kesalahan-umum'];
+const CALLOUTS: readonly string[] = ['tips-examiner', 'kesalahan-umum', 'pengantar'];
 
 function plainText(node: MdNode): string {
   if (typeof node.value === 'string') return node.value;

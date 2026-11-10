@@ -151,7 +151,7 @@ Semua komponen dibangun di atas shadcn/ui (Radix); token di atas menggantikan de
 - **Progress bar:** tinggi 8px, track `border`, isi `primary` (belajar) / `status-done` (selesai); label persen di teks; `role="progressbar"` dengan `aria-valuenow`.
 - **Toast:** muncul bawah (mobile) / kanan-bawah, auto-hilang 4 dtk, `aria-live="polite"`, tidak mencuri fokus; toast error tidak auto-hilang dan menyertakan aksi "Coba lagi".
 - **Tabs (Learn/Drill/Apply):** segmented di atas pemutar, `role=tablist`, panah kiri/kanan berpindah tab.
-- **Callout:** "Tips Examiner" (ikon Lightbulb, latar `info` subtle), "Kesalahan Umum" (ikon AlertTriangle, latar warning subtle), border-kiri 4px, teks selalu berlabel.
+- **Callout:** "Tips Examiner" (ikon Lightbulb, latar `info` subtle), "Kesalahan Umum" (ikon AlertTriangle, latar warning subtle), "Pengantar" (ikon Compass, latar `primary` subtle; pembuka artikel di bagian "Mulai dari Sini", backlog C-20), border-kiri 4px, teks selalu berlabel.
 - **Skeleton:** blok `surface-muted` dengan shimmer halus untuk > 300 ms; dihentikan saat reduced-motion.
 
 ### 5.8 Status Skill Tree: Terkunci / Sedang / Selesai (CUR-01)

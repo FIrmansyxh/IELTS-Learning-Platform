@@ -3,6 +3,7 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { checkPengantar } from '../../content/_src/check-pengantar.mjs';
 import { extractToc, MarkdownArticle } from '../../src/components/player/markdown-article';
 import { enhanceMarkdown } from '../../src/components/player/markdown-enhance';
 
@@ -59,6 +60,18 @@ describe('Materi Diperkaya (C-12)', () => {
         expect(md).toMatch(/Strategi IELTS/);
         expect(md).toMatch(/Contoh Jawaban Model/);
         expect(md).toMatch(/Cek Diri/);
+      });
+
+      it('pengantar dasar (C-20): pembuka "Mulai dari Sini" dan paragraf pengantar di tiap bagian bernomor', () => {
+        expect(checkPengantar(md)).toEqual([]);
+        // Pembuka adalah butir pertama daftar isi dan dirender sebagai callout berlabel "Pengantar".
+        expect(extractToc(md)[0]?.text).toBe('Mulai dari Sini');
+        const { container, unmount } = render(<MarkdownArticle markdown={md} />);
+        const intro = container.querySelector('aside[data-callout="pengantar"]');
+        expect(intro).not.toBeNull();
+        expect(intro?.textContent ?? '').toMatch(/^Pengantar/);
+        expect(intro?.querySelectorAll('p').length ?? 0).toBeGreaterThanOrEqual(4);
+        unmount();
       });
 
       it('dirender tanpa sisa sintaks tabel/callout mentah, dengan banyak tabel dan >= 2 callout', () => {
