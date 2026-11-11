@@ -43,6 +43,7 @@ const chip = (on: boolean) =>
   );
 
 type VerbFilter = 'ALL' | 'IRREGULAR' | VerbPattern;
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const FILTERS: VerbFilter[] = ['ALL', 'BERATURAN', 'A-B-C', 'A-B-A', 'A-B-B', 'A-A-A', 'IRREGULAR'];
 const FILTER_LABEL: Record<VerbFilter, string> = {
   ALL: 'Semua',
@@ -283,6 +284,7 @@ function FormGuide() {
 function VerbTable() {
   const [query, setQuery] = React.useState('');
   const [filter, setFilter] = React.useState<VerbFilter>('ALL');
+  const [letter, setLetter] = React.useState<string | null>(null);
   const [hideV2, setHideV2] = usePersistentToggle('ielts.glossary.hide.v2', false);
   const [hideV3, setHideV3] = usePersistentToggle('ielts.glossary.hide.v3', false);
   const [hideIng, setHideIng] = usePersistentToggle('ielts.glossary.hide.ing', false);
@@ -297,7 +299,8 @@ function VerbTable() {
   const setHidden: Record<FormKey, (v: boolean) => void> = { v2: setHideV2, v3: setHideV3, ing: setHideIng, s: setHideS };
   const anyHidden = hideV2 || hideV3 || hideIng || hideS;
 
-  const rows = React.useMemo(() => {
+  // Daftar sebelum disaring huruf: dipakai untuk menentukan huruf yang tersedia pada pencarian/filter saat ini.
+  const baseRows = React.useMemo(() => {
     const q = query.trim().toLowerCase();
     return VERBS.filter((v) => {
       if (!matchesFilter(v, filter)) return false;
@@ -306,7 +309,13 @@ function VerbTable() {
     });
   }, [query, filter]);
 
-  const letters = React.useMemo(() => [...new Set(rows.map((v) => v.v1[0]!.toUpperCase()))], [rows]);
+  const letters = React.useMemo(() => [...new Set(baseRows.map((v) => v.v1[0]!.toUpperCase()))], [baseRows]);
+  // Huruf terpilih yang tidak punya kata pada pencarian/filter baru diabaikan, bukan menghasilkan daftar kosong.
+  const activeLetter = letter !== null && letters.includes(letter) ? letter : null;
+  const rows = React.useMemo(
+    () => (activeLetter ? baseRows.filter((v) => v.v1[0]!.toUpperCase() === activeLetter) : baseRows),
+    [baseRows, activeLetter],
+  );
 
   const showAll = () => {
     setHideV2(false);
@@ -323,17 +332,7 @@ function VerbTable() {
   const resetSearch = () => {
     setQuery('');
     setFilter('ALL');
-  };
-
-  /** Lompat ke huruf pertama yang terlihat (tabel pada layar lebar, kartu pada layar sempit). */
-  const jumpTo = (letter: string) => {
-    const targets = document.querySelectorAll<HTMLElement>(`[data-letter="${letter}"]`);
-    for (const el of targets) {
-      if (el.offsetParent !== null) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-    }
+    setLetter(null);
   };
 
   /** Ucapkan V1 lalu bentuk lain secara berurutan; bentuk yang sedang disembunyikan (mode hafalan) dilewati. */
@@ -399,17 +398,6 @@ function VerbTable() {
       </Badge>
     ) : null;
 
-  const firstOfLetter = new Set<string>();
-  const letterAttr = (v: VerbEntry) => {
-    const l = v.v1[0]!.toUpperCase();
-    if (firstOfLetter.has(l)) return undefined;
-    firstOfLetter.add(l);
-    return l;
-  };
-  const tableLetters = new Map(rows.map((v) => [v.v1, letterAttr(v)]));
-  firstOfLetter.clear();
-  const cardLetters = new Map(rows.map((v) => [v.v1, letterAttr(v)]));
-
   return (
     <div className="grid gap-5">
       <FormGuide />
@@ -462,18 +450,39 @@ function VerbTable() {
           {rows.length} kata kerja
         </p>
         {letters.length > 1 ? (
-          <nav aria-label="Lompat ke huruf" className="flex flex-wrap gap-1">
-            {letters.map((l) => (
-              <button
-                key={l}
-                type="button"
-                onClick={() => jumpTo(l)}
-                aria-label={`Lompat ke huruf ${l}`}
-                className="inline-flex size-9 items-center justify-center rounded-lg border bg-background text-sm font-semibold outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50"
-              >
-                {l}
-              </button>
-            ))}
+          <nav aria-label="Saring menurut huruf awal" className="flex flex-wrap gap-1">
+            <button
+              type="button"
+              onClick={() => setLetter(null)}
+              aria-pressed={activeLetter === null}
+              className={cn(
+                'inline-flex h-9 items-center justify-center rounded-lg border px-3 text-sm font-semibold outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50',
+                activeLetter === null ? 'border-primary bg-primary text-primary-foreground' : 'bg-background hover:bg-accent',
+              )}
+            >
+              Semua huruf
+            </button>
+            {ALPHABET.map((l) => {
+              const available = letters.includes(l);
+              return (
+                <button
+                  key={l}
+                  type="button"
+                  disabled={!available}
+                  onClick={() => setLetter(activeLetter === l ? null : l)}
+                  aria-pressed={activeLetter === l}
+                  aria-label={available ? `Tampilkan kata kerja berawalan huruf ${l}` : `Tidak ada kata kerja berawalan huruf ${l}`}
+                  title={available ? undefined : 'Belum ada kata kerja umum berawalan huruf ini'}
+                  className={cn(
+                    'inline-flex size-9 items-center justify-center rounded-lg border text-sm font-semibold outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50',
+                    activeLetter === l ? 'border-primary bg-primary text-primary-foreground' : 'bg-background hover:bg-accent',
+                    !available && 'cursor-not-allowed opacity-35 hover:bg-background',
+                  )}
+                >
+                  {l}
+                </button>
+              );
+            })}
           </nav>
         ) : null}
       </div>
@@ -485,7 +494,7 @@ function VerbTable() {
           {/* Layar sempit: satu kartu per kata kerja, tanpa gulir horizontal. */}
           <ul className="grid gap-3 md:hidden" aria-label="Daftar kata kerja">
             {rows.map((v) => (
-              <li key={v.v1} data-letter={cardLetters.get(v.v1)} data-testid={`verb-card-${v.v1}`} className="grid gap-3 rounded-2xl border bg-card p-4">
+              <li key={v.v1} data-testid={`verb-card-${v.v1}`} className="grid gap-3 rounded-2xl border bg-card p-4">
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <p className="flex flex-wrap items-center gap-2">
@@ -534,7 +543,7 @@ function VerbTable() {
               </thead>
               <tbody className="divide-y">
                 {rows.map((v) => (
-                  <tr key={v.v1} data-letter={tableLetters.get(v.v1)} className="align-middle even:bg-muted/20 hover:bg-muted/50" data-testid={`verb-row-${v.v1}`}>
+                  <tr key={v.v1} className="align-middle even:bg-muted/20 hover:bg-muted/50" data-testid={`verb-row-${v.v1}`}>
                     <th scope="row" className="px-4 py-3">
                       <span className="flex items-center gap-1.5">
                         <span className={cn('text-lg font-bold', FORM_STYLE.v1.text)}>{v.v1}</span>
@@ -608,7 +617,7 @@ function TermList() {
           }}
         />
       ) : (
-        <ul className="grid items-start gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <ul className="grid items-start gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {rows.map((t) => (
             <li key={t.term} className="grid gap-2 rounded-2xl border bg-card p-4" data-testid="term-card">
               <div className="flex flex-wrap items-start justify-between gap-2">
@@ -632,7 +641,7 @@ function TermList() {
 
 export function GlossaryView() {
   return (
-    <div className="mx-auto grid w-full max-w-6xl gap-6">
+    <div className="grid w-full gap-6">
       <header className="grid gap-1.5">
         <h1 className="flex items-center gap-2.5 text-2xl font-bold sm:text-3xl">
           <BookA className="size-7 text-primary" aria-hidden="true" />

@@ -110,6 +110,33 @@ describe('GlossaryView', () => {
     expect(screen.getByTestId('verb-count').textContent).toMatch(/^\d+ kata kerja$/);
   });
 
+  it('filter huruf: klik B hanya menampilkan kata berawalan B, klik lagi atau Semua huruf mengembalikan', () => {
+    render(<GlossaryView />);
+    const all = Number(screen.getByTestId('verb-count').textContent?.split(' ')[0]);
+    // Alfabet ditampilkan utuh; huruf tanpa kata kerja dinonaktifkan.
+    expect((screen.getByRole('button', { name: 'Tidak ada kata kerja berawalan huruf Z' }) as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: 'Tampilkan kata kerja berawalan huruf B' }));
+    const rows = screen.getAllByTestId(/^verb-row-/);
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.length).toBeLessThan(all);
+    expect(rows.every((r) => r.getAttribute('data-testid')!.replace('verb-row-', '').startsWith('b'))).toBe(true);
+    expect(screen.queryByTestId('verb-row-go')).toBeNull();
+    expect(screen.getByTestId('verb-count').textContent).toBe(`${rows.length} kata kerja`);
+    // Huruf lain tetap tersedia, dan digabung dengan filter pola.
+    fireEvent.click(screen.getByRole('button', { name: /^A-B-B/ }));
+    expect(screen.getByTestId('verb-row-buy')).toBeTruthy();
+    expect(screen.queryByTestId('verb-row-bring')).toBeTruthy();
+    expect(screen.queryByTestId('verb-row-build')).toBeTruthy();
+    expect(screen.queryByTestId('verb-row-catch')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Tampilkan kata kerja berawalan huruf B' }));
+    expect(screen.getByTestId('verb-row-catch')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /^Semua \d/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Tampilkan kata kerja berawalan huruf C' }));
+    expect(screen.queryByTestId('verb-row-go')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Semua huruf' }));
+    expect(screen.getByTestId('verb-count').textContent).toBe(`${all} kata kerja`);
+  });
+
   it('mode hafalan: sembunyikan V2, ketuk untuk membuka, dan reset', () => {
     render(<GlossaryView />);
     fireEvent.click(screen.getByRole('button', { name: 'V2' }));
