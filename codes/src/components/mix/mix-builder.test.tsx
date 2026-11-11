@@ -66,13 +66,16 @@ const session = { data: { attempt_id: ATTEMPT, question_count: 10, mode: 'MANUAL
 
 const ACTIVE = { attempt_id: ATTEMPT, mode: 'MANUAL', question_count: 12, answered_count: 4, started_at: '2026-11-08T10:00:00.000Z' };
 
-function setup(opts: { banks?: unknown; mixStatus?: number; mixBody?: unknown; active?: unknown } = {}) {
+const NO_REVIEWS = { due_count: 0, scheduled_count: 0, mastered_count: 0, next_due_at: null };
+
+function setup(opts: { banks?: unknown; mixStatus?: number; mixBody?: unknown; active?: unknown; reviews?: unknown } = {}) {
   return mockFetch((url, init) => {
     if (url.pathname === '/api/v1/banks') return { body: { data: opts.banks ?? BANKS } };
     if (url.pathname === '/api/v1/mix-sessions' && init.method === 'POST') {
       return { status: opts.mixStatus ?? 201, body: opts.mixBody ?? session };
     }
     if (url.pathname === '/api/v1/mix-sessions/active') return { body: { data: opts.active ?? null } };
+    if (url.pathname === '/api/v1/me/reviews') return { body: { data: opts.reviews ?? NO_REVIEWS } };
     return { status: 404, body: errorBody('NOT_FOUND', 'x') };
   });
 }
@@ -261,5 +264,34 @@ describe('MixBuilder', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Mulai latihan' }));
     await waitFor(() => expect(postCalls(calls)).toHaveLength(1));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+});
+
+describe('Ulangi soal yang salah (SPEC-026)', () => {
+  it('belum ada jadwal: kartu menjelaskan sumbernya dan tanpa tombol ulang', async () => {
+    setup();
+    renderWithProviders(<MixBuilder />);
+    await heading();
+    expect(await screen.findByTestId('review-card')).toHaveTextContent('Ulangi soal yang salah');
+    expect(screen.getByTestId('review-card')).toHaveTextContent('Belum ada soal untuk diulang');
+    expect(screen.queryByRole('button', { name: /^Ulangi \d+ soal/ })).not.toBeInTheDocument();
+  });
+
+  it('ada soal jatuh tempo: tombol memulai sesi REVIEW_DUE dengan batas 20 soal', async () => {
+    const calls = setup({ reviews: { due_count: 27, scheduled_count: 30, mastered_count: 4, next_due_at: null } });
+    renderWithProviders(<MixBuilder />);
+    await heading();
+    expect(await screen.findByTestId('review-due')).toHaveTextContent('27 soal jatuh tempo');
+    fireEvent.click(screen.getByRole('button', { name: 'Ulangi 20 soal' }));
+    await waitFor(() => expect(push).toHaveBeenCalledWith(`/latihan/campur/${ATTEMPT}`));
+    expect(postCalls(calls)[0]!.json).toEqual({ count: 20, mode: 'REVIEW_DUE' });
+  });
+
+  it('terjadwal tetapi belum jatuh tempo: tombol nonaktif dan menampilkan jatuh tempo berikutnya', async () => {
+    setup({ reviews: { due_count: 0, scheduled_count: 3, mastered_count: 0, next_due_at: '2026-11-12T08:00:00.000Z' } });
+    renderWithProviders(<MixBuilder />);
+    await heading();
+    expect(await screen.findByRole('button', { name: 'Ulangi 0 soal' })).toBeDisabled();
+    expect(screen.getByTestId('review-card')).toHaveTextContent('Soal berikutnya jatuh tempo');
   });
 });

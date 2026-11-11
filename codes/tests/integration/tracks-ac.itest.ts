@@ -127,7 +127,8 @@ describe('AC-6: endpoint, migrasi 0003, seed, progres bersama', () => {
     };
 
     const report = runMigrations(raw, REAL);
-    expect(report.applied).toEqual(['0003_spec_021_learning_tracks']);
+    // Migrasi setelah 0003 (mis. 0004, SPEC-026) ikut terpasang; yang diuji di sini hanya 0003 yang berurutan pertama.
+    expect(report.applied[0]).toBe('0003_spec_021_learning_tracks');
 
     // data lama utuh (kolom baru dikecualikan)
     const strip = (rows: any[], drop: string[]) => rows.map((r) => Object.fromEntries(Object.entries(r).filter(([k]) => !drop.includes(k))));
