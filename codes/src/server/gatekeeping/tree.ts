@@ -5,7 +5,6 @@ import { recomputeStatuses } from './service';
 import {
   bossState,
   isAvailable,
-  isTerminal,
   lockReasonOf,
   moduleAvailable,
   moduleProgressPercent,
@@ -107,7 +106,7 @@ export function buildTree(snap: Snapshot, sets: PublishedSet[]): { tiers: Curric
             order_index: mod.order,
             status: mod.status,
             content_state: available ? ('AVAILABLE' as const) : ('COMING_SOON' as const),
-            progress_percent: isTerminal(mod.status) ? 100 : moduleProgressPercent(mod),
+            progress_percent: moduleProgressPercent(mod),
             skip_test: skipDto(moduleSkipSet, available && skipEligible(mod.status), tier.skipThreshold),
             sub_modules: [...mod.subs]
               .sort((a, b) => a.order - b.order)

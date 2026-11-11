@@ -100,7 +100,7 @@ export const seedModules: SeedModule[] = [
     },
   },
   {
-    // SPEC-004: 4 Tier, 13 Modul, 31 Sub-Modul berstatus DRAFT.
+    // SPEC-004 + C-22: 4 Tier, 13 Modul, 40 Sub-Modul berstatus DRAFT.
     name: 'curriculum-structure',
     run: async (tx) => {
       await tx
@@ -156,7 +156,7 @@ export const seedModules: SeedModule[] = [
     },
   },
   {
-    // SPEC-021: 4 jalur belajar seed (GT-STRUCT, GT-WRITING, GT-READING, GT-SPRINT-4W).
+    // SPEC-021 + C-22: 5 jalur belajar seed (GT-STRUCT, GT-WRITING, GT-READING, GT-SPRINT-4W, GT-GRAMMAR).
     name: 'learning-tracks',
     run: async (tx) => {
       const { readFileSync } = await import('node:fs');

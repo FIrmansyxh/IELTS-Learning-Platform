@@ -424,18 +424,18 @@ describe('AC-19: content:import / db:seed idempoten untuk jalur', () => {
     delete env.DATABASE_URL;
     return spawnSync(process.execPath, [tsx, script, ...args], { env, encoding: 'utf8', timeout: 120_000 });
   };
-  const EXPECT = { tracks: 4, items: 51, perTrack: { 'GT-STRUCT': 0, 'GT-WRITING': 18, 'GT-READING': 9, 'GT-SPRINT-4W': 24 } };
+  const EXPECT = { tracks: 5, items: 69, perTrack: { 'GT-STRUCT': 0, 'GT-WRITING': 18, 'GT-READING': 9, 'GT-SPRINT-4W': 24, 'GT-GRAMMAR': 18 } };
 
-  it('AC-19: applyTracks pada DB seed: run kedua NOOP (4 jalur sama hash), baris 4 jalur / 51 item', async () => {
+  it('AC-19: applyTracks pada DB seed: run kedua NOOP (5 jalur sama hash), baris 5 jalur / 69 item', async () => {
     const pkg = tracksJson();
     const before = counts(process.env.DATABASE_PATH!);
     expect(before).toMatchObject(EXPECT);
     const r = await db.transaction((tx) => applyTracks(tx, pkg.learning_tracks, 'PUBLISHED'));
-    expect(r).toEqual({ created: 0, updated: 0, noop: 4 });
+    expect(r).toEqual({ created: 0, updated: 0, noop: 5 });
     expect(counts(process.env.DATABASE_PATH!)).toEqual(before);
   });
 
-  it('AC-19: proses db:seed dua kali dan content:import --dir content/gt-tracks dua kali pada DB baru: jumlah baris 4/51 dan hash tidak berubah', () => {
+  it('AC-19: proses db:seed dua kali dan content:import --dir content/gt-tracks dua kali pada DB baru: jumlah baris 5/69 dan hash tidak berubah', () => {
     const dbPath = path.join(tmp('ielts-ac19-'), 'ielts.db');
     const mig = run('scripts/migrate.ts', [], dbPath);
     expect(mig.status, `${mig.stdout}\n${mig.stderr}`).toBe(0);

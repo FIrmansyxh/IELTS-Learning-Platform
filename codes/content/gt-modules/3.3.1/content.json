@@ -345,6 +345,155 @@
               "An overview of the main trends",
               "Accurate data to support key features"
             ]
+          },
+          {
+            "question_id": "Q-WR331-022",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which sentence is CORRECT?",
+            "explanation_id": "\"Rise\" intransitive (tanpa objek) dan bentuk lampaunya rose. \"Raise\" transitive, jadi butuh objek, dan \"rise\" tidak bisa dipasifkan.",
+            "options": [
+              "The number rose in 2010.",
+              "The number raise in 2010.",
+              "The number raised in 2010.",
+              "The number was risen in 2010."
+            ],
+            "correct_answers": [
+              "The number rose in 2010."
+            ]
+          },
+          {
+            "question_id": "Q-WR331-023",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "A pie chart shows household spending with NO year or time period. Which tense should you use?",
+            "explanation_id": "Data statis tanpa keterangan waktu dilaporkan dengan Simple Present, misalnya \"Food accounts for 30% of spending\".",
+            "options": [
+              "Simple Present",
+              "Simple Past",
+              "Present Perfect",
+              "Future simple"
+            ],
+            "correct_answers": [
+              "Simple Present"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-024",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The graph includes a prediction for 2050. Complete: The population ___ 9 billion by 2050.",
+            "explanation_id": "Prediksi masa depan memakai will / is expected to / is projected to + kata kerja dasar.",
+            "options": [
+              "is projected to reach",
+              "reached",
+              "has reached",
+              "is reach"
+            ],
+            "correct_answers": [
+              "is projected to reach"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-025",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Rent was twice ___ food costs.",
+            "explanation_id": "Pola kelipatan: twice / three times + as + adjektiva + as.",
+            "options": [
+              "as high as",
+              "higher as",
+              "as high than",
+              "more high than"
+            ],
+            "correct_answers": [
+              "as high as"
+            ]
+          },
+          {
+            "question_id": "Q-WR331-026",
+            "skill": "WRITING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: The farm was ___ into a housing estate. (convert / converted)",
+            "explanation_id": "Perubahan pada peta memakai pasif: was + V3, yaitu was converted into.",
+            "correct_answers": [
+              "converted"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-WR331-027",
+            "skill": "WRITING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: There was an increase ___ 10% in sales. (of / to)",
+            "explanation_id": "Setelah kata benda increase, nilai kenaikan memakai \"of\": an increase of 10%.",
+            "correct_answers": [
+              "of"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-WR331-028",
+            "skill": "WRITING",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat deskripsi proses yang benar.",
+            "explanation_id": "Pola menghubungkan tahap: Once + present perfect passive, lalu tahap berikutnya dalam pasif present simple.",
+            "segments": [
+              "Once the beans",
+              "have been dried,",
+              "they are roasted",
+              "at a high temperature."
+            ]
+          },
+          {
+            "question_id": "Q-WR331-029",
+            "skill": "WRITING",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Perbandingan dengan adjektiva -er memakai \"than\": higher than in Europe.",
+            "tokens": [
+              "Sales",
+              "in",
+              "Asia",
+              "were",
+              "higher",
+              "as",
+              "in",
+              "Europe."
+            ],
+            "correct_answers": [
+              5
+            ]
+          },
+          {
+            "question_id": "Q-WR331-030",
+            "skill": "WRITING",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan persentase dengan cara menulisnya sebagai pecahan.",
+            "explanation_id": "50% = a half; 75% = three quarters; 33% = a third; 10% = one in ten. A quarter adalah 25%.",
+            "points": 4,
+            "matching": {
+              "left": [
+                "50%",
+                "75%",
+                "33%",
+                "10%"
+              ],
+              "right": [
+                "a half",
+                "three quarters",
+                "a third",
+                "one in ten",
+                "a quarter"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2,
+              3
+            ]
           }
         ]
       }

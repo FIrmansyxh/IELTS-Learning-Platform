@@ -1,0 +1,509 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 1,
+      "module_code": "1.1",
+      "module_category": "GRAMMAR",
+      "sub_module_title": "Adjectives & Adverbs: Jenis, Posisi, & Akhiran Pembentuk Kata (Suffix)",
+      "sub_module_code": "1.1.5",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Mulai dari Sini\n\n:::pengantar\n**Apa yang kamu pelajari?** Bagian ini membahas dua jenis kata yang tugasnya \"menerangkan\": kata sifat (*adjective*) yang menerangkan kata benda, dan kata keterangan (*adverb*) yang menerangkan kata kerja, kata sifat, atau seluruh kalimat. Kamu juga belajar akhiran pembentuk kata (*suffix*) seperti *-ful*, *-ly*, dan *-ness*. Dalam bahasa Indonesia, kata \"cepat\" dipakai di \"mobil cepat\" maupun \"berlari cepat\" tanpa berubah bentuk. Bahasa Inggris membedakannya: *a quick car*, tetapi *run quickly*.\n\n**Kenapa ini penting?** Tanpa adjective dan adverb, kalimatmu benar tetapi datar. Dengan keduanya, kamu bisa menggambarkan orang, tempat, dan cara melakukan sesuatu secara tepat. Di IELTS, memilih bentuk kata yang salah (*She sings beautiful*) terhitung kesalahan tata bahasa sekaligus kosakata. Mengenali suffix juga membantu kamu menebak kelas kata pada soal isian Reading dan Listening.\n\n**Bekal sebelum mulai:** Kamu cukup tahu apa itu *noun* (kata benda) dan *verb* (kata kerja), serta perbedaan countable dan uncountable dari sub-modul 1.1.1. Istilah lain dijelaskan saat pertama muncul. Tidak perlu menghafal daftar suffix; cukup kenali polanya dari contoh.\n:::\n\n### Istilah yang Akan Kamu Temui\n\n| Istilah | Arti sederhana | Contoh |\n|---|---|---|\n| **Adjective** | Kata sifat: menerangkan kata benda | *a **tall** building* |\n| **Adverb** | Kata keterangan: menerangkan kata kerja, kata sifat, adverb lain, atau kalimat | *run **quickly**, **very** tall* |\n| **Suffix** | Akhiran yang ditempelkan di belakang kata dan biasanya mengubah kelas katanya | *happy → happi**ness*** |\n| **Word family** | Keluarga kata: satu kata dasar dengan beberapa bentuk | *succeed, success, successful* |\n| **Comparative / superlative** | Bentuk \"lebih\" / bentuk \"paling\" | *bigger* / *the biggest* |\n| **Participle adjective** | Kata sifat berakhiran *-ing* atau *-ed* yang berasal dari kata kerja | *boring, bored* |\n\n---\n\n## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Mengenali enam kelompok **adjective** dan meletakkannya dalam urutan yang benar sebelum noun.\n2. Membedakan adjective **-ed** dan **-ing**, serta pasangan yang sering tertukar (*good/well, hard/hardly, late/lately*).\n3. Menjelaskan fungsi, jenis, dan posisi **adverb** dalam kalimat.\n4. Membentuk **comparative** dan **superlative** dengan benar.\n5. Mengenali **suffix** pembentuk adjective, adverb, dan noun, lalu menyusun **word family**.\n\n> **Ringkasan 30 detik**\n> - **Adjective** menerangkan noun (*a careful driver*); **adverb** menerangkan verb, adjective, atau adverb lain (*drive carefully, very careful*).\n> - Kebanyakan adverb = adjective + **-ly**, tetapi tidak semua kata berakhiran -ly itu adverb (*friendly* adalah adjective) dan tidak semua adverb berakhiran -ly (*fast, hard, well*).\n> - **Suffix** memberi tahu kelas kata: *-ness, -ment, -tion* biasanya noun; *-ful, -ous, -ive* biasanya adjective. Ini sangat membantu di soal isian IELTS.\n\n---\n\n## 1. Adjective: Enam Kelompok Kata Sifat\n\nAdjective adalah kata yang memberi keterangan tentang kata benda: milik siapa, yang mana, berapa banyak, dan seperti apa. Dalam bahasa Indonesia kata sifat diletakkan sesudah kata benda (\"rumah besar\"), sedangkan dalam bahasa Inggris hampir selalu sebelum kata benda (*a big house*). Kabar baiknya, adjective tidak pernah berubah menjadi jamak: *two big houses*, bukan *two bigs houses*.\n\nKelompok pertama adalah **article** (*a, an, the*). Kelompok ini sudah dibahas lengkap di sub-modul 1.1.1, jadi tidak diulang di sini. Lima kelompok lainnya ada di bawah.\n\n### 1.1 Possessive dan demonstrative adjective\n\n*Possessive adjective* menunjukkan pemilik, sedangkan *demonstrative adjective* menunjuk benda yang dekat atau jauh. Keduanya selalu diikuti noun.\n\n| Kelompok | Kata | Contoh |\n|---|---|---|\n| Possessive (dari pronoun) | my, your, his, her, its, our, their | **My** phone is new. **Their** house is big. |\n| Possessive (dari noun + **'s**) | Eric's, my mother's, the teacher's | **Eric's** house is near the station. |\n| Demonstrative, dekat | **this** + noun tunggal, **these** + noun jamak | **This** book is mine. **These** books are mine. |\n| Demonstrative, jauh | **that** + noun tunggal, **those** + noun jamak | **That** car is fast. **Those** cars are fast. |\n\nBahasa Indonesia hanya punya \"ini\" dan \"itu\" untuk satu maupun banyak benda. Bahasa Inggris punya empat bentuk, jadi cek dulu noun sesudahnya: tunggal atau jamak?\n\n### 1.2 Adjective penunjuk jumlah (indefinite quantity)\n\nDetail *many, much, few,* dan *little* sudah ada di 1.1.1. Tabel ini hanya ringkasannya, ditambah beberapa kata baru.\n\n| Dipakai dengan | Kata | Contoh |\n|---|---|---|\n| Countable jamak | many, a few, few, several, a number of | **several** reasons, **a number of** students |\n| Uncountable | much, a little, little, a great amount of | **much** time, **a great amount of** water |\n| Keduanya | some, any, a lot of | **some** books, **some** advice |\n\nAda satu pasangan yang sering muncul di Writing Task 1 dan sering salah:\n\n:::compare\nA number of + noun jamak | Artinya \"sejumlah\" atau \"beberapa\"; verb mengikuti noun jamak; A number of students increase their skills.\nThe number of + noun jamak | Artinya \"jumlah\" (satu angka); verb selalu singular; The number of students increases every year.\n:::\n\n### 1.3 Numeral (kata bilangan)\n\n| Jenis | Fungsi | Contoh |\n|---|---|---|\n| **Cardinal** | Menghitung | one, two, twenty: **three** tickets |\n| **Ordinal** | Urutan, biasanya dengan *the* | the first, the second, the third: **the second** floor |\n| **Multiple** | Kelipatan | single, double, triple: a **double** room |\n| **Fraction** | Pecahan | half, a quarter, two-thirds: **two-thirds** of the class |\n\n### 1.4 Descriptive adjective\n\nInilah kelompok terbesar: kata yang menggambarkan sifat atau keadaan noun.\n\n| Kategori | Contoh kata | Contoh frasa |\n|---|---|---|\n| Karakter atau kualitas | kind, polite, honest | a **polite** student |\n| Ukuran | big, small, tall | a **small** kitchen |\n| Usia | young, old, ancient | an **ancient** temple |\n| Suhu | hot, cold, warm | **cold** water |\n| Bentuk | square, round, flat | a **round** table |\n| Warna | red, blue, dark green | a **blue** shirt |\n| Kebangsaan (huruf kapital) | Indonesian, Spanish, Japanese | **Indonesian** food |\n| Participle | boring, interesting, bored, interested | an **interesting** film |\n\nAdjective juga boleh diletakkan sesudah *be* atau kata kerja penghubung seperti *look, feel, seem*: *The kitchen is small. You look tired.*\n\n### 1.5 Adjective -ed vs. -ing\n\nPasangan ini paling sering tertukar. Rumusnya sederhana: **-ing** untuk hal yang *menyebabkan* perasaan, **-ed** untuk orang yang *merasakan*.\n\n| -ing (penyebab) | -ed (yang merasakan) | Contoh |\n|---|---|---|\n| boring (membosankan) | bored (bosan) | The lesson is **boring**, so I am **bored**. |\n| interesting (menarik) | interested (tertarik) | The topic is **interesting**. I am **interested** in it. |\n| tiring (melelahkan) | tired (lelah) | The trip was **tiring**. We were **tired**. |\n| confusing (membingungkan) | confused (bingung) | The map is **confusing**. The tourists are **confused**. |\n\n:::kesalahan-umum\n*I am **boring*** berarti \"saya orang yang membosankan\", bukan \"saya bosan\". Kalau kamu ingin berkata \"saya bosan\", pakai *I am **bored***. Begitu juga *I am **interested** in music*, bukan *I am interesting in music*.\n:::\n\n### 1.6 Urutan adjective sebelum noun\n\nKalau ada lebih dari satu adjective, penutur asli menyusunnya dalam urutan tetap. Kamu jarang butuh lebih dari tiga sekaligus, tetapi urutannya tetap sama.\n\n:::flow\nOpinion | Pendapat: beautiful, nice, expensive\nSize | Ukuran: big, small, long\nAge | Usia: old, new, young\nShape | Bentuk: round, square\nColor | Warna: brown, white\nOrigin | Asal: Javanese, Italian\nMaterial | Bahan: wooden, leather, plastic\n:::\n\n| Opinion | Size | Age | Color | Origin | Material | Noun |\n|---|---|---|---|---|---|---|\n| a beautiful | | old | | | wooden | table |\n| a nice | small | | white | | | house |\n| an expensive | | new | black | Italian | leather | bag |\n\n### 1.7 Variasi contoh\n\n#### Level 1: dasar\n\n1. **This** bag is **heavy**.\n2. **My** sister has **two young** children.\n3. I am **tired** because the trip was **long**.\n\n#### Level 2: beberapa adjective sekaligus\n\n1. **Those** students live in a **small old** house near the campus.\n2. We stayed in a **double** room on **the third** floor.\n3. **A number of** visitors were **interested** in the **ancient** temple.\n\n#### Level 3: konteks akademik\n\n1. **The number of** **elderly** people in **urban** areas is rising.\n2. **Several** **recent** studies report **surprising** results.\n3. **Two-thirds** of the respondents were **satisfied** with **their** **local** hospital.\n\n---\n\n## 2. Adverb: Fungsi, Jenis, dan Posisi\n\nAdverb adalah kata keterangan. Kalau adjective menjawab \"noun yang seperti apa?\", adverb menjawab pertanyaan seperti \"bagaimana?\", \"kapan?\", \"di mana?\", \"seberapa sering?\", dan \"seberapa?\". Adverb lebih lincah daripada adjective karena ia bisa menerangkan empat hal berbeda dan bisa pindah posisi di dalam kalimat.\n\n### 2.1 Empat fungsi adverb\n\n| Adverb menerangkan | Contoh | Penjelasan |\n|---|---|---|\n| Verb | I **completely** agree with you. | Seberapa setuju? Sepenuhnya. |\n| Adjective | The room is **so** clean. | Seberapa bersih? Sangat. |\n| Adverb lain | She speaks **too** fast. | Seberapa cepat? Terlalu. |\n| Seluruh kalimat | **Finally**, I arrived home. | Memberi keterangan untuk seluruh peristiwa. |\n\n### 2.2 Lima jenis adverb\n\n| Jenis | Menjawab | Contoh kata | Contoh kalimat |\n|---|---|---|---|\n| **Time** | Kapan? | now, yesterday, soon, tomorrow | We met **yesterday**. |\n| **Manner** | Bagaimana caranya? | slowly, carefully, well, hard, fast | He drives **carefully**. |\n| **Frequency** | Seberapa sering? | always, usually, often, sometimes, rarely, never | She **often** studies at night. |\n| **Place and direction** | Di mana? Ke mana? | here, there, inside, outside, somewhere | The children are playing **outside**. |\n| **Degree** | Seberapa? | very, too, so, quite, extremely, enough | The test was **extremely** difficult. |\n\nCatatan kecil tentang *enough*: kata ini diletakkan **sesudah** adjective atau adverb, bukan sebelumnya. *He is old **enough** to drive*, bukan *enough old*.\n\n### 2.3 Tiga posisi adverb\n\n| Posisi | Letak | Biasa dipakai untuk | Contoh |\n|---|---|---|---|\n| **Initial** | Awal kalimat, diikuti koma | Keterangan kalimat, waktu | **Fortunately**, nobody was hurt. |\n| **Medial** | Di tengah, dekat verb | Frequency, degree | I have **never** visited Bali. |\n| **Final** | Akhir kalimat | Manner, place, time | She answered the question **correctly**. |\n\nPosisi tengah (*medial*) punya tiga pola yang perlu kamu ingat:\n\n| Pola | Rumus | Contoh |\n|---|---|---|\n| Ada kata kerja bantu (*auxiliary*) | S + auxiliary + adverb + verb | She **has always wanted** to study abroad. |\n| Kalimat dengan *be* | S + be + adverb + complement | He **is usually** late. |\n| Hanya satu verb biasa | S + adverb + verb | They **often play** football. |\n\nKalau di akhir kalimat ada beberapa keterangan sekaligus, urutan yang paling aman adalah **cara, tempat, lalu waktu**: *She worked **hard** **at the office** **yesterday**.* Satu hal lagi: jangan menyelipkan adverb di antara verb dan objeknya. Tulis *I like coffee **very much***, bukan *I like very much coffee*.\n\n### 2.4 Variasi contoh\n\n- **Level 1:** He walks **slowly**. I **always** drink tea in the morning.\n- **Level 2:** The bus is **usually** on time, but **yesterday** it arrived **very** late.\n- **Level 3:** **Interestingly**, the figure rose **sharply** in 2020 and has remained **relatively** stable since then.\n\n---\n\n## 3. Adjective atau Adverb? Pasangan yang Sering Tertukar\n\nSekarang kamu sudah mengenal keduanya, saatnya memilih di antara mereka. Caranya selalu sama: lihat kata apa yang sedang diterangkan. Kalau yang diterangkan noun, pakai adjective. Kalau yang diterangkan verb, adjective, atau adverb lain, pakai adverb. Bahasa Indonesia tidak membedakan keduanya, sehingga kesalahan di sini sangat umum.\n\n:::compare\nAdjective | Menerangkan noun; sebelum noun atau sesudah be, look, feel, seem; She is a careful driver. The soup smells delicious.\nAdverb | Menerangkan verb, adjective, atau adverb lain; sering berakhiran -ly; She drives carefully. It is really delicious.\n:::\n\nPerhatikan contoh *The soup smells delicious*. Kata *smell, look, feel, taste, sound,* dan *seem* di sini berfungsi seperti *be* (menghubungkan subjek dengan sifatnya), jadi diikuti adjective, bukan adverb.\n\n| Kata | Kelas kata dan arti | Contoh |\n|---|---|---|\n| good | adjective: bagus | She is a **good** singer. |\n| well | adverb: dengan baik | She sings **well**. |\n| hard | adjective dan adverb: keras, sulit | It is a **hard** job. He works **hard**. |\n| hardly | adverb: hampir tidak | He **hardly** works. (hampir tidak bekerja) |\n| late | adjective dan adverb: terlambat | The **late** train. The train arrived **late**. |\n| lately | adverb: akhir-akhir ini | I have been busy **lately**. |\n| fast | adjective dan adverb: cepat | A **fast** car. He runs **fast**. (tidak ada *fastly*) |\n\nSebaliknya, beberapa kata berakhiran **-ly** justru adjective, bukan adverb: *friendly, lovely, lonely, silly, elderly*. Kamu tidak bisa berkata *She smiled friendly*. Pakai *She smiled **in a friendly way***.\n\n---\n\n## 4. Comparative dan Superlative\n\nKita sering perlu membandingkan: lebih murah, paling cepat, lebih hati-hati. Bahasa Indonesia cukup menambah kata \"lebih\" dan \"paling\" di depan kata sifat apa pun. Bahasa Inggris punya dua cara, dan pilihannya bergantung pada panjang kata: kata pendek diberi akhiran, kata panjang diberi *more* atau *most*.\n\n| Jenis kata | Comparative (lebih) | Superlative (paling) | Contoh |\n|---|---|---|---|\n| Satu suku kata | + **-er** | **the** + **-est** | tall, taller, the tallest |\n| Berakhiran **-e** | + **-r** | **the** + **-st** | large, larger, the largest |\n| Satu vokal + satu konsonan | konsonan digandakan + **-er** | konsonan digandakan + **-est** | big, bigger, the biggest |\n| Dua suku kata berakhiran **-y** | y menjadi **-ier** | y menjadi **-iest** | easy, easier, the easiest |\n| Dua suku kata atau lebih | **more** + adjective | **the most** + adjective | expensive, more expensive, the most expensive |\n| Adverb berakhiran **-ly** | **more** + adverb | **the most** + adverb | carefully, more carefully, the most carefully |\n| Tak beraturan | good/well → **better**; bad/badly → **worse**; far → **farther/further**; little → **less**; many/much → **more** | **the best**; **the worst**; **the farthest/furthest**; **the least**; **the most** | This is **the best** café in town. |\n\nDua hal yang wajib diingat: comparative diikuti **than** (*cheaper **than** mine*), dan jangan memakai dua penanda sekaligus. *More cheaper* dan *the most tallest* selalu salah.\n\n- **Level 1:** My room is **smaller than** yours.\n- **Level 2:** Trains are **more comfortable than** buses, but buses are **cheaper**.\n- **Level 3:** Sales grew **more rapidly** in Asia **than** in Europe, and March was **the busiest** month of the year.\n\n---\n\n## 5. Suffix: Akhiran Pembentuk Kata dan Word Family\n\nSuffix adalah akhiran yang ditempelkan pada sebuah kata untuk membentuk kata baru, mirip akhiran \"-an\" atau imbuhan \"ke-an\" dalam bahasa Indonesia (makan menjadi makanan, bahagia menjadi kebahagiaan). Yang paling penting: suffix biasanya **mengubah kelas kata**. Dari verb atau adjective bisa lahir noun, dari noun bisa lahir adjective, dan dari adjective bisa lahir adverb.\n\n### 5.1 Suffix pembentuk adjective\n\n| Suffix | Contoh | Suffix | Contoh |\n|---|---|---|---|\n| **-ic** | economic, basic | **-ish** | childish, foolish |\n| **-al** | normal, national | **-ate** | moderate, accurate |\n| **-ical** | logical, political | **-ful** | colorful, useful |\n| **-less** | hopeless, careless | **-ant** | abundant, important |\n| **-ive** | effective, active | **-y** | sunny, rainy |\n| **-ible** | sensible, possible | **-ly** | friendly, lovely |\n| **-able** | comfortable, reliable | **-ous** | dangerous, famous |\n\n*-ful* berarti \"penuh dengan\" dan *-less* berarti \"tanpa\", sehingga *careful* (hati-hati) berlawanan dengan *careless* (ceroboh). Hati-hati juga dengan pasangan yang mirip tetapi berbeda arti: *economic* berkaitan dengan ekonomi (*economic growth*), sedangkan *economical* berarti hemat (*an economical car*).\n\n### 5.2 Suffix -ly pembentuk adverb\n\nRumus dasarnya adjective + **-ly**: *slow → slowly, beautiful → beautifully*. Ada empat aturan ejaan.\n\n| Akhiran adjective | Aturan | Contoh |\n|---|---|---|\n| Kebanyakan kata | + **-ly** | quick → quick**ly**, careful → careful**ly** |\n| Konsonan + **-y** | y menjadi **-ily** | happy → happ**ily**, easy → eas**ily** |\n| **-le** | e menjadi **-y** | terrible → terrib**ly**, simple → simp**ly** |\n| **-ic** | + **-ally** | basic → basic**ally**, automatic → automatic**ally** (kecuali *publicly*) |\n\n### 5.3 Suffix pembentuk noun\n\n| Suffix | Kata asal | Noun |\n|---|---|---|\n| **-age** | marry (verb) | marriage |\n| **-ion / -tion** | connect, inform (verb) | connection, information |\n| **-ment** | announce, govern (verb) | announcement, government |\n| **-ness** | happy, kind (adjective) | happiness, kindness |\n| **-hood** | child (noun) | childhood |\n| **-ship** | friend, scholar (noun) | friendship, scholarship |\n| **-ism** | capital (noun) | capitalism |\n| **-logy** | bio- (unsur kata Yunani \"hidup\") | biology |\n\nSuffix *-hood, -ship,* dan *-ism* tidak mengubah kelas kata (noun tetap noun), tetapi mengubah maknanya dari benda konkret menjadi konsep abstrak.\n\n### 5.4 Word family\n\n*Word family* adalah satu kata dasar dengan semua bentuk turunannya. Menghafal satu keluarga sekaligus jauh lebih hemat daripada menghafal kata satu per satu.\n\n| Noun | Verb | Adjective | Adverb |\n|---|---|---|---|\n| success | succeed | successful | successfully |\n| decision | decide | decisive | decisively |\n| creation | create | creative | creatively |\n| difference | differ | different | differently |\n| care | care | careful, careless | carefully, carelessly |\n| economy | economise | economic, economical | economically |\n\n:::tips-examiner\nDi Writing Task 2, memakai bentuk kata yang berbeda dari keluarga yang sama menunjukkan **Lexical Resource** yang fleksibel: *The programme was a **success**. It **succeeded** because the team planned **successfully**.* Sebaliknya, bentuk kata yang salah (*The programme was success**ful**ly*) dihitung sebagai kesalahan *word formation* dan menahan nilaimu di Band 5 sampai 6.\n:::\n\n---\n\n## 6. Kesalahan Umum Pelajar Indonesia\n\nTabel berikut mengumpulkan kesalahan yang paling sering muncul pada topik ini. Sebagian besar terjadi karena bahasa Indonesia memakai satu bentuk kata untuk kata sifat dan kata keterangan, dan tidak punya perubahan bentuk untuk perbandingan. Tutup kolom \"Perbaikan\" dan coba tebak dulu sebelum membacanya.\n\n| # | Kesalahan | Perbaikan | Penjelasan |\n|---|---|---|---|\n| 1 | She sings **beautiful**. | She sings **beautifully**. | Menerangkan verb *sings*, jadi adverb. |\n| 2 | I am **boring** in this class. | I am **bored** in this class. | Yang merasakan memakai -ed. |\n| 3 | He speaks English very **good**. | very **well**. | *Good* adjective, *well* adverb. |\n| 4 | He works **hardly** every day. | He works **hard** every day. | *Hardly* berarti \"hampir tidak\". |\n| 5 | This phone is **more cheaper**. | This phone is **cheaper**. | Jangan memakai *more* dan *-er* bersamaan. |\n| 6 | **This** books are mine. | **These** books are mine. | Noun jamak memakai *these* atau *those*. |\n| 7 | The number of students **increase**. | The number of students **increases**. | Subjeknya *the number* (singular). |\n| 8 | a **wooden old beautiful** table | a **beautiful old wooden** table | Urutan: opinion, age, material. |\n| 9 | He runs **fastly**. | He runs **fast**. | *Fast* sudah adverb. |\n| 10 | She is not **enough old** to vote. | She is not **old enough** to vote. | *Enough* sesudah adjective. |\n| 11 | She **goes always** to school by bus. | She **always goes** to school by bus. | Adverb frequency sebelum verb utama. |\n| 12 | Money cannot buy **happy**. | Money cannot buy **happiness**. | Sesudah *buy* dibutuhkan noun. |\n\n---\n\n## 7. Strategi IELTS\n\nAturan di atas baru berguna kalau kamu tahu di bagian tes mana ia menghasilkan poin. Setiap butir di bawah menyebut bagian tesnya dan satu kebiasaan kecil yang bisa langsung kamu latih mulai hari ini.\n\n- **Reading dan Listening (soal isian):** sebelum mencari jawaban, tentukan kelas kata yang dibutuhkan celah. Sesudah *a/an/the* + adjective biasanya noun; sesudah *be* atau sebelum noun biasanya adjective; sesudah verb biasanya adverb. Suffix pada kata di teks membantu kamu memilih bentuk yang tepat.\n- **Writing Task 1:** adverb dan adjective adalah alat utama untuk menggambarkan perubahan: *rose **sharply***, *a **sharp** rise*, *fell **slightly***, *a **slight** fall*. Ingat *The number of ... **has** increased*.\n- **Writing Task 2:** pakai adverb kalimat di posisi awal untuk menyambung gagasan (***However**, ...; **Consequently**, ...; **Clearly**, ...*) dan pakai comparative saat membandingkan dua pilihan.\n- **Speaking:** ganti *very good* dan *very bad* dengan adjective yang lebih tepat (*excellent, terrible, crowded, peaceful*), dan periksa -ed atau -ing saat membicarakan perasaan.\n- **Semua bagian:** catat kosakata baru dalam bentuk word family, bukan kata tunggal.\n\n---\n\n## 8. Contoh Jawaban Model (Speaking Part 1)\n\nDi bawah ini satu pertanyaan Speaking dijawab dalam tiga tingkat kemampuan. Isi ketiganya hampir sama; yang berbeda adalah ketepatan adjective, adverb, dan bentuk katanya. Bandingkan satu per satu agar kamu melihat perubahan kecil apa yang menaikkan nilai.\n\n**Pertanyaan:** *Tell me about your hometown.*\n\n- **Band 5:** My hometown is small city. It is very good and the people is friend. I am boring there because it is quietly.\n- **Band 6:** My hometown is a small city. It is quiet and the people are friendly. Sometimes I am bored there because there are not many interesting places.\n- **Band 7:** My hometown is a small, peaceful city surrounded by green hills. The people are extremely friendly, and life moves more slowly than in Jakarta. Honestly, I sometimes feel bored because there are hardly any exciting places for young people.\n\n**Mengapa naik band?** (1) Bentuk kata benar (*friendly*, bukan *friend*; *bored*, bukan *boring*; *quiet*, bukan *quietly*), (2) ada adverb degree dan adverb kalimat (*extremely, honestly, hardly*), (3) ada comparative (*more slowly than*) dan dua adjective berurutan sebelum noun.\n\n---\n\n## 9. Ringkasan dan Cek Diri\n\nSebelum masuk ke latihan, pastikan inti materi sudah menempel. Baca daftar \"Ingat\" di bawah, lalu jawab pertanyaan Cek Diri tanpa melihat ke atas. Kalau ada jawaban yang salah, kembali ke bagian terkait sebelum mengerjakan drill.\n\n**Ingat:**\n\n- Adjective menerangkan noun; adverb menerangkan verb, adjective, adverb lain, atau kalimat.\n- -ing = penyebab perasaan; -ed = yang merasakan.\n- Urutan adjective: opinion, size, age, shape, color, origin, material.\n- *good → well*; *hard* dan *fast* tidak berubah; *hardly* = hampir tidak; *lately* = akhir-akhir ini.\n- Kata pendek: -er / -est. Kata panjang: more / most. Tak beraturan: better, best, worse, worst.\n- *The number of* + verb singular; *a number of* + verb plural.\n- Suffix menunjukkan kelas kata: -ness, -ment, -tion (noun); -ful, -ous, -ive (adjective); -ly (umumnya adverb).\n\n**Cek diri (tanpa melihat materi):**\n\n1. *The film was ___ (bored / boring), so we left early.*\n2. *She answered all the questions ___ (correct / correctly).*\n3. *The number of online shops ___ (is / are) growing.*\n4. *Tulis dalam urutan yang benar: a (leather / new / black) bag.*\n5. *Bentuk noun dari \"kind\" dan adverb dari \"easy\" adalah ___.*\n\n**Kunci:** 1. boring (film adalah penyebab rasa bosan). 2. correctly (menerangkan verb answered). 3. is (subjeknya the number). 4. a new black leather bag (age, color, material). 5. kindness dan easily.",
+        "mini_task": {
+          "task_type": "AI_SHORT_WRITING",
+          "prompt": "Tulis paragraf singkat (sekitar 80 sampai 100 kata) dalam bahasa Inggris yang menggambarkan tempat favoritmu di kotamu (misalnya taman, kafe, atau pasar) dan apa yang biasanya kamu lakukan di sana.\n\nDalam paragrafmu:\n- pakai setidaknya 5 adjective, termasuk satu frasa dengan dua adjective berurutan sebelum noun (mis. a small old cafe)\n- pakai setidaknya 3 adverb dari jenis yang berbeda (mis. frequency: usually; manner: quietly; degree: extremely)\n- pakai satu adjective -ed atau -ing dengan benar (mis. relaxed, relaxing)\n- pakai satu bentuk comparative atau superlative (mis. cheaper than, the most peaceful)\n- pakai setidaknya satu noun berakhiran suffix (mis. happiness, friendship, entertainment)",
+          "ai_rubric_criteria": "Grammatical Accuracy: adjective dipakai untuk noun dan adverb untuk verb/adjective (bukan \"sings beautiful\"), adjective -ed/-ing tepat, urutan adjective sebelum noun benar, posisi adverb frequency benar, comparative/superlative benar (tanpa \"more cheaper\"). Lexical Resource: bentuk kata (word formation) dan suffix tepat, adjective bervariasi (tidak hanya good/nice). Task Achievement: semua unsur yang diminta muncul. Coherence: paragraf runtut dan mudah diikuti."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 900,
+        "pass_percent": 75,
+        "questions": [
+          {
+            "question_id": "Q-GR115-001",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "___ books on the shelf over there are mine.",
+            "explanation_id": "\"Books\" jamak dan letaknya jauh (over there), jadi memakai \"those\". \"This/that\" hanya untuk noun tunggal, dan \"these\" untuk benda yang dekat.",
+            "options": [
+              "This",
+              "That",
+              "These",
+              "Those"
+            ],
+            "correct_answers": [
+              "Those"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-002",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The number of tourists in Bali ___ every year.",
+            "explanation_id": "Subjek kalimat adalah \"the number\" (satu angka), sehingga verb harus singular: increases. Tiga pilihan lain berbentuk plural.",
+            "options": [
+              "increase",
+              "increases",
+              "are increasing",
+              "have increased"
+            ],
+            "correct_answers": [
+              "increases"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-003",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "A number of students ___ late for class this morning.",
+            "explanation_id": "\"A number of\" berarti \"beberapa\", sehingga verb mengikuti noun jamak \"students\": were.",
+            "options": [
+              "was",
+              "were",
+              "is",
+              "has"
+            ],
+            "correct_answers": [
+              "were"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-004",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The lecture was so ___ that half of the audience fell asleep.",
+            "explanation_id": "Kuliah itu adalah penyebab rasa bosan, jadi memakai bentuk -ing. \"Bored\" dipakai untuk orang yang merasakan bosan.",
+            "options": [
+              "bored",
+              "boring",
+              "boredom",
+              "bore"
+            ],
+            "correct_answers": [
+              "boring"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-005",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "She speaks English very ___.",
+            "explanation_id": "Kata yang diterangkan adalah verb \"speaks\", jadi dibutuhkan adverb. Adverb dari \"good\" adalah \"well\". Good, nice, dan fluent adalah adjective.",
+            "options": [
+              "good",
+              "well",
+              "nice",
+              "fluent"
+            ],
+            "correct_answers": [
+              "well"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-006",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which phrase has the correct adjective order?",
+            "explanation_id": "Urutan adjective: opinion (beautiful), lalu age (old), lalu material (wooden), baru noun.",
+            "options": [
+              "a wooden old beautiful table",
+              "a beautiful old wooden table",
+              "an old beautiful wooden table",
+              "a beautiful wooden old table"
+            ],
+            "correct_answers": [
+              "a beautiful old wooden table"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-007",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "He was so tired that he could ___ keep his eyes open.",
+            "explanation_id": "\"Hardly\" berarti \"hampir tidak\": ia hampir tidak bisa membuka mata. \"Hard\" berarti keras atau sulit dan tidak cocok di posisi ini.",
+            "options": [
+              "hard",
+              "hardly",
+              "harder",
+              "hardest"
+            ],
+            "correct_answers": [
+              "hardly"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-008",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "This exercise is ___ than the previous one.",
+            "explanation_id": "Adjective dua suku kata berakhiran -y membentuk comparative dengan -ier: easy -> easier. \"More easier\" memakai dua penanda sekaligus, dan \"easiest\" adalah superlative.",
+            "options": [
+              "more easy",
+              "easier",
+              "easiest",
+              "more easier"
+            ],
+            "correct_answers": [
+              "easier"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-009",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which word is a NOUN?",
+            "explanation_id": "Suffix -ness mengubah adjective menjadi noun: happy -> happiness. \"Happily\" adverb, \"happier\" comparative adjective.",
+            "options": [
+              "happy",
+              "happily",
+              "happiness",
+              "happier"
+            ],
+            "correct_answers": [
+              "happiness"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-010",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which word is an ADJECTIVE, not an adverb?",
+            "explanation_id": "\"Friendly\" berasal dari noun \"friend\" + -ly dan berfungsi sebagai adjective (a friendly teacher). Tiga kata lain adalah adverb yang dibentuk dari adjective + -ly.",
+            "options": [
+              "quickly",
+              "friendly",
+              "slowly",
+              "carefully"
+            ],
+            "correct_answers": [
+              "friendly"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-011",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: My sister is ___ in Korean dramas, so she watches them every night. (interested / interesting)",
+            "explanation_id": "Kakak adalah orang yang merasakan ketertarikan, jadi memakai bentuk -ed: interested in. \"Interesting\" dipakai untuk hal yang menarik.",
+            "correct_answers": [
+              "interested"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR115-012",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Ubah adjective \"happy\" menjadi adverb: The children played ___ in the garden.",
+            "explanation_id": "Kata yang diterangkan adalah verb \"played\", jadi dibutuhkan adverb. Konsonan + y berubah menjadi -ily: happy -> happily.",
+            "correct_answers": [
+              "happily"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR115-013",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan bentuk comparative dari \"bad\": The traffic today is ___ than yesterday.",
+            "explanation_id": "\"Bad\" punya bentuk comparative tak beraturan: bad -> worse -> the worst. Bentuk \"badder\" atau \"more bad\" tidak ada.",
+            "correct_answers": [
+              "worse"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR115-014",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan bentuk noun dari \"announce\": The manager made an important ___ this morning.",
+            "explanation_id": "Sesudah \"an important\" dibutuhkan noun. Suffix -ment mengubah verb menjadi noun: announce -> announcement.",
+            "correct_answers": [
+              "announcement"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR115-015",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: He drives too ___ on the highway. (fast / fastly)",
+            "explanation_id": "\"Fast\" adalah adjective sekaligus adverb, sehingga bentuknya tidak berubah. Kata \"fastly\" tidak ada dalam bahasa Inggris baku.",
+            "correct_answers": [
+              "fast"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR115-016",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan bentuk adverb dari \"basic\": The two plans are ___ the same.",
+            "explanation_id": "Adjective berakhiran -ic membentuk adverb dengan -ally: basic -> basically.",
+            "correct_answers": [
+              "basically"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR115-017",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat yang benar.",
+            "explanation_id": "Sesudah subjek dan verb, frasa noun disusun: a + opinion (beautiful) + age (old) + material (wooden) + noun (table).",
+            "segments": [
+              "She",
+              "bought",
+              "a",
+              "beautiful",
+              "old",
+              "wooden",
+              "table."
+            ]
+          },
+          {
+            "question_id": "Q-GR115-018",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat yang benar.",
+            "explanation_id": "\"Enough\" diletakkan sesudah adjective yang diterangkannya: big enough, bukan enough big. Pola: subjek + be + adjective + enough + keterangan.",
+            "segments": [
+              "The room",
+              "is not",
+              "big",
+              "enough",
+              "for us."
+            ]
+          },
+          {
+            "question_id": "Q-GR115-019",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Kata yang diterangkan adalah verb \"sings\", jadi dibutuhkan adverb: beautifully. \"Beautiful\" adalah adjective dan hanya menerangkan noun.",
+            "tokens": [
+              "She",
+              "sings",
+              "very",
+              "beautiful",
+              "in",
+              "the",
+              "choir."
+            ],
+            "correct_answers": [
+              3
+            ]
+          },
+          {
+            "question_id": "Q-GR115-020",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Pembicara adalah orang yang merasakan bosan, jadi memakai bentuk -ed: bored with. \"Boring\" berarti membosankan.",
+            "tokens": [
+              "I",
+              "am",
+              "very",
+              "boring",
+              "with",
+              "this",
+              "long",
+              "movie."
+            ],
+            "correct_answers": [
+              3
+            ]
+          },
+          {
+            "question_id": "Q-GR115-021",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "\"Cheap\" hanya satu suku kata, jadi comparative-nya cukup \"cheaper\". Kata \"more\" harus dibuang karena tidak boleh ada dua penanda comparative.",
+            "tokens": [
+              "This",
+              "phone",
+              "is",
+              "more",
+              "cheaper",
+              "than",
+              "mine."
+            ],
+            "correct_answers": [
+              3
+            ]
+          },
+          {
+            "question_id": "Q-GR115-022",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "\"Smells\" di sini adalah kata kerja penghubung (seperti be) yang menghubungkan subjek dengan sifatnya, jadi diikuti adjective: delicious, bukan adverb \"deliciously\".",
+            "tokens": [
+              "The",
+              "soup",
+              "smells",
+              "deliciously",
+              "today."
+            ],
+            "correct_answers": [
+              3
+            ]
+          },
+          {
+            "question_id": "Q-GR115-023",
+            "skill": "GRAMMAR",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan setiap kata dengan kelas katanya (lihat suffix-nya).",
+            "explanation_id": "Suffix -hood membentuk noun (childhood), -ous membentuk adjective (dangerous), dan adjective + -ly membentuk adverb (quickly).",
+            "points": 3,
+            "matching": {
+              "left": [
+                "childhood",
+                "dangerous",
+                "quickly"
+              ],
+              "right": [
+                "noun",
+                "adjective",
+                "adverb",
+                "verb"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR115-024",
+            "skill": "GRAMMAR",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan setiap adverb dengan jenisnya.",
+            "explanation_id": "Yesterday menjawab \"kapan\" (time), carefully menjawab \"bagaimana\" (manner), rarely menjawab \"seberapa sering\" (frequency), dan extremely menjawab \"seberapa\" (degree).",
+            "points": 4,
+            "matching": {
+              "left": [
+                "yesterday",
+                "carefully",
+                "rarely",
+                "extremely"
+              ],
+              "right": [
+                "time",
+                "manner",
+                "frequency",
+                "degree",
+                "place"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "question_id": "Q-GR115-025",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih SEMUA kata yang merupakan adjective.",
+            "explanation_id": "Friendly dan lovely berakhiran -ly tetapi tetap adjective (a friendly neighbour, a lovely day). Hopeless adalah adjective bersuffix -less. \"Quickly\" adalah adverb.",
+            "points": 3,
+            "options": [
+              "friendly",
+              "lovely",
+              "quickly",
+              "hopeless"
+            ],
+            "correct_answers": [
+              "friendly",
+              "lovely",
+              "hopeless"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-026",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih SEMUA kata yang merupakan noun.",
+            "explanation_id": "Suffix -ship (friendship), -ment (government), dan -age (marriage) membentuk noun. \"Effective\" bersuffix -ive, jadi adjective.",
+            "points": 3,
+            "options": [
+              "friendship",
+              "government",
+              "effective",
+              "marriage"
+            ],
+            "correct_answers": [
+              "friendship",
+              "government",
+              "marriage"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-027",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Mount Everest is ___ mountain in the world.",
+            "explanation_id": "Membandingkan satu hal dengan semua yang lain (in the world) memakai superlative. \"High\" satu suku kata, jadi the + highest, bukan \"the most high\".",
+            "options": [
+              "higher",
+              "the highest",
+              "the most high",
+              "highest than"
+            ],
+            "correct_answers": [
+              "the highest"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-028",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "He is not ___ to drive a car.",
+            "explanation_id": "\"Enough\" selalu diletakkan sesudah adjective: old enough. Susunan \"enough old\" adalah terjemahan langsung dari \"cukup tua\" dan salah.",
+            "options": [
+              "enough old",
+              "old enough",
+              "too old enough",
+              "enough older"
+            ],
+            "correct_answers": [
+              "old enough"
+            ]
+          },
+          {
+            "question_id": "Q-GR115-029",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan bentuk adjective dari \"danger\": Swimming in this river is ___.",
+            "explanation_id": "Sesudah \"is\" dibutuhkan adjective untuk menerangkan subjek. Suffix -ous mengubah noun menjadi adjective: danger -> dangerous.",
+            "correct_answers": [
+              "dangerous"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR115-030",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: The team finished the project ___ and won an award. (successful / successfully)",
+            "explanation_id": "Kata yang diterangkan adalah verb \"finished\", jadi dibutuhkan adverb: successfully. \"Successful\" adalah adjective dan hanya menerangkan noun.",
+            "correct_answers": [
+              "successfully"
+            ],
+            "max_words": 1
+          }
+        ]
+      }
+    }
+  ]
+}

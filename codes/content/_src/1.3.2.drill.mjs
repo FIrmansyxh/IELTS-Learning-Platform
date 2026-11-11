@@ -28,6 +28,14 @@ The cost is £12, which includes the coach and the entry ticket. If you cannot p
 Best wishes,
 Ms Hart`;
 
+const text3 = `## Greenfield Sports Centre: Adult Swimming Lessons
+
+Our new beginners' course for adults starts on Tuesday 6 May and runs for eight weeks. Lessons take place every Tuesday evening from 6.30 p.m. to 7.15 p.m. in the small pool. Each class has a maximum of ten learners, so please book early.
+
+The full course costs £48 for members and £60 for non-members. You must pay when you book; we cannot accept payment on the day. Please bring your own towel and swimming costume. Goggles can be borrowed free of charge at reception.
+
+To book a place, call 01632 960 147 or speak to Daniel at the front desk before Friday 2 May. If you miss a lesson, we are sorry that we cannot give your money back.`;
+
 const sub = {
   meta: {
     tier_number: 1,
@@ -44,7 +52,7 @@ const sub = {
   },
   drill: {
     time_limit_seconds: 900,
-    passages: [text1, text2],
+    passages: [text1, text2, text3],
     questions: [
       mcq(1, 1, 'What is the main purpose of the library notice?', ['To announce changes to the opening hours and rules', 'To advertise a new computer course', 'To sell second-hand books', 'To ask members to pay fines'], 'To announce changes to the opening hours and rules', 'Judul dan kalimat pertama menyebut perubahan jam buka mulai 1 Desember, dilengkapi aturan. Pilihan lain hanya detail atau tidak disebut.'),
       fill(2, 1, 'From 1 December, the library will open at ___ a.m. on weekdays.', ['9.30', '9:30'], 'Teks: "will open at 9.30 a.m. instead of 9.00 a.m. on weekdays".'),
@@ -113,6 +121,23 @@ const sub = {
         correct_answers: ['Numbers and dates', 'Names with capital letters'],
       }),
       mcq(20, 1, 'Which sentence describes the MAIN IDEA, not a detail?', ['The library has new opening hours from 1 December.', 'Fines are 20 pence a day.', 'Guests pay £1 per hour for computers.', 'The library is closed on 1 January.'], 'The library has new opening hours from 1 December.', 'Ide pokok mencakup seluruh teks; tiga pilihan lain hanya detail.'),
+      mcq(21, 3, 'What is the main purpose of the sports centre notice?', ['To announce that the small pool is closing', 'To give information about a swimming course for adults', 'To advertise a job at the front desk', 'To explain the rules of a swimming competition'], 'To give information about a swimming course for adults', 'Judul dan kalimat pertama menyebut kursus renang pemula untuk dewasa; sisanya adalah detail jadwal, biaya, dan cara mendaftar.'),
+      fill(22, 3, 'The course runs for ___ weeks.', ['eight', '8'], 'Teks: "starts on Tuesday 6 May and runs for eight weeks".'),
+      fill(23, 3, 'Non-members pay £___ for the full course.', ['60'], 'Teks: "£48 for members and £60 for non-members". Hati-hati, £48 adalah harga untuk anggota.'),
+      g(24, {
+        passage_no: 3,
+        question_type: 'SHORT_ANSWER',
+        prompt: 'What can learners borrow at reception? (Maximum ONE word)',
+        correct_answers: ['goggles', 'Goggles'],
+        max_words: 1,
+        explanation_id: 'Teks: "Goggles can be borrowed free of charge at reception". Handuk dan baju renang harus dibawa sendiri.',
+      }),
+      tfng(25, 3, 'Learners can pay for the course on the day of the first lesson.', 'False', 'Teks: "You must pay when you book; we cannot accept payment on the day".'),
+      tfng(26, 3, 'There are never more than ten learners in a class.', 'True', 'Teks: "Each class has a maximum of ten learners".'),
+      tfng(27, 3, 'Daniel is the swimming teacher.', 'Not Given', 'Teks hanya menyebut Daniel di front desk untuk pendaftaran; siapa pengajarnya tidak disebut.'),
+      mcq(28, 3, 'When do the lessons take place?', ['Every Tuesday morning', 'Every Friday evening', 'Every Tuesday evening', 'Every evening in May'], 'Every Tuesday evening', 'Teks: "every Tuesday evening from 6.30 p.m. to 7.15 p.m.". Friday 2 May hanyalah batas pendaftaran.'),
+      fill(29, 1, 'The new study room can be booked for a maximum of ___ hours.', ['two', '2'], 'Teks: "can be booked at the front desk for a maximum of two hours".'),
+      tfng(30, 2, 'Students can wear their own clothes on the trip.', 'False', 'Teks: "Students should wear their school uniform and comfortable shoes".'),
     ],
   },
 };

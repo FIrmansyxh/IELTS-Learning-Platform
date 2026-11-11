@@ -337,6 +337,167 @@
               "Combine two techniques, such as synonym and structure change",
               "Keep numbers and names unchanged"
             ]
+          },
+          {
+            "question_id": "Q-WR222-021",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which word has the right register for a formal essay?",
+            "explanation_id": "Register harus sesuai: \"kids\" santai, sedangkan \"children\" formal dan cocok untuk esai.",
+            "options": [
+              "children",
+              "kids",
+              "kiddies",
+              "little guys"
+            ],
+            "correct_answers": [
+              "children"
+            ]
+          },
+          {
+            "question_id": "Q-WR222-022",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The text says: \"About a fifth of pupils stopped.\" Which statement has the same meaning?",
+            "explanation_id": "A fifth = seperlima = 20%. Soal Reading sering memarafrase angka dengan bentuk lain yang nilainya sama.",
+            "options": [
+              "20% of pupils stopped.",
+              "5% of pupils stopped.",
+              "Half of the pupils stopped.",
+              "Five pupils stopped."
+            ],
+            "correct_answers": [
+              "20% of pupils stopped."
+            ]
+          },
+          {
+            "question_id": "Q-WR222-023",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The text says: \"Participation rose.\" Which statement matches the text?",
+            "explanation_id": "Parafrase dengan antonim + negasi: rose = did not fall. \"Doubled\" menambah informasi yang tidak ada di teks.",
+            "options": [
+              "Participation did not fall.",
+              "Participation fell.",
+              "Participation doubled.",
+              "Participation stayed the same."
+            ],
+            "correct_answers": [
+              "Participation did not fall."
+            ]
+          },
+          {
+            "question_id": "Q-WR222-024",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which is a correct paraphrase of \"Although he was tired, he finished the work.\"?",
+            "explanation_id": "Konjungsi diganti: although + klausa menjadi despite + V-ing, maknanya tetap kontras.",
+            "options": [
+              "Despite being tired, he finished the work.",
+              "Despite he was tired, he finished the work.",
+              "Because he was tired, he finished the work.",
+              "Although being tired, but he finished the work."
+            ],
+            "correct_answers": [
+              "Despite being tired, he finished the work."
+            ]
+          },
+          {
+            "question_id": "Q-WR222-025",
+            "skill": "WRITING",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which is the best paraphrase of \"The graph shows the percentage of households with internet access.\"?",
+            "explanation_id": "Shows menjadi illustrates, percentage menjadi proportion, households menjadi homes: kata berubah, makna tetap. Pilihan lain menyalin atau mengubah makna.",
+            "options": [
+              "The graph illustrates the proportion of homes with online access.",
+              "The graph shows the percentage of households with internet access.",
+              "The graph illustrates the number of people who own computers.",
+              "The graph proves that all homes have internet access."
+            ],
+            "correct_answers": [
+              "The graph illustrates the proportion of homes with online access."
+            ]
+          },
+          {
+            "question_id": "Q-WR222-026",
+            "skill": "WRITING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: Many people use public transport. = Public transport is ___ by many people.",
+            "explanation_id": "Aktif menjadi pasif: is + V3 (used) + by + pelaku.",
+            "correct_answers": [
+              "used"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-WR222-027",
+            "skill": "WRITING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan bentuk noun dari \"improve\": There has been a clear ___ in air quality.",
+            "explanation_id": "Verb improve menjadi noun improvement (perubahan word form).",
+            "correct_answers": [
+              "improvement"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-WR222-028",
+            "skill": "WRITING",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: The man who lives next door is a doctor. = The man ___ next door is a doctor.",
+            "explanation_id": "Relative clause aktif (who lives) dipendekkan menjadi V-ing: living.",
+            "correct_answers": [
+              "living"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-WR222-029",
+            "skill": "WRITING",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata dengan kolokasi yang salah.",
+            "explanation_id": "Kolokasi yang benar adalah \"a high price\", bukan \"a big price\".",
+            "tokens": [
+              "The",
+              "shop",
+              "charged",
+              "a",
+              "big",
+              "price",
+              "for",
+              "the",
+              "repair."
+            ],
+            "correct_answers": [
+              4
+            ]
+          },
+          {
+            "question_id": "Q-WR222-030",
+            "skill": "WRITING",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan kata dengan bentuk noun-nya.",
+            "explanation_id": "Succeed menjadi success; popular menjadi popularity; differ menjadi difference. \"Successful\" adalah adjective.",
+            "points": 3,
+            "matching": {
+              "left": [
+                "succeed",
+                "popular",
+                "differ"
+              ],
+              "right": [
+                "success",
+                "popularity",
+                "difference",
+                "successful"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
           }
         ]
       }

@@ -277,6 +277,7 @@ export const id = {
     skipTest: 'Uji Kompetensi',
     comingSoon: 'Segera hadir',
     emptyTier: 'Konten belum tersedia. Segera hadir.',
+    newContent: 'Ada materi baru',
     module: 'Modul {code}',
     loadFailedTitle: 'Peta belajar gagal dimuat',
     loadFailedBody: 'Periksa koneksi Anda lalu coba lagi.',

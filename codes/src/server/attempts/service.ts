@@ -4,7 +4,7 @@
  * `SELECT ...` pada baris attempt; kegagalan hook membatalkan seluruh submit.
  */
 import { randomUUID } from 'node:crypto';
-import { and, asc, eq, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, sql } from 'drizzle-orm';
 import { assessmentSets, attemptAnswers, attempts, attemptSections, contentAssets } from '@/db/schema';
 import type { Attempt, AttemptResult } from '@/contracts/attempts';
 import type { Question } from '@/contracts/content';
@@ -104,6 +104,23 @@ async function loadAudio(tx: Tx, set: SetRow) {
     .where(eq(contentAssets.id, set.listeningAssetId))
     .limit(1);
   return a ?? null;
+}
+
+/** Jumlah attempt terakhir yang diperhitungkan saat menghindari pengulangan soal drill. */
+const RECENT_ATTEMPTS_FOR_VARIETY = 6;
+
+/** Id soal yang dilayani pada attempt-attempt terakhir profil ini untuk set yang sama (terbaru lebih dulu). */
+async function recentServedQuestionIds(tx: Tx, userId: string, assessmentSetId: string): Promise<string[][]> {
+  const rows = await tx
+    .select({ state: attempts.state })
+    .from(attempts)
+    .where(and(eq(attempts.userId, userId), eq(attempts.assessmentSetId, assessmentSetId)))
+    .orderBy(desc(attempts.createdAt))
+    .limit(RECENT_ATTEMPTS_FOR_VARIETY);
+  return rows.map((r) => {
+    const order = (r.state as Partial<AttemptState> | null)?.order;
+    return Array.isArray(order) ? order.filter((x): x is string => typeof x === 'string') : [];
+  });
 }
 
 /** Jeda minimal sejak aktivitas terakhir agar resume dianggap "pergi lalu kembali" dan basis waktu digeser. */
@@ -312,7 +329,12 @@ export async function startAttempt(db: Db, userId: string, assessmentSetId: stri
     const plan = await handler.start({ tx, userId, set, now }); // gerbang: 403/404/409
     const questions = parseQuestions(set);
     const id = randomUUID();
-    const baseState = buildInitialState(id, [...questions.values()], { limit: plan.questionLimit, keepOrder: plan.keepOrder }, plan.passPercent, now);
+    // Drill yang memotong pool: ambil soal yang dilayani pada beberapa attempt terakhir agar tidak diulang terus.
+    const recent =
+      plan.questionLimit !== null && questions.size > plan.questionLimit
+        ? await recentServedQuestionIds(tx, userId, set.id)
+        : undefined;
+    const baseState = buildInitialState(id, [...questions.values()], { limit: plan.questionLimit, keepOrder: plan.keepOrder, recent }, plan.passPercent, now);
     if (set.assessmentType === 'PLACEMENT_TEST') {
       const pData = (plan.state as Record<string, unknown> | undefined)?.placement as { served?: string[] } | undefined;
       if (pData?.served?.length) {

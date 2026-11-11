@@ -115,7 +115,7 @@ describe('pohon dan status awal', () => {
     await execute(db, sql`DELETE FROM user_sub_module_progress WHERE user_id = ${u.id}`);
     const t = await getTree(u.id);
     expect(sub(t, '1.1.1').status).toBe('UNLOCKED');
-    expect((await execute(db, sql`SELECT count(*) AS n FROM user_sub_module_progress WHERE user_id = ${u.id}`)).rows[0]).toEqual({ n: 33 });
+    expect((await execute(db, sql`SELECT count(*) AS n FROM user_sub_module_progress WHERE user_id = ${u.id}`)).rows[0]).toEqual({ n: 40 });
   });
 
   it('mini_task_json {} -> has_mini_task=false; berisi task_type -> true; D7 persentase', async () => {
@@ -407,7 +407,7 @@ describe('GET /curriculum/tree', () => {
     expect(CurriculumTreeResponseSchema.safeParse(r.json).success).toBe(true);
   });
 
-  it('kinerja: 4 Tier x 33 sub-modul, keadaan tunak <= 8 query SQL dan p95 < 300 ms', async () => {
+  it('kinerja: 4 Tier x 40 sub-modul, keadaan tunak <= 8 query SQL dan p95 < 300 ms', async () => {
     await publish(...(await execute(db, sql`SELECT sub_module_code AS c FROM sub_modules`)).rows.map((r) => (r as { c: string }).c));
     const l = await learnerSession();
     await call(treeGet, 'GET', '/api/v1/curriculum/tree', { cookie: l.cookie }); // hangatkan + buat progres

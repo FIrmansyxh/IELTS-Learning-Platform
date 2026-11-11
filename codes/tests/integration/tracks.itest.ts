@@ -21,17 +21,17 @@ describe('SPEC-021: Jalur Belajar & Gaya Penyampaian Materi (Integration)', () =
   });
 
   describe('AC-1 & AC-17: GET /api/v1/tracks', () => {
-    it('mengembalikan tepat 4 jalur PUBLISHED dengan GT-STRUCT aktif secara default', async () => {
+    it('mengembalikan tepat 5 jalur PUBLISHED dengan GT-STRUCT aktif secara default', async () => {
       const res = await getTracks(user);
       expect(res.status).toBe(200);
       const tracks = res.json.data;
-      expect(tracks).toHaveLength(4);
+      expect(tracks).toHaveLength(5);
 
       const codes = tracks.map((t: any) => t.code);
-      expect(codes).toEqual(['GT-STRUCT', 'GT-WRITING', 'GT-READING', 'GT-SPRINT-4W']);
+      expect(codes).toEqual(['GT-STRUCT', 'GT-WRITING', 'GT-READING', 'GT-SPRINT-4W', 'GT-GRAMMAR']);
 
       const struct = tracks.find((t: any) => t.code === 'GT-STRUCT');
-      expect(struct.total_sub_modules).toBe(31);
+      expect(struct.total_sub_modules).toBe(38);
       expect(struct.checkpoint_count).toBe(0);
       expect(struct.is_active).toBe(true);
 
@@ -78,7 +78,7 @@ describe('SPEC-021: Jalur Belajar & Gaya Penyampaian Materi (Integration)', () =
       const resDefault = await getTree(user);
       expect(resDefault.status).toBe(200);
       expect(resDefault.json.data.track.code).toBe('GT-STRUCT');
-      expect(resDefault.json.data.track.items).toHaveLength(31);
+      expect(resDefault.json.data.track.items).toHaveLength(38);
 
       const resWriting = await getTree(user, { track: 'GT-WRITING' });
       expect(resWriting.status).toBe(200);

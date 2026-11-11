@@ -152,6 +152,18 @@ describe('persentase, boss, alasan terkunci', () => {
     expect(tierProgressPercent(tierN(1, []))).toBe(0);
   });
 
+  it('D7 (C-23): Modul/Tier terminal tetap menghitung sub-modul yang dipublikasikan belakangan', () => {
+    const m = mod('1.1', 1, [sub('a', 1, { status: 'COMPLETED' }), sub('b', 2, { status: 'COMPLETED' }), sub('baru', 3, { status: 'UNLOCKED' })], 'PUBLISHED', { status: 'COMPLETED' });
+    expect(moduleProgressPercent(m)).toBe(66);
+    expect(tierProgressPercent(tierN(1, [m], { status: 'COMPLETED' }))).toBe(66);
+    const full = mod('1.2', 2, [sub('c', 1, { status: 'SKIPPED' })], 'PUBLISHED', { status: 'SKIPPED' });
+    expect(moduleProgressPercent(full)).toBe(100);
+    expect(tierProgressPercent(tierN(1, [full], { status: 'SKIPPED' }))).toBe(100);
+    // Tanpa sub-modul AVAILABLE: terminal = 100, lainnya = 0.
+    expect(tierProgressPercent(tierN(1, [], { status: 'SKIPPED' }))).toBe(100);
+    expect(moduleProgressPercent(mod('1.3', 3, [sub('d', 1, { review: 'DRAFT' })], 'PUBLISHED', { status: 'COMPLETED' }))).toBe(100);
+  });
+
   it('D9: urutan prioritas alasan boss', () => {
     const done = mod('1.1', 1, [sub('a', 1, { status: 'COMPLETED' })], 'PUBLISHED', { status: 'COMPLETED' });
     const open = mod('1.1', 1, [sub('a', 1)]);

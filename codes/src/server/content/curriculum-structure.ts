@@ -1,5 +1,6 @@
 /**
- * Struktur kurikulum SPEC-004: 4 Tier, 13 Modul, 33 Sub-Modul (seed `curriculum-structure`).
+ * Struktur kurikulum SPEC-004: 4 Tier, 13 Modul, 40 Sub-Modul (seed `curriculum-structure`).
+ * Backlog C-22 menambah 7 sub-modul grammar (1.1.5-1.1.9, 2.1.5, 2.1.6) dari slide kursus Basic + Intermediate.
  * ADR-004: tiap sub-modul membawa tag `exam` (COMMON bila kosong). Sub-modul ACADEMIC disembunyikan dari
  * learner saat EXAM_MODULE=GENERAL_TRAINING (default); sub-modul GENERAL_TRAINING menggantikannya.
  */
@@ -45,6 +46,11 @@ export const SUB_MODULE_SEEDS: Array<{ code: string; title: string; exam?: ExamM
   { code: '1.1.2', title: 'Present Simple vs. Present Continuous' },
   { code: '1.1.3', title: 'Past Simple vs. Present Perfect' },
   { code: '1.1.4', title: 'Modals of Ability, Obligation & Possibility (can, must, should, might)' },
+  { code: '1.1.5', title: 'Adjectives & Adverbs: Jenis, Posisi, & Akhiran Pembentuk Kata (Suffix)' },
+  { code: '1.1.6', title: 'Verbs: Bentuk Kata Kerja, Transitive/Intransitive, Linking Verb, & Auxiliary' },
+  { code: '1.1.7', title: 'Prepositions (in, on, at, & Bound Prepositions) dan Interjections' },
+  { code: '1.1.8', title: 'Phrases: Noun Phrase, Adjective Phrase, Adverbial Phrase, & Prepositional Phrase' },
+  { code: '1.1.9', title: 'Simple Future (will, shall, be going to): Aktif, Pasif, & Kalimat Nominal' },
   { code: '1.2.1', title: '1.000 Kata Inti (Oxford A1-A2) dalam Konteks Kalimat' },
   { code: '1.2.2', title: 'Fonetik Dasar, Bunyi Vokal Panjang/Pendek, & Word Stress' },
   { code: '1.3.1', title: 'Mendengarkan Angka, Ejaan Nama, Waktu, & Alamat' },
@@ -53,6 +59,8 @@ export const SUB_MODULE_SEEDS: Array<{ code: string; title: string; exam?: ExamM
   { code: '2.1.2', title: 'Relative Clauses (who, which, that, whose, where)' },
   { code: '2.1.3', title: 'Passive Voice untuk Deskripsi Proses & Laporan Ilmiah' },
   { code: '2.1.4', title: 'Conditional Sentences (Zero, First, Second, Third) untuk Argumen Esai' },
+  { code: '2.1.5', title: 'Gerund & To Infinitive (Verb + -ing vs. to + Verb)' },
+  { code: '2.1.6', title: 'Meringkas Adjective Clause: Reducing, Omitting, & Appositive' },
   { code: '2.2.1', title: 'Anatomi Paragraf Akademik: Topic Sentence + Explanation + Concrete Example' },
   { code: '2.2.2', title: 'Teknik Paraphrasing (Sinonim, Word Form, Aktif-Pasif)' },
   { code: '2.3.1', title: 'Teknik Skimming (Ide Utama) vs. Scanning (Kata Kunci, Nama, Tahun)' },

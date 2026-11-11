@@ -14,7 +14,7 @@ import { enhanceMarkdown } from '../../src/components/player/markdown-enhance';
 const ROOT = path.resolve(__dirname, '..', '..', 'content', 'gt-modules');
 /** Drill yang dikunci tes E2E (kunci jawaban dibaca dari content.json); hanya artikelnya yang diperkaya. */
 const DRILL_DIKUNCI_E2E = new Set(['3.3.3']);
-/** Semua paket di gt-modules (seluruh 33 sub-modul) wajib memenuhi standar C-12. */
+/** Semua paket di gt-modules (seluruh 40 sub-modul) wajib memenuhi standar C-12. */
 const MODUL_DIPERKAYA = readdirSync(ROOT, { withFileTypes: true })
   .filter((e) => e.isDirectory())
   .map((e) => e.name)
@@ -34,7 +34,7 @@ const load = (code: string): Pkg['sub_modules'][number] =>
 
 describe('Materi Diperkaya (C-12)', () => {
   it('semua kode yang diwajibkan punya content.json', () => {
-    expect(MODUL_DIPERKAYA.length).toBe(33);
+    expect(MODUL_DIPERKAYA.length).toBe(40);
     for (const c of MODUL_DIPERKAYA) expect(existsSync(path.join(ROOT, c, 'content.json')), c).toBe(true);
   });
 

@@ -357,7 +357,7 @@ describe('submit: hasil lulus / gagal', () => {
     const t = await tree(u);
     const m21 = t.json.data.tiers.flatMap((x: any) => x.modules).find((m: any) => m.module_code === '2.1');
     expect(m21.status).toBe('SKIPPED');
-    expect(m21.sub_modules.every((s: any) => s.status === 'SKIPPED')).toBe(true);
+    expect(m21.sub_modules.filter((s: any) => s.content_state === 'AVAILABLE').every((s: any) => s.status === 'SKIPPED')).toBe(true);
   });
 
   it('submit serentak 2x: efek (SKIPPED, audit) terjadi sekali', async () => {

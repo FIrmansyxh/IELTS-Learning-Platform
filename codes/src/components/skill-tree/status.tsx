@@ -1,4 +1,4 @@
-import { CheckCircle2, CircleDot, FastForward, Lock, type LucideIcon } from 'lucide-react';
+import { CheckCircle2, CircleDot, FastForward, Lock, Sparkles, type LucideIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { id } from '@/i18n/id';
 import { cn } from '@/lib/utils';
@@ -53,6 +53,16 @@ export function StatusBadge({ status, className }: { status: ProgressStatusValue
     <Badge variant="outline" className={cn('h-6 gap-1 px-2.5 text-xs font-semibold', meta.text, className)}>
       <Icon aria-hidden="true" />
       {meta.label}
+    </Badge>
+  );
+}
+
+/** C-23: Modul/Tier sudah selesai tetapi ada sub-modul yang dipublikasikan belakangan. */
+export function NewContentBadge({ className }: { className?: string }) {
+  return (
+    <Badge variant="outline" className={cn('h-6 gap-1 px-2.5 text-xs font-semibold text-[var(--color-progress)]', className)}>
+      <Sparkles aria-hidden="true" />
+      {id.tree.newContent}
     </Badge>
   );
 }

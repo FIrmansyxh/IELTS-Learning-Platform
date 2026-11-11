@@ -1,0 +1,503 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 1,
+      "module_code": "1.1",
+      "module_category": "GRAMMAR",
+      "sub_module_title": "Simple Future (will, shall, be going to): Aktif, Pasif, & Kalimat Nominal",
+      "sub_module_code": "1.1.9",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Mulai dari Sini\n\n:::pengantar\n**Apa yang kamu pelajari?** Bagian ini membahas cara membicarakan masa depan dalam bahasa Inggris. Bentuk utamanya bernama *Simple Future*, yaitu *will* atau *shall* ditambah kata kerja dasar. Bahasa Indonesia cukup memakai satu kata, \"akan\": \"saya akan datang\", \"surat itu akan dikirim\", \"dia akan senang\". Bahasa Inggris memisahkan tiga pola untuk tiga kalimat tadi: *I will come* (aktif), *The letter will be sent* (pasif), dan *She will be happy* (nominal, tanpa kata kerja aksi). Kamu juga akan mengenal *be going to* dan tahu kapan ia lebih cocok daripada *will*.\n\n**Kenapa ini penting?** Rencana, janji, tawaran, dan prediksi semuanya memakai bentuk masa depan. Di IELTS kamu memakainya saat ditanya rencana di Speaking, saat menulis surat di Writing Task 1, dan saat memprediksi dampak di Writing Task 2. Kesalahan kecil seperti *will goes* atau *will happy* langsung terdengar oleh penguji.\n\n**Bekal sebelum mulai:** Sebaiknya kamu sudah menyelesaikan 1.1.2 (Present Simple vs. Present Continuous) dan mengenal V3 dari 1.1.3. Kalau V3 masih asing, cukup ingat bahwa itu bentuk ketiga kata kerja, misalnya *sent* dan *chosen*.\n:::\n\n### Istilah yang Akan Kamu Temui\n\n| Istilah | Arti sederhana | Contoh |\n|---|---|---|\n| **Simple Future** | Bentuk kata kerja untuk hal yang akan terjadi | *will go, will be sent* |\n| **V1 / V3** | Kata kerja bentuk dasar / bentuk ketiga | *send / sent* |\n| **Kalimat verbal** | Kalimat yang punya kata kerja aksi | *She will call you.* |\n| **Kalimat nominal** | Kalimat tanpa kata kerja aksi, memakai *be* | *She will be busy.* |\n| **Complement** | Pelengkap sesudah *be*: kata sifat, kata benda, atau keterangan | *happy, a doctor, at home* |\n| **Aktif / pasif** | Subjek melakukan / subjek dikenai tindakan | *will send* / *will be sent* |\n| **Time signal** | Kata penanda waktu | *tomorrow, next week* |\n\n---\n\n## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Menyusun kalimat **Simple Future** dalam tiga pola (verbal aktif, verbal pasif, dan nominal), masing-masing dalam bentuk positif, negatif, dan tanya.\n2. Memilih antara **will**, **shall**, dan **be going to** sesuai maksud kalimat: keputusan spontan, janji, tawaran, rencana, atau prediksi.\n3. Menghindari *will* sesudah *when*, *after*, *before*, *as soon as*, *until*, dan *if*.\n\n> **Ringkasan 30 detik**\n> - **Aktif:** S + will + V1 → *She **will send** the email.*\n> - **Pasif:** S + will + be + V3 → *The email **will be sent**.*\n> - **Nominal:** S + will + be + complement → *She **will be** busy.*\n> - Sesudah *will* selalu **bentuk dasar**: tidak ada *-s*, *-ing*, *-ed*, atau *to*.\n> - Rencana yang sudah diputuskan dan prediksi dari bukti yang terlihat → **be going to**.\n\n---\n\n## 1. Posisi Simple Future dalam Peta Tense\n\nBagian pendek ini menunjukkan letak Simple Future di antara tense lain dan memperkenalkan kata penanda waktunya. Dalam bahasa Indonesia, kata \"akan\" dan keterangan seperti \"besok\" sudah cukup. Dalam bahasa Inggris, kamu perlu kata bantu *will* di depan kata kerja.\n\nBahasa Inggris memiliki 16 bentuk tense (lihat peta di sub-modul 1.1.2). Simple Future adalah nomor 9 di peta itu. Tense ini dipakai untuk menyatakan kejadian yang akan terjadi di masa datang, termasuk janji, tawaran, dan prediksi.\n\n| Tense | Rumus | Contoh |\n|---|---|---|\n| **Simple Future** (no. 9) | S + will/shall + V1 | I **will try** to improve my English. |\n\nKata *will* termasuk keluarga modal, yaitu kata bantu seperti *can* dan *must* yang dibahas di sub-modul 1.1.4. Semua modal punya sifat yang sama: bentuknya tidak berubah untuk subjek apa pun, dan kata kerja sesudahnya selalu bentuk dasar.\n\n### 1.1 Time signal (penanda waktu)\n\n| Time signal | Arti | Contoh |\n|---|---|---|\n| tomorrow | besok | I will see the dentist **tomorrow**. |\n| the day after tomorrow | lusa | The shop will reopen **the day after tomorrow**. |\n| next week / month / year | minggu / bulan / tahun depan | She will graduate **next year**. |\n| soon | segera | The rain will stop **soon**. |\n| later | nanti | I will explain it **later**. |\n| in two days / in an hour | dua hari lagi / satu jam lagi | The parcel will arrive **in two days**. |\n| tonight / this weekend | nanti malam / akhir pekan ini | We will stay at home **tonight**. |\n\nPerhatikan *in two days*. Artinya \"dua hari lagi\", bukan \"dalam waktu dua hari\". Pelajar Indonesia sering menulis *two days again*, dan itu salah.\n\n---\n\n## 2. Kalimat Verbal Aktif: will + V1\n\nPola pertama adalah yang paling sering kamu pakai: subjek melakukan sesuatu di masa depan. Rumusnya pendek, tetapi justru karena pendek banyak pelajar menambahkan sesuatu yang tidak perlu, seperti *-s*, *-ing*, atau *to*. Ingat satu hal: sesudah *will*, kata kerja tidak diapa-apakan.\n\n### 2.1 Rumus lengkap\n\n| Bentuk | Rumus | Contoh |\n|---|---|---|\n| Positif (+) | S + will + V1 | Dina **will join** the debate club. |\n| Negatif (-) | S + will + not + V1 | Dina **will not join** the debate club. |\n| Tanya (?) | Will + S + V1 ? | **Will** Dina **join** the debate club? |\n| Tanya WH | WH + will + S + V1 ? | **When will** Dina **join** the club? |\n| Jawaban singkat | Yes, S + will. / No, S + won't. | Yes, she **will**. / No, she **won't**. |\n\nBentuk *will* sama untuk semua subjek: *I will, she will, they will*. Tidak ada *wills*.\n\n### 2.2 Singkatan\n\n| Bentuk panjang | Singkatan | Catatan |\n|---|---|---|\n| I will, she will, they will | **I'll, she'll, they'll** | Sangat umum dalam percakapan |\n| will not | **won't** | Dibaca /wəʊnt/, bukan \"wilnt\" |\n| shall not | **shan't** | Jarang dipakai, cukup dikenali |\n\nPada jawaban singkat positif, jangan menyingkat: *Yes, I will*, bukan *Yes, I'll*.\n\n:::kesalahan-umum\nSesudah **will**, kata kerja selalu **bentuk dasar (V1)**. Salah: *She will **goes**. I will **going**. I will **to go**.* Benar: *She will **go**. I will **go**.* Dalam bahasa Indonesia kita berkata \"akan pergi\", dan bahasa Inggris pun cukup *will go*, tanpa tambahan apa pun.\n:::\n\n### 2.3 Shall: hanya untuk I dan we\n\nRumus di banyak buku ditulis *will/shall*, tetapi keduanya tidak selalu bisa ditukar. Dalam bahasa Inggris modern, *shall* hampir hanya dipakai dengan **I** dan **we**, terutama dalam kalimat tanya untuk menawarkan bantuan atau mengajak.\n\n| Fungsi | Contoh | Arti |\n|---|---|---|\n| Tawaran | **Shall I** open the window? | Mau saya bukakan jendelanya? |\n| Ajakan atau saran | **Shall we** start? | Kita mulai, yuk? |\n| Meminta saran | What **shall we** do now? | Sebaiknya kita bagaimana sekarang? |\n| Pernyataan formal | We **shall** inform you of the result. | Kami akan memberi tahu hasilnya. (resmi, gaya Inggris Britania) |\n\nUntuk *he, she, it, you, they*, pakailah *will*. Kalimat seperti *She shall come tomorrow* terdengar kuno atau seperti bahasa hukum.\n\n### 2.4 Variasi contoh (dari mudah ke sulit)\n\n#### Level 1: kalimat dasar\n\n1. I **will call** you tomorrow.\n2. He **won't come** to the party.\n3. **Will** they **arrive** on time?\n\n#### Level 2: sehari-hari (Speaking)\n\n1. I'm a bit tired, so I think I **will stay** at home tonight.\n2. Don't worry about the dishes. **I'll wash** them after dinner.\n3. **Where will** you **live** when you move to Bandung? ~ **I'll** probably **rent** a room near the campus.\n\n#### Level 3: formal (Writing)\n\n1. Online learning **will** probably **replace** some traditional classes in the next decade.\n2. If the city builds more bus lanes, fewer people **will drive** to work.\n3. I **will send** you the signed form as soon as I receive it.\n\n---\n\n## 3. Kalimat Verbal Pasif: will be + V3\n\nKalimat pasif dipakai kalau yang penting adalah benda yang dikenai tindakan, bukan pelakunya. Dalam bahasa Indonesia ini sama dengan awalan *di-*: \"akan dikirim\", \"akan diumumkan\". Dalam bahasa Inggris kamu butuh dua bagian sekaligus sesudah *will*, yaitu *be* dan V3.\n\n| Bentuk | Rumus | Contoh |\n|---|---|---|\n| Positif (+) | S + will + be + V3 | The winner **will be chosen** next Friday. |\n| Negatif (-) | S + will + not + be + V3 | The winner **will not be chosen** today. |\n| Tanya (?) | Will + S + be + V3 ? | **Will** the winner **be chosen** next Friday? |\n| Tanya WH | WH + will + S + be + V3 ? | **When will** the winner **be chosen**? |\n\nBandingkan kalimat aktif dan pasif dengan arti yang sama:\n\n| Aktif (pelaku di depan) | Pasif (benda di depan) |\n|---|---|\n| The committee **will announce** the result. | The result **will be announced** (by the committee). |\n| They **will hold** the meeting in Room 2. | The meeting **will be held** in Room 2. |\n| Someone **will repair** the lift tomorrow. | The lift **will be repaired** tomorrow. |\n\nDua kesalahan yang paling sering muncul di pola ini: lupa *be* (*The result will announced*) dan memakai V2 (*will be chose*). Yang benar selalu V3: *chosen, held, sent, written*. Pembahasan passive voice yang lengkap untuk semua tense ada di sub-modul 2.1.3. Di sini kamu cukup menguasai bentuk masa depannya.\n\n---\n\n## 4. Kalimat Nominal: will be + Complement\n\nKalimat nominal adalah kalimat yang tidak punya kata kerja aksi. Isinya keadaan, sifat, profesi, atau tempat. Bahasa Indonesia boleh langsung berkata \"dia akan senang\" atau \"saya akan di rumah\". Bahasa Inggris tidak boleh: setiap kalimat wajib punya kata kerja, jadi *be* harus hadir sesudah *will*.\n\n| Bentuk | Rumus | Contoh |\n|---|---|---|\n| Positif (+) | S + will + be + complement | The exam **will be** difficult. |\n| Negatif (-) | S + will + not + be + complement | The exam **will not be** difficult. |\n| Tanya (?) | Will + S + be + complement ? | **Will** the exam **be** difficult? |\n| Tanya WH | WH + will + S + be ? | **Where will** you **be** tomorrow? |\n\nComplement bisa berupa tiga jenis kata:\n\n| Jenis complement | Contoh | Arti |\n|---|---|---|\n| Kata sifat (adjective) | You **will be better** tomorrow. | Besok kamu akan lebih baik. |\n| Kata benda (noun) | She **will be a nurse** next year. | Tahun depan dia akan menjadi perawat. |\n| Keterangan tempat atau waktu (adverb) | The doctor **will be there** at nine. | Dokter akan ada di sana jam sembilan. |\n\nBentuk *be* di sini tidak pernah berubah menjadi *am, is,* atau *are*, karena ia berada sesudah *will*. Jadi *She will is happy* dan *She is will be happy* sama-sama salah.\n\n:::compare\nVerbal aktif | will + V1; subjek melakukan; She will send the form.\nVerbal pasif | will + be + V3; subjek dikenai tindakan; The form will be sent.\nNominal | will + be + complement; tidak ada kata kerja aksi; She will be ready.\n:::\n\nCara cepat memilih pola: tanyakan apakah ada kata kerja aksi. Kalau tidak ada, pakai *will be* + complement. Kalau ada dan subjeknya pelaku, pakai *will* + V1. Kalau ada dan subjeknya dikenai tindakan, pakai *will be* + V3. Jangan mencampur: *will be join* bukan aktif dan bukan pasif, jadi salah.\n\n:::quiz\nQ| The new library ___ by the mayor next month. Bentuk mana yang benar?\no| will open\nc| will be opened\no| will be open\ne| Ada pelaku sesudah by, jadi perpustakaan dikenai tindakan (dibuka). Pola pasif: will + be + V3.\n:::\n\n---\n\n## 5. Will atau Be Going To?\n\nSelain *will*, ada satu bentuk lain yang juga berarti \"akan\", yaitu *be going to*. Bahasa Indonesia tidak membedakan keduanya, tetapi penutur bahasa Inggris memilihnya berdasarkan kapan keputusan dibuat dan apakah ada bukti yang terlihat. Bagian ini memberi rumusnya, lalu tabel perbandingan.\n\n### 5.1 Rumus be going to\n\n| Bentuk | Rumus | Contoh |\n|---|---|---|\n| Positif (+) | S + am/is/are + going to + V1 | I **am going to buy** a laptop. |\n| Negatif (-) | S + am/is/are + not + going to + V1 | She **isn't going to buy** a laptop. |\n| Tanya (?) | Am/Is/Are + S + going to + V1 ? | **Are** you **going to buy** a laptop? |\n\nDi sini *be* berubah mengikuti subjek (*am, is, are*), berbeda dengan *will* yang tetap.\n\n### 5.2 Perbandingan pemakaian\n\n| Maksud kalimat | Pilih | Contoh |\n|---|---|---|\n| Keputusan spontan, dibuat saat berbicara | will | The phone is ringing. **I'll answer** it. |\n| Janji | will | I **will pay** you back on Friday. |\n| Tawaran dan permintaan | will | **I'll carry** that for you. **Will** you **help** me? |\n| Prediksi berdasarkan pendapat | will | I think Indonesia **will win**. |\n| Fakta masa depan | will | She **will be** twenty next month. |\n| Rencana yang sudah diputuskan sebelumnya | be going to | **I'm going to study** law. I've already applied. |\n| Prediksi dari bukti yang terlihat sekarang | be going to | Look at those clouds. **It's going to rain**. |\n\n### 5.3 Pasangan kalimat\n\n| will | be going to |\n|---|---|\n| \"We're out of milk.\" ~ \"Really? **I'll buy** some.\" *(baru memutuskan)* | \"We're out of milk.\" ~ \"I know. **I'm going to buy** some after work.\" *(sudah direncanakan)* |\n| I think the test **will be** hard. *(pendapat)* | He hasn't studied at all. **He's going to fail**. *(ada bukti)* |\n\n:::tips-examiner\nDalam banyak kalimat prediksi umum, *will* dan *be going to* sama-sama diterima, dan penguji IELTS tidak menghukum pilihan yang wajar. Yang dinilai adalah **bentuk yang benar** dan **variasi**. Jangan memakai *will* di setiap kalimat. Campurkan dengan *I'm going to*, *I'm planning to*, dan *I'll probably* supaya jawabanmu terdengar alami.\n:::\n\n---\n\n## 6. Bentuk Present untuk Masa Depan dan Time Clause\n\nAda dua situasi di mana kalimat tentang masa depan justru memakai bentuk present. Yang pertama sudah kamu kenal dari sub-modul 1.1.2 bagian 3.7, jadi di sini cukup diulang singkat. Yang kedua adalah aturan time clause, dan aturan ini sangat sering dilanggar pelajar Indonesia.\n\n### 6.1 Present Continuous dan Present Simple untuk masa depan\n\n| Bentuk | Dipakai untuk | Contoh |\n|---|---|---|\n| Present Continuous | Janji temu yang sudah diatur dengan orang lain | I **am meeting** my tutor at 3 p.m. tomorrow. |\n| Present Simple | Jadwal tetap (kereta, pesawat, kelas, bioskop) | The train **leaves** at 6.40 tomorrow morning. |\n\n### 6.2 Time clause dan if-clause: tanpa will\n\n*Time clause* adalah bagian kalimat yang dibuka kata penghubung waktu. Sesudah *when, after, before, as soon as, until,* dan *if*, pakailah **present simple**, walaupun maksudnya masa depan. Kata *will* hanya muncul di bagian kalimat yang satunya.\n\n| Salah | Benar |\n|---|---|\n| I will call you when I **will arrive**. | I will call you when I **arrive**. |\n| We will wait until she **will come**. | We will wait until she **comes**. |\n| If it **will rain**, we will stay at home. | If it **rains**, we will stay at home. |\n| She will text you as soon as she **will finish**. | She will text you as soon as she **finishes**. |\n\nDalam bahasa Indonesia kita berkata \"kalau saya sudah sampai\", tanpa \"akan\". Bahasa Inggris ternyata sama: *when I arrive*, tanpa *will*. Jangan lupa akhiran *-s* untuk *he, she, it* di bagian present simple.\n\n---\n\n## 7. Kesalahan Umum Pelajar Indonesia\n\nSepuluh kesalahan berikut hampir semuanya muncul karena kata \"akan\" diterjemahkan begitu saja menjadi *will*, lalu sisanya mengikuti susunan bahasa Indonesia. Tutup kolom \"Perbaikan\", tebak bentuk yang benar, lalu cocokkan. Kalau sering meleset di nomor 5 sampai 7, baca ulang Bagian 3 dan 4.\n\n| # | Kesalahan | Perbaikan | Penjelasan |\n|---|---|---|---|\n| 1 | I **will to go** to the bank. | I **will go** | Sesudah will tidak ada *to*. |\n| 2 | She **will goes** tomorrow. | She **will go** | Sesudah will tidak ada *-s*. |\n| 3 | I **will going** to Bali. | I **will go** / I **am going to go** | Jangan mencampur will dengan going. |\n| 4 | He **is will come** later. | He **will come** | Will tidak butuh *is* di depannya. |\n| 5 | I **will happy** to help. | I **will be happy** | Kalimat nominal wajib memakai *be*. |\n| 6 | **Will you be come** tonight? | **Will you come** tonight? | Kata kerja aksi tidak perlu *be*. |\n| 7 | The letter **will be send** today. | The letter **will be sent** | Pasif memakai V3, bukan V1. |\n| 8 | I will call you when I **will arrive**. | when I **arrive** | Sesudah when dipakai present simple. |\n| 9 | She **wills** help us. | She **will** help us | Will tidak pernah diberi *-s*. |\n| 10 | I **will not to be** late. | I **will not be** late | Negatif: will + not + bentuk dasar. |\n\n---\n\n## 8. Strategi IELTS\n\nBagian ini menunjukkan di mana bentuk masa depan muncul dalam tes IELTS, satu butir untuk satu bagian tes. Polanya mirip di semua bagian: bentuk harus benar, dan pilihan kata sebaiknya bervariasi supaya tidak semua kalimat berbunyi *I will*. Ambil contoh kalimatnya sebagai model saat berlatih.\n\n- **Speaking Part 1 (rencana):** untuk pertanyaan seperti *What are you going to do this weekend?*, jawab dengan *be going to* atau *I'm planning to*, lalu tambahkan satu kalimat *will* untuk hal yang belum pasti: *I'm going to visit my parents, and I'll probably cook for them.*\n- **Speaking Part 3 (prediksi):** pakai *will* dengan kata keterangan tingkat keyakinan: *will definitely, will probably, probably won't*. Variasikan dengan *It is likely that...* dan *There will be...*.\n- **Writing Task 1 General Training (surat):** bentuk masa depan dipakai untuk menawarkan dan mengatur sesuatu: *I will be available on Monday afternoon. I will send you the documents by Friday. The meeting will be held in the main hall.* Ketiga pola (aktif, nominal, pasif) bisa muncul dalam satu surat.\n- **Writing Task 2 (dampak dan prediksi):** *will* + adverb membuat prediksi terdengar terukur: *This policy will probably reduce traffic. Prices will inevitably rise.* Hindari *will* sesudah *if* dan *when*.\n- **Listening:** dengarkan *'ll* dan *won't*. Keduanya pendek dan mudah terlewat, padahal menentukan apakah sesuatu jadi dilakukan atau tidak.\n\n| Tingkat keyakinan | Ungkapan | Contoh |\n|---|---|---|\n| Sangat yakin | will definitely / will certainly | Cities **will definitely** grow. |\n| Cukup yakin | will probably / is likely to | Rent **will probably** increase. |\n| Tidak yakin | might / may | Some shops **might** close. |\n| Yakin tidak | probably won't / definitely won't | Cash **probably won't** disappear. |\n\nPerhatikan posisinya: *probably* berada **sesudah** *will*, tetapi **sebelum** *won't*.\n\n---\n\n## 9. Contoh Jawaban Model (Speaking Part 1)\n\nSatu pertanyaan Speaking dijawab dalam tiga tingkat kemampuan. Isi jawabannya mirip, jadi perhatikan satu hal saja: bentuk kata kerja sesudah *will* dan variasi cara menyatakan masa depan di tiap tingkat. Sesudah itu baca penjelasan di bawahnya.\n\n**Pertanyaan:** *What are your plans for next year?*\n\n- **Band 5:** Next year I will to study in university. I will happy. I will going to Jakarta and my parents is will visit me.\n- **Band 6:** Next year I will study at a university in Jakarta. I think I will be happy there. I am going to live in a dormitory, and my parents will visit me every month.\n- **Band 7:** I'm going to start a degree in nursing in Jakarta, so next year will be quite busy for me. I've already found a dormitory, and I'll probably move in as soon as the semester starts. I think it will be hard at first, but my parents have promised they'll visit me whenever they can.\n\n**Mengapa naik band?** (1) Tidak ada lagi kesalahan bentuk (*will to study, will happy, is will visit*). (2) Pembicara memilih *be going to* untuk rencana yang sudah diputuskan dan *will* untuk prediksi. (3) Ada variasi (*I'll probably*, *it will be hard*) dan time clause yang benar (*as soon as the semester starts*, tanpa *will*).\n\n---\n\n## 10. Ringkasan dan Cek Diri\n\nGunakan bagian ini untuk memeriksa diri sebelum mengerjakan latihan. Enam butir \"Ingat\" merangkum ketiga pola dan aturan tambahannya. Kerjakan Cek Diri tanpa menggulir ke atas, dan untuk tiap soal tanyakan dulu: ada kata kerja aksi atau tidak?\n\n**Ingat:**\n\n- Aktif: S + will + V1. Negatif: will not (won't). Tanya: Will + S + V1?\n- Pasif: S + will + be + V3.\n- Nominal: S + will + be + complement (adjective, noun, adverb).\n- Shall hanya untuk I dan we, terutama tawaran dan ajakan: *Shall I...? Shall we...?*\n- Rencana matang dan bukti yang terlihat → be going to. Keputusan spontan, janji, tawaran, opini → will.\n- Sesudah when, after, before, as soon as, until, if → present simple, bukan will.\n\n**Cek diri (tanpa melihat materi):**\n\n1. *Rudi ___ (join) the football team next month.*\n2. *The tickets ___ (send) to your email tomorrow.*\n3. *Don't worry. Everything ___ fine.*\n4. *I will phone you when I ___ (arrive) at the airport.*\n5. *It's hot in here. ___ I turn on the fan?*\n\n**Kunci:** 1. will join. 2. will be sent. 3. will be. 4. arrive. 5. Shall.",
+        "mini_task": {
+          "task_type": "AI_SHORT_WRITING",
+          "prompt": "Tulis surat pendek (sekitar 90 sampai 110 kata) dalam bahasa Inggris kepada seorang teman yang akan berkunjung ke kotamu minggu depan.\n\nDalam suratmu:\n- sebutkan satu rencana yang sudah kamu putuskan dengan be going to (mis. \"I am going to take two days off\")\n- tulis minimal dua kalimat aktif dengan will untuk janji atau tawaran (mis. \"I will pick you up ...\")\n- tulis minimal satu kalimat pasif dengan will be + V3 (mis. \"Dinner will be served ...\")\n- tulis minimal satu kalimat nominal dengan will be + kata sifat, kata benda, atau keterangan tempat (mis. \"The weather will be warm\")\n- pakai satu time clause dengan when, as soon as, atau before yang diikuti present simple, bukan will",
+          "ai_rubric_criteria": "Grammatical Range and Accuracy: sesudah will selalu bentuk dasar (tidak \"will goes\", \"will to go\", \"will going\", \"is will\"); pasif memakai will be + V3 yang benar; kalimat nominal memakai will be + complement (tidak \"will happy\"); be going to memakai am/is/are yang sesuai subjek; time clause sesudah when/as soon as/before memakai present simple, bukan will. Task Achievement: kelima unsur yang diminta (be going to, dua will aktif, satu pasif, satu nominal, satu time clause) tercakup. Coherence: surat runtut dengan pembuka dan penutup yang wajar. Lexical Resource: kosakata sesuai dan penanda waktu masa depan dipakai tepat."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 900,
+        "pass_percent": 75,
+        "questions": [
+          {
+            "question_id": "Q-GR119-001",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Dina ___ the debate club next semester.",
+            "explanation_id": "Sesudah will, kata kerja selalu bentuk dasar (V1) untuk subjek apa pun: will join. Tidak ada tambahan -s, -ing, atau to.",
+            "options": [
+              "will joins",
+              "will join",
+              "will joining",
+              "will to join"
+            ],
+            "correct_answers": [
+              "will join"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-002",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The manager ___ the meeting, so please come as planned.",
+            "explanation_id": "Negatif aktif: S + will + not + V1. Kata \"not\" berada sesudah will, dan kata kerja tetap bentuk dasar: will not cancel.",
+            "options": [
+              "will not cancels",
+              "will not cancel",
+              "will not cancelled",
+              "not will cancel"
+            ],
+            "correct_answers": [
+              "will not cancel"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-003",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "A new team leader ___ by the staff next Friday.",
+            "explanation_id": "Ketua tim dipilih (dikenai tindakan), jadi pola pasif: will + be + V3. V3 dari choose adalah chosen, bukan chose (V2).",
+            "options": [
+              "will be chose",
+              "will be chosen",
+              "will chosen",
+              "will be choose"
+            ],
+            "correct_answers": [
+              "will be chosen"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-004",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Don't worry. The doctor ___ at nine o'clock.",
+            "explanation_id": "Kalimat ini nominal karena tidak ada kata kerja aksi; \"there\" adalah keterangan tempat. Polanya will + be + complement: will be there. Will tidak didahului is dan tidak diikuti is.",
+            "options": [
+              "will there",
+              "will be there",
+              "is will be there",
+              "will is there"
+            ],
+            "correct_answers": [
+              "will be there"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-005",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Take this medicine and you ___ tomorrow.",
+            "explanation_id": "\"Better\" adalah kata sifat, bukan kata kerja, jadi wajib ada be sesudah will: will be better.",
+            "options": [
+              "will better",
+              "will be better",
+              "will being better",
+              "are will better"
+            ],
+            "correct_answers": [
+              "will be better"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-006",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "___ the results be announced next week?",
+            "explanation_id": "Kalimat tanya pasif Simple Future: Will + S + be + V3? Kata \"be\" sesudah subjek menunjukkan bahwa kata bantu di depan harus will.",
+            "options": [
+              "Will",
+              "Do",
+              "Are",
+              "Is"
+            ],
+            "correct_answers": [
+              "Will"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-007",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "A: \"Will Rani come to the workshop?\" B: \"No, she ___.\"",
+            "explanation_id": "Jawaban singkat mengulang kata bantu dari pertanyaan. Pertanyaannya memakai will, jadi jawaban negatifnya won't (singkatan will not). Bentuk \"willn't\" tidak ada.",
+            "options": [
+              "won't",
+              "willn't",
+              "doesn't",
+              "isn't"
+            ],
+            "correct_answers": [
+              "won't"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-008",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "These boxes look heavy. ___ I carry one for you?",
+            "explanation_id": "Untuk menawarkan bantuan dengan subjek I, dipakai Shall I + V1? Do I, Does I, dan Am I tidak membentuk tawaran yang benar di sini.",
+            "options": [
+              "Shall",
+              "Does",
+              "Do",
+              "Am"
+            ],
+            "correct_answers": [
+              "Shall"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-009",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Look at those dark clouds! It ___ rain.",
+            "explanation_id": "Ada bukti yang terlihat sekarang (awan gelap), jadi dipakai be going to. Rumusnya is + going to + V1. Tiga pilihan lain salah bentuk: will tidak diikuti to, dan going to wajib didahului be.",
+            "options": [
+              "is going to",
+              "will to",
+              "going to",
+              "is go to"
+            ],
+            "correct_answers": [
+              "is going to"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-010",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "A: \"The phone is ringing.\" B: \"OK, ___ it.\"",
+            "explanation_id": "Keputusan spontan yang dibuat saat berbicara memakai will (disingkat 'll) + V1: I'll answer. Pilihan lain salah bentuk karena sesudah will tidak ada -ing atau to.",
+            "options": [
+              "I'll answer",
+              "I'll answering",
+              "I will to answer",
+              "I am answer"
+            ],
+            "correct_answers": [
+              "I'll answer"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-011",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "I will call you when I ___ at the station.",
+            "explanation_id": "Sesudah when dalam time clause dipakai present simple walaupun maksudnya masa depan: when I arrive. Will hanya ada di bagian kalimat utama.",
+            "options": [
+              "arrive",
+              "will arrive",
+              "am going to arrive",
+              "arriving"
+            ],
+            "correct_answers": [
+              "arrive"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-012",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "If it ___ tomorrow, we will cancel the picnic.",
+            "explanation_id": "Sesudah if dipakai present simple, bukan will. Subjek it membutuhkan akhiran -s: rains. Will berada di bagian hasil: we will cancel.",
+            "options": [
+              "rains",
+              "will rain",
+              "will rains",
+              "raining"
+            ],
+            "correct_answers": [
+              "rains"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-013",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which sentence is a correct nominal (non-verbal) sentence?",
+            "explanation_id": "Kalimat nominal masa depan: S + will + be + complement. \"Happy\" adalah kata sifat, jadi perlu be sesudah will. Be tidak berubah menjadi is dan tidak boleh mendahului will.",
+            "options": [
+              "She will happy with the result.",
+              "She will be happy with the result.",
+              "She will is happy with the result.",
+              "She be will happy with the result."
+            ],
+            "correct_answers": [
+              "She will be happy with the result."
+            ]
+          },
+          {
+            "question_id": "Q-GR119-014",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan satu kata: The package will ___ delivered tomorrow morning.",
+            "explanation_id": "Paket diantar (pasif), jadi polanya will + be + V3: will be delivered. Tanpa be, kalimat pasif tidak lengkap.",
+            "correct_answers": [
+              "be"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR119-015",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan V3 dari \"send\": The invitations will be ___ next Monday.",
+            "explanation_id": "Pasif Simple Future memakai will be + V3. V3 dari send adalah sent (send, sent, sent), bukan send atau sended.",
+            "correct_answers": [
+              "sent"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR119-016",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Tulis singkatan satu kata dari will not: Don't worry, I ___ forget your birthday.",
+            "explanation_id": "Singkatan will not adalah won't. Bentuknya tidak beraturan: bukan \"willn't\".",
+            "correct_answers": [
+              "won't",
+              "won’t"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR119-017",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan bentuk yang tepat: She will call you as soon as she ___ her class. (finish / finishes / will finish)",
+            "explanation_id": "Sesudah as soon as dipakai present simple, bukan will. Subjek she membutuhkan akhiran -es: finishes.",
+            "correct_answers": [
+              "finishes"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR119-018",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan bentuk yang tepat: The staff will not ___ late tomorrow. (be / is / are)",
+            "explanation_id": "\"Late\" adalah kata sifat, jadi kalimat ini nominal: will + not + be + complement. Sesudah will, be tidak berubah menjadi is atau are.",
+            "correct_answers": [
+              "be"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR119-019",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan Shall atau Will untuk membuat ajakan: ___ we start the meeting now?",
+            "explanation_id": "Ajakan atau saran dengan subjek we memakai Shall we + V1? Will we...? hanya menanyakan apakah sesuatu akan terjadi, bukan mengajak.",
+            "correct_answers": [
+              "Shall"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR119-020",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan am, is, atau are: My sister ___ going to study in Bandung next year.",
+            "explanation_id": "Pada be going to, be mengikuti subjek. \"My sister\" sama dengan she, jadi dipakai is: is going to study.",
+            "correct_answers": [
+              "is"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR119-021",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat pasif Simple Future yang benar.",
+            "explanation_id": "Pasif Simple Future: S + will + be + V3 + keterangan waktu. Urutannya: The report will be sent tomorrow.",
+            "segments": [
+              "The report",
+              "will",
+              "be",
+              "sent",
+              "tomorrow."
+            ]
+          },
+          {
+            "question_id": "Q-GR119-022",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat tanya nominal yang benar.",
+            "explanation_id": "Tanya nominal: Will + S + be + complement? Will pindah ke depan subjek, sedangkan be tetap sesudah subjek: Will the shop be open next Sunday?",
+            "segments": [
+              "Will",
+              "the shop",
+              "be",
+              "open",
+              "next Sunday?"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-023",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat aktif negatif yang benar.",
+            "explanation_id": "Negatif aktif: S + will + not + V1 + objek. Not selalu berada tepat sesudah will: They will not attend the seminar.",
+            "segments": [
+              "They",
+              "will",
+              "not",
+              "attend",
+              "the seminar."
+            ]
+          },
+          {
+            "question_id": "Q-GR119-024",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi pertanyaan WH yang benar.",
+            "explanation_id": "Tanya WH: kata tanya + will + S + V1? Will berada di antara kata tanya dan subjek: What time will the train leave?",
+            "segments": [
+              "What time",
+              "will",
+              "the train",
+              "leave?"
+            ]
+          },
+          {
+            "question_id": "Q-GR119-025",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Sesudah will, kata kerja selalu bentuk dasar walaupun subjeknya she. Yang benar: She will go, bukan will goes.",
+            "tokens": [
+              "She",
+              "will",
+              "goes",
+              "to",
+              "Jakarta",
+              "next",
+              "week."
+            ],
+            "correct_answers": [
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR119-026",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang tidak seharusnya ada.",
+            "explanation_id": "Will langsung mengikuti subjek dan tidak butuh is di depannya. Yang benar: He will come to the office tomorrow.",
+            "tokens": [
+              "He",
+              "is",
+              "will",
+              "come",
+              "to",
+              "the",
+              "office",
+              "tomorrow."
+            ],
+            "correct_answers": [
+              1
+            ]
+          },
+          {
+            "question_id": "Q-GR119-027",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang tidak seharusnya ada.",
+            "explanation_id": "Sesudah when dipakai present simple, jadi will yang kedua harus dibuang: I will call you when I arrive. Will yang pertama benar karena berada di kalimat utama.",
+            "tokens": [
+              "I",
+              "will",
+              "call",
+              "you",
+              "when",
+              "I",
+              "will",
+              "arrive."
+            ],
+            "correct_answers": [
+              6
+            ]
+          },
+          {
+            "question_id": "Q-GR119-028",
+            "skill": "GRAMMAR",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan setiap kalimat dengan polanya.",
+            "explanation_id": "\"Will be announced\" = will + be + V3 (pasif, pemenang diumumkan). \"Will be hungry\" = will + be + kata sifat (nominal). \"Will announce\" = will + V1 (aktif, panitia mengumumkan).",
+            "points": 3,
+            "matching": {
+              "left": [
+                "The winner will be announced tonight.",
+                "The guests will be hungry after the trip.",
+                "The committee will announce the winner tonight."
+              ],
+              "right": [
+                "Verbal pasif: will + be + V3",
+                "Nominal: will + be + complement",
+                "Verbal aktif: will + V1",
+                "Be going to + V1"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR119-029",
+            "skill": "GRAMMAR",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan setiap kalimat dengan fungsinya.",
+            "explanation_id": "\"I'll help you\" adalah tawaran yang muncul saat berbicara (will). \"We are going to move... we have already signed\" adalah rencana yang sudah diputuskan (be going to). \"Shall we...?\" adalah ajakan atau saran (shall dengan we).",
+            "points": 3,
+            "matching": {
+              "left": [
+                "I'll help you with those bags.",
+                "We are going to move house next month; we have already signed the contract.",
+                "Shall we take a short break?"
+              ],
+              "right": [
+                "Tawaran spontan (will)",
+                "Rencana yang sudah diputuskan (be going to)",
+                "Ajakan atau saran (shall)",
+                "Jadwal tetap (Present Simple)"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR119-030",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih SEMUA kalimat yang benar.",
+            "explanation_id": "Tiga kalimat benar: \"will start\" (aktif, will + V1), \"will be announced\" (pasif, will + be + V3), dan \"will not be late\" (nominal negatif). \"Will to send\" salah karena sesudah will tidak ada to. \"Will be join\" salah karena kata kerja aksi aktif tidak memakai be.",
+            "points": 2,
+            "options": [
+              "The class will start at eight tomorrow.",
+              "I will to send the file tonight.",
+              "The winners will be announced next week.",
+              "She will be join us later.",
+              "We will not be late."
+            ],
+            "correct_answers": [
+              "The class will start at eight tomorrow.",
+              "The winners will be announced next week.",
+              "We will not be late."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
