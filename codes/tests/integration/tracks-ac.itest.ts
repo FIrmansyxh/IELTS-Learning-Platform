@@ -61,12 +61,12 @@ async function addSet(type: 'TIER_BOSS_EXAM' | 'SKIP_TIER_TEST' | 'SKIP_MODULE_T
   return s!;
 }
 
-/** Kondisi AC-7: Tier 2 LOCKED, 1.1.1-1.1.4 COMPLETED, 2.1.1 (dan 2.3.1) PUBLISHED. */
+/** Kondisi AC-7: Tier 2 LOCKED, 1.1.1, 1.3.1, 1.3.2, 1.3.4 COMPLETED, 2.1.1 (dan 2.3.1) PUBLISHED. */
 async function tier2LockedState(): Promise<L> {
   const u = await learnerSession();
-  for (const s of ['1.1.1', '1.1.2', '1.1.3', '1.1.4', '2.1.1', '2.3.1']) await seedMaterial(s);
+  for (const s of ['1.1.1', '1.3.1', '1.3.2', '1.3.4', '2.1.1', '2.3.1']) await seedMaterial(s);
   await ensureProgressRows(db, u.user.id);
-  for (const s of ['1.1.1', '1.1.2', '1.1.3', '1.1.4']) {
+  for (const s of ['1.1.1', '1.3.1', '1.3.2', '1.3.4']) {
     await execute(
       db,
       sql`UPDATE user_sub_module_progress SET status = 'COMPLETED', learn_completed_at = CURRENT_TIMESTAMP

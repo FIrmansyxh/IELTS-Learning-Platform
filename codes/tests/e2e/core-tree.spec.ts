@@ -17,7 +17,7 @@ import {
 } from './helpers/core';
 
 // SPEC-003 Skill Tree & Gatekeeping (domain Inti Belajar). Dijalankan lewat tests/e2e/helpers/run-e2e.mjs.
-// Konten sintetis: tests/fixtures/e2e-content/core (1.2.1/1.2.2 Tier 1; 2.1.1/2.2.x Tier 2; Tier 4 punya celah 4.2.2).
+// Konten sintetis: tests/fixtures/e2e-content/core (1.4.1/1.4.2 Tier 1; 2.1.1/2.2.x Tier 2; Tier 4 punya celah 4.2.2).
 test.describe.configure({ timeout: 75_000 });
 
 let fresh: CoreProfile; // tidak pernah menyelesaikan apa pun
@@ -53,10 +53,10 @@ test('profil baru: Tier 1 terbuka, sub-modul pertama terbuka, berikutnya terkunc
   const tiers = ((await res.json()) as { data: { tiers: Awaited<ReturnType<typeof getTree>> } }).data.tiers;
   expect(tiers.map((t) => t.tier_number)).toEqual([1, 2, 3, 4]);
   expect(tiers[0]).toMatchObject({ status: 'UNLOCKED', unlock_source: 'DEFAULT' });
-  const t1 = tiers[0]!.modules.find((m) => m.module_code === '1.2')!;
+  const t1 = tiers[0]!.modules.find((m) => m.module_code === '1.4')!;
   const [s121, s122] = t1.sub_modules;
-  expect(s121).toMatchObject({ sub_module_code: '1.2.1', status: 'UNLOCKED', content_state: 'AVAILABLE', lock_reason: null });
-  expect(s122).toMatchObject({ sub_module_code: '1.2.2', status: 'LOCKED', lock_reason: { code: 'PREVIOUS_INCOMPLETE' } });
+  expect(s121).toMatchObject({ sub_module_code: '1.4.1', status: 'UNLOCKED', content_state: 'AVAILABLE', lock_reason: null });
+  expect(s122).toMatchObject({ sub_module_code: '1.4.2', status: 'LOCKED', lock_reason: { code: 'PREVIOUS_INCOMPLETE' } });
   expect(s122!.lock_reason!.message).toBe(`Selesaikan ${s121!.title} dan capai skor latihan 75% untuk membuka.`);
   for (const t of tiers.slice(1)) {
     expect(t.status).toBe('LOCKED');
@@ -81,17 +81,17 @@ test('peta belajar: status berlabel teks + ikon, alasan terkunci muncul di Popov
   await expect(page.getByRole('list', { name: 'Peta Belajar' })).toBeVisible();
 
   // Tier 1: sub-modul terbuka berupa tautan dengan label "Sedang dipelajari".
-  const n121 = node(page, '1.2.1');
-  await expect(n121.getByRole('link')).toHaveAttribute('href', '/belajar/1.2.1');
+  const n121 = node(page, '1.4.1');
+  await expect(n121.getByRole('link')).toHaveAttribute('href', '/belajar/1.4.1');
   await expect(n121).toContainText('Sedang dipelajari');
 
   // Terkunci berantai: Popover menampilkan alasan Indonesia (nama predecessor + ambang 75%).
-  const n122 = node(page, '1.2.2');
+  const n122 = node(page, '1.4.2');
   await expect(n122).toContainText('Terkunci');
   await n122.getByRole('button').click();
   const pop = page.locator('[role="dialog"][data-state="open"]');
   await expect(pop).toContainText('Mengapa terkunci?');
-  await expect(pop).toContainText(`Selesaikan ${SUB_TITLES['1.2.1']} dan capai skor latihan 75% untuk membuka.`);
+  await expect(pop).toContainText(`Selesaikan ${SUB_TITLES['1.4.1']} dan capai skor latihan 75% untuk membuka.`);
   await page.keyboard.press('Escape');
 
   // Tier terkunci: alasan Boss Stage + tombol Uji Kompetensi (modul 2.1 punya set Skip terbit).
@@ -103,12 +103,12 @@ test('peta belajar: status berlabel teks + ikon, alasan terkunci muncul di Popov
   await page.keyboard.press('Escape');
 
   // "Segera hadir": tidak dapat diklik (bukan tautan/tombol), modul tanpa konten diberi label yang sama.
-  const comingSoon = node(page, '1.2.2').locator('xpath=ancestor::li[contains(@class,"rounded-lg")][1]');
+  const comingSoon = node(page, '1.4.2').locator('xpath=ancestor::li[contains(@class,"rounded-lg")][1]');
   await expect(comingSoon).toBeVisible();
   const m11 = page.locator('li').filter({ has: page.getByText('Modul 1.1', { exact: true }) }).first();
   await expect(m11).toContainText('Segera hadir');
   await expect(page.locator('a[href^="/belajar/1.1."]')).toHaveCount(0);
-  await expect(page.locator('li[data-node-id]').filter({ hasText: SUB_TITLES['1.2.2'] }).locator('a')).toHaveCount(0);
+  await expect(page.locator('li[data-node-id]').filter({ hasText: SUB_TITLES['1.4.2'] }).locator('a')).toHaveCount(0);
 
   // Tidak ada overflow horizontal; di desktop konten tidak tertutup sidebar.
   const m = await noHorizontalOverflow(page);
@@ -144,12 +144,12 @@ test('modul dapat dilipat (aria-expanded)', async ({ page, context }) => {
   await page.goto('/peta');
   const toggle = page.getByRole('button', { name: /Modul 1\.2/ });
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(node(page, '1.2.1')).toBeVisible();
+  await expect(node(page, '1.4.1')).toBeVisible();
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(node(page, '1.2.1')).toBeHidden();
+  await expect(node(page, '1.4.1')).toBeHidden();
   await toggle.click();
-  await expect(node(page, '1.2.1')).toBeVisible();
+  await expect(node(page, '1.4.1')).toBeVisible();
 });
 
 test('akses langsung: sub-modul terkunci 403 tanpa materi, belum terbit 404, kode tak dikenal 404, format salah 400', async ({ page, context }) => {
@@ -162,14 +162,14 @@ test('akses langsung: sub-modul terkunci 403 tanpa materi, belum terbit 404, kod
   const raw = JSON.stringify(locked.body);
   expect(raw).not.toContain('article_markdown');
   expect(raw).not.toContain('ai_rubric_criteria');
-  const chained = await apiGet<{ error: { code: string; details: Array<{ code: string }> } }>(page, '/api/v1/sub-modules/1.2.2');
+  const chained = await apiGet<{ error: { code: string; details: Array<{ code: string }> } }>(page, '/api/v1/sub-modules/1.4.2');
   expect(chained.status).toBe(403);
   expect(chained.body.error.details[0]!.code).toBe('PREVIOUS_INCOMPLETE');
   expect((await apiGet(page, '/api/v1/sub-modules/1.1.1')).status).toBe(404); // DRAFT
   expect((await apiGet(page, '/api/v1/sub-modules/9.9.9')).status).toBe(404);
   expect((await apiGet(page, '/api/v1/sub-modules/abc')).status).toBe(400);
   // UI
-  await page.goto('/belajar/1.2.2');
+  await page.goto('/belajar/1.4.2');
   await expect(page.getByRole('heading', { name: 'Sub-modul ini masih terkunci' })).toBeVisible();
   await expect(page.getByText('Selesaikan sub-modul sebelumnya terlebih dahulu.')).toBeVisible();
   await page.getByRole('link', { name: 'Kembali ke Peta' }).click();
@@ -184,31 +184,31 @@ test('akses langsung: sub-modul terkunci 403 tanpa materi, belum terbit 404, kod
 
 test('lulus drill membuka sub-modul berikutnya (peta: Selesai + Sedang dipelajari), progres Modul/Tier naik', async ({ page, context }) => {
   await context.addCookies(learner.cookies);
-  const before = await subOf(page, '1.2.1');
+  const before = await subOf(page, '1.4.1');
   expect(before.status).toBe('UNLOCKED');
-  const result = await completeSub(page, '1.2.1');
+  const result = await completeSub(page, '1.4.1');
   expect(result.attempt.passed).toBe(true);
   expect(result.progress.status).toBe('COMPLETED');
   // Catatan: label berupa judul saja; contoh spec SPEC-003 menulis "2.1.4 Conditional Sentences" (awalan kode). Lihat laporan (Minor).
-  expect(result.progress.unlocked.map((u: { label: string }) => u.label)).toEqual([SUB_TITLES['1.2.2']]);
+  expect(result.progress.unlocked.map((u: { label: string }) => u.label)).toEqual([SUB_TITLES['1.4.2']]);
 
   await page.goto('/peta');
-  await expect(node(page, '1.2.1')).toContainText('Selesai');
-  await expect(node(page, '1.2.2')).toContainText('Sedang dipelajari');
-  await expect(node(page, '1.2.2').getByRole('link')).toHaveAttribute('href', '/belajar/1.2.2');
-  const sub = await subOf(page, '1.2.1');
+  await expect(node(page, '1.4.1')).toContainText('Selesai');
+  await expect(node(page, '1.4.2')).toContainText('Sedang dipelajari');
+  await expect(node(page, '1.4.2').getByRole('link')).toHaveAttribute('href', '/belajar/1.4.2');
+  const sub = await subOf(page, '1.4.1');
   expect(sub).toMatchObject({ status: 'COMPLETED', progress_percent: 100 });
   expect(sub.module.progress_percent).toBe(50); // 1 dari 2 sub-modul AVAILABLE
   expect(sub.tier.status).toBe('IN_PROGRESS');
 
-  await completeSub(page, '1.2.2');
-  const after = await subOf(page, '1.2.2');
+  await completeSub(page, '1.4.2');
+  const after = await subOf(page, '1.4.2');
   expect(after.module.status).toBe('COMPLETED');
   expect(after.module.progress_percent).toBe(100);
   await page.reload();
   // Modul selesai terlipat secara bawaan dan berlabel "Selesai".
   await expect(page.getByRole('button', { name: /Modul 1\.2/ })).toHaveAttribute('aria-expanded', 'false');
-  await expect(page.locator('li').filter({ has: page.getByText('Modul 1.2', { exact: true }) }).first()).toContainText('Selesai');
+  await expect(page.locator('li').filter({ has: page.getByText('Modul 1.4', { exact: true }) }).first()).toContainText('Selesai');
 });
 
 test('rantai melewati sub-modul yang belum terbit; Boss Stage terbuka setelah semua modul Tier selesai', async ({ page, context }) => {

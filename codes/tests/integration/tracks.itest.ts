@@ -153,8 +153,8 @@ describe('SPEC-021: Jalur Belajar & Gaya Penyampaian Materi (Integration)', () =
     });
 
     it('AC-10: bila sub-modul selesai dan kolam cukup, startCheckpoint mengembalikan 201 dengan 10 soal', async () => {
-      // Siapkan 4 sub-modul pertama GT-WRITING: 1.1.1, 1.1.2, 1.1.3, 1.1.4
-      const subs = ['1.1.1', '1.1.2', '1.1.3', '1.1.4'];
+      // Siapkan 4 sub-modul pertama GT-WRITING: 1.1.1, 1.3.1, 1.3.2, 1.3.4
+      const subs = ['1.1.1', '1.3.1', '1.3.2', '1.3.4'];
       for (const s of subs) {
         await seedMaterial(s);
         await addDrill(s, [Q.mcq(), Q.mcq(), Q.mcq(), Q.mcq()]);

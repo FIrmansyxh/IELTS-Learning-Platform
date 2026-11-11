@@ -8,7 +8,7 @@ const fill = (n, prompt, answers, explanation_id, max_words = 1) =>
 const sub = {
   meta: {
     tier_number: 1,
-    module_code: '1.1',
+    module_code: '1.3',
     module_category: 'GRAMMAR',
     sub_module_title: 'Modals of Ability, Obligation & Possibility (can, must, should, might)',
   },

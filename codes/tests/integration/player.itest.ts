@@ -85,9 +85,9 @@ describe('GET /sub-modules/{code}', () => {
     expect(tier.status).toBe(403);
     expect(tier.json.error.details[0].code).toBe('TIER_LOCKED');
 
-    expect((await detail(u, '1.1.3')).status).toBe(404); // DRAFT
-    await execute(db, sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE sub_module_code = '1.1.4'`);
-    expect((await detail(u, '1.1.4')).status).toBe(404);
+    expect((await detail(u, '1.2.1')).status).toBe(404); // DRAFT
+    await execute(db, sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE sub_module_code = '1.2.2'`);
+    expect((await detail(u, '1.2.2')).status).toBe(404);
     expect((await detail(u, '9.9.9')).status).toBe(404);
     const bad = await detail(u, 'abc');
     expect(bad.status).toBe(400);
@@ -176,7 +176,7 @@ describe('POST learn-progress (anti-farming)', () => {
     const u = await learnerSession();
     expect((await ping(u, lockedId, { subtab: 'ARTICLE', active_seconds: 5 })).status).toBe(403);
     expect((await ping(u, '00000000-0000-4000-8000-000000000000', { subtab: 'ARTICLE', active_seconds: 5 })).status).toBe(404);
-    expect((await ping(u, await subId('1.1.3'), { subtab: 'ARTICLE', active_seconds: 5 })).status).toBe(404);
+    expect((await ping(u, await subId('1.2.1'), { subtab: 'ARTICLE', active_seconds: 5 })).status).toBe(404);
     expect((await ping(u, 'bukan-uuid', { subtab: 'ARTICLE', active_seconds: 5 })).status).toBe(400);
   });
 
@@ -288,7 +288,7 @@ describe('POST learn-complete', () => {
     const { subId: lockedId } = await seedMaterial('1.1.2');
     const u = await learnerSession();
     expect((await complete(u, lockedId)).status).toBe(403);
-    expect((await complete(u, await subId('1.1.3'))).status).toBe(404);
+    expect((await complete(u, await subId('1.2.1'))).status).toBe(404);
   });
 });
 

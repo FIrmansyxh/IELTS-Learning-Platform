@@ -133,8 +133,8 @@ describe('Materi Diperkaya (C-12)', () => {
     }
   });
 
-  it('peta tense di 1.1.2 memuat 16 bentuk termasuk Past Future (bukan patokan 12)', () => {
-    const md = load('1.1.2').materials.article_markdown;
+  it('peta tense di 1.3.1 memuat 16 bentuk termasuk Past Future (bukan patokan 12)', () => {
+    const md = load('1.3.1').materials.article_markdown;
     for (const t of ['Past Future Perfect Continuous', 'Future Perfect Continuous', 'Present Perfect Continuous', 'Past Perfect Continuous'])
       expect(md).toContain(t);
     expect(md).toMatch(/16 bentuk/);

@@ -1,98 +1,85 @@
-const P = 'Q-VC121-';
-const g = (n, rest) => ({ question_id: `${P}${String(n).padStart(3, '0')}`, skill: 'VOCAB', ...rest });
+const P = 'Q-GR116-';
+const g = (n, rest) => ({ question_id: `${P}${String(n).padStart(3, '0')}`, skill: 'GRAMMAR', ...rest });
 const mcq = (n, prompt, options, answer, explanation_id) =>
   g(n, { question_type: 'MCQ_SINGLE', prompt, explanation_id, options, correct_answers: [answer] });
 const fill = (n, prompt, answers, explanation_id, max_words = 1) =>
   g(n, { question_type: 'FILL_IN_BLANK', prompt, explanation_id, correct_answers: answers, max_words });
+const err = (n, tokens, index, explanation_id) =>
+  g(n, { question_type: 'ERROR_RECOGNITION', prompt: 'Klik kata yang salah.', explanation_id, tokens, correct_answers: [index] });
+const reorder = (n, segments, explanation_id) =>
+  g(n, { question_type: 'SENTENCE_REORDER', prompt: 'Susun menjadi kalimat yang benar.', explanation_id, segments });
 
 const sub = {
   meta: {
     tier_number: 1,
     module_code: '1.2',
-    module_category: 'VOCAB',
-    sub_module_title: '1.000 Kata Inti (Oxford A1-A2) dalam Konteks Kalimat',
+    module_category: 'GRAMMAR',
+    sub_module_title: 'Verbs: Bentuk Kata Kerja, Transitive/Intransitive, Linking Verb, & Auxiliary',
   },
   mini_task: {
     task_type: 'AI_SHORT_WRITING',
     prompt:
-      'Tulis paragraf pendek (sekitar 80 sampai 100 kata) dalam bahasa Inggris tentang hari liburmu yang biasa.\n\nWajib memakai:\n- minimal 6 kata dari topik yang dipelajari (keluarga, rumah, makanan, belanja, perjalanan, kesehatan)\n- minimal 4 kolokasi yang benar (mis. take a shower, make a mistake, do the shopping, have breakfast, go for a walk)\n- satu pasangan yang sering tertukar dipakai dengan tepat (say/tell, borrow/lend, make/do)\n- tidak memakai kata terjemahan langsung yang salah (mis. "do a mistake", "make homework")',
+      'Tulis paragraf singkat (sekitar 80 sampai 100 kata) dalam bahasa Inggris tentang seorang anggota keluargamu: siapa dia, seperti apa orangnya, dan apa yang biasa ia lakukan.\n\nDalam paragrafmu:\n- tulis setidaknya 2 kalimat nominal dengan be (mis. My mother is a nurse. She is patient.)\n- tulis setidaknya 2 kalimat dengan kata kerja transitive beserta objeknya, salah satunya dengan dua objek (mis. She gives me advice.)\n- pakai setidaknya 1 linking verb selain be dengan adjective (look, seem, feel, become, sound)\n- tulis setidaknya 1 kalimat negatif dengan do/does/did + V1\n- jangan menggabung be dengan V1 (hindari bentuk seperti "is work" atau "am agree")',
     ai_rubric_criteria:
-      'Lexical Resource: kosakata dasar tepat dan bervariasi, kolokasi benar (make/do/have/take/go), pasangan say/tell dan borrow/lend dipakai benar, tidak ada false friends. Grammatical Accuracy: kalimat utuh dengan tense sesuai. Task Achievement: semua elemen (6 kata topik, 4 kolokasi, satu pasangan) muncul. Coherence: paragraf teratur.',
+      'Grammatical Accuracy: setiap kalimat punya kata kerja; kalimat nominal memakai be; tidak ada be + V1; negatif memakai do/does/did + V1; bentuk kata kerja (V1+s, V2, V3, V-ing) sesuai; linking verb diikuti adjective, bukan adverb; kata kerja transitive punya objek dan pola to/for benar. Task Achievement: semua unsur yang diminta muncul (kalimat nominal, transitive dengan satu dan dua objek, linking verb selain be, kalimat negatif). Coherence dan Lexical Resource: paragraf runtut dan kosakata sesuai topik keluarga.',
   },
   drill: {
     time_limit_seconds: 900,
     questions: [
-      mcq(1, 'Which sentence is correct?', ['I make my homework every evening.', 'I do my homework every evening.', 'I have my homework every evening.', 'I take my homework every evening.'], 'I do my homework every evening.', 'Kolokasi tetap: do homework. Make dipakai untuk membuat sesuatu seperti a cake atau a mistake.'),
-      mcq(2, 'Which sentence is correct?', ['She made a mistake.', 'She did a mistake.', 'She took a mistake.', 'She had a mistake.'], 'She made a mistake.', 'Kolokasi tetap: make a mistake.'),
-      mcq(3, 'Can I ___ your pen for a minute?', ['borrow', 'lend', 'give back', 'take away'], 'borrow', '"Borrow" = meminjam dari orang lain; "lend" = meminjamkan kepada orang lain.'),
-      mcq(4, 'He ___ me a funny story yesterday.', ['said', 'told', 'spoke', 'talked'], 'told', '"Tell" diikuti orang (tell me a story); "say" diikuti ucapan.'),
-      mcq(5, 'The film was really ___, so we laughed a lot.', ['funny', 'fun', 'fine', 'funnily'], 'funny', '"Funny" = lucu. "Fun" = menyenangkan (untuk pengalaman atau acara).'),
-      mcq(6, 'In English, "actual" means...', ['real or true', 'latest', 'sensitive', 'attractive'], 'real or true', '"Actual" berarti sebenarnya atau nyata (false friend dengan "aktual").'),
-      mcq(7, 'Choose the correct word: She is a very ___ person who makes good decisions.', ['sensible', 'sensitive', 'sensational', 'sensual'], 'sensible', '"Sensible" = bijaksana atau masuk akal. "Sensitive" berarti peka atau mudah tersinggung.'),
-      mcq(8, 'Which noun is UNCOUNTABLE?', ['furniture', 'chair', 'table', 'shelf'], 'furniture', '"Furniture" uncountable: some furniture, a piece of furniture.'),
-      mcq(9, 'Which word means "tagihan di restoran"?', ['bill', 'receipt', 'discount', 'change'], 'bill', '"Bill" = tagihan; "receipt" = struk bukti bayar; "change" = uang kembalian.'),
-      mcq(10, 'What is the adjective form of "danger"?', ['dangerous', 'dangerously', 'endanger', 'dangering'], 'dangerous', 'Danger (noun), endanger (verb), dangerous (adjective), dangerously (adverb).'),
-      fill(11, 'Lengkapi: I usually ___ a shower before breakfast.', ['take', 'have'], 'Kolokasi: take a shower atau have a shower.'),
-      fill(12, 'Lengkapi: We need to ___ the shopping this afternoon.', ['do'], 'Kolokasi tetap: do the shopping.'),
-      fill(13, 'Lengkapi: It is raining ___, so take an umbrella. (lawan dari "light")', ['heavily', 'hard'], 'Heavily atau hard menjelaskan hujan deras; kolokasi heavy rain atau rain heavily.'),
-      fill(14, 'Lengkapi: Could we have the ___, please? (di akhir makan di restoran)', ['bill', 'check'], 'Di restoran kita meminta bill (Inggris Britania) atau check (Amerika).'),
-      fill(15, 'Lengkapi: She is ___ of her son because he won the prize. (bangga)', ['proud'], 'Proud of = bangga akan.'),
-      g(16, {
-        question_type: 'SENTENCE_REORDER',
-        prompt: 'Susun menjadi kalimat yang benar.',
-        explanation_id: 'Pola: subjek + take a shower + before + have breakfast.',
-        segments: ['I usually', 'take a shower', 'before I', 'have breakfast.'],
-      }),
-      g(17, {
-        question_type: 'ERROR_RECOGNITION',
-        prompt: 'Klik kata yang salah.',
-        explanation_id: 'Kolokasi tetap: make a mistake, bukan do a mistake.',
-        tokens: ['I', 'do', 'a', 'mistake', 'in', 'my', 'test.'],
-        correct_answers: [1],
-      }),
-      g(18, {
-        question_type: 'ERROR_RECOGNITION',
-        prompt: 'Klik kata yang salah.',
-        explanation_id: 'Information adalah uncountable: tidak berbentuk jamak. Seharusnya: some information.',
-        tokens: ['She', 'gave', 'me', 'some', 'informations', 'about', 'the', 'trip.'],
-        correct_answers: [4],
-      }),
-      g(19, {
+      mcq(1, 'Which form is the past participle (V3) of "write"?', ['wrote', 'written', 'writing', 'writes'], 'written', 'Write adalah irregular verb: write (V1), wrote (V2), written (V3). V3 dipakai setelah have/has/had dan di kalimat pasif.'),
+      mcq(2, 'Which sentence has a TRANSITIVE verb?', ['The baby is sleeping.', 'He arrived late.', 'She reads a book.', 'They live in Bandung.'], 'She reads a book.', 'Hanya "reads" yang punya objek (a book). Sleep, arrive, dan live tidak diikuti objek; "late" dan "in Bandung" adalah keterangan, bukan objek.'),
+      mcq(3, 'Which sentence has an INTRANSITIVE verb?', ['She opened the door.', 'The door opened slowly.', 'He bought a ticket.', 'We need more time.'], 'The door opened slowly.', 'Pada "The door opened slowly" tidak ada objek; "slowly" adalah keterangan cara. Tiga kalimat lain punya objek (the door, a ticket, more time). Open bisa transitive maupun intransitive.'),
+      mcq(4, 'The soup smells ___.', ['delicious', 'deliciously', 'deliciousness', 'more deliciously'], 'delicious', 'Smell di sini linking verb, sehingga diikuti adjective (delicious) yang menerangkan subjek, bukan adverb berakhiran -ly.'),
+      mcq(5, 'My father gave a watch ___ me.', ['to', 'for', 'at', 'with'], 'to', 'Give berpasangan dengan "to" karena bendanya berpindah kepada penerima: give something to someone. "For" dipakai dengan buy, make, cook.'),
+      mcq(6, 'My mother bought a new bag ___ me.', ['to', 'for', 'at', 'on'], 'for', 'Buy berpasangan dengan "for" karena sesuatu dilakukan untuk seseorang: buy something for someone.'),
+      mcq(7, 'She ___ agree with your opinion.', ["isn't", "doesn't", "aren't", 'not'], "doesn't", 'Agree adalah kata kerja biasa, jadi negatifnya memakai does not + V1 untuk subjek she. Be tidak boleh diikuti V1, dan "not" saja tanpa auxiliary tidak cukup.'),
+      mcq(8, 'Which sentence is correct?', ['She beautiful.', 'She is beautiful.', 'She does beautiful.', 'She be beautiful.'], 'She is beautiful.', 'Beautiful adalah adjective, bukan kata kerja, jadi kalimat ini nominal dan wajib memakai be yang sesuai subjek: she is.'),
+      mcq(9, '___ your brother work in a bank?', ['Is', 'Does', 'Do', 'Are'], 'Does', 'Ada kata kerja biasa (work), jadi kalimat tanya memakai do/does. Subjek "your brother" tunggal orang ketiga, sehingga Does. "Is ... work" salah karena be tidak diikuti V1.'),
+      mcq(10, 'We ___ the problem in the meeting yesterday.', ['discussed', 'discussed about', 'discussed on', 'were discuss'], 'discussed', 'Discuss adalah kata kerja transitive yang langsung diikuti objek, tanpa preposisi about atau on. "Were discuss" salah karena be tidak diikuti V1.'),
+      mcq(11, 'In the sentence "Learning English takes time", the word "Learning" is a ...', ['gerund (V-ing sebagai noun)', 'past participle (V3)', 'bare infinitive (V1)', 'auxiliary verb'], 'gerund (V-ing sebagai noun)', 'Learning menduduki posisi subjek kalimat, jadi berfungsi sebagai kata benda. V-ing yang berfungsi sebagai kata benda disebut gerund. Kata kerja utamanya adalah takes.'),
+      mcq(12, 'The teacher explained the rule ___.', ['us', 'to us', 'for we', 'we'], 'to us', 'Polanya explain + hal + to + orang. Explain tidak bisa langsung diikuti objek orang, dan setelah preposisi dipakai pronoun objek (us), bukan we.'),
+      fill(13, 'Lengkapi dengan bentuk past tense (V2) dari buy: I ___ a new phone last week.', ['bought'], 'Buy adalah irregular verb: buy, bought, bought. "Last week" menandai Simple Past, jadi dipakai V2.'),
+      fill(14, 'Lengkapi dengan bentuk past participle (V3) dari take: She has ___ the IELTS test twice.', ['taken'], 'Setelah has dipakai V3. Take adalah irregular verb: take, took, taken.'),
+      fill(15, 'Lengkapi dengan bentuk V-ing dari stop: The bus is ___ in front of the school.', ['stopping'], 'Setelah be (is) dipakai V-ing untuk continuous. Stop berakhiran konsonan-vokal-konsonan, jadi huruf p digandakan: stopping.'),
+      fill(16, 'Lengkapi: He ___ not like spicy food. (is / does / do)', ['does'], 'Like adalah kata kerja biasa, jadi negatifnya memakai do/does + not + V1. Subjek he memakai does. "Is not like" salah karena be tidak diikuti V1.'),
+      fill(17, 'Lengkapi: They ___ not at home right now. (are / do / does)', ['are'], 'Tidak ada kata kerja aksi; predikatnya keterangan tempat (at home). Ini kalimat nominal, jadi memakai be: they are not.'),
+      fill(18, 'Lengkapi: The music sounds ___. (beautiful / beautifully)', ['beautiful'], 'Sound adalah linking verb. Complement-nya harus adjective (beautiful) karena menerangkan subjek the music, bukan adverb.'),
+      fill(19, 'Lengkapi: Why ___ you so quiet today? (are / do / does)', ['are'], 'Quiet adalah adjective, bukan kata kerja, jadi kalimat tanya ini nominal dan memakai be. Do dan did hanya dipakai bila ada kata kerja biasa.'),
+      fill(20, 'Lengkapi: My sister ___ a lecturer, and she teaches biology. (is / does / do)', ['is'], 'A lecturer adalah noun yang menerangkan subjek (complement), jadi dipakai be: my sister is a lecturer. Do/does butuh kata kerja biasa sesudahnya.'),
+      reorder(21, ['She', 'gave', 'me', 'a flower.'], 'Pola ditransitive: subjek + kata kerja + penerima (indirect object) + benda (direct object). Bila benda disebut lebih dulu, penerima butuh "to": She gave a flower to me.'),
+      reorder(22, ['Does', 'your sister', 'work', 'in a hospital?'], 'Kalimat tanya dengan kata kerja biasa: Does + subjek + V1 + keterangan. Setelah does, kata kerja kembali ke V1 (work, bukan works).'),
+      reorder(23, ['They', 'do not', 'understand', 'the question.'], 'Kalimat negatif dengan kata kerja biasa: subjek + do not + V1 + objek. Understand adalah kata kerja, jadi tidak memakai are not.'),
+      err(24, ['She', 'looks', 'happily', 'today.'], 2, 'Look di sini linking verb, jadi harus diikuti adjective: She looks happy today. Adverb (happily) tidak bisa menjadi complement.'),
+      err(25, ['She', "doesn't", 'likes', 'coffee.'], 2, 'Setelah does/doesn\'t kata kerja kembali ke V1: She doesn\'t like coffee. Tanda -s sudah dibawa oleh does.'),
+      err(26, ['Did', 'you', 'went', 'to', 'school', 'yesterday?'], 2, 'Setelah did dipakai V1, bukan V2: Did you go to school yesterday? Tanda lampau sudah dibawa oleh did.'),
+      err(27, ['We', 'discussed', 'about', 'the', 'plan', 'yesterday.'], 2, 'Discuss langsung diikuti objek tanpa preposisi: We discussed the plan yesterday. Kata "about" harus dibuang.'),
+      err(28, ['She', 'has', 'wrote', 'three', 'letters', 'today.'], 2, 'Setelah has dipakai V3, bukan V2: She has written three letters today. Wrote adalah V2 dari write.'),
+      g(29, {
         question_type: 'MATCHING_DROPDOWN',
-        prompt: 'Cocokkan kata dengan artinya.',
-        explanation_id: 'Cousin = sepupu; receipt = struk; neighbour = tetangga.',
-        points: 3,
+        prompt: 'Cocokkan setiap kalimat dengan jenis kata kerjanya.',
+        explanation_id: 'Reads punya satu objek (a book): monotransitive. Gives punya dua objek (me, a flower): ditransitive. Sits tidak punya objek maupun complement (on the sand hanya keterangan tempat): intransitive complete. Looks diikuti adjective happy yang menerangkan subjek: linking verb.',
+        points: 4,
         matching: {
-          left: ['cousin', 'receipt', 'neighbour'],
-          right: ['sepupu', 'struk belanja', 'tetangga', 'saudara kandung'],
+          left: ['She reads a book.', 'She gives me a flower.', 'She sits on the sand.', 'She looks happy.'],
+          right: [
+            'monotransitive (satu objek)',
+            'ditransitive (dua objek)',
+            'intransitive complete (tanpa objek dan tanpa complement)',
+            'linking verb + complement',
+            'auxiliary + V-ing',
+          ],
           allow_reuse: false,
         },
-        correct_answers: [0, 1, 2],
+        correct_answers: [0, 1, 2, 3],
       }),
-      g(20, {
+      g(30, {
         question_type: 'MCQ_MULTI',
-        prompt: 'Pilih DUA cara belajar kata baru yang paling efektif.',
-        explanation_id: 'Belajar dalam kalimat dan mengulang berjarak adalah dua cara yang paling efektif. Menghafal terjemahan tanpa konteks tidak bertahan lama.',
-        points: 2,
-        options: ['Learn each word in a sentence with its collocations', 'Memorise a long list of translations only once', 'Review the words after 1, 3 and 7 days', 'Never use the new words in your own sentences'],
-        correct_answers: ['Learn each word in a sentence with its collocations', 'Review the words after 1, 3 and 7 days'],
+        prompt: 'Pilih SEMUA kalimat yang memakai linking verb.',
+        explanation_id: 'Went (went bad), became, dan seems menghubungkan subjek dengan complement (bad, a doctor, reasonable), jadi ketiganya linking verb. Pada "She went to the market", went adalah kata kerja gerak biasa yang diikuti keterangan tempat, bukan complement.',
+        points: 3,
+        options: ['The milk went bad.', 'He became a doctor.', 'She went to the market.', 'The plan seems reasonable.'],
+        correct_answers: ['The milk went bad.', 'He became a doctor.', 'The plan seems reasonable.'],
       }),
-      mcq(21, 'I ___ a strange noise outside last night.', ['listened', 'heard', 'watched', 'looked'], 'heard', '"Hear" = mendengar tanpa sengaja (pasif). "Listen" = mendengarkan dengan sengaja dan butuh "to".'),
-      mcq(22, 'She ___ three languages: Indonesian, English and Japanese.', ['talks', 'says', 'speaks', 'tells'], 'speaks', '"Speak" dipakai untuk bahasa: speak English. "Talk" berarti mengobrol.'),
-      mcq(23, 'We usually ___ TV after dinner.', ['look', 'see', 'watch', 'hear'], 'watch', '"Watch" = menonton sesuatu yang bergerak atau berlangsung: watch TV.'),
-      mcq(24, 'In English, "fabric" means...', ['a factory', 'cloth or material', 'a machine', 'a shop'], 'cloth or material', '"Fabric" berarti kain (false friend dengan "pabrik", yang dalam bahasa Inggris adalah factory).'),
-      mcq(25, 'In English, "eventually" means...', ['possibly', 'in the end', 'sometimes', 'immediately'], 'in the end', '"Eventually" berarti akhirnya, setelah waktu yang lama (false friend).'),
-      mcq(26, 'She drives very ___. She has never had an accident.', ['careful', 'carefully', 'care', 'careless'], 'carefully', 'Yang menjelaskan kata kerja (drives) adalah adverb: carefully. "Careful" adalah adjective.'),
-      g(27, {
-        question_type: 'ERROR_RECOGNITION',
-        prompt: 'Klik kata yang salah.',
-        explanation_id: 'Kolokasi tetap: take medicine, bukan eat medicine.',
-        tokens: ['I', 'eat', 'medicine', 'when', 'I', 'have', 'a', 'fever.'],
-        correct_answers: [1],
-      }),
-      fill(28, 'Lengkapi dengan satu kata: She goes to work ___ bus every day.', ['by'], 'Kolokasi: go by bus (tanpa artikel).'),
-      fill(29, 'Lengkapi: There was ___ traffic this morning, so I was late. (lawan dari "light")', ['heavy'], 'Kolokasi tetap: heavy traffic (bukan strong traffic atau big traffic).'),
-      fill(30, 'Lengkapi: It was difficult, but she finally ___ a decision.', ['made', 'took', 'reached'], 'Kolokasi utama: make a decision (bentuk lampau: made). Bukan "did a decision".'),
     ],
   },
 };

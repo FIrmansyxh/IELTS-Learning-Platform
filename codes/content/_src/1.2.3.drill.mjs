@@ -12,7 +12,7 @@ const err = (n, tokens, index, explanation_id) =>
 const sub = {
   meta: {
     tier_number: 1,
-    module_code: '1.1',
+    module_code: '1.2',
     module_category: 'GRAMMAR',
     sub_module_title: 'Phrases: Noun Phrase, Adjective Phrase, Adverbial Phrase, & Prepositional Phrase',
   },

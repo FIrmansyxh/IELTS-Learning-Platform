@@ -25,7 +25,7 @@ import {
   type CoreProfile,
 } from './helpers/core';
 
-// SPEC-006 Mesin Soal & Active Drill + hasil (domain Inti Belajar). Drill 1.2.1 = 4 soal (lulus 75% = 3 benar);
+// SPEC-006 Mesin Soal & Active Drill + hasil (domain Inti Belajar). Drill 1.4.1 = 4 soal (lulus 75% = 3 benar);
 // drill 2.2.1 = 10 tipe soal berbobot (maks 14 poin).
 test.describe.configure({ timeout: 75_000 });
 const profiles: CoreProfile[] = [];
@@ -83,9 +83,9 @@ async function openDrill(page: Page, code: string): Promise<void> {
 test('lulus tepat 75% (3 dari 4): umpan balik tiap soal, hasil Lulus, soal berikutnya terbuka, poin bertambah, tanpa kunci di payload', async ({ page, context }) => {
   const p = await mk('drl-p');
   await context.addCookies(p.cookies);
-  await learnFast(page, '1.2.1');
+  await learnFast(page, '1.4.1');
   const pointsBefore = await totalPoints(page);
-  await openDrill(page, '1.2.1');
+  await openDrill(page, '1.4.1');
   await expect(page.getByText('4 soal - 5 menit - lulus 75%')).toBeVisible();
 
   const [startRes] = await Promise.all([
@@ -113,9 +113,9 @@ test('lulus tepat 75% (3 dari 4): umpan balik tiap soal, hasil Lulus, soal berik
   await expect(page.getByText('Ambang lulus 75%')).toBeVisible();
   await expect(page.getByText('3 dari 4 poin')).toBeVisible();
   await expect(page.getByText('Kerja bagus! Anda sudah menguasai sub-modul ini.')).toBeVisible();
-  await expect(page.getByText(`Terbuka: ${SUB_TITLES['1.2.2']}`)).toBeVisible();
+  await expect(page.getByText(`Terbuka: ${SUB_TITLES['1.4.2']}`)).toBeVisible();
   const next = page.getByRole('link', { name: 'Sub-Modul Berikutnya' });
-  await expect(next).toHaveAttribute('href', '/belajar/1.2.2');
+  await expect(next).toHaveAttribute('href', '/belajar/1.4.2');
   // Mahkota/poin: total poin naik (server), dan layar hasil harus menampilkan blok poin/mahkota (SPEC-006 DrillResult, SPEC-016).
   expect(await totalPoints(page)).toBeGreaterThan(pointsBefore);
   const saved = await apiGet<{ data: { gamification: { points: { total: number }; crown: { current: string } } | null; attempt: { points_awarded: number } } }>(page, `/api/v1/attempts/${attemptId}/result`);
@@ -135,20 +135,20 @@ test('lulus tepat 75% (3 dari 4): umpan balik tiap soal, hasil Lulus, soal berik
   await shot(page, `drill-pass75-${test.info().project.name}`);
 
   // Server konsisten: sub-modul COMPLETED, berikutnya terbuka, tab Latihan bercentang.
-  const sub = await subOf(page, '1.2.1');
+  const sub = await subOf(page, '1.4.1');
   expect(sub).toMatchObject({ status: 'COMPLETED', best_score_percent: 75 });
-  expect((await subOf(page, '1.2.2')).status).toBe('UNLOCKED');
+  expect((await subOf(page, '1.4.2')).status).toBe('UNLOCKED');
   await expect(page.getByRole('tab', { name: /^Latihan/ })).toContainText('selesai');
   await next.click();
   await expect(page).toHaveURL(/\/belajar\/1\.2\.2/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(SUB_TITLES['1.2.2']!);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(SUB_TITLES['1.4.2']!);
 });
 
 test('gagal (2 dari 4 = 50%): Belum lulus, Ulangi Latihan membuat percobaan baru, Tinjau Materi ke tab Pelajari, berikutnya tetap terkunci; skor terbaik dipertahankan', async ({ page, context }) => {
   const p = await mk('drl-f');
   await context.addCookies(p.cookies);
-  await learnFast(page, '1.2.1');
-  await openDrill(page, '1.2.1');
+  await learnFast(page, '1.4.1');
+  await openDrill(page, '1.4.1');
   await page.getByRole('button', { name: 'Mulai Latihan' }).click();
   const firstUrl = await (async () => {
     await expect(page).toHaveURL(/attempt=/);
@@ -164,11 +164,11 @@ test('gagal (2 dari 4 = 50%): Belum lulus, Ulangi Latihan membuat percobaan baru
   await expect(page.getByRole('button', { name: 'Ulangi Latihan' })).toBeVisible();
   await shot(page, `drill-fail-${test.info().project.name}`);
 
-  // Gerbang: tetap belum COMPLETED; 1.2.2 masih terkunci; skor terbaik tercatat.
-  const sub = await subOf(page, '1.2.1');
+  // Gerbang: tetap belum COMPLETED; 1.4.2 masih terkunci; skor terbaik tercatat.
+  const sub = await subOf(page, '1.4.1');
   expect(sub.status).toBe('IN_PROGRESS');
   expect(sub.best_score_percent).toBe(50);
-  expect((await subOf(page, '1.2.2')).status).toBe('LOCKED');
+  expect((await subOf(page, '1.4.2')).status).toBe('LOCKED');
 
   // Tinjau Materi -> tab Pelajari; kembali ke Latihan menampilkan ringkasan dengan skor terbaik.
   await page.getByRole('button', { name: 'Tinjau Materi' }).click();
@@ -184,27 +184,27 @@ test('gagal (2 dari 4 = 50%): Belum lulus, Ulangi Latihan membuat percobaan baru
   // Selesaikan percobaan kedua dengan buruk lalu gunakan "Ulangi Latihan" langsung dari layar hasil.
   await runAsserting(page, 4, (prompt) => (prompt === D121.mcq ? 'right' : 'wrong'));
   await expect(page.getByTestId('score-percent')).toHaveText('25%');
-  expect((await subOf(page, '1.2.1')).best_score_percent, 'skor terbaik tidak turun').toBe(50);
+  expect((await subOf(page, '1.4.1')).best_score_percent, 'skor terbaik tidak turun').toBe(50);
   await page.getByRole('button', { name: 'Ulangi Latihan' }).click();
   await expect(page.getByTestId('question-counter')).toHaveText('Soal 1 dari 4');
   expect(page.url()).not.toBe(secondUrl);
   await runAsserting(page, 4, () => 'right');
   await expect(page.getByTestId('score-percent')).toHaveText('100%');
   await expect(page.getByRole('status').filter({ hasText: /^Lulus$/ })).toBeVisible();
-  expect((await subOf(page, '1.2.1')).status).toBe('COMPLETED');
-  expect((await subOf(page, '1.2.2')).status).toBe('UNLOCKED');
+  expect((await subOf(page, '1.4.1')).status).toBe('COMPLETED');
+  expect((await subOf(page, '1.4.2')).status).toBe('UNLOCKED');
   // Skor terbaik tidak turun ketika dikerjakan ulang lebih buruk.
-  const detail = (await apiGet<{ data: { drill: { assessment_set_id: string } } }>(page, '/api/v1/sub-modules/1.2.1')).body.data;
+  const detail = (await apiGet<{ data: { drill: { assessment_set_id: string } } }>(page, '/api/v1/sub-modules/1.4.1')).body.data;
   const again = await apiPost<{ data: { id: string; questions: Array<{ prompt: string }> } }>(page, '/api/v1/attempts', { assessment_set_id: detail.drill.assessment_set_id });
   expect(again.status).toBe(201);
-  expect((await subOf(page, '1.2.1')).best_score_percent).toBe(100);
+  expect((await subOf(page, '1.4.1')).best_score_percent).toBe(100);
 });
 
 test('refresh di tengah drill melanjutkan di soal yang benar dengan jawaban tersimpan', async ({ page, context }) => {
   const p = await mk('drl-r');
   await context.addCookies(p.cookies);
-  await learnFast(page, '1.2.1');
-  await openDrill(page, '1.2.1');
+  await learnFast(page, '1.4.1');
+  await openDrill(page, '1.4.1');
   await page.getByRole('button', { name: 'Mulai Latihan' }).click();
   await expect(page).toHaveURL(/attempt=/);
   const attemptId = /attempt=([0-9a-f-]{36})/.exec(page.url())![1]!;
@@ -225,7 +225,7 @@ test('refresh di tengah drill melanjutkan di soal yang benar dengan jawaban ters
   expect(att.body.data).toMatchObject({ answered_count: 2, current_index: 2 });
   // "Mulai Latihan" pada tab memulihkan attempt yang sama (bukan membuat baru).
   const resume = await apiPost<{ data: { id: string; resumed: boolean } }>(page, '/api/v1/attempts', {
-    assessment_set_id: (await apiGet<{ data: { drill: { assessment_set_id: string } } }>(page, '/api/v1/sub-modules/1.2.1')).body.data.drill.assessment_set_id,
+    assessment_set_id: (await apiGet<{ data: { drill: { assessment_set_id: string } } }>(page, '/api/v1/sub-modules/1.4.1')).body.data.drill.assessment_set_id,
   });
   expect(resume.status).toBe(200);
   expect(resume.body.data).toMatchObject({ id: attemptId, resumed: true });
@@ -307,15 +307,15 @@ test('10 tipe soal: renderer per tipe, kredit parsial, batas kata, hasil berbobo
 test('keyboard saja: pintasan angka/huruf memilih opsi, Enter memeriksa dan melanjutkan', async ({ page, context }) => {
   const p = await mk('drl-k');
   await context.addCookies(p.cookies);
-  unlockCode(p, '1.2.2');
-  await learnFast(page, '1.2.2');
-  await openDrill(page, '1.2.2');
+  unlockCode(p, '1.4.2');
+  await learnFast(page, '1.4.2');
+  await openDrill(page, '1.4.2');
   await page.getByRole('button', { name: 'Mulai Latihan' }).click();
   for (let i = 0; i < 2; i++) {
     await expect(page.getByTestId('question-counter')).toHaveText(`Soal ${i + 1} dari 2`);
     const prompt = await currentPrompt(page);
     const a = ANSWERS.get(prompt)!;
-    if (a.t !== 'mcq') throw new Error('fixture 1.2.2 harus MCQ');
+    if (a.t !== 'mcq') throw new Error('fixture 1.4.2 harus MCQ');
     const texts = await page.locator('main label span[lang="en"]').allInnerTexts();
     const idx = texts.indexOf(a.right);
     expect(idx).toBeGreaterThanOrEqual(0);

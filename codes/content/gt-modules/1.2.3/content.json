@@ -3,10 +3,10 @@
   "sub_modules": [
     {
       "tier_number": 1,
-      "module_code": "1.1",
+      "module_code": "1.2",
       "module_category": "GRAMMAR",
       "sub_module_title": "Phrases: Noun Phrase, Adjective Phrase, Adverbial Phrase, & Prepositional Phrase",
-      "sub_module_code": "1.1.8",
+      "sub_module_code": "1.2.3",
       "passing_score_percent": 75,
       "origin": "AI_GENERATED_REVIEWED",
       "source_code": "OWN",

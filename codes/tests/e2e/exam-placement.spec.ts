@@ -272,7 +272,7 @@ test('placement tidak tersedia bila sudah ada progres (PROGRESS_EXISTS) dan POST
   const p = await fresh('pl-block');
   await signIn(context, p);
   const ids = await examIds(page.request);
-  await completeSubModule(page.request, '1.3.2');
+  await completeSubModule(page.request, '1.5.2');
   const st = await status(page.request);
   expect(st.available).toBe(false);
   expect(st.blocked_reason).toBe('PROGRESS_EXISTS');

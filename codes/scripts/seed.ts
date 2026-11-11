@@ -4,6 +4,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { getDb, closeDb, type Tx } from '../src/server/db';
 import * as schema from '../src/db/schema';
 import { MODULE_SEEDS, SUB_MODULE_SEEDS, TIER_SEEDS } from '../src/server/content/curriculum-structure';
+import { renumberC24 } from '../src/server/content/renumber-c24';
 import {
   BAND_SEED_LABEL,
   BAND_SEED_LABEL_GT,
@@ -100,7 +101,15 @@ export const seedModules: SeedModule[] = [
     },
   },
   {
-    // SPEC-004 + C-22: 4 Tier, 13 Modul, 40 Sub-Modul berstatus DRAFT.
+    // C-24: basis data lama (Modul 1.1 berisi 9 sub-modul) dimigrasi ke 15 modul sebelum struktur baru disemai.
+    name: 'curriculum-renumber-c24',
+    run: async (tx) => {
+      const r = await renumberC24(tx);
+      if (r.migrated) console.log(`[seed] C-24: ${r.moved} sub-modul dipindah ke modul baru`);
+    },
+  },
+  {
+    // SPEC-004 + C-22 + C-24: 4 Tier, 15 Modul, 40 Sub-Modul berstatus DRAFT.
     name: 'curriculum-structure',
     run: async (tx) => {
       await tx

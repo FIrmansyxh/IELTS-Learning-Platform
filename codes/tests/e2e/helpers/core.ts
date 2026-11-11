@@ -79,12 +79,12 @@ export function ensureCoreContent(): void {
 
 const FAKE = '00000000-0000-4000-8000-000000000001';
 const WARM_PAGES = [
-  '/', '/peta', '/profil', '/placement', '/belajar/1.2.1', '/belajar/1.2.1?tab=latihan', '/belajar/9.9.9',
+  '/', '/peta', '/profil', '/placement', '/belajar/1.4.1', '/belajar/1.4.1?tab=latihan', '/belajar/9.9.9',
   `/ujian/mulai/${FAKE}`, `/ujian/${FAKE}`, `/ujian/${FAKE}/hasil`,
 ];
 const WARM_GET = [
   '/api/v1/curriculum/tree', '/api/v1/me/last-learned', '/api/v1/me/stats', '/api/v1/me/points', '/api/v1/band-tables/active', '/api/v1/placement',
-  '/api/v1/sub-modules/1.2.1', `/api/v1/exams/${FAKE}/intro`, `/api/v1/attempts/${FAKE}`, `/api/v1/attempts/${FAKE}/result`, `/api/v1/assets/${FAKE}/file`, '/api/v1/me/active-track',
+  '/api/v1/sub-modules/1.4.1', `/api/v1/exams/${FAKE}/intro`, `/api/v1/attempts/${FAKE}`, `/api/v1/attempts/${FAKE}/result`, `/api/v1/assets/${FAKE}/file`, '/api/v1/me/active-track',
 ];
 const WARM_POST = [
   '/api/v1/attempts', `/api/v1/attempts/${FAKE}/submit`, `/api/v1/attempts/${FAKE}/sections/${FAKE}/start`, `/api/v1/attempts/${FAKE}/sections/${FAKE}/submit`,
