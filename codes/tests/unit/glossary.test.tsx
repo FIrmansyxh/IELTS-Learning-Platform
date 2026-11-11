@@ -1,5 +1,5 @@
 /** @vitest-environment jsdom */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { GlossaryView } from '@/components/glossary/glossary-view';
 import { TERMS } from '@/lib/glossary-terms';
@@ -89,9 +89,30 @@ describe('GlossaryView', () => {
     expect(screen.getByTestId('verb-row-write')).toBeTruthy();
   });
 
+  it('filter pola A-B-C, A-B-A, A-B-B, A-A-A, dan Beraturan, lengkap dengan penjelasan', () => {
+    render(<GlossaryView />);
+    const guide = () => screen.getByTestId('pattern-guide').textContent ?? '';
+    expect(guide()).toContain('Apa arti A-B-C');
+    fireEvent.click(screen.getByRole('button', { name: /^A-B-C/ }));
+    expect(screen.getByTestId('verb-row-go')).toBeTruthy();
+    expect(screen.queryByTestId('verb-row-buy')).toBeNull();
+    expect(guide()).toContain('Ketiga bentuk berbeda semua');
+    fireEvent.click(screen.getByRole('button', { name: /^A-B-A/ }));
+    expect(screen.getByTestId('verb-row-come')).toBeTruthy();
+    expect(screen.queryByTestId('verb-row-go')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /^A-B-B/ }));
+    expect(screen.getByTestId('verb-row-buy')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /^A-A-A/ }));
+    expect(screen.getByTestId('verb-row-put')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /^Beraturan/ }));
+    expect(screen.getByTestId('verb-row-work')).toBeTruthy();
+    expect(screen.queryByTestId('verb-row-put')).toBeNull();
+    expect(screen.getByTestId('verb-count').textContent).toMatch(/^\d+ kata kerja$/);
+  });
+
   it('mode hafalan: sembunyikan V2, ketuk untuk membuka, dan reset', () => {
     render(<GlossaryView />);
-    fireEvent.click(screen.getByRole('button', { name: 'Sembunyikan V2' }));
+    fireEvent.click(screen.getByRole('button', { name: 'V2' }));
     const row = screen.getByTestId('verb-row-go');
     expect(within(row).queryByText('went')).toBeNull();
     fireEvent.click(within(row).getByRole('button', { name: 'Tampilkan V2 dari go' }));
@@ -110,5 +131,50 @@ describe('GlossaryView', () => {
     fireEvent.change(screen.getByLabelText('Cari istilah'), { target: { value: '' } });
     fireEvent.click(screen.getByRole('button', { name: 'IELTS' }));
     expect(screen.getAllByTestId('term-card').every((c) => c.textContent?.includes('IELTS'))).toBe(true);
+  });
+
+  it('audio: mengucapkan 5 bentuk berurutan dengan pelan, melewati bentuk yang disembunyikan', () => {
+    vi.useFakeTimers();
+    const spoken: Array<{ text: string; rate: number }> = [];
+    class FakeUtterance {
+      text: string;
+      rate = 1;
+      lang = '';
+      voice: unknown = null;
+      onend: (() => void) | null = null;
+      onerror: (() => void) | null = null;
+      constructor(text: string) {
+        this.text = text;
+      }
+    }
+    vi.stubGlobal('SpeechSynthesisUtterance', FakeUtterance);
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        getVoices: () => [],
+        cancel: () => undefined,
+        speak: (u: FakeUtterance) => {
+          spoken.push({ text: u.text, rate: u.rate });
+          u.onend?.();
+        },
+      },
+    });
+    try {
+      render(<GlossaryView />);
+      fireEvent.click(screen.getAllByRole('button', { name: 'Dengarkan lafal go' })[0]!);
+      vi.advanceTimersByTime(10_000);
+      expect(spoken.map((s) => s.text)).toEqual(['go', 'went', 'gone', 'going', 'goes']);
+      expect(spoken.every((s) => s.rate < 0.8)).toBe(true);
+
+      spoken.length = 0;
+      fireEvent.click(screen.getByRole('button', { name: 'V3' }));
+      fireEvent.click(screen.getAllByRole('button', { name: 'Dengarkan lafal go' })[0]!);
+      vi.advanceTimersByTime(10_000);
+      expect(spoken.map((s) => s.text)).toEqual(['go', 'went', 'going', 'goes']);
+    } finally {
+      vi.useRealTimers();
+      vi.unstubAllGlobals();
+      Reflect.deleteProperty(window, 'speechSynthesis');
+    }
   });
 });
