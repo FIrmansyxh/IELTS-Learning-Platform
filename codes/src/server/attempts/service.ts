@@ -53,6 +53,7 @@ import {
   toNumeric,
   toPublicQuestion,
   type AttemptState,
+  type Served,
 } from './engine';
 import { assessmentTypeHandlers } from './handlers';
 import { attemptCompletedHooks, type ScoreSummary } from './hooks';
@@ -578,7 +579,19 @@ export async function submitAnswer(
     const existing = all.find((a) => a.questionId === questionId);
     const practice = attempt.mode === 'PRACTICE';
 
-    if (isMock) {
+    // Simulasi: bentuk respons standar (option_ids/choice/text/pairs/...) dinilai mesin soal yang sama dengan mode
+    // lain memakai `served` dari state simulasi, sehingga MCQ_MULTI, MATCHING, REORDER, dan soal multi-poin benar.
+    const mockServed = isMock ? (mockStateOf(attempt).served?.[questionId] as Served | undefined) : undefined;
+    const mockShape = isMock && mockServed && !('selected' in rawResponse) ? parseResponse(q, mockServed, rawResponse) : null;
+    if (mockShape && !mockShape.ok) throw new ApiError('VALIDATION_ERROR', { details: mockShape.issues });
+
+    if (mockShape?.ok) {
+      shapeResponse = mockShape.response;
+      const g = gradeAnswer(q, mockServed!, mockShape.response);
+      isCorrect = g.isCorrect;
+      scoreH = g.scoreH;
+    } else if (isMock) {
+      // Bentuk lama `{ selected }` (klien simulasi sebelum perbaikan) tetap diterima.
       shapeResponse = rawResponse;
 
       const userChoice = typeof rawResponse.selected === 'string'

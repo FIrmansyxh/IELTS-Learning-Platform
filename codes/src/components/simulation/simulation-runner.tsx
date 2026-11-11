@@ -13,7 +13,8 @@ import {
 } from 'lucide-react';
 import { simulationsApi } from '@/lib/api/simulations';
 import { attemptsApi } from '@/lib/api/attempts';
-import type { AnswerResponse, QuestionPublic } from '@/contracts/attempts';
+import { AnswerResponseSchema, type AnswerResponse, type QuestionPublic } from '@/contracts/attempts';
+import { QuestionRenderer } from '@/components/quiz/question-renderer';
 import type { SimulationPart, SimulationSection, SimulationSubmission } from '@/contracts/simulation';
 import { fmt, id } from '@/i18n/id';
 import { Button } from '@/components/ui/button';
@@ -471,52 +472,45 @@ function ObjectiveQuestionCard({
   response: Record<string, unknown> | undefined;
   onAnswer: (resp: Record<string, unknown>) => void;
 }) {
-  const isMcq = question.question_type === 'MCQ_SINGLE';
-  const isShort = question.question_type === 'SHORT_ANSWER';
+  // Semua tipe soal (MCQ tunggal/ganda, TFNG/YNNG, isian, matching, reorder, error recognition) memakai renderer
+  // yang sama dengan Active Drill dan Ujian. Jawaban disimpan setelah jeda singkat agar mengetik tidak mengirim
+  // permintaan per ketukan; jawaban kosong/tak lengkap (null) tidak dikirim.
+  const [value, setValue] = React.useState<AnswerResponse | null>(() => {
+    const parsed = AnswerResponseSchema.safeParse(response);
+    return parsed.success ? parsed.data : null;
+  });
+  const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pending = React.useRef<AnswerResponse | null>(null);
+  const onAnswerRef = React.useRef(onAnswer);
+  onAnswerRef.current = onAnswer;
+  React.useEffect(
+    () => () => {
+      // Keluar dari kartu (ganti bagian/section): simpan jawaban yang masih tertunda.
+      if (timer.current) clearTimeout(timer.current);
+      if (pending.current) onAnswerRef.current(pending.current);
+    },
+    [],
+  );
+  const onChange = (next: AnswerResponse | null) => {
+    setValue(next);
+    if (timer.current) clearTimeout(timer.current);
+    pending.current = next;
+    if (!next) return;
+    timer.current = setTimeout(() => {
+      timer.current = null;
+      pending.current = null;
+      onAnswer(next);
+    }, 600);
+  };
 
   return (
-    <Card className="p-4">
+    <Card className="p-4" data-testid="sim-question" data-question-type={question.question_type}>
       <div className="flex items-start gap-3">
         <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold">
           {index}
         </span>
-        <div className="flex-1 space-y-3">
-          <p className="whitespace-pre-line text-sm font-medium">{question.prompt}</p>
-
-          {isMcq && question.options && (
-            <div className="space-y-2">
-              {question.options.map((opt) => {
-                const optText = typeof opt === 'string' ? opt : opt.text;
-                const selected = response?.selected === optText;
-                return (
-                  <button
-                    key={optText}
-                    type="button"
-                    onClick={() => onAnswer({ selected: optText })}
-                    className={`flex w-full items-center gap-3 rounded-lg border p-2.5 text-left text-sm transition-all ${
-                      selected ? 'border-primary bg-primary/10 font-medium' : 'hover:bg-muted/50'
-                    }`}
-                  >
-                    <div
-                      className={`size-4 rounded-full border ${
-                        selected ? 'border-primary bg-primary' : 'border-muted-foreground'
-                      }`}
-                    />
-                    <span>{optText}</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {isShort && (
-            <Input
-              placeholder="Ketik jawaban Anda..."
-              value={typeof response?.text === 'string' ? response.text : ''}
-              onChange={(e) => onAnswer({ text: e.target.value })}
-              className="max-w-md text-sm"
-            />
-          )}
+        <div className="min-w-0 flex-1 text-sm [&_legend]:text-sm [&_legend]:font-medium">
+          <QuestionRenderer question={question} value={value} onChange={onChange} disabled={false} feedback={null} />
         </div>
       </div>
     </Card>
