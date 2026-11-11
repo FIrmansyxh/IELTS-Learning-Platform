@@ -235,6 +235,7 @@ export type RecordingPreferencesRequest = z.infer<typeof RecordingPreferencesReq
 export const AiStatusSchema = z.object({
   enabled: z.boolean(),
   available: z.boolean(),
+  speaking_enabled: z.boolean(),
   queue: z.object({
     waiting: z.number().int(),
     estimated_wait_sec: z.number().int().nullable(),

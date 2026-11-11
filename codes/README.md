@@ -78,6 +78,15 @@ llama-server -hf ggml-org/gpt-oss-20b-GGUF:MXFP4 --device Vulkan0 -ngl 99 --n-cp
 ```
 Kebutuhan terukur: sekitar 3,4 GB VRAM dan 10-11 GB RAM; generasi sekitar 7,6 token/dtk, satu evaluasi sekitar 70 dtk (median benchmark), evaluasi pertama setelah server menyala bisa lebih dari 250 dtk. Naikkan `AI_JOB_TIMEOUT_SEC` ke 300 (lihat `.env.example`). Skor LLM lokal bersifat **indikatif**: pada benchmark kasus baru, 18 dari 24 evaluasi dalam rentang acuan (MAE band 0,66), skala cenderung terkompresi (surat lemah dinilai terlalu tinggi, tulisan sangat bagus terlalu rendah). Jangan dianggap setara penguji IELTS.
 
-Lalu di `.env`: `AI_ENABLED=true`, `LLAMACPP_BASE_URL=http://127.0.0.1:8080`, `SPEAKING_AI_ENABLED=false`. LLM hanya menilai Writing; Speaking dilatih lewat prompt AI suara pihak ketiga (tombol "Salin prompt" pada soal Speaking).
+Lalu di `.env`: `AI_ENABLED=true`, `LLAMACPP_BASE_URL=http://127.0.0.1:8080`.
+
+### Speaking lokal (ADR-004 addendum 3): whisper.cpp + LLM yang sama
+Jawaban Speaking direkam di browser, diubah menjadi teks oleh `whisper-server` (whisper.cpp), lalu dinilai 4 kriteria oleh LLM penilai Writing. Semua di laptop, tanpa internet. Pronunciation hanya perkiraan dari transkrip.
+
+1. Unduh `whisper-bin-x64.zip` (build CPU) dari [rilis whisper.cpp](https://github.com/ggml-org/whisper.cpp/releases) dan ekstrak, misalnya ke `%LOCALAPPDATA%\ielts-stt\bin`.
+2. Unduh model `ggml-small.en.bin` (466 MB) dari [ggerganov/whisper.cpp](https://huggingface.co/ggerganov/whisper.cpp).
+3. Di `.env`: `SPEAKING_AI_ENABLED=true`, `STT_DRIVER=whisper`, `STT_BASE_URL=http://127.0.0.1:8081`, `WHISPER_BIN=<path whisper-server.exe>`, `WHISPER_MODEL_PATH=<path ggml-small.en.bin>`, opsional `WHISPER_ARGS=-t 8`.
+
+`start:local` menyalakan `whisper-server` sendiri (log `data/logs/whisper-server.log`). Build CPU dipilih agar tidak berebut VRAM dengan llama-server; jawaban 2 menit ditranskripsi sekitar 40 dtk di i9-11900H. `npm run doctor` menampilkan baris "Penilai Speaking (STT)". Tombol "Salin prompt" untuk Claude/ChatGPT/Gemini mode suara tetap ada di bawah perekam sebagai cadangan; `SPEAKING_AI_ENABLED=false` menjadikannya satu-satunya jalur.
 
 Benchmark model: `npx tsx scripts/bench-gt-writing.mts --out <berkas.json> --reps 3 --hint "text,calib" [--cases heldout] --models "label=repo:quant|flag server,..."` (set `LLAMA_CACHE`). `--cases heldout` memakai kasus yang tidak dipakai menyetel prompt (`scripts/bench/gt-cases-heldout.mts`).

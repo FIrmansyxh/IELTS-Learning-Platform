@@ -118,6 +118,17 @@ Temuan: gpt-oss-20b bertahan dengan penurunan wajar. Semua enam kasus di luar re
 
 **Belum dilakukan:** status ADR ini masih `Proposed`; sisa variabel `OLLAMA_*` di `.env.example` (driver `ollama` masih didukung); perbaikan komentar generik di atas.
 
+## Addendum 2026-11-11 (3): Speaking dinilai AI lokal penuh (disetujui human)
+
+Atas permintaan human ("iya aktifkan tapi untuk prompt tetap buatkan untuk jaga-jaga saja"), Keputusan #3 dan #5 (penundaan penilaian Speaking otomatis) dicabut.
+
+1. **Speaking dinilai di laptop.** Rekam di browser, STT whisper.cpp lokal (`whisper-server`, build CPU), lalu penilaian 4 kriteria oleh LLM penilai yang sama dengan Writing (gpt-oss-20b, llama-server). Pipeline SPEC-013 yang sudah ada dipakai; `SPEAKING_AI_ENABLED=true`, `STT_DRIVER=whisper`.
+2. **STT di CPU, bukan GPU.** llama-server gpt-oss-20b sudah memakai sekitar 4,5 dari 6 GB VRAM; whisper di GPU berisiko kehabisan memori. Build CPU (`whisper-bin-x64`, i9-11900H) dengan model `ggml-small.en` cukup cepat untuk jawaban maksimal 2 menit. Model lain dapat dipasang lewat env tanpa ubah kode.
+3. **start-local menyalakan whisper-server** seperti llama-server (opsional, loopback, log di `data/logs/whisper-server.log`) dari `WHISPER_BIN`, `WHISPER_MODEL_PATH`, `STT_BASE_URL`.
+4. **Prompt eksternal tetap ada sebagai cadangan.** Setiap soal Speaking tetap menampilkan "Salin prompt" untuk Claude/ChatGPT/Gemini mode suara beserta input skor manual (Addendum SPEC-013 2026-11-08), di bawah perekam. Bila penilai Speaking lokal nonaktif, kartu prompt menjadi tampilan utama seperti sebelumnya.
+5. **Batasan yang diterima:** Pronunciation tetap perkiraan dari transkrip dan keyakinan STT (`pronunciation_estimated`); interaksi rekam lalu kirim, bukan percakapan dua arah. Penilaian lafal berbasis fonem adalah kandidat tahap berikutnya.
+6. **Offline (ADR-005 #5):** evaluasi Speaking tidak lagi butuh internet; pengecualian hanya berlaku untuk jalur cadangan AI pihak ketiga.
+
 ## Consequences
 
 - Perlu spec baru/revisi: SPEC-012 (Writing GT), SPEC-013 (Speaking via prompt eksternal), SPEC-009 (tabel band GT), SPEC-004 (kontrak konten v1.2), spec baru Learning Track dan Mix Builder.
@@ -131,3 +142,4 @@ Temuan: gpt-oss-20b bertahan dengan penurunan wajar. Semua enam kasus di luar re
 | 2026-11-08 | Orchestrator | ADR dibuat (Proposed) |
 | 2026-11-11 | Claude (atas permintaan human) | Addendum benchmark putaran 2: Qwen3.5, Gemma 4, gpt-oss-20b, Qwen3.6-35B; koreksi penyebab kegagalan Qwen3-8B |
 | 2026-11-11 | Claude (atas permintaan human) | Addendum 2: putaran 3-4 (held-out), kebutuhan sumber daya terukur, penetapan gpt-oss-20b MXFP4 sebagai penilai Writing |
+| 2026-11-11 | Claude (atas permintaan human) | Addendum 3: Speaking dinilai AI lokal penuh (whisper.cpp CPU + gpt-oss-20b); prompt eksternal dipertahankan sebagai cadangan |

@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { apiFetch } from '@/lib/api/client';
 import { PassageMarkdown } from '@/components/reading/passage-markdown';
+import { SpeakingTaskPanel, useSpeakingEnabled } from '@/components/speaking/speaking-task-panel';
 
 export function SimulationRunner({ attemptId }: { attemptId: string }) {
   const router = useRouter();
@@ -638,11 +639,13 @@ function SpeakingWorkspaceSection({
   onSubmitted: () => void;
 }) {
   const [activePart, setActivePart] = React.useState<1 | 2 | 3>(1);
+  const speaking = useSpeakingEnabled();
 
   const partQuestions = questions.filter(
     (q) => q.ai_task?.part === activePart || (q as unknown as { part?: number }).part === activePart,
   );
   const partFirstQ = partQuestions[0];
+  const partDone = submissions.some((s) => partQuestions.some((q) => q.question_id === s.question_id));
 
   const [copied, setCopied] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
@@ -721,9 +724,31 @@ function SpeakingWorkspaceSection({
 
       {/* Guide Banner */}
       <div className="rounded-lg bg-primary/10 p-4 text-xs leading-relaxed text-primary">
-        {id.simulation.runner.speakingGuide}
+        {speaking.enabled ? id.simulation.runner.speakingLocalGuide : id.simulation.runner.speakingGuide}
       </div>
 
+      {speaking.enabled && partFirstQ ? (
+        partDone ? (
+          <p className="rounded-lg border p-4 text-sm text-muted-foreground">{id.simulation.runner.speakingSubmitted}</p>
+        ) : (
+          <SpeakingTaskPanel
+            key={`spk-part-${activePart}`}
+            context={{ kind: `SPEAKING_PART${activePart}`, attempt_id: attemptId, question_id: partFirstQ.question_id }}
+            promptText={
+              activePart === 2
+                ? partFirstQ.prompt
+                : partQuestions.map((q, i) => `${i + 1}. ${q.prompt}`).join('\n')
+            }
+            cuePoints={activePart === 2 ? partFirstQ.ai_task?.cue_points : undefined}
+            prepSeconds={activePart === 2 ? 60 : 0}
+            recordSeconds={120}
+            externalPrompt={fullPromptText}
+            onSubmitted={onSubmitted}
+            onExternalSaved={onSubmitted}
+          />
+        )
+      ) : (
+      <>
       {/* Prompt Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -809,6 +834,8 @@ function SpeakingWorkspaceSection({
           </div>
         </CardContent>
       </Card>
+      </>
+      )}
     </div>
   );
 }

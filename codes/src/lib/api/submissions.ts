@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+  AiStatusSchema,
   EvaluationSchema,
   SubmissionQuotaSchema,
   SubmissionSchema,
@@ -21,6 +22,9 @@ export const submissionsApi = {
 
   retry: async (submissionId: string) =>
     (await apiFetch(`/submissions/${submissionId}/retry`, { method: 'POST', schema: WithQuota })).data,
+
+  aiStatus: async (signal?: AbortSignal) =>
+    (await apiFetch('/ai/status', { schema: z.object({ data: AiStatusSchema }), signal })).data,
 
   selfAssess: async (submissionId: string, criteria_scores: Record<string, number>) =>
     (

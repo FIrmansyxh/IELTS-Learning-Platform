@@ -152,6 +152,24 @@ async function llmCheck(): Promise<DoctorCheck> {
   }
 }
 
+/** Penilai Speaking (ADR-004 Addendum 3): STT whisper.cpp; penilaian memakai LLM yang sama dengan Writing. */
+async function sttCheck(): Promise<DoctorCheck> {
+  const name = 'Penilai Speaking (STT)';
+  if (!config.aiEnabled() || !config.speakingAiEnabled()) {
+    return { name, status: 'warn', detail: 'Nonaktif (AI_ENABLED/SPEAKING_AI_ENABLED): Speaking memakai prompt AI suara pihak ketiga' };
+  }
+  if ((process.env.STT_DRIVER ?? 'whisper') === 'mock') return { name, status: 'warn', detail: 'STT_DRIVER=mock: transkrip tiruan, bukan suara asli' };
+  const { getSttClient } = await import('../ai/stt');
+  try {
+    const up = await getSttClient().ping();
+    return up
+      ? { name, status: 'ok', detail: `aktif (whisper.cpp ${process.env.STT_MODEL ?? ''})`.trim() }
+      : { name, status: 'fail', detail: 'whisper-server tidak menjawab. Isi WHISPER_BIN/WHISPER_MODEL_PATH lalu jalankan start:local, lihat README.' };
+  } catch (e) {
+    return { name, status: 'fail', detail: (e as Error).message.slice(0, 100) };
+  }
+}
+
 function hostCheck(): DoctorCheck {
   const host = process.env.HOSTNAME ?? '127.0.0.1';
   const loopback = host === 'localhost' || host === '127.0.0.1' || host === '::1';
@@ -162,7 +180,7 @@ function hostCheck(): DoctorCheck {
 
 export const OFFLINE_NOTES = [
   'Video YouTube di materi butuh internet (kartu video memberi pesan bila offline).',
-  'Evaluasi Speaking lewat Claude/GPT/Gemini dilakukan di aplikasi lain di browser dan butuh internet.',
+  'Evaluasi Speaking berjalan di laptop (whisper.cpp + LLM lokal); hanya jalur cadangan lewat Claude/GPT/Gemini yang butuh internet.',
   'Build pertama mengunduh font Google; model LLM diunduh sekali.',
 ];
 
@@ -202,5 +220,5 @@ export async function ffmpegCheck(): Promise<DoctorCheck> {
 
 export async function runDoctor(): Promise<DoctorCheck[]> {
   const leftover = postgresLeftoverCheck();
-  return [nodeCheck(), envCheck(), hostCheck(), ...(await dbChecks()), ...(leftover ? [leftover] : []), await assetsCheck(), await llmCheck(), await ffmpegCheck()];
+  return [nodeCheck(), envCheck(), hostCheck(), ...(await dbChecks()), ...(leftover ? [leftover] : []), await assetsCheck(), await llmCheck(), await sttCheck(), await ffmpegCheck()];
 }

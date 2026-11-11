@@ -196,6 +196,38 @@ export function planLlama(env) {
   };
 }
 
+/**
+ * Rencana `whisper-server` (STT Speaking, ADR-004 Addendum 3) dari env gabungan. Murni; probe dilakukan pemanggil.
+ * @returns {{ kind: 'skip' } | { kind: 'warn', reason: string } | { kind: 'start', baseUrl: string, healthUrl: string, bin: string, args: string[], missingModel: boolean }}
+ */
+export function planWhisper(env) {
+  if (env.AI_ENABLED !== 'true' || env.SPEAKING_AI_ENABLED !== 'true' || (env.STT_DRIVER ?? 'whisper') !== 'whisper') {
+    return { kind: 'skip' };
+  }
+  let url;
+  try {
+    url = new URL(env.STT_BASE_URL || 'http://127.0.0.1:8081');
+  } catch {
+    return { kind: 'warn', reason: 'STT_BASE_URL tidak valid' };
+  }
+  if (!isLoopbackUrlHost(url.hostname)) return { kind: 'warn', reason: 'STT_BASE_URL bukan loopback' };
+  const base = `${url.protocol}//${url.host}`;
+  const port = url.port || (url.protocol === 'https:' ? '443' : '80');
+  const extra = (env.WHISPER_ARGS || '').split(/\s+/).filter(Boolean);
+  if (extra.some((a) => /^(--host|--port)(=|$)/.test(a))) {
+    return { kind: 'warn', reason: 'WHISPER_ARGS tidak boleh memuat --host/--port (alamat dikunci ke 127.0.0.1 dan port dari STT_BASE_URL)' };
+  }
+  const model = env.WHISPER_MODEL_PATH;
+  return {
+    kind: 'start',
+    baseUrl: base,
+    healthUrl: `${base}/health`,
+    bin: env.WHISPER_BIN || 'whisper-server',
+    args: model ? ['-m', model, '--host', '127.0.0.1', '--port', port, '-l', 'en', ...extra] : [],
+    missingModel: !model,
+  };
+}
+
 // ---------------------------------------------------------------------------------------------
 // Dependensi nyata
 // ---------------------------------------------------------------------------------------------
@@ -427,8 +459,8 @@ export async function runStartLocal(argv, ctx) {
       });
     });
 
-  let llamaChild;
-  let llamaLogFd;
+  const sidecars = [];
+  const logFds = [];
   const killChild = (child, signal) => {
     try {
       child.kill(signal);
@@ -443,7 +475,7 @@ export async function runStartLocal(argv, ctx) {
     const timer = (deps.graceSleep ?? graceSleep)(SHUTDOWN_GRACE_MS).then(() => 'timeout');
     const winner = await Promise.race([Promise.all(all.map(exited)).then(() => 'done'), timer]);
     if (winner === 'timeout') for (const c of all) killChild(c, 'SIGKILL');
-    if (llamaLogFd !== undefined) deps.closeLog(llamaLogFd);
+    for (const fd of logFds.splice(0)) deps.closeLog(fd);
   };
 
   const offSignal = deps.onSignal(() => {
@@ -514,59 +546,68 @@ export async function runStartLocal(argv, ctx) {
       log('Build terbaru, dilewati.');
     }
 
-    // 10. llama-server opsional (tidak menunggu model siap)
-    const plan = planLlama(merged);
-    if (plan.kind === 'warn') warn(`Penilai Writing tidak dinyalakan: ${plan.reason}`);
-    else if (plan.kind === 'start') {
-      if (await probeOk(plan.healthUrl, deps.fetch)) {
-        log('llama-server sudah berjalan, dipakai ulang.');
-      } else if (plan.missingModel) {
-        warn('Penilai Writing tidak dinyalakan: LLAMACPP_MODEL_PATH/LLAMACPP_HF_REPO belum diisi');
-      } else {
-        const logFile = path.join(cwd, 'data', 'logs', 'llama-server.log');
-        try {
-          llamaLogFd = deps.openLog(logFile);
-        } catch {
-          llamaLogFd = undefined;
-        }
-        const stdio = llamaLogFd === undefined ? 'ignore' : ['ignore', llamaLogFd, llamaLogFd];
-        let child;
-        let spawnError;
-        try {
-          child = deps.spawn(plan.bin, plan.args, { cwd, env: childEnv, stdio, shell: false, windowsHide: true });
-        } catch (e) {
-          spawnError = e;
-        }
-        if (child) {
-          const spawned = await new Promise((resolve) => {
-            const t = setTimeout(() => resolve({ ok: true }), deps.spawnWaitMs ?? 300);
-            child.once('error', (e) => {
-              clearTimeout(t);
-              resolve({ ok: false, error: e });
-            });
-            child.once('spawn', () => {
-              clearTimeout(t);
-              resolve({ ok: true });
-            });
-          });
-          if (spawned.ok) {
-            llamaChild = child;
-            children.add(child);
-            log(`llama-server dijalankan (log: data/logs/llama-server.log); model dimuat di latar belakang.`);
-            exited(child).then(([code]) => {
-              children.delete(child);
-              if (!stopping) warn(`llama-server berhenti (kode ${code}). Penilai Writing tidak tersedia.`);
-            });
-          } else spawnError = spawned.error;
-        }
-        if (spawnError) {
-          const enoent = spawnError && spawnError.code === 'ENOENT';
-          warn(`Penilai Writing tidak dinyalakan: ${enoent ? 'biner tidak ditemukan' : spawnError.message || 'gagal dijalankan'}`);
-          if (llamaLogFd !== undefined) deps.closeLog(llamaLogFd);
-          llamaLogFd = undefined;
-        }
+    // 10. llama-server (penilai Writing/Speaking) dan whisper-server (STT Speaking), opsional; tidak menunggu model siap
+    const sidecar = async (plan, { name, label, logName }) => {
+      if (plan.kind === 'warn') {
+        warn(`${label} tidak dinyalakan: ${plan.reason}`);
+        return;
       }
-    }
+      if (plan.kind !== 'start') return;
+      if (await probeOk(plan.healthUrl, deps.fetch)) {
+        log(`${name} sudah berjalan, dipakai ulang.`);
+        return;
+      }
+      if (plan.missingModel) {
+        warn(`${label} tidak dinyalakan: ${name === 'llama-server' ? 'LLAMACPP_MODEL_PATH/LLAMACPP_HF_REPO' : 'WHISPER_MODEL_PATH'} belum diisi`);
+        return;
+      }
+      const logFile = path.join(cwd, 'data', 'logs', logName);
+      let fd;
+      try {
+        fd = deps.openLog(logFile);
+      } catch {
+        fd = undefined;
+      }
+      const stdio = fd === undefined ? 'ignore' : ['ignore', fd, fd];
+      let child;
+      let spawnError;
+      try {
+        child = deps.spawn(plan.bin, plan.args, { cwd, env: childEnv, stdio, shell: false, windowsHide: true });
+      } catch (e) {
+        spawnError = e;
+      }
+      if (child) {
+        const spawned = await new Promise((resolve) => {
+          const t = setTimeout(() => resolve({ ok: true }), deps.spawnWaitMs ?? 300);
+          child.once('error', (e) => {
+            clearTimeout(t);
+            resolve({ ok: false, error: e });
+          });
+          child.once('spawn', () => {
+            clearTimeout(t);
+            resolve({ ok: true });
+          });
+        });
+        if (spawned.ok) {
+          sidecars.push(child);
+          if (fd !== undefined) logFds.push(fd);
+          children.add(child);
+          log(`${name} dijalankan (log: data/logs/${logName}); model dimuat di latar belakang.`);
+          exited(child).then(([code]) => {
+            children.delete(child);
+            if (!stopping) warn(`${name} berhenti (kode ${code}). ${label} tidak tersedia.`);
+          });
+          return;
+        }
+        spawnError = spawned.error;
+      }
+      const enoent = spawnError && spawnError.code === 'ENOENT';
+      warn(`${label} tidak dinyalakan: ${enoent ? 'biner tidak ditemukan' : spawnError?.message || 'gagal dijalankan'}`);
+      if (fd !== undefined) deps.closeLog(fd);
+    };
+    await sidecar(planLlama(merged), { name: 'llama-server', label: 'Penilai Writing', logName: 'llama-server.log' });
+    if (stopping) return await finish(0);
+    await sidecar(planWhisper(merged), { name: 'whisper-server', label: 'Penilai Speaking', logName: 'whisper-server.log' });
     if (stopping) return await finish(0);
 
     // 11. server
@@ -603,7 +644,7 @@ export async function runStartLocal(argv, ctx) {
     // 12. tunggu sampai berhenti
     const [code] = await serverExit;
     if (stopping) return await finish(0);
-    if (llamaChild) killChild(llamaChild, 'SIGTERM');
+    for (const c of sidecars) killChild(c, 'SIGTERM');
     return await finish(code ?? 1);
   } catch (e) {
     return await finish(fail(`Galat tak terduga: ${e instanceof Error ? e.message : String(e)}`));

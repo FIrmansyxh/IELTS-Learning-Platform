@@ -2,7 +2,7 @@
 
 import { Sparkles } from 'lucide-react';
 import * as React from 'react';
-import { SpeakingExternalPromptCard } from '@/components/speaking/external-prompt-card';
+import { SpeakingTaskPanel } from '@/components/speaking/speaking-task-panel';
 import { WritingTaskPanel } from '@/components/writing/writing-task-panel';
 import { id } from '@/i18n/id';
 import type { RendererProps } from './answer-utils';
@@ -62,7 +62,18 @@ function Body(props: RendererProps) {
         props.attemptId && (part === 1 || part === 2 || part === 3)
           ? ({ kind: `SPEAKING_PART${part}`, attempt_id: props.attemptId, question_id: props.question.question_id } as const)
           : undefined;
-      return external ? <SpeakingExternalPromptCard prompt={external} context={context} /> : <AiTaskSlot kind="SPEAKING" />;
+      if (!external) return <AiTaskSlot kind="SPEAKING" />;
+      return (
+        <SpeakingTaskPanel
+          key={props.question.question_id}
+          context={context}
+          promptText={props.question.prompt}
+          cuePoints={props.question.ai_task?.cue_points}
+          prepSeconds={props.question.ai_task?.prep_seconds}
+          recordSeconds={props.question.ai_task?.record_seconds}
+          externalPrompt={external}
+        />
+      );
     }
   }
 }

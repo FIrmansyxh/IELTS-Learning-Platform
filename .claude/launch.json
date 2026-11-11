@@ -9,6 +9,13 @@
       "url": "http://127.0.0.1:3005"
     },
     {
+      "name": "ielts-uji-speaking",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["-e", "process.env.DATABASE_PATH='data/uji-speaking.db';process.argv=[process.argv[0],'start-local','--no-open','--port','3006'];import(require('url').pathToFileURL(require('path').resolve('codes/scripts/start-local.mjs')).href)"],
+      "port": 3006,
+      "url": "http://127.0.0.1:3006"
+    },
+    {
       "name": "ielts-dev",
       "runtimeExecutable": "node",
       "runtimeArgs": ["-e", "process.chdir('codes');process.argv=[process.argv[0],'next','dev','--turbopack','-H','127.0.0.1','-p','3017'];require(require('path').resolve('node_modules/next/dist/bin/next'))"],

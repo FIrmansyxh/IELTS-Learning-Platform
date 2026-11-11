@@ -4,7 +4,7 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
-import { rm } from 'node:fs/promises';
+import { mkdir, rm } from 'node:fs/promises';
 import { desc, eq } from 'drizzle-orm';
 import {
   aiEvaluations,
@@ -126,6 +126,9 @@ export async function processSttTranscription(
     const tmpDir = path.join(os.tmpdir(), `stt-${randomUUID()}`);
     const wavPath = path.join(tmpDir, 'audio.wav');
     try {
+      // Direktori sementara per job (SPEC-013 langkah 3); ffmpeg tidak membuat folder keluaran sendiri.
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- path dari os.tmpdir() + UUID
+      await mkdir(tmpDir, { recursive: true });
       await convertAudioToWav(rawFilePath, wavPath);
 
       // 4. Jalankan STT
@@ -220,9 +223,11 @@ export async function processSttTranscription(
     }
   } catch (err) {
     logger.error({ err: safeErr(err), submissionId }, 'stt_transcription_error');
+    // Galat konversi audio (ffmpeg) bukan galat server STT; bedakan agar pesan UI tepat dan tidak di-retry.
+    const code = (err as { code?: string }).code;
     const jobFail = {
       status: 'FAILED' as const,
-      errorCode: 'STT_UNREACHABLE',
+      errorCode: code === 'AUDIO_UNREADABLE' ? 'AUDIO_UNREADABLE' : 'STT_UNREACHABLE',
       finishedAt: new Date(),
       updatedAt: new Date(),
     };
