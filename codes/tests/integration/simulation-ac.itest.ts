@@ -32,6 +32,8 @@ import { GET as examHistoryRoute } from '@/app/api/v1/me/exam-history/route';
 import { POST as writingSubRoute } from '@/app/api/v1/submissions/writing/route';
 import { POST as speakingSubRoute } from '@/app/api/v1/submissions/speaking-external/route';
 import { POST as selfAssessRoute } from '@/app/api/v1/submissions/[submission_id]/self-assessment/route';
+import { GET as audioRoute } from '@/app/api/v1/attempts/[attempt_id]/audio/route';
+import { getStorage } from '@/server/storage';
 import { call, learnerSession } from './helpers';
 import {
   abundantPool,
@@ -585,6 +587,35 @@ describe('SPEC-023: bukti AC pasca-audit (integrasi)', () => {
       for (const q of r.json.data.questions) expect((await answer(user, id, q.question_id, { selected: 'True' })).status).toBe(200);
       const rs = await submitSection(user, id, 'READING');
       expect(rs.json.data).toMatchObject({ raw_score: 40, max_score: 40, band: 9 });
+    });
+
+    it('audio Listening simulasi dapat diputar lewat /attempts/:id/audio?asset= (bukan /assets/:id/file)', async () => {
+      await insertPool([...minimalPool(), listeningBank(1, 'AUD-L1'), listeningBank(2, 'AUD-L2'), listeningBank(3, 'AUD-L3'), listeningBank(4, 'AUD-L4')]);
+      const mp3 = Buffer.from('ID3fake-mp3-bytes');
+      const key = await getStorage().put(mp3, 'mp3');
+      await execute(db, sql`UPDATE content_assets SET storage_key = ${key} WHERE asset_code LIKE 'gt-listening/simac-%'`);
+      const c = await createSim(user, ['LISTENING']);
+      const id = c.json.data.attempt_id as string;
+      const audio = (url: string) =>
+        audioRoute(new Request(`http://localhost:3000${url}`, { headers: { cookie: user.cookie!, origin: 'http://localhost:3000' } }), {
+          params: Promise.resolve({ attempt_id: id }),
+        });
+
+      expect((await startSection(user, id, 'LISTENING')).status).toBe(200);
+      const parts = (await getSection(user, id, 'LISTENING')).json.data.parts as Array<{ listening: { audio_url: string } | null }>;
+      expect(parts).toHaveLength(4);
+      for (const p of parts) expect(p.listening!.audio_url).toMatch(new RegExp(`^/api/v1/attempts/${id}/audio\\?asset=[0-9a-f-]{36}$`));
+
+      const ok = await audio(parts[0]!.listening!.audio_url);
+      expect(ok.status).toBe(200);
+      expect(ok.headers.get('content-type')).toBe('audio/mpeg');
+      expect(Buffer.from(await ok.arrayBuffer())).toEqual(mp3);
+      // Asset di luar attempt ini -> 404; tanpa ?asset -> 404.
+      expect((await audio(`/api/v1/attempts/${id}/audio?asset=00000000-0000-4000-8000-000000000000`)).status).toBe(404);
+      expect((await audio(`/api/v1/attempts/${id}/audio`)).status).toBe(404);
+      // Setelah section dikumpulkan, audio tidak lagi dilayani.
+      expect((await submitSection(user, id, 'LISTENING')).status).toBe(200);
+      expect((await audio(parts[0]!.listening!.audio_url)).status).not.toBe(200);
     });
 
     it('AC-17: tabel progres tier/modul/sub-modul dan user_stats identik sebelum-sesudah, points_awarded=0, radar READING terbarui, riwayat memuat MOCK_TEST', async () => {

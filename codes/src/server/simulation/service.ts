@@ -297,7 +297,8 @@ export class SimulationService {
       let listening: SimulationPart['listening'] = null;
       if (p.listening_asset_id) {
         listening = {
-          audio_url: `/api/v1/assets/${p.listening_asset_id}/file`,
+          // Bukan /assets/:id/file: rute itu hanya melayani lampiran materi, sehingga audio Listening selalu 404.
+          audio_url: `/api/v1/attempts/${attempt.id}/audio?asset=${p.listening_asset_id}`,
           mime_type: 'audio/mpeg',
           duration_sec: p.audio_duration_sec ?? 0,
           note: p.attribution_text ?? null,
