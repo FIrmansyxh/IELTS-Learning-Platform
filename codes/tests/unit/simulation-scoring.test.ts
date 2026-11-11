@@ -97,3 +97,17 @@ describe('Simulation Scoring & Band Calculations (AC-4, AC-20, D4)', () => {
     expect(computeSpeakingBand(null, 6.0, 6.0)).toBeNull();
   });
 });
+
+describe('sectionMaxPoints (C-30)', () => {
+  it('menjumlahkan points soal (bawaan 1) agar skor mentah > 40 soal tetap bisa diskalakan', async () => {
+    const { sectionMaxPoints } = await import('@/server/simulation/service');
+    const qs = [
+      { question: {} },
+      { question: { points: 1 } },
+      { question: { points: 6 } },
+      { question: { points: 0 } },
+    ];
+    expect(sectionMaxPoints(qs)).toBe(9);
+    expect(sectionMaxPoints([])).toBe(0);
+  });
+});

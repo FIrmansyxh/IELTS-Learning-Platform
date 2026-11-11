@@ -52,7 +52,7 @@ function ffprobeDuration(file: string): Promise<number | null | 'missing'> {
     let out = '';
     let child;
     try {
-      child = spawn('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file], { windowsHide: true });
+      child = spawn(process.env.FFPROBE_PATH || 'ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file], { windowsHide: true });
     } catch {
       resolve('missing');
       return;

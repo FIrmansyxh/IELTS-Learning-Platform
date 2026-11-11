@@ -24,6 +24,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { apiFetch } from '@/lib/api/client';
+import { PassageMarkdown } from '@/components/reading/passage-markdown';
 
 export function SimulationRunner({ attemptId }: { attemptId: string }) {
   const router = useRouter();
@@ -357,8 +358,8 @@ function ReadingWorkspaceSection({
           <CardHeader className="sticky top-0 z-10 border-b bg-card/90 py-3 backdrop-blur">
             <CardTitle className="text-sm font-semibold">Teks Bacaan {activePart}</CardTitle>
           </CardHeader>
-          <CardContent className="prose prose-sm dark:prose-invert p-5">
-            <div className="whitespace-pre-wrap leading-relaxed">{part?.passage_markdown}</div>
+          <CardContent className="p-5">
+            <PassageMarkdown markdown={part?.passage_markdown ?? ''} />
           </CardContent>
         </Card>
 

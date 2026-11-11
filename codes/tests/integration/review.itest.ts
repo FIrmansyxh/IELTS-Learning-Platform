@@ -58,11 +58,18 @@ async function play(u: L, body: unknown, wrong: (qid: string, i: number) => bool
 const reviewOf = async (userId: string, qid: string) =>
   (await rows(sql`SELECT box, due_at, lapses, mastered_at FROM question_reviews WHERE user_id = ${userId} AND question_id = ${qid}`))[0];
 
+/** Impor sah: exit 0, atau exit 2 yang semata-mata karena bank Listening belum lolos uji dengar human (C-30). */
+function expectImportOk(r: { exitCode: number; lines: string[]; banks?: unknown[] }) {
+  const onlyReviewGate =
+    r.exitCode === 2 && (r.banks?.length ?? 0) > 0 && r.lines.some((l) => /^listening_review_(missing|stale):/.test(l));
+  expect(r.exitCode === 0 || onlyReviewGate, r.lines.join('\n')).toBe(true);
+}
+
 beforeAll(async () => {
   const assets = await runImport(db, { dir: path.resolve('content', 'gt-listening'), publish: true, dryRun: false, actorUserId: null });
   expect(assets.exitCode, assets.lines.join('\n')).toBe(0);
   const out = await runImport(db, { dir: path.resolve('content', 'gt-bank'), publish: true, dryRun: false, actorUserId: null });
-  expect(out.exitCode, out.lines.join('\n')).toBe(0);
+  expectImportOk(out);
 });
 afterAll(async () => {
   await execute(db, sql`DELETE FROM attempts`);

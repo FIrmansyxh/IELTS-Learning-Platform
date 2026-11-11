@@ -1,0 +1,13 @@
+{
+  "part_code": "GT-L-S1-002",
+  "reviewer": "BELUM DIREVIEW",
+  "reviewed_at": "2026-11-11",
+  "clarity": 1,
+  "speed": 1,
+  "naturalness": 1,
+  "answer_leak": false,
+  "approved": false,
+  "script_sha256": "2267795be7b4e2dad6491c417c6f0c41c293bf3ce72e097c527f154a4e33170a",
+  "audio_sha256": "0f149a5280d37cfa31975273057330f9f82545ef887e1cfd249226062db9a213",
+  "notes": "Draf otomatis (C-30). Dengarkan audio, isi nama reviewer, skor 1-5 (clarity >= 4, speed >= 3), answer_leak, lalu approved: true."
+}

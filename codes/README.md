@@ -48,6 +48,13 @@ npm run content:import:all                                        # semua konten
 ```
 Tanpa `ffprobe`, durasi audio hanya terbaca untuk WAV (peringatan `ffprobe_unavailable`).
 
+Audio Listening dibuat lokal dengan Kokoro TTS + ffmpeg (pemasangan: `scripts/tts/README.md`):
+```bash
+npm run listening:check -- --script content/gt-listening/scripts/GT-L-S2-001.md
+npm run listening:build -- --script content/gt-listening/scripts/GT-L-S2-001.md   # tulis mp3 + assets.manifest.json
+```
+Bagian Listening baru terbit hanya bila `content/gt-listening/reviews/<part_code>.review.json` disetujui manusia (`approved: true`, `clarity >= 4`, `speed >= 3`, `answer_leak: false`) dan hash naskah/audio cocok. Bank berisi 2 set ujian penuh: Listening S1-S4 x2, Reading simulasi x3 (C-30).
+
 ### Jenis ujian dan modul General Training (ADR-004)
 `EXAM_MODULE=GENERAL_TRAINING` (default) menyembunyikan sub-modul bertag `ACADEMIC` dari learner; `ACADEMIC` membaliknya. Konten General Training:
 ```bash
@@ -64,9 +71,13 @@ Tes integrasi memakai berkas SQLite sementara (otomatis). Coverage: `npm run cov
 `npm run bench:ai -- --models qwen2.5:3b-instruct,qwen2.5:7b-instruct` (khusus driver Ollama; harus berjalan di 127.0.0.1:11434).
 
 ### LLM lokal (ADR-004): llama.cpp
-Driver default `LLM_DRIVER=llamacpp` memakai `llama-server` (winget: `winget install ggml.llamacpp`). Contoh untuk RTX 3060 6 GB:
+Driver default `LLM_DRIVER=llamacpp` memakai `llama-server` (winget: `winget install ggml.llamacpp`). Model penilai Writing: **gpt-oss-20b MXFP4** (ADR-004, addendum 2026-11-11). Contoh untuk RTX 3060 6 GB + RAM 32 GB:
 ```powershell
-$env:LLAMA_CACHE = 'G:\llm-models'   # lokasi model GGUF
-llama-server -hf bartowski/Qwen2.5-7B-Instruct-GGUF:Q4_K_M --device Vulkan0 -ngl 99 -c 4096 --parallel 1 --host 127.0.0.1 --port 8080
+$env:LLAMA_CACHE = 'G:\llm-models'   # lokasi model GGUF (berkas 12,1 GB)
+llama-server -hf ggml-org/gpt-oss-20b-GGUF:MXFP4 --device Vulkan0 -ngl 99 --n-cpu-moe 20 -c 6144 --parallel 1 --host 127.0.0.1 --port 8080
 ```
+Kebutuhan terukur: sekitar 3,4 GB VRAM dan 10-11 GB RAM; generasi sekitar 7,6 token/dtk, satu evaluasi sekitar 70 dtk (median benchmark), evaluasi pertama setelah server menyala bisa lebih dari 250 dtk. Naikkan `AI_JOB_TIMEOUT_SEC` ke 300 (lihat `.env.example`). Skor LLM lokal bersifat **indikatif**: pada benchmark kasus baru, 18 dari 24 evaluasi dalam rentang acuan (MAE band 0,66), skala cenderung terkompresi (surat lemah dinilai terlalu tinggi, tulisan sangat bagus terlalu rendah). Jangan dianggap setara penguji IELTS.
+
 Lalu di `.env`: `AI_ENABLED=true`, `LLAMACPP_BASE_URL=http://127.0.0.1:8080`, `SPEAKING_AI_ENABLED=false`. LLM hanya menilai Writing; Speaking dilatih lewat prompt AI suara pihak ketiga (tombol "Salin prompt" pada soal Speaking).
+
+Benchmark model: `npx tsx scripts/bench-gt-writing.mts --out <berkas.json> --reps 3 --hint "text,calib" [--cases heldout] --models "label=repo:quant|flag server,..."` (set `LLAMA_CACHE`). `--cases heldout` memakai kasus yang tidak dipakai menyetel prompt (`scripts/bench/gt-cases-heldout.mts`).

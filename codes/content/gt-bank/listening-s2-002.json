@@ -1,0 +1,194 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-LIS-S2-002",
+      "bank_kind": "LISTENING_GT_S2",
+      "title": "Listening GT Section 2: Informasi Festival Kuliner dan Kerajinan",
+      "skill": "LISTENING",
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "listening_asset_code": "gt-listening/gt-l-s2-002",
+      "tags": [
+        "listening",
+        "section-2",
+        "monologue",
+        "community-event"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTL2-011",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Why has the festival moved to a new location this year?",
+          "difficulty": 2,
+          "explanation_id": "Festival dipindahkan ke Victoria Park \"because of the road works on the high street\".",
+          "options": [
+            "The Market Square is being redeveloped",
+            "There are road works on the high street",
+            "The festival has grown too large",
+            "Local shopkeepers complained"
+          ],
+          "correct_answers": [
+            "There are road works on the high street"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-012",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Complete the notes. Write ONE WORD AND/OR A NUMBER.\n\nGates open at: ________ a.m.",
+          "difficulty": 2,
+          "explanation_id": "Gerbang dibuka \"at nine thirty in the morning\". Pukul sembilan yang tercetak di program adalah salah cetak.",
+          "max_words": 1,
+          "correct_answers": [
+            "9.30",
+            "9:30",
+            "930",
+            "nine-thirty"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-013",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Number of stalls this year: more than ________",
+          "difficulty": 2,
+          "explanation_id": "Tahun lalu sekitar 50 kios, tahun ini \"more than eighty\".",
+          "max_words": 1,
+          "correct_answers": [
+            "80",
+            "eighty"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-014",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Where in Victoria Park will each of the following be?",
+          "difficulty": 3,
+          "explanation_id": "Tenda kerajinan anak \"in the rose garden\" (bukan dekat pintu masuk seperti tahun lalu), panggung musik \"beside the lake\", dan pos P3K \"next to the car park\" agar ambulans mudah masuk.",
+          "matching": {
+            "left": [
+              "Children's craft tent",
+              "Live music stage",
+              "First aid point"
+            ],
+            "right": [
+              "Near the main gate",
+              "In the rose garden",
+              "Beside the lake",
+              "Next to the car park",
+              "Behind the information tent"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            1,
+            2,
+            3
+          ],
+          "points": 3
+        },
+        {
+          "question_id": "Q-GTL2-015",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Visitors who want a drink should bring a reusable ________.",
+          "difficulty": 2,
+          "explanation_id": "Kios tidak lagi memberi gelas sekali pakai: \"please remember to bring a reusable cup with you\".",
+          "max_words": 1,
+          "correct_answers": [
+            "cup"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-016",
+          "question_type": "MCQ_MULTI",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Choose TWO letters. Which TWO ways of travelling to the festival do the organisers recommend?",
+          "difficulty": 3,
+          "explanation_id": "Penyelenggara menyarankan \"the free shuttle bus\" dari stasiun dan \"to cycle\". Parkir terbatas dan taksi tidak bisa ke gerbang karena Park Lane ditutup.",
+          "options": [
+            "Driving and using the park car park",
+            "Taking a taxi to the gate",
+            "Using the free shuttle bus",
+            "Cycling",
+            "Walking from the town centre"
+          ],
+          "correct_answers": [
+            "Using the free shuttle bus",
+            "Cycling"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-017",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Adult entry fee: £________",
+          "difficulty": 1,
+          "explanation_id": "Anak di bawah 16 tahun gratis, sedangkan \"adults are asked to pay three pounds at the gate\".",
+          "max_words": 1,
+          "correct_answers": [
+            "3",
+            "three",
+            "£3",
+            "3 pounds"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-018",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Where will the money from ticket sales go?",
+          "difficulty": 1,
+          "explanation_id": "Seluruh hasil penjualan tiket \"will go to the Westbridge Hospice\".",
+          "options": [
+            "To the local school",
+            "To the Westbridge Hospice",
+            "To the stallholders",
+            "To repairing Victoria Park"
+          ],
+          "correct_answers": [
+            "To the Westbridge Hospice"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-019",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Volunteers are needed to help with setting up on ________ evening.",
+          "difficulty": 2,
+          "explanation_id": "Relawan dibutuhkan \"to help with setting up on Friday evening\" dan memungut sampah selama festival.",
+          "max_words": 1,
+          "correct_answers": [
+            "Friday"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-020",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Festival coordinator: Mrs ________",
+          "difficulty": 1,
+          "explanation_id": "Nama koordinator dieja: \"T-H-O-R-N-B-U-R-Y\".",
+          "max_words": 1,
+          "correct_answers": [
+            "Thornbury"
+          ]
+        }
+      ]
+    }
+  ]
+}
