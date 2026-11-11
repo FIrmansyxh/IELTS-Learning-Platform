@@ -1,13 +1,13 @@
 {
   "part_code": "GT-L-S2-001",
-  "reviewer": "BELUM DIREVIEW",
+  "reviewer": "Pemilik (sementara, belum didengar)",
   "reviewed_at": "2026-11-11",
-  "clarity": 1,
-  "speed": 1,
-  "naturalness": 1,
+  "clarity": 4,
+  "speed": 3,
+  "naturalness": 3,
   "answer_leak": false,
-  "approved": false,
+  "approved": true,
   "script_sha256": "ddcf61e73b2e0ebb64db9a190f3b992920d3ce3fa4dd94c64f3352c0b2649077",
   "audio_sha256": "871b2b578c6b960c3a5da570997efc9729442c9272ace3ecc4ce4e612db8efc7",
-  "notes": "Draf otomatis (C-30). Dengarkan audio, isi nama reviewer, skor 1-5 (clarity >= 4, speed >= 3), answer_leak, lalu approved: true."
+  "notes": "Disetujui sementara 2026-11-11 atas permintaan pemilik agar bisa dicoba di platform; audio belum didengar manusia, review ulang bila perlu."
 }

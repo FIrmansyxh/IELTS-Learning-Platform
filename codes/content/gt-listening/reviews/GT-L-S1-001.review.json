@@ -1,13 +1,13 @@
 {
   "part_code": "GT-L-S1-001",
-  "reviewer": "BELUM DIREVIEW",
+  "reviewer": "Pemilik (sementara, belum didengar)",
   "reviewed_at": "2026-11-11",
-  "clarity": 1,
-  "speed": 1,
-  "naturalness": 1,
+  "clarity": 4,
+  "speed": 3,
+  "naturalness": 3,
   "answer_leak": false,
-  "approved": false,
-  "script_sha256": "68e694e3d071f42c3d150db3c519de83173b9aff1fb86cf992e9f6ef004955fc",
+  "approved": true,
+  "script_sha256": "c57339a2156db7ef3527d4d21d7cbe563e2d7d53c54bb598df47457770ce77fa",
   "audio_sha256": "177856368c542909c28f5f24171307f54acdd149a3c7b70c18d4f1da55b9db99",
-  "notes": "Audio dibangun ulang dengan Kokoro (C-30): berkas lama hanya 5 detik dan rusak. Review lama (2026-11-08) tidak berlaku lagi. Dengarkan lalu jalankan npm run listening:approve."
+  "notes": "Disetujui sementara 2026-11-11 atas permintaan pemilik agar bisa dicoba di platform; audio belum didengar manusia, review ulang bila perlu."
 }

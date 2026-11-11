@@ -45,7 +45,8 @@ async function main(): Promise<number> {
     naturalness: score('naturalness'),
     answer_leak: flag('leak'),
     approved: !flag('reject'),
-    script_sha256: sha(script),
+    // Sama dengan review-gate: CRLF dinormalkan ke LF (checkout Windows dengan autocrlf).
+    script_sha256: sha(Buffer.from(script.toString('utf8').split('\r\n').join('\n'), 'utf8')),
     audio_sha256: sha(audio),
     ...(arg('notes') ? { notes: arg('notes') } : {}),
   });
