@@ -180,7 +180,18 @@ export function planLlama(env) {
     baseUrl: base,
     healthUrl: `${base}/health`,
     bin,
-    args: modelArgs ? [...modelArgs, '--host', '127.0.0.1', '--port', port, '-c', '4096', '--parallel', '1', ...extra] : [],
+    // Konteks default 4096; bila LLAMACPP_ARGS memuat -c/--ctx-size (mis. 6144 untuk gpt-oss-20b), pakai itu saja
+    // agar tidak ada flag ganda.
+    args: modelArgs
+      ? [
+          ...modelArgs,
+          '--host', '127.0.0.1',
+          '--port', port,
+          ...(extra.some((a) => /^(-c|--ctx-size)(=|$)/.test(a)) ? [] : ['-c', '4096']),
+          '--parallel', '1',
+          ...extra,
+        ]
+      : [],
     missingModel: !modelArgs,
   };
 }

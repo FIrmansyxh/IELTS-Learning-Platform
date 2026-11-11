@@ -98,15 +98,21 @@ async function drain(): Promise<void> {
   }
 }
 
-/** Masukkan kembali job yang belum selesai dari proses sebelumnya (sekali per proses). */
-async function recover(): Promise<void> {
+/**
+ * Masukkan kembali job yang belum selesai dari proses sebelumnya (sekali per proses).
+ * `skipJobId`: job yang sedang di-enqueue pemanggil. Barisnya sudah ada di `async_jobs` (QUEUED) saat enqueue
+ * pertama, sehingga tanpa pengecualian ini job tersebut masuk dua kali dan dinilai dua kali (dua pemanggilan LLM).
+ */
+async function recover(skipJobId?: string): Promise<void> {
   if (state.recovered) return;
   state.recovered = true;
   try {
-    const rows = await getDb()
-      .select({ id: asyncJobs.id, kind: asyncJobs.kind, submissionId: asyncJobs.submissionId })
-      .from(asyncJobs)
-      .where(inArray(asyncJobs.status, ['QUEUED', 'RUNNING']));
+    const rows = (
+      await getDb()
+        .select({ id: asyncJobs.id, kind: asyncJobs.kind, submissionId: asyncJobs.submissionId })
+        .from(asyncJobs)
+        .where(inArray(asyncJobs.status, ['QUEUED', 'RUNNING']))
+    ).filter((r) => r.id !== skipJobId);
     for (const r of rows) {
       const queue = KIND_TO_QUEUE[r.kind];
       if (!queue || !r.submissionId) continue;
@@ -128,7 +134,7 @@ function ensurePurgeTimer(): void {
 
 /** Kirim job; mengembalikan id job. Penjalanan tidak memblokir pemanggil. */
 export async function enqueue(queue: QueueName, data: Record<string, unknown>): Promise<string | null> {
-  await recover();
+  await recover(typeof data.async_job_id === 'string' ? data.async_job_id : undefined);
   ensurePurgeTimer();
   const id = randomUUID();
   state.items.push({ id, queue, data, attempt: 0 });

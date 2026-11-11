@@ -635,6 +635,14 @@ describe('LLAMACPP_ARGS tidak boleh menimpa bind loopback (M-5)', () => {
     const plan = planLlama({ AI_ENABLED: 'true', LLAMACPP_MODEL_PATH: '/m.gguf', LLAMACPP_ARGS: '--device Vulkan0 -ngl 99' });
     expect(plan.kind).toBe('start');
   });
+  it('-c/--ctx-size di LLAMACPP_ARGS menggantikan konteks default 4096 (tanpa flag ganda)', () => {
+    for (const extra of ['--n-cpu-moe 20 -c 6144', '--ctx-size 6144', '--ctx-size=6144']) {
+      const plan = planLlama({ AI_ENABLED: 'true', LLAMACPP_MODEL_PATH: '/m.gguf', LLAMACPP_ARGS: extra });
+      expect(plan.kind).toBe('start');
+      expect(plan.args).not.toContain('4096');
+      expect(plan.args.filter((a: string) => a === '-c' || a.startsWith('--ctx-size'))).toHaveLength(1);
+    }
+  });
   it('peluncur: tidak ada proses llama, satu peringatan, aplikasi tetap naik', async () => {
     const h = harness({ env: { AI_ENABLED: 'true', LLAMACPP_MODEL_PATH: '/m.gguf', LLAMACPP_ARGS: '--host 0.0.0.0' } });
     const code = await runUntilServerExit(h, 0);

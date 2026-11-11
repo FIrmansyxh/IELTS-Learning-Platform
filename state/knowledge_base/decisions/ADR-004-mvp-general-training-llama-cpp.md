@@ -56,6 +56,68 @@ Kesimpulan: tidak ada model yang layak dikunci apa adanya. Llama-3.1-8B paling a
 5. **UI Writing** dipasang ke drill/ujian dan Mini-Task (panel `WritingTaskPanel`).
 6. **Status implementasi (2026-11-08):** tag `exam_module` pada `sub_modules` (migrasi 0009; filter di `loadSnapshot` lewat `EXAM_MODULE`, default `GENERAL_TRAINING`) dan tabel band `READING_GENERAL` (migrasi 0008) SUDAH ada. Sub-modul 3.3.1 dan 4.1.1 bertag ACADEMIC; penggantinya 3.3.3 (surat) dan 4.1.3 (kosakata sehari-hari/kerja) bertag GENERAL_TRAINING. Konten 3.3.3 sudah ditulis (`codes/content/gt-modules/3.3.3`); konten 4.1.3 belum.
 
+## Addendum 2026-11-11: benchmark putaran 2 (model generasi 2026 dan MoE dengan offload CPU)
+
+Alasan: daftar kandidat putaran 1 (Qwen2.5, Llama-3.1, Qwen3, Gemma-2) generasi lama, dan kelas MoE dengan expert di RAM (RAM mesin 31,8 GB) belum diuji. Skrip sama (`scripts/bench-gt-writing.mts`, 7 kasus, satu kali jalan per model, rentang band acuan ditetapkan agen, belum diverifikasi penguji IELTS). Skrip kini menerima flag server per model (`label=repo:quant|--flag ...`) dan mengirim `reasoning_effort: 'low'` (untuk gpt-oss; template lain mengabaikannya). Mesin: i9-11900H, RAM 31,8 GB, RTX 3060 Laptop 6 GB, `llama-server` build 12182 (Vulkan).
+
+| Model | Flag | JSON valid | Band dalam rentang | MAE band | Urutan surat/esai | Indonesia baik | p50 latensi |
+|---|---|---|---|---|---|---|---|
+| gpt-oss-20b MXFP4 | `--n-cpu-moe 20 -ngl 99` | 7/7 | 6/7 | 0,39 | ya / ya | 20% | 91 dtk |
+| Gemma 4 26B-A4B UD-Q4_K_M | `--no-mmproj` (auto-fit) | 7/7 | 4/7 | 1,25 | ya / ya | 90% | 92 dtk |
+| Qwen3.5-4B Q4_K_M | - | 7/7 | 3/7 | 1,39 | ya / ya | 73% | 22 dtk |
+| Qwen3.5-9B Q4_K_M | - | 5/5 sebelum timeout | 3/5 | - | - | 0% | 151-261 dtk per kasus (timeout 300 dtk di kasus 6) |
+| Qwen3.6-35B-A3B UD-Q4_K_M | `--cpu-moe -ngl 99`, lalu `--no-mmproj` | gagal | - | - | - | - | timeout di kasus pertama pada kedua konfigurasi |
+| Gemma 4 E4B | `:Q4_K_M` | gagal dimuat | - | - | - | - | repo `ggml-org/gemma-4-E4B-it-GGUF` tidak punya Q4_K_M (hanya Q4_0, Q8_0, BF16); belum diulang dengan `Q4_0` |
+
+Temuan:
+1. **Tidak ada model yang layak dikunci.** gpt-oss-20b paling akurat (MAE 0,39; surat bagus dinilai 7, tidak melambung) tetapi 5 dari 7 evaluasi berisi komentar placeholder (`K1`, `komentar1`, ...), jadi umpan balik untuk siswa tidak dapat dipakai, dan latensi 91 dtk melewati target 10-60 dtk. Gemma 4 26B menulis bahasa Indonesia yang baik tetapi menilai terlalu tinggi (surat bagus dan dua esai diberi band 9). Qwen3.5-4B satu-satunya dalam target latensi tetapi pola melambungnya sama (band 8,5-9).
+2. **Penyebab kegagalan Qwen3-8B (putaran 1) bukan mode berpikir.** Skrip sudah mengirim `enable_thinking: false`; keluaran yang gagal berisi loop degenerat (`task_response_comment_1111...`). Dugaan awal bahwa itu efek thinking keliru.
+3. **`--cpu-moe` (semua expert di CPU) membuat pemrosesan prompt sangat lambat pada Vulkan** (Gemma 4 26B tercatat 1-2 token/dtk) sehingga timeout. Dugaan dari log, belum diuji terpisah. Qwen3.6-35B tetap timeout tanpa flag itu; nilai `--n-cpu-moe` parsial yang berhasil belum ditemukan, jadi belum terbukti mustahil.
+4. Model 9B+ dense tidak layak pada VRAM 6 GB (jatuh ke CPU, 150-260 dtk per evaluasi).
+
+Arah berikutnya (belum diuji, belum diputuskan human): gpt-oss-20b dengan prompt yang menegaskan komentar berupa kalimat, atau dua tahap (skor dari satu model, teks dari model lain); kalibrasi dengan esai berlabel penguji IELTS; ulangi Gemma 4 E4B dengan `Q4_0` dan Qwen3.6-35B dengan `--n-cpu-moe` parsial. Sampai itu selesai, skor LLM lokal tetap diperlakukan indikatif dan `AI_ENABLED` tetap dapat dimatikan (fallback self-assessment, ADR-002).
+
+Hasil mentah ada di `G:\llm-models\bench-gt-new.json`, `bench-gt-moe.json`, dan `bench-gt-moe2.json` (di luar repo).
+
+## Addendum 2026-11-11 (2): putaran 3-4 dan penetapan model penilai Writing
+
+**Putaran 3** (7 kasus lama, 3 ulangan, dengan dua petunjuk prompt tambahan `text` dan `calib` pada pesan pengguna; skrip `--reps 3 --hint "text,calib"`):
+
+| Model | Valid | Band dalam rentang | MAE | Indonesia baik | p50 | Selisih antar ulangan |
+|---|---|---|---|---|---|---|
+| gpt-oss-20b | 21/21 | 20/21 | 0,42 | 97% | 73 dtk | 0,71 |
+| Gemma 4 26B-A4B | 21/21 | 14/21 | 0,96 | 97% | 85 dtk | 0,21 |
+| Qwen3.5-4B | 17/21 | 8/21 | 1,19 | 99% | 24 dtk | 0,14 |
+
+Petunjuk `text` menghilangkan komentar placeholder gpt-oss (`K1`, `komentar1`); `calib` menekan, tetapi tidak menghilangkan, skor melambung pada Gemma/Qwen. Karena petunjuk ditulis setelah melihat kegagalan pada kasus yang sama, hasil putaran 3 berisiko terlalu optimistis.
+
+**Putaran 4 (held-out)**: 8 kasus baru dengan soal dan topik berbeda (`scripts/bench/gt-cases-heldout.mts`; surat ke teman, pemilik kontrakan, atasan; esai kerja dari rumah band 5/6/7 dan esai di luar topik), 3 ulangan, petunjuk sama:
+
+| Model | Valid | Band dalam rentang | MAE | Indonesia baik | p50 | Selisih antar ulangan |
+|---|---|---|---|---|---|---|
+| gpt-oss-20b | 24/24 | 18/24 | 0,66 | 96% | 68 dtk | 0,44 |
+| Qwen3.5-4B | 22/24 | 14/24 | 0,73 | 99% | 23 dtk | 0,63 |
+
+Temuan: gpt-oss-20b bertahan dengan penurunan wajar. Semua enam kasus di luar rentang meleset 0,5 dari batas. Skala terkompresi: surat lemah diberi 5 (acuan maks 4,5), surat bagus 6-6,5 (acuan 6,5-8), esai band 7 diberi 6-6,5. Urutan kualitas benar; `task_requirement_met` benar pada surat lemah, esai di luar topik, dan surat register salah di semua ulangan. Rentang acuan ditetapkan agen (bukan penguji IELTS), kasus baru ditulis model yang sama dengan penilainya, dan hanya 8 kasus.
+
+**Kebutuhan sumber daya terukur** (RTX 3060 Laptop 6 GB, RAM 31,8 GB, `--n-cpu-moe 20 -ngl 99 -c 6144`, satu permintaan): berkas 12,1 GB; VRAM naik sekitar 3,4 GB (sisa sekitar 1 GB); memori proses 5,2 GB idle lalu 10,7 GB setelah satu permintaan; RAM bebas turun sekitar 10,3 GB; prompt 73 token/dtk, generasi 7,6 token/dtk. Semua dilepas saat server dimatikan. RAM 16 GB tidak diuji.
+
+**Keputusan (disetujui human, 2026-11-11): gpt-oss-20b MXFP4 ditetapkan sebagai model penilai Writing.** Tinjauan atas ketentuan:
+1. Skor LLM lokal tetap **indikatif**, bukan setara penguji IELTS; kalibrasi dengan esai berlabel penguji IELTS masih disarankan dan belum dilakukan.
+2. Latensi sekitar 70 dtk melewati target 10-60 dtk dan diterima lewat UX antrean (ADR-002). `AI_JOB_TIMEOUT_SEC` disarankan 300 (evaluasi pertama setelah server menyala >250 dtk pada benchmark).
+3. `AI_ENABLED=false` (self-assessment) tetap menjadi fallback (ADR-002).
+4. Model lain dapat dipasang lewat env tanpa ubah kode (`LLAMACPP_MODEL_WRITING`, `LLAMACPP_HF_REPO`, `LLAMACPP_ARGS`). Qwen3.5-4B (24 dtk) adalah cadangan cepat dengan akurasi lebih rendah.
+
+**Perubahan kode yang menyertai:** `WRITING_USER_HINTS` (petunjuk `text` dan `calib`) ditambahkan ke pesan pengguna di `pipeline.ts`; `LlamaCppClient` mengirim `chat_template_kwargs: { enable_thinking: false, reasoning_effort: 'low' }` dan label default `gpt-oss-20b-mxfp4`; `planLlama` (start-local) tidak menambah `-c 4096` bila `LLAMACPP_ARGS` memuat `-c/--ctx-size`; `.env.example` dan `README.md` diperbarui (model, flag, timeout 300). Benchmark `bench-gt-writing.mts` mendapat `--reps`, `--hint`, `--cases heldout`, dan flag server per model.
+
+**Uji end-to-end langsung (2026-11-11)**, aplikasi `start:local` + `llama-server` gpt-oss-20b nyata, database uji terpisah, lewat UI Latihan campur (soal Writing Task 1 asli dari bank): doctor melaporkan penilai Writing aktif; dua surat dinilai (surat menengah: band 6,0 lalu 6,5 pada penilaian ganda; surat lemah: band 5,0). Tercatat di `ai_evaluations`: `model_name = gpt-oss-20b-mxfp4`, latensi 77-130 dtk (7-9 token/dtk; 1.144-2.060 token total); batas `AI_JOB_TIMEOUT_SEC=300` cukup. UI sudah memuat label "Perkiraan latihan, bukan skor resmi IELTS." dan "AI LOCAL".
+
+**Bug yang ditemukan dan diperbaiki:** `enqueue` pertama setelah proses menyala memanggil `recover()`, yang ikut memasukkan job yang baru dibuat (barisnya sudah `QUEUED` di `async_jobs`), sehingga job pertama tiap sesi dinilai dua kali (dua pemanggilan LLM, dua baris `ai_evaluations`, status sempat kembali `GRADING`). Tersembunyi pada mock karena instan. Perbaikan: `recover(skipJobId)` di `src/server/jobs/queue.ts`; tes regresi di `tests/integration/ai-queue.itest.ts` (gagal tanpa perbaikan: 2 pemanggilan, lulus dengan perbaikan). Terverifikasi di uji langsung: satu permintaan ke llama-server, status `GRADED`.
+
+**Temuan kualitas dari uji langsung (belum diperbaiki):** pada surat lemah, keempat komentar per kriteria hanya berbunyi generik ("Komentar mengenai pencapaian tugas", ...), padahal bagian Kekuatan, Saran, dan Koreksi berisi konten. Pada benchmark, komentar `task_response` gpt-oss berbentuk meta ("Komentar mengenai pencapaian tugas menunjukkan bahwa ...", 15 dari 45 evaluasi putaran 3-4) dan hanya 1 dari 45 yang kosong; metrik "bahasa Indonesia baik" benchmark tidak menangkap pola ini (kalimat generik lolos). Perlu: instruksi prompt yang meminta bukti konkret dari teks siswa dan melarang awalan "Komentar ...", pemeriksaan pasca-LLM yang menolak komentar kosong, dan metrik benchmark yang lebih ketat, lalu uji ulang.
+
+**Belum dilakukan:** status ADR ini masih `Proposed`; sisa variabel `OLLAMA_*` di `.env.example` (driver `ollama` masih didukung); perbaikan komentar generik di atas.
+
 ## Consequences
 
 - Perlu spec baru/revisi: SPEC-012 (Writing GT), SPEC-013 (Speaking via prompt eksternal), SPEC-009 (tabel band GT), SPEC-004 (kontrak konten v1.2), spec baru Learning Track dan Mix Builder.
@@ -67,3 +129,5 @@ Kesimpulan: tidak ada model yang layak dikunci apa adanya. Llama-3.1-8B paling a
 | Timestamp | Agen | Perubahan |
 |-----------|------|-----------|
 | 2026-11-08 | Orchestrator | ADR dibuat (Proposed) |
+| 2026-11-11 | Claude (atas permintaan human) | Addendum benchmark putaran 2: Qwen3.5, Gemma 4, gpt-oss-20b, Qwen3.6-35B; koreksi penyebab kegagalan Qwen3-8B |
+| 2026-11-11 | Claude (atas permintaan human) | Addendum 2: putaran 3-4 (held-out), kebutuhan sumber daya terukur, penetapan gpt-oss-20b MXFP4 sebagai penilai Writing |

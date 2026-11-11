@@ -1,6 +1,6 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { z } from 'zod';
-import { buildWritingSystemPrompt } from './writing-prompts';
+import { buildWritingSystemPrompt, WRITING_USER_HINTS } from './writing-prompts';
 import { desc, eq } from 'drizzle-orm';
 import {
   aiEvaluations,
@@ -13,6 +13,7 @@ import { logger } from '../logger';
 import { writeAudit } from '../audit';
 import { safeErr } from '../safe-error';
 import { getLlmClient, type LlmClient } from './llm';
+import { findGenericComments } from './comment-quality';
 import {
   countWords,
   isInjectionSuspected,
@@ -34,7 +35,7 @@ export function buildWritingOutputJsonSchema(): Record<string, unknown> {
   const prose = 'Natural Indonesian sentence(s) with normal spaces and punctuation. Never snake_case, never keywords joined by underscores.';
   const props = schema.properties ?? {};
   for (const c of Object.values(props.criteria?.properties ?? {})) {
-    if (c?.properties?.comment_id) c.properties.comment_id.description = `Specific feedback for this criterion. ${prose}`;
+    if (c?.properties?.comment_id) c.properties.comment_id.description = `A concrete judgement of this criterion that cites specific evidence from the student's response. Never a bare label such as "Komentar mengenai ...". ${prose}`;
   }
   if (props.strengths_id?.items) props.strengths_id.items.description = `One strength. ${prose}`;
   if (props.improvements_id?.items) props.improvements_id.items.description = `One concrete improvement action. ${prose}`;
@@ -120,7 +121,7 @@ export async function processWritingEvaluation(
     // 4. Netralisasi teks dan susun pesan
     const neutralizedText = neutralizeUserInput(sub.responseText);
     const boundaryId = randomBytes(4).toString('hex');
-    const userPrompt = `Task Prompt:\n${sub.promptSnapshot}\n\nStudent Response:\n<student_response id="${boundaryId}">\n${neutralizedText}\n</student_response>\n\nREMINDER: every comment_id, strengths_id, improvements_id and reason_id value MUST be written in Indonesian (Bahasa Indonesia). Only "original", "improved" and "band7_rewrite" stay in English. All band values must be multiples of 0.5.`;
+    const userPrompt = `Task Prompt:\n${sub.promptSnapshot}\n\nStudent Response:\n<student_response id="${boundaryId}">\n${neutralizedText}\n</student_response>\n\nREMINDER: every comment_id, strengths_id, improvements_id and reason_id value MUST be written in Indonesian (Bahasa Indonesia). Only "original", "improved" and "band7_rewrite" stay in English. All band values must be multiples of 0.5.${WRITING_USER_HINTS}`;
 
     // 5. Panggil LLM
     const llm = client ?? getLlmClient();
@@ -142,10 +143,12 @@ export async function processWritingEvaluation(
     rawOutput = firstGen.content;
     latencyMs = firstGen.latencyMs;
 
+    let usedRepair = false;
     try {
       const parsedJson = snapBandsToHalf(JSON.parse(rawOutput));
       parsedOutput = WritingEvaluationOutputSchema.parse(parsedJson);
     } catch (parseErr) {
+      usedRepair = true;
       // 6. Satu percobaan perbaikan jika gagal
       logger.warn({ err: safeErr(parseErr), submissionId }, 'llm_output_schema_failed_trying_repair');
       const errMsg = parseErr instanceof Error ? parseErr.message : String(parseErr);
@@ -177,6 +180,29 @@ export async function processWritingEvaluation(
           .set({ status: 'FAILED', updatedAt: new Date() })
           .where(eq(submissions.id, submissionId));
         return;
+      }
+    }
+
+    // 6b. Komentar generik/placeholder (mis. "Komentar mengenai pencapaian tugas"): satu percobaan ulang, hanya
+    // bila keluaran ini belum hasil perbaikan skema. Bila ulang gagal atau tidak lebih baik, pakai keluaran pertama
+    // (lebih baik komentar kurang tajam daripada evaluasi gagal).
+    const genericPaths = findGenericComments(parsedOutput!);
+    if (genericPaths.length > 0 && !usedRepair) {
+      logger.warn({ submissionId, genericPaths }, 'llm_generic_comments_trying_regeneration');
+      try {
+        const regen = await llm.generate({
+          systemPrompt,
+          userPrompt: `${userPrompt}\n\nKomentar pada bidang berikut terlalu generik atau hanya berupa label: ${genericPaths.join(', ')}. Tulis ulang SEMUA komentar sebagai kalimat Indonesia yang memuat penilaian konkret dan bukti dari teks siswa. Kirim ulang HANYA JSON yang valid sesuai skema.`,
+          schema: WRITING_OUTPUT_JSON_SCHEMA,
+        });
+        latencyMs += regen.latencyMs;
+        const regenParsed = WritingEvaluationOutputSchema.parse(snapBandsToHalf(JSON.parse(regen.content)));
+        if (findGenericComments(regenParsed).length < genericPaths.length) {
+          parsedOutput = regenParsed;
+          rawOutput = regen.content;
+        }
+      } catch (regenErr) {
+        logger.warn({ err: safeErr(regenErr), submissionId }, 'llm_generic_regeneration_failed_keeping_first');
       }
     }
 
