@@ -197,7 +197,7 @@ export function DrillResult({
                   <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
                 </summary>
                 <div className="grid gap-2 border-t px-4 py-3 text-sm">
-                  {info ? <p className="font-medium">{info.q.prompt}</p> : null}
+                  {info ? <p className="whitespace-pre-line font-medium">{info.q.prompt}</p> : null}
                   {r.correct_answer ? (
                     <div>
                       <p className="font-semibold">{id.quiz.correctAnswer}</p>
@@ -211,7 +211,7 @@ export function DrillResult({
                   {r.explanation_id ? (
                     <div>
                       <p className="font-semibold">{id.quiz.explanation}</p>
-                      <p className="leading-relaxed">{r.explanation_id}</p>
+                      <p className="whitespace-pre-line leading-relaxed">{r.explanation_id}</p>
                     </div>
                   ) : null}
                 </div>

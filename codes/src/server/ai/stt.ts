@@ -125,7 +125,8 @@ export class WhisperCppClient implements SttClient {
       segments?: Array<{ start?: number; end?: number; text?: string; avg_logprob?: number }>;
     };
 
-    const text = (data.text ?? '').trim();
+    // whisper-server memecah teks per segmen dengan baris baru; satukan menjadi satu paragraf.
+    const text = (data.text ?? '').replace(/\s+/g, ' ').trim();
     const segments: SttSegment[] = (data.segments ?? []).map((s) => {
       const conf = typeof s.avg_logprob === 'number' ? Math.exp(s.avg_logprob) : null;
       return {

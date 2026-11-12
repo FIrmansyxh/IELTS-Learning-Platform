@@ -350,6 +350,352 @@
             "I would appreciate your prompt reply."
           ],
           "points": 2
+        },
+        {
+          "question_id": "Q-GTVC-021",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "The money you pay every month to live in a flat that you do not own is called ___.",
+          "difficulty": 1,
+          "explanation_id": "Rent = uang sewa. Mortgage = cicilan KPR untuk membeli rumah.",
+          "options": [
+            "rent",
+            "mortgage",
+            "deposit",
+            "bill"
+          ],
+          "correct_answers": [
+            "rent"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-022",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "A flat that already has a bed, a sofa and a table is described as ___.",
+          "difficulty": 1,
+          "explanation_id": "Furnished = sudah berperabot. Detached = rumah terpisah; spacious = luas.",
+          "options": [
+            "furnished",
+            "decorated",
+            "detached",
+            "spacious"
+          ],
+          "correct_answers": [
+            "furnished"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-023",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "VOCAB",
+          "prompt": "Match each transport word with its meaning.",
+          "difficulty": 1,
+          "explanation_id": "commute = pulang-pergi kerja rutin; fare = ongkos; timetable = jadwal; platform = peron.",
+          "matching": {
+            "left": [
+              "commute",
+              "fare",
+              "timetable",
+              "platform"
+            ],
+            "right": [
+              "the money you pay for a journey",
+              "a list of departure and arrival times",
+              "to travel regularly between home and work",
+              "the area where you get on a train",
+              "a ticket for many journeys"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            2,
+            0,
+            1,
+            3
+          ],
+          "points": 4
+        },
+        {
+          "question_id": "Q-GTVC-024",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "VOCAB",
+          "prompt": "Complete: If you miss the last bus, you can take a ___ home. (kendaraan sewaan dengan argo)",
+          "difficulty": 1,
+          "explanation_id": "Taxi/cab = taksi.",
+          "correct_answers": [
+            "taxi",
+            "cab"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTVC-025",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "I need to make an ___ to see the doctor about my back pain.",
+          "difficulty": 1,
+          "explanation_id": "Kolokasi: make an appointment (membuat janji temu dokter).",
+          "options": [
+            "appointment",
+            "reservation",
+            "admission",
+            "arrangement"
+          ],
+          "correct_answers": [
+            "appointment"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-026",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "The doctor gave me a ___ for some antibiotics, so I took it to the pharmacy.",
+          "difficulty": 1,
+          "explanation_id": "Prescription = resep dokter. 'Recipe' = resep masakan.",
+          "options": [
+            "prescription",
+            "receipt",
+            "recipe",
+            "description"
+          ],
+          "correct_answers": [
+            "prescription"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-027",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "VOCAB",
+          "prompt": "Complete: I have had a high ___ since last night, so I am staying in bed. (demam)",
+          "difficulty": 1,
+          "explanation_id": "Have a high temperature/fever = demam tinggi.",
+          "correct_answers": [
+            "temperature",
+            "fever"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTVC-028",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "The extra money you earn for working more than your normal hours is called ___ pay.",
+          "difficulty": 2,
+          "explanation_id": "Overtime pay = upah lembur.",
+          "options": [
+            "overtime",
+            "overload",
+            "overpaid",
+            "outside"
+          ],
+          "correct_answers": [
+            "overtime"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-029",
+          "question_type": "MCQ_MULTI",
+          "skill": "VOCAB",
+          "prompt": "Choose TWO words for money that you regularly receive from your job.",
+          "difficulty": 1,
+          "explanation_id": "Salary (gaji bulanan/tahunan) dan wages (upah per jam/minggu). Deadline, shift, dan appraisal bukan uang.",
+          "options": [
+            "salary",
+            "wages",
+            "deadline",
+            "shift",
+            "appraisal"
+          ],
+          "correct_answers": [
+            "salary",
+            "wages"
+          ],
+          "points": 2
+        },
+        {
+          "question_id": "Q-GTVC-030",
+          "question_type": "SHORT_ANSWER",
+          "skill": "VOCAB",
+          "prompt": "Write ONE word: the company or organisation that pays you to work for it is your ___.",
+          "difficulty": 1,
+          "explanation_id": "Employer = pemberi kerja; employee = karyawan.",
+          "correct_answers": [
+            "employer"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTVC-031",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "To take money out of your bank account is to ___ it.",
+          "difficulty": 1,
+          "explanation_id": "Withdraw = menarik uang. Deposit = menyetor.",
+          "options": [
+            "withdraw",
+            "deposit",
+            "transfer",
+            "borrow"
+          ],
+          "correct_answers": [
+            "withdraw"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-032",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "The document that lists every payment into and out of your account each month is a bank ___.",
+          "difficulty": 2,
+          "explanation_id": "Bank statement = rekening koran/mutasi rekening.",
+          "options": [
+            "statement",
+            "receipt",
+            "balance",
+            "invoice"
+          ],
+          "correct_answers": [
+            "statement"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-033",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "VOCAB",
+          "prompt": "Complete: I need to ___ money from my savings account to my current account. (memindahkan)",
+          "difficulty": 2,
+          "explanation_id": "Transfer money from ... to ... = memindahkan dana antarrekening.",
+          "correct_answers": [
+            "transfer",
+            "move"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTVC-034",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "VOCAB",
+          "prompt": "Click the incorrect word.",
+          "difficulty": 2,
+          "explanation_id": "Kolokasi: make a phone call, bukan do a phone call.",
+          "tokens": [
+            "Could",
+            "you",
+            "do",
+            "a",
+            "phone",
+            "call",
+            "to",
+            "the",
+            "supplier?"
+          ],
+          "correct_answers": [
+            2
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-035",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "We need to ___ a decision about the new office by Friday.",
+          "difficulty": 1,
+          "explanation_id": "Kolokasi: make a decision (mengambil keputusan).",
+          "options": [
+            "make",
+            "do",
+            "have",
+            "get"
+          ],
+          "correct_answers": [
+            "make"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-036",
+          "question_type": "MATCHING_DRAG",
+          "skill": "VOCAB",
+          "prompt": "Drag the verb that collocates with each phrase.",
+          "difficulty": 2,
+          "explanation_id": "open a bank account, catch a bus, meet a deadline, sign a lease.",
+          "matching": {
+            "left": [
+              "___ a bank account",
+              "___ a bus",
+              "___ a deadline",
+              "___ a lease"
+            ],
+            "right": [
+              "meet",
+              "sign",
+              "open",
+              "catch",
+              "earn"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            2,
+            3,
+            0,
+            1
+          ],
+          "points": 4
+        },
+        {
+          "question_id": "Q-GTVC-037",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "VOCAB",
+          "prompt": "Complete with the noun form of 'attend': Please confirm your ___ at the meeting by Monday.",
+          "difficulty": 2,
+          "explanation_id": "Attend (verba) -> attendance (nomina, kehadiran).",
+          "correct_answers": [
+            "attendance"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTVC-038",
+          "question_type": "MCQ_SINGLE",
+          "skill": "VOCAB",
+          "prompt": "The new manager is very ___ and always replies to emails quickly.",
+          "difficulty": 2,
+          "explanation_id": "Setelah 'very' dibutuhkan adjektiva: efficient. Efficiency = nomina, efficiently = adverbia.",
+          "options": [
+            "efficient",
+            "efficiency",
+            "efficiently",
+            "effect"
+          ],
+          "correct_answers": [
+            "efficient"
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-039",
+          "question_type": "SENTENCE_REORDER",
+          "skill": "VOCAB",
+          "prompt": "Put the parts in order to make a correct sentence.",
+          "difficulty": 1,
+          "explanation_id": "Be responsible for + V-ing/nomina = bertanggung jawab atas.",
+          "segments": [
+            "The tenant",
+            "is responsible for",
+            "paying the electricity bill",
+            "every month."
+          ]
+        },
+        {
+          "question_id": "Q-GTVC-040",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "VOCAB",
+          "prompt": "Complete with the negative adjective form of 'accept': The landlord's response was completely ___.",
+          "difficulty": 3,
+          "explanation_id": "Accept -> acceptable -> unacceptable (awalan un- untuk makna negatif).",
+          "correct_answers": [
+            "unacceptable"
+          ],
+          "max_words": 1
         }
       ]
     }

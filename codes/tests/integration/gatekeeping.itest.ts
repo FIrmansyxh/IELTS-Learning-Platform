@@ -94,9 +94,9 @@ describe('pohon dan status awal', () => {
     expect(second.lock_reason.message).toBe('Selesaikan Nouns, Pronouns, Articles (a/an/the), & Plurals dan capai skor latihan 75% untuk membuka.');
     expect(tier(t, 2).status).toBe('LOCKED');
     expect(sub(t, '2.1.1').lock_reason).toMatchObject({ code: 'TIER_LOCKED', message: 'Selesaikan Boss Stage Tier 1 atau ikuti Uji Kompetensi untuk membuka Tier ini.' });
-    expect(sub(t, '1.1.3')).toMatchObject({ content_state: 'COMING_SOON', lock_reason: { code: 'NOT_PUBLISHED', message: 'Materi ini belum tersedia. Segera hadir.' } });
+    expect(sub(t, '1.2.1')).toMatchObject({ content_state: 'COMING_SOON', lock_reason: { code: 'NOT_PUBLISHED', message: 'Materi ini belum tersedia. Segera hadir.' } });
     expect(mod(t, '1.2').content_state).toBe('COMING_SOON');
-    expect(t.tiers.reduce((n, x) => n + x.modules.length, 0)).toBe(13);
+    expect(t.tiers.reduce((n, x) => n + x.modules.length, 0)).toBe(15);
   });
 
   it('userCreatedHooks membuat progres; Tier tanpa sub-modul AVAILABLE: progress 0 dan MODULES_INCOMPLETE', async () => {
@@ -115,7 +115,7 @@ describe('pohon dan status awal', () => {
     await execute(db, sql`DELETE FROM user_sub_module_progress WHERE user_id = ${u.id}`);
     const t = await getTree(u.id);
     expect(sub(t, '1.1.1').status).toBe('UNLOCKED');
-    expect((await execute(db, sql`SELECT count(*) AS n FROM user_sub_module_progress WHERE user_id = ${u.id}`)).rows[0]).toEqual({ n: 33 });
+    expect((await execute(db, sql`SELECT count(*) AS n FROM user_sub_module_progress WHERE user_id = ${u.id}`)).rows[0]).toEqual({ n: 40 });
   });
 
   it('mini_task_json {} -> has_mini_task=false; berisi task_type -> true; D7 persentase', async () => {
@@ -138,7 +138,7 @@ describe('applyDrillResult', () => {
     await getTree(u.id);
     const r = await drill(u.id, '1.1.1', 75);
     expect(r.unlocked.map((x) => x.kind)).toEqual(['SUB_MODULE']);
-    expect(r.unlocked[0]!.label).toBe('Present Simple vs. Present Continuous');
+    expect(r.unlocked[0]!.label).toBe('Adjectives & Adverbs: Jenis, Posisi, & Akhiran Pembentuk Kata (Suffix)');
     const a = await progressRow(u.id, '1.1.1');
     expect(a).toMatchObject({ status: 'COMPLETED', best_score_percent: 75, attempts_count: 1 });
     expect(a.completed_at).not.toBeNull();
@@ -179,13 +179,13 @@ describe('applyDrillResult', () => {
     expect((await progressRow(u.id, '1.1.1')).status).toBe('COMPLETED');
   });
 
-  it('rantai melewati sub-modul DRAFT: 1.1.3 UNLOCKED setelah 1.1.1 selesai; 1.1.2 COMING_SOON', async () => {
-    await publish('1.1.1', '1.1.3');
+  it('rantai melewati sub-modul DRAFT: 1.2.1 UNLOCKED setelah 1.1.1 selesai; 1.1.2 COMING_SOON', async () => {
+    await publish('1.1.1', '1.2.1');
     const u = await newUser();
     await getTree(u.id);
     await drill(u.id, '1.1.1', 100);
     const t = await getTree(u.id);
-    expect(sub(t, '1.1.3').status).toBe('UNLOCKED');
+    expect(sub(t, '1.2.1').status).toBe('UNLOCKED');
     expect(sub(t, '1.1.2').content_state).toBe('COMING_SOON');
   });
 
@@ -231,7 +231,7 @@ describe('assertSubModuleAccessible dan markStarted', () => {
     expect((await run(await subId('1.1.1'))).subModule.code).toBe('1.1.1');
     await expect(run(await subId('1.1.2'))).rejects.toMatchObject({ code: 'LOCKED_CONTENT', status: 403, details: [{ path: 'sub_module_id', code: 'PREVIOUS_INCOMPLETE' }] });
     await expect(run(await subId('2.1.1'))).rejects.toMatchObject({ code: 'LOCKED_CONTENT', details: [{ code: 'TIER_LOCKED' }] });
-    await expect(run(await subId('1.1.3'))).rejects.toMatchObject({ code: 'NOT_FOUND', status: 404 });
+    await expect(run(await subId('1.2.1'))).rejects.toMatchObject({ code: 'NOT_FOUND', status: 404 });
     await expect(run('7a1b2c3d-0000-4000-8000-000000000000')).rejects.toMatchObject({ code: 'NOT_FOUND' });
     await execute(db, sql`UPDATE sub_modules SET status = 'ARCHIVED' WHERE sub_module_code = '1.1.1'`);
     await expect(run(await subId('1.1.1'))).rejects.toMatchObject({ code: 'NOT_FOUND' });
@@ -371,7 +371,7 @@ describe('override progres (CLI progress:unlock memakai fungsi ini)', () => {
     expect(logs).toHaveLength(1);
     expect(logs[0]!.actorUserId).toBeNull();
     await expect(override(l.id, 'SUB_MODULE', target)).rejects.toMatchObject({ code: 'ALREADY_UNLOCKED' });
-    await expect(override(l.id, 'SUB_MODULE', await subId('1.1.3'))).rejects.toMatchObject({ code: 'NOT_AVAILABLE' });
+    await expect(override(l.id, 'SUB_MODULE', await subId('1.2.1'))).rejects.toMatchObject({ code: 'NOT_AVAILABLE' });
     await expect(override(l.id, 'SUB_MODULE', '7a1b2c3d-0000-4000-8000-000000000000')).rejects.toMatchObject({ code: 'NOT_FOUND' });
     await expect(override('7a1b2c3d-0000-4000-8000-000000000000', 'SUB_MODULE', target)).rejects.toMatchObject({ code: 'NOT_FOUND' });
   });
@@ -407,7 +407,7 @@ describe('GET /curriculum/tree', () => {
     expect(CurriculumTreeResponseSchema.safeParse(r.json).success).toBe(true);
   });
 
-  it('kinerja: 4 Tier x 33 sub-modul, keadaan tunak <= 8 query SQL dan p95 < 300 ms', async () => {
+  it('kinerja: 4 Tier x 40 sub-modul, keadaan tunak <= 8 query SQL dan p95 < 300 ms', async () => {
     await publish(...(await execute(db, sql`SELECT sub_module_code AS c FROM sub_modules`)).rows.map((r) => (r as { c: string }).c));
     const l = await learnerSession();
     await call(treeGet, 'GET', '/api/v1/curriculum/tree', { cookie: l.cookie }); // hangatkan + buat progres

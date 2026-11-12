@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import type { ModuleNode, TierNode } from '@/contracts/curriculum';
 import { fmt, id } from '@/i18n/id';
 import { cn } from '@/lib/utils';
-import { StatusBadge } from './status';
+import { NewContentBadge, StatusBadge } from './status';
 import { SubModuleNodeItem, type Selection } from './sub-module-node';
 
 export function ModuleCard({
@@ -24,7 +24,9 @@ export function ModuleCard({
   onSelect: (s: Selection) => void;
 }) {
   const done = module.status === 'COMPLETED' || module.status === 'SKIPPED';
-  const [open, setOpen] = React.useState(!done);
+  // C-23: modul yang sudah selesai tetapi mendapat sub-modul baru tetap terbuka dan diberi lencana.
+  const hasNew = done && module.content_state === 'AVAILABLE' && module.progress_percent < 100;
+  const [open, setOpen] = React.useState(!done || hasNew);
   const listId = React.useId();
   const comingSoon = module.content_state === 'COMING_SOON';
   const skipSet = module.skip_test.available ? module.skip_test.assessment_set_id : null;
@@ -56,6 +58,7 @@ export function ModuleCard({
               ) : (
                 <StatusBadge status={module.status} />
               )}
+              {hasNew ? <NewContentBadge /> : null}
               <span className="text-xs text-muted-foreground tabular-nums">{module.progress_percent}%</span>
             </span>
           </span>

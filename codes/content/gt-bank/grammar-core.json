@@ -353,6 +353,345 @@
             2
           ],
           "points": 3
+        },
+        {
+          "question_id": "Q-GTGC-021",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "By the time we arrived at the station, the train ___.",
+          "difficulty": 2,
+          "explanation_id": "Kejadian yang lebih dulu selesai sebelum kejadian lampau lain: Past Perfect (had + V3).",
+          "options": [
+            "had left",
+            "has left",
+            "leaves",
+            "is leaving"
+          ],
+          "correct_answers": [
+            "had left"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-022",
+          "question_type": "MCQ_MULTI",
+          "skill": "GRAMMAR",
+          "prompt": "Choose TWO sentences that are grammatically correct.",
+          "difficulty": 2,
+          "explanation_id": "for + durasi (five years), since + titik waktu (2020). Present Perfect dipakai untuk keadaan yang berlanjut sampai sekarang, bukan Present Simple.",
+          "options": [
+            "She has worked here since five years.",
+            "She has worked here for five years.",
+            "She has been working here since 2020.",
+            "She works here since 2020."
+          ],
+          "correct_answers": [
+            "She has worked here for five years.",
+            "She has been working here since 2020."
+          ],
+          "points": 2
+        },
+        {
+          "question_id": "Q-GTGC-023",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Excuse me, could you tell me the way to ___ nearest post office?",
+          "difficulty": 1,
+          "explanation_id": "Superlatif (nearest) selalu memakai 'the'.",
+          "options": [
+            "the",
+            "a",
+            "an",
+            "no article"
+          ],
+          "correct_answers": [
+            "the"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-024",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Complete with an article: She works as ___ engineer for a large construction company.",
+          "difficulty": 1,
+          "explanation_id": "Profesi tunggal memakai a/an; 'engineer' diawali bunyi vokal sehingga 'an'.",
+          "correct_answers": [
+            "an"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGC-025",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "If I had known about the delay, I ___ a later train.",
+          "difficulty": 3,
+          "explanation_id": "Third conditional (pengandaian masa lampau): If + had + V3, would have + V3.",
+          "options": [
+            "would have taken",
+            "will take",
+            "would take",
+            "had taken"
+          ],
+          "correct_answers": [
+            "would have taken"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-026",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Complete with the correct form of 'melt': If you heat ice, it ___.",
+          "difficulty": 1,
+          "explanation_id": "Zero conditional (fakta umum): If + Present Simple, Present Simple. Subjek 'it' -> melts.",
+          "correct_answers": [
+            "melts"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGC-027",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "All staff members ___ to wear an ID badge at all times.",
+          "difficulty": 2,
+          "explanation_id": "Staf adalah pihak yang dikenai aturan, jadi pasif: are required (be + V3).",
+          "options": [
+            "are required",
+            "require",
+            "are requiring",
+            "have required"
+          ],
+          "correct_answers": [
+            "are required"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-028",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Complete with the future passive of 'open' (use 'will'): The new library ___ by the mayor next month.",
+          "difficulty": 3,
+          "explanation_id": "Pasif future: will be + V3 -> will be opened.",
+          "correct_answers": [
+            "will be opened"
+          ],
+          "max_words": 3
+        },
+        {
+          "question_id": "Q-GTGC-029",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "The flat ___ I rented last year had a beautiful view.",
+          "difficulty": 2,
+          "explanation_id": "Benda (flat) sebagai objek 'rented': which/that. 'Where' tidak bisa karena 'rented' butuh objek.",
+          "options": [
+            "which",
+            "who",
+            "whose",
+            "where"
+          ],
+          "correct_answers": [
+            "which"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-030",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "GRAMMAR",
+          "prompt": "Click the incorrect word.",
+          "difficulty": 2,
+          "explanation_id": "Untuk orang dipakai 'who' atau 'that', bukan 'which': The man who lives next door.",
+          "tokens": [
+            "The",
+            "man",
+            "which",
+            "lives",
+            "next",
+            "door",
+            "is",
+            "a",
+            "doctor."
+          ],
+          "correct_answers": [
+            2
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-031",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "You ___ bring your own towel because the gym provides them.",
+          "difficulty": 2,
+          "explanation_id": "Tidak wajib (tetapi boleh) = don't have to. Mustn't berarti larangan.",
+          "options": [
+            "don't have to",
+            "mustn't",
+            "must",
+            "can't"
+          ],
+          "correct_answers": [
+            "don't have to"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-032",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Her car is in the car park and she isn't answering her phone, so she ___ be in the meeting.",
+          "difficulty": 3,
+          "explanation_id": "Kesimpulan yang sangat yakin berdasarkan bukti: must + V1.",
+          "options": [
+            "must",
+            "can't",
+            "mustn't",
+            "has"
+          ],
+          "correct_answers": [
+            "must"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-033",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Neither the manager nor the assistants ___ available on Fridays.",
+          "difficulty": 3,
+          "explanation_id": "Neither ... nor: kata kerja mengikuti subjek terdekat (the assistants, jamak) -> are.",
+          "options": [
+            "are",
+            "is",
+            "be",
+            "am"
+          ],
+          "correct_answers": [
+            "are"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-034",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "GRAMMAR",
+          "prompt": "Click the incorrect word.",
+          "difficulty": 2,
+          "explanation_id": "'Each of + jamak' tetap dianggap tunggal: Each of the rooms has.",
+          "tokens": [
+            "Each",
+            "of",
+            "the",
+            "rooms",
+            "have",
+            "a",
+            "private",
+            "bathroom."
+          ],
+          "correct_answers": [
+            4
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-035",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Complete with 'has' or 'have': The number of applicants ___ increased this year.",
+          "difficulty": 3,
+          "explanation_id": "'The number of' bersubjek tunggal -> has. (Bandingkan: 'A number of applicants have...').",
+          "correct_answers": [
+            "has"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGC-036",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "I'm considering ___ to a smaller flat.",
+          "difficulty": 2,
+          "explanation_id": "Consider diikuti gerund (V-ing): considering moving.",
+          "options": [
+            "moving",
+            "to move",
+            "move",
+            "moved"
+          ],
+          "correct_answers": [
+            "moving"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-037",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "GRAMMAR",
+          "prompt": "Choose the correct verb form to complete each sentence.",
+          "difficulty": 2,
+          "explanation_id": "decide/refuse + to-infinitive; enjoy/mind + V-ing.",
+          "matching": {
+            "left": [
+              "We decided ___ a taxi home.",
+              "I really enjoy ___ by train.",
+              "He refused ___ the extra fee.",
+              "Would you mind ___ the window?"
+            ],
+            "right": [
+              "opening",
+              "to take",
+              "to open",
+              "travelling",
+              "to pay",
+              "travel"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            1,
+            3,
+            4,
+            0
+          ],
+          "points": 4
+        },
+        {
+          "question_id": "Q-GTGC-038",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "This flat is ___ than the one we saw yesterday.",
+          "difficulty": 1,
+          "explanation_id": "Komparatif kata pendek: adjektiva + -er (bigger); 'much' menguatkan. 'More bigger' salah.",
+          "options": [
+            "much bigger",
+            "more bigger",
+            "biggest",
+            "most big"
+          ],
+          "correct_answers": [
+            "much bigger"
+          ]
+        },
+        {
+          "question_id": "Q-GTGC-039",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Complete with the superlative of 'good': It is the ___ hotel in the city.",
+          "difficulty": 1,
+          "explanation_id": "Superlatif tidak beraturan: good - better - best.",
+          "correct_answers": [
+            "best"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGC-040",
+          "question_type": "SENTENCE_REORDER",
+          "skill": "GRAMMAR",
+          "prompt": "Put the parts in order to make a correct sentence.",
+          "difficulty": 3,
+          "explanation_id": "Third conditional pasif: If + had been + V3, would have + V3.",
+          "segments": [
+            "If the parcel",
+            "had been sent",
+            "on Monday,",
+            "it would have arrived",
+            "by now."
+          ]
         }
       ]
     }

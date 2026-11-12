@@ -1,0 +1,13 @@
+{
+  "part_code": "GT-L-S3-001",
+  "reviewer": "Pemilik (sementara, belum didengar)",
+  "reviewed_at": "2026-11-11",
+  "clarity": 4,
+  "speed": 3,
+  "naturalness": 3,
+  "answer_leak": false,
+  "approved": true,
+  "script_sha256": "f16bec2c83561e36fb707d78e751f4c521f6eb6ac868dae1f955e190e9b0a832",
+  "audio_sha256": "5d407823d609d78b83ddea5dcf10f47c62ab755249e7da3098f0c5407483e485",
+  "notes": "Disetujui sementara 2026-11-11 atas permintaan pemilik agar bisa dicoba di platform; audio belum didengar manusia, review ulang bila perlu."
+}

@@ -22,8 +22,8 @@ import {
   unlockCode,
 } from './helpers/core';
 
-// SPEC-005 Pemutar Materi Multimodal (domain Inti Belajar). Sub-modul uji 1.2.1: artikel + callout + tabel lebar,
-// 1 video (YouTube di-stub), 3 slide, 1 lampiran PDF, Mini-Task SELF_CHECK, drill 4 soal. 1.2.2: artikel saja.
+// SPEC-005 Pemutar Materi Multimodal (domain Inti Belajar). Sub-modul uji 1.4.1: artikel + callout + tabel lebar,
+// 1 video (YouTube di-stub), 3 slide, 1 lampiran PDF, Mini-Task SELF_CHECK, drill 4 soal. 1.4.2: artikel saja.
 test.describe.configure({ timeout: 75_000 });
 let journey: CoreProfile; // tes 60 detik nyata
 let reader: CoreProfile; // tes baca/aset/video (tanpa menyelesaikan)
@@ -60,12 +60,12 @@ test('alur belajar nyata (ambang bawaan 60 detik): artikel, video, slide, Selesa
   setLearnMin(60);
   await context.addCookies(journey.cookies);
   await stubYouTube(page);
-  await page.goto('/belajar/1.2.1');
+  await page.goto('/belajar/1.4.1');
   const tLoad = Date.now();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(SUB_TITLES['1.2.1']!);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(SUB_TITLES['1.4.1']!);
   await expect(page.getByText(/Tier 1 > Survival Vocabulary & Pronunciation · 1\.2\.1/)).toBeVisible();
   // Server menandai sub-modul dimulai (UNLOCKED -> IN_PROGRESS) saat halaman dibuka.
-  await expect.poll(async () => ((await apiGet<Detail>(page, '/api/v1/sub-modules/1.2.1')).body.data.progress as { status: string }).status).toBe('IN_PROGRESS');
+  await expect.poll(async () => ((await apiGet<Detail>(page, '/api/v1/sub-modules/1.4.1')).body.data.progress as { status: string }).status).toBe('IN_PROGRESS');
 
   // Sub-tab hanya yang berisi: Artikel, Video, Slide.
   const subtabs = page.getByRole('tablist', { name: 'Jenis materi' });
@@ -103,7 +103,7 @@ test('alur belajar nyata (ambang bawaan 60 detik): artikel, video, slide, Selesa
   await expect(completeBtn(page)).not.toHaveAttribute('aria-disabled', 'true');
   const elapsed = (Date.now() - tLoad) / 1000;
   expect(elapsed, 'server wajib memotong detik klaim klien dengan jam nyata (ambang 60 detik)').toBeGreaterThanOrEqual(50);
-  const prog = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.2.1')).body.data.progress as { learn_active_seconds: number; learn_ready: boolean; learn_visited_subtabs: string[] };
+  const prog = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.4.1')).body.data.progress as { learn_active_seconds: number; learn_ready: boolean; learn_visited_subtabs: string[] };
   expect(prog.learn_ready).toBe(true);
   expect(prog.learn_active_seconds).toBeGreaterThanOrEqual(60);
   expect([...prog.learn_visited_subtabs].sort()).toEqual(['ARTICLE', 'SLIDES', 'VIDEO']);
@@ -118,7 +118,7 @@ test('alur belajar nyata (ambang bawaan 60 detik): artikel, video, slide, Selesa
   expect(m2.sw).toBeLessThanOrEqual(m2.w);
   await shot(page, `player-after-learn-${test.info().project.name}`);
   // Idempoten: panggilan ulang learn-complete tetap 200 dengan waktu yang sama.
-  const sid = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.2.1')).body.data.sub_module.id;
+  const sid = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.4.1')).body.data.sub_module.id;
   const again = await apiPost<{ data: { learn_completed_at: string } }>(page, `/api/v1/sub-modules/${sid}/learn-complete`);
   expect(again.status).toBe(200);
   const again2 = await apiPost<{ data: { learn_completed_at: string } }>(page, `/api/v1/sub-modules/${sid}/learn-complete`);
@@ -127,7 +127,7 @@ test('alur belajar nyata (ambang bawaan 60 detik): artikel, video, slide, Selesa
 
 test('artikel: callout berlabel, tabel mengisi lebar tanpa geser (wadah scroll cadangan), tautan luar aman, gambar Markdown dibuang, aset tidak bocor', async ({ page, context }) => {
   await context.addCookies(reader.cookies);
-  await page.goto('/belajar/1.2.1');
+  await page.goto('/belajar/1.4.1');
   const article = page.locator('article');
   await expect(article.getByText(TIPS_LABEL, { exact: true })).toBeVisible();
   await expect(article.getByText('Baca soal dua kali sebelum menjawab.')).toBeVisible();
@@ -152,7 +152,7 @@ test('artikel: callout berlabel, tabel mengisi lebar tanpa geser (wadah scroll c
   await expect(page.locator('script', { hasText: 'alert(1)' })).toHaveCount(0);
 
   // Payload tidak membocorkan kolom internal.
-  const d = await apiGet<Detail>(page, '/api/v1/sub-modules/1.2.1');
+  const d = await apiGet<Detail>(page, '/api/v1/sub-modules/1.4.1');
   const raw = JSON.stringify(d.body);
   for (const k of ['ai_rubric_criteria', 'storage_key', 'sha256', 'external_url']) expect(raw, k).not.toContain(`"${k}"`);
   expect(d.body.data.material.videos[0]!.video_id).toBe(VIDEO_ID);
@@ -161,7 +161,7 @@ test('artikel: callout berlabel, tabel mengisi lebar tanpa geser (wadah scroll c
 
 test('aset: slide dan lampiran dilayani dengan header aman, ETag 304, lampiran sebagai unduhan; kind lain tidak dilayani', async ({ page, context }) => {
   await context.addCookies(reader.cookies);
-  const d = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.2.1')).body.data;
+  const d = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.4.1')).body.data;
   expect(d.material.slides).toHaveLength(3);
   const slide = await page.request.get(d.material.slides[0]!.url);
   expect(slide.status()).toBe(200);
@@ -185,7 +185,7 @@ test('aset: slide dan lampiran dilayani dengan header aman, ETag 304, lampiran s
   expect((await page.request.get('/api/v1/assets/00000000-0000-4000-8000-000000000000/file')).status()).toBe(404);
 
   // UI: tombol unduh PDF memuat ukuran berkas.
-  await page.goto('/belajar/1.2.1');
+  await page.goto('/belajar/1.4.1');
   const dl = page.getByRole('link', { name: /Unduh PDF \(.+\)/ });
   await expect(dl).toBeVisible();
   await expect(dl).toHaveAttribute('href', d.material.attachments[0]!.url);
@@ -194,7 +194,7 @@ test('aset: slide dan lampiran dilayani dengan header aman, ETag 304, lampiran s
 test('video: URL embed hanya dari video_id valid (nocookie) dengan start/end/rel/playsinline/origin; label bagian; t di luar rentang kembali ke start', async ({ page, context }) => {
   await context.addCookies(reader.cookies);
   await stubYouTube(page);
-  await page.goto('/belajar/1.2.1?tab=pelajari&sub=video');
+  await page.goto('/belajar/1.4.1?tab=pelajari&sub=video');
   await expect(page.getByText('Bagian 00:10–03:20')).toBeVisible();
   await expect(page.getByText('Oleh Kanal Uji')).toBeVisible();
   await expect(page.locator('iframe[data-stub]')).toHaveAttribute('title', `Video: ${VIDEO.title}`);
@@ -208,10 +208,10 @@ test('video: URL embed hanya dari video_id valid (nocookie) dengan start/end/rel
   expect(Math.abs(box!.width / box!.height - 16 / 9)).toBeLessThan(0.05);
 
   // Lanjut dari detik tersimpan (SPEC-007): t dalam rentang dipakai, t > end_sec kembali ke start_sec.
-  await page.goto('/belajar/1.2.1?tab=pelajari&sub=video&t=50');
+  await page.goto('/belajar/1.4.1?tab=pelajari&sub=video&t=50');
   await expect(page.locator('iframe[data-stub]')).toBeVisible();
   expect(await page.evaluate(() => (window as unknown as { __yt: { players: Array<{ playerVars: { start: number } }> } }).__yt.players.at(-1)!.playerVars.start)).toBe(50);
-  await page.goto('/belajar/1.2.1?tab=pelajari&sub=video&t=5000');
+  await page.goto('/belajar/1.4.1?tab=pelajari&sub=video&t=5000');
   await expect(page.locator('iframe[data-stub]')).toBeVisible();
   expect(await page.evaluate(() => (window as unknown as { __yt: { players: Array<{ playerVars: { start: number } }> } }).__yt.players.at(-1)!.playerVars.start)).toBe(10);
 });
@@ -219,7 +219,7 @@ test('video: URL embed hanya dari video_id valid (nocookie) dengan start/end/rel
 test('video gagal dimuat: pesan, tautan Buka di YouTube, Coba lagi; offline: Video butuh koneksi internet', async ({ page, context }) => {
   await context.addCookies(reader.cookies);
   await breakYouTube(page);
-  await page.goto('/belajar/1.2.1?tab=pelajari&sub=video');
+  await page.goto('/belajar/1.4.1?tab=pelajari&sub=video');
   await expect(page.getByText('Video tidak dapat dimuat')).toBeVisible();
   const open = page.getByRole('link', { name: 'Buka di YouTube' });
   await expect(open).toHaveAttribute('href', `https://www.youtube.com/watch?v=${VIDEO_ID}&t=10s`);
@@ -233,7 +233,7 @@ test('video gagal dimuat: pesan, tautan Buka di YouTube, Coba lagi; offline: Vid
   await expect(page.locator('iframe[data-stub]')).toBeVisible();
 
   // Offline: setelah pemutar termuat (data sub-modul sudah ada), jaringan diputus.
-  await page.goto('/belajar/1.2.1?tab=pelajari&sub=video');
+  await page.goto('/belajar/1.4.1?tab=pelajari&sub=video');
   await expect(page.locator('iframe[data-stub]')).toBeVisible();
   await context.setOffline(true);
   await page.evaluate(() => window.dispatchEvent(new Event('offline')));
@@ -246,7 +246,7 @@ test('video gagal dimuat: pesan, tautan Buka di YouTube, Coba lagi; offline: Vid
 test('video PLAYING menghitung waktu aktif tanpa interaksi dan posisi dilaporkan; sub-tab Slide: carousel dapat dinavigasi (tombol + panah)', async ({ page, context }) => {
   await context.addCookies(reader.cookies);
   await stubYouTube(page);
-  await page.goto('/belajar/1.2.1?tab=pelajari&sub=slide');
+  await page.goto('/belajar/1.4.1?tab=pelajari&sub=slide');
   const region = page.getByRole('region', { name: 'Slide materi' });
   await expect(region).toBeVisible();
   await expect(region).toHaveAttribute('aria-roledescription', 'carousel');
@@ -269,25 +269,25 @@ test('video PLAYING menghitung waktu aktif tanpa interaksi dan posisi dilaporkan
 test('Mini-Task SELF_CHECK: ditandai selesai hanya setelah materi selesai; tanpa Mini-Task ada pesan', async ({ page, context }) => {
   setLearnMin(10);
   await context.addCookies(applier.cookies);
-  await page.goto('/belajar/1.2.1?tab=terapkan');
+  await page.goto('/belajar/1.4.1?tab=terapkan');
   await expect(page.getByText('Tulis lima kata benda dari kamarmu di buku catatan.')).toBeVisible();
   await expect(page.getByText('Lima kata benda ditulis dengan benar.')).toBeVisible();
   const mark = page.getByRole('button', { name: 'Tandai Selesai' });
   await expect(mark).toBeDisabled();
   await expect(page.getByText('Selesaikan materi di tab Pelajari terlebih dahulu.')).toBeVisible();
   // API menolak sebelum materi selesai, dan tipe lain menolak.
-  const d = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.2.1')).body.data;
+  const d = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.4.1')).body.data;
   const early = await apiPost<{ error: { code: string } }>(page, `/api/v1/sub-modules/${d.sub_module.id}/mini-task/complete`);
   expect(early.status).toBe(409);
   expect(early.body.error.code).toBe('LEARN_NOT_COMPLETED');
 
-  await learnFast(page, '1.2.1');
+  await learnFast(page, '1.4.1');
   await page.reload();
   await expect(mark).toBeEnabled();
   await mark.click();
   await expect(page.getByText('Mini-Task selesai.')).toBeVisible();
   await expect(page.getByRole('tab', { name: /^Terapkan/ })).toContainText('selesai');
-  const after = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.2.1')).body.data.progress as { mini_task_completed_at: string | null };
+  const after = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.4.1')).body.data.progress as { mini_task_completed_at: string | null };
   expect(after.mini_task_completed_at).toBeTruthy();
   const second = await apiPost<{ data: { mini_task_completed_at: string } }>(page, `/api/v1/sub-modules/${d.sub_module.id}/mini-task/complete`);
   expect(second.status).toBe(200);
@@ -299,11 +299,11 @@ test('Latihan terkunci sampai materi selesai (UI + API); learn-complete awal dit
   const p = await createCoreProfile('plr-g');
   try {
     await context.addCookies(p.cookies);
-    await page.goto('/belajar/1.2.1?tab=latihan');
+    await page.goto('/belajar/1.4.1?tab=latihan');
     await expect(page.getByRole('button', { name: 'Mulai Latihan' })).toBeDisabled();
     await expect(page.getByText('Selesaikan materi terlebih dahulu.')).toBeVisible();
     await expect(page.getByText('4 soal - 5 menit - lulus 75%')).toBeVisible();
-    const d = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.2.1')).body.data;
+    const d = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.4.1')).body.data;
     expect(d.drill).toMatchObject({ can_start: false, blocked_reason: 'LEARN_NOT_COMPLETED' });
     const start = await apiPost<{ error: { code: string } }>(page, '/api/v1/attempts', { assessment_set_id: d.drill.assessment_set_id });
     expect(start.status).toBe(409);
@@ -324,9 +324,9 @@ test('Latihan terkunci sampai materi selesai (UI + API); learn-complete awal dit
       last = r.body.data.learn_active_seconds;
     }
     expect(last).toBeLessThanOrEqual(8);
-    // Sub-modul tanpa video (1.2.2, dibuka lewat CLI): subtab VIDEO ditolak 400 subtab_unavailable.
-    unlockCode(p, '1.2.2');
-    const d2 = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.2.2')).body.data;
+    // Sub-modul tanpa video (1.4.2, dibuka lewat CLI): subtab VIDEO ditolak 400 subtab_unavailable.
+    unlockCode(p, '1.4.2');
+    const d2 = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.4.2')).body.data;
     const bad = await apiPost<{ error: { code: string; details: Array<{ code: string }> } }>(page, `/api/v1/sub-modules/${d2.sub_module.id}/learn-progress`, { subtab: 'VIDEO', active_seconds: 10 });
     expect(bad.status).toBe(400);
     expect(bad.body.error.code).toBe('VALIDATION_ERROR');
@@ -338,10 +338,10 @@ test('Latihan terkunci sampai materi selesai (UI + API); learn-complete awal dit
 
 test('navigasi Sebelumnya/Selanjutnya mengikuti rantai Tier', async ({ page, context }) => {
   await context.addCookies(applier.cookies);
-  const a = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.2.1')).body.data.navigation;
-  expect(a).toEqual({ prev_sub_module_code: null, next_sub_module_code: '1.2.2' });
-  await page.goto('/belajar/1.2.1');
-  await expect(page.getByRole('link', { name: 'Selanjutnya' })).toHaveAttribute('href', '/belajar/1.2.2');
+  const a = (await apiGet<Detail>(page, '/api/v1/sub-modules/1.4.1')).body.data.navigation;
+  expect(a).toEqual({ prev_sub_module_code: null, next_sub_module_code: '1.4.2' });
+  await page.goto('/belajar/1.4.1');
+  await expect(page.getByRole('link', { name: 'Selanjutnya' })).toHaveAttribute('href', '/belajar/1.4.2');
   await expect(page.getByRole('link', { name: 'Sebelumnya' })).toHaveCount(0);
   // Tombol kembali ke peta.
   await expect(page.getByRole('link', { name: 'Kembali ke peta belajar' })).toHaveAttribute('href', '/peta');

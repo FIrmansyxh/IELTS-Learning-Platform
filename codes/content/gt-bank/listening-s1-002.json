@@ -1,0 +1,176 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-LIS-S1-002",
+      "bank_kind": "LISTENING_GT_S1",
+      "title": "Listening GT Section 1: Pemesanan Ruang Pusat Komunitas",
+      "skill": "LISTENING",
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "listening_asset_code": "gt-listening/gt-l-s1-002",
+      "tags": [
+        "listening",
+        "section-1",
+        "form-filling",
+        "room-booking"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTL1-011",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Complete the booking form below. Write ONE WORD ONLY.\n\nName: David ________",
+          "difficulty": 1,
+          "explanation_id": "Penelepon mengeja nama keluarganya: \"C-A-L-D-W-E-L-L\".",
+          "max_words": 1,
+          "correct_answers": [
+            "Caldwell"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-012",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Type of event: ________ party",
+          "difficulty": 1,
+          "explanation_id": "Acara bukan pesta ulang tahun: \"actually it's her retirement party\". Kata \"birthday\" adalah pengecoh.",
+          "max_words": 1,
+          "correct_answers": [
+            "retirement"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-013",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Date: Saturday ________ March",
+          "difficulty": 2,
+          "explanation_id": "Tanggal 16 sudah dipesan untuk resepsi pernikahan, sehingga dipilih \"Saturday the twenty-third of March\".",
+          "max_words": 1,
+          "correct_answers": [
+            "23rd",
+            "23",
+            "twenty-third",
+            "twenty third",
+            "23rd of",
+            "the 23rd"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-014",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Number of guests: ________",
+          "difficulty": 2,
+          "explanation_id": "Sekitar 60 undangan dikirim, tetapi yang sudah konfirmasi hanya 45: \"let's say forty-five\".",
+          "max_words": 1,
+          "correct_answers": [
+            "45",
+            "forty-five",
+            "fortyfive"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-015",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Which room does David decide to book?",
+          "difficulty": 2,
+          "explanation_id": "Main Hall terlalu besar (120 orang) dan Studio terlalu kecil (30 orang). David berkata: \"The Garden Room sounds perfect.\"",
+          "options": [
+            "The Main Hall",
+            "The Studio",
+            "The Garden Room",
+            "The Conference Room"
+          ],
+          "correct_answers": [
+            "The Garden Room"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-016",
+          "question_type": "MCQ_MULTI",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Choose TWO letters. Which TWO extras does David request?",
+          "difficulty": 3,
+          "explanation_id": "Petugas merangkum: \"So that's the projector and kitchen access.\" Mikrofon tidak diperlukan, dan meja serta kursi sudah termasuk dalam sewa ruangan.",
+          "options": [
+            "A projector",
+            "A microphone",
+            "Use of the kitchen",
+            "Extra tables and chairs",
+            "A sound system"
+          ],
+          "correct_answers": [
+            "A projector",
+            "Use of the kitchen"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-017",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Guest parking: use the car park behind the ________",
+          "difficulty": 2,
+          "explanation_id": "Petugas menyarankan: \"use the larger car park behind the library\". Parkir di depan gedung kecil dan cepat penuh.",
+          "max_words": 1,
+          "correct_answers": [
+            "library"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-018",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Total cost: £________",
+          "difficulty": 2,
+          "explanation_id": "Ruangan £28 x 5 jam = £140 ditambah dapur £20: \"that comes to one hundred and sixty pounds in total\". Proyektor gratis.",
+          "max_words": 1,
+          "correct_answers": [
+            "160",
+            "£160",
+            "one hundred and sixty",
+            "160 pounds"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-019",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "The £50 deposit must be paid by ________",
+          "difficulty": 2,
+          "explanation_id": "Biasanya batasnya hari Rabu, tetapi petugas memberi kelonggaran: \"I can give you until Friday.\"",
+          "max_words": 1,
+          "correct_answers": [
+            "Friday"
+          ]
+        },
+        {
+          "question_id": "Q-GTL1-020",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 1,
+          "prompt": "Booking reference: ________",
+          "difficulty": 2,
+          "explanation_id": "Nomor referensi dieja: \"G-R-four-four-seven-one\", yaitu GR4471.",
+          "max_words": 1,
+          "correct_answers": [
+            "GR4471",
+            "GR-4471"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -24,9 +24,9 @@ const STATUS_CONFIG: Record<
   string,
   { label: string; variant: 'default' | 'secondary' | 'outline' | 'destructive'; className?: string }
 > = {
-  PASSED: { label: 'Lulus', variant: 'default', className: 'bg-emerald-600 text-white dark:bg-emerald-700' },
+  PASSED: { label: 'Lulus', variant: 'default', className: 'bg-[var(--color-done-text)] text-white dark:text-[#0e1822]' },
   ATTEMPTED: { label: 'Perlu Diulang', variant: 'secondary', className: 'bg-amber-500/15 text-amber-700 dark:text-amber-300' },
-  READY: { label: 'Siap Dikerjakan', variant: 'default', className: 'bg-blue-600 text-white dark:bg-blue-700' },
+  READY: { label: 'Siap Dikerjakan', variant: 'default', className: 'bg-primary text-primary-foreground' },
   NOT_READY: { label: 'Belum Siap', variant: 'outline', className: 'text-muted-foreground' },
 };
 

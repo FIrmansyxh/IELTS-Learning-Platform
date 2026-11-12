@@ -18,6 +18,13 @@ const WRITING_CRITERIA = [
   { key: 'grammar', name: 'Grammatical Range & Accuracy', desc: 'Variasi struktur kalimat dan keakuratan tata bahasa.' },
 ];
 
+const SPEAKING_CRITERIA = [
+  { key: 'fluency', name: 'Fluency & Coherence', desc: 'Kelancaran bicara, jeda, dan keruntutan jawaban.' },
+  { key: 'lexical', name: 'Lexical Resource', desc: 'Variasi dan ketepatan kosakata saat berbicara.' },
+  { key: 'grammar', name: 'Grammatical Range & Accuracy', desc: 'Variasi struktur kalimat dan keakuratan tata bahasa lisan.' },
+  { key: 'pronunciation', name: 'Pronunciation', desc: 'Kejelasan lafal, tekanan kata, dan intonasi.' },
+];
+
 const BAND_OPTIONS = [
   4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0,
 ];
@@ -27,20 +34,15 @@ export function roundToHalfBand(mean: number): number {
 }
 
 export function SelfAssessmentForm({
-  kind: _kind = 'writing',
+  kind = 'writing',
   onSubmit,
   onCancel,
   isSubmitting = false,
 }: SelfAssessmentFormProps) {
-  void _kind;
-  const [scores, setScores] = useState<Record<string, number>>({
-    task_response: 6.0,
-    coherence: 6.0,
-    lexical: 6.0,
-    grammar: 6.0,
-  });
-
-  const criteriaList = WRITING_CRITERIA;
+  const criteriaList = kind === 'speaking' ? SPEAKING_CRITERIA : WRITING_CRITERIA;
+  const [scores, setScores] = useState<Record<string, number>>(() =>
+    Object.fromEntries(criteriaList.map((c) => [c.key, 6.0])),
+  );
 
   const currentMean =
     criteriaList.reduce((acc, c) => acc + (scores[c.key] ?? 6.0), 0) / criteriaList.length;
@@ -58,7 +60,7 @@ export function SelfAssessmentForm({
     >
       <div>
         <h3 className="text-base font-semibold text-foreground">{id.ai.selfAssessment.title}</h3>
-        <p className="text-xs text-muted-foreground mt-1">{id.ai.selfAssessment.desc}</p>
+        <p className="text-xs text-muted-foreground mt-1">{kind === 'speaking' ? id.ai.selfAssessment.descSpeaking : id.ai.selfAssessment.desc}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

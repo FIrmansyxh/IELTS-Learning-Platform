@@ -9,6 +9,69 @@
       "rights_status": "OWN_ORIGINAL",
       "file": "audio/gt-l-s1-001.mp3",
       "attribution_text": "Audio dibuat dengan suara sintetis."
+    },
+    {
+      "asset_code": "gt-listening/gt-l-s1-002",
+      "kind": "AUDIO_LISTENING",
+      "title": "Pemesanan Ruang di Pusat Komunitas Riverside",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "audio/gt-l-s1-002.mp3",
+      "attribution_text": "Audio dibuat dengan suara sintetis."
+    },
+    {
+      "asset_code": "gt-listening/gt-l-s2-001",
+      "kind": "AUDIO_LISTENING",
+      "title": "Tur Pusat Olahraga dan Rekreasi Lakeside",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "audio/gt-l-s2-001.mp3",
+      "attribution_text": "Audio dibuat dengan suara sintetis."
+    },
+    {
+      "asset_code": "gt-listening/gt-l-s2-002",
+      "kind": "AUDIO_LISTENING",
+      "title": "Informasi Festival Kuliner dan Kerajinan Musim Panas",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "audio/gt-l-s2-002.mp3",
+      "attribution_text": "Audio dibuat dengan suara sintetis."
+    },
+    {
+      "asset_code": "gt-listening/gt-l-s3-001",
+      "kind": "AUDIO_LISTENING",
+      "title": "Perencanaan Proyek Survei Kursus Keterampilan Bisnis",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "audio/gt-l-s3-001.mp3",
+      "attribution_text": "Audio dibuat dengan suara sintetis."
+    },
+    {
+      "asset_code": "gt-listening/gt-l-s3-002",
+      "kind": "AUDIO_LISTENING",
+      "title": "Diskusi Pelatihan Keamanan Pangan untuk Staf Hotel",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "audio/gt-l-s3-002.mp3",
+      "attribution_text": "Audio dibuat dengan suara sintetis."
+    },
+    {
+      "asset_code": "gt-listening/gt-l-s4-001",
+      "kind": "AUDIO_LISTENING",
+      "title": "Pelatihan Kerja Ergonomi Meja Kerja yang Sehat",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "audio/gt-l-s4-001.mp3",
+      "attribution_text": "Audio dibuat dengan suara sintetis."
+    },
+    {
+      "asset_code": "gt-listening/gt-l-s4-002",
+      "kind": "AUDIO_LISTENING",
+      "title": "Ceramah Komunitas tentang Beternak Lebah di Kota",
+      "source_code": "OWN",
+      "rights_status": "OWN_ORIGINAL",
+      "file": "audio/gt-l-s4-002.mp3",
+      "attribution_text": "Audio dibuat dengan suara sintetis."
     }
   ]
 }

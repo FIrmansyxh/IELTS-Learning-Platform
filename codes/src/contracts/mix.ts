@@ -37,7 +37,8 @@ const uniqueEnumArray = <T extends readonly [string, ...string[]]>(values: T, ma
     .max(max, { error: 'too_big' })
     .refine((a) => new Set(a).size === a.length, { error: 'invalid_value' });
 
-export const MixModeSchema = z.enum(['MANUAL', 'AUTO_WEAKNESS'], { error: 'invalid_value' });
+/** `REVIEW_DUE` (SPEC-026): soal jatuh tempo pengulangan berjarak; `count` = batas atas, filter lain diabaikan. */
+export const MixModeSchema = z.enum(['MANUAL', 'AUTO_WEAKNESS', 'REVIEW_DUE'], { error: 'invalid_value' });
 export type MixMode = z.infer<typeof MixModeSchema>;
 
 const diff = () =>

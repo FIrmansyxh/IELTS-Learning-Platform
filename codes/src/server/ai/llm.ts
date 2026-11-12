@@ -96,7 +96,7 @@ export class LlamaCppClient implements LlmClient {
   constructor(opts?: { baseUrl?: string; model?: string }) {
     this.baseUrl = opts?.baseUrl ?? process.env.LLAMACPP_BASE_URL ?? 'http://127.0.0.1:8080';
     // llama-server melayani satu model; nama hanya label di log/audit.
-    this.model = opts?.model ?? process.env.LLAMACPP_MODEL_WRITING ?? 'qwen2.5-7b-instruct-q4_k_m';
+    this.model = opts?.model ?? process.env.LLAMACPP_MODEL_WRITING ?? 'gpt-oss-20b-mxfp4';
     this.name = this.model;
   }
 
@@ -118,6 +118,9 @@ export class LlamaCppClient implements LlmClient {
       stream: false,
       temperature: req.temperature ?? 0.2,
       max_tokens: req.numPredict ?? 1500,
+      // enable_thinking: Qwen/Gemma; reasoning_effort: gpt-oss (model terpilih, ADR-004).
+      // Template lain mengabaikan kunci yang tidak dikenal. Sama dengan konfigurasi benchmark.
+      chat_template_kwargs: { enable_thinking: false, reasoning_effort: 'low' },
       messages: [
         { role: 'system', content: req.systemPrompt },
         { role: 'user', content: req.userPrompt },

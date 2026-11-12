@@ -151,7 +151,7 @@ Semua komponen dibangun di atas shadcn/ui (Radix); token di atas menggantikan de
 - **Progress bar:** tinggi 8px, track `border`, isi `primary` (belajar) / `status-done` (selesai); label persen di teks; `role="progressbar"` dengan `aria-valuenow`.
 - **Toast:** muncul bawah (mobile) / kanan-bawah, auto-hilang 4 dtk, `aria-live="polite"`, tidak mencuri fokus; toast error tidak auto-hilang dan menyertakan aksi "Coba lagi".
 - **Tabs (Learn/Drill/Apply):** segmented di atas pemutar, `role=tablist`, panah kiri/kanan berpindah tab.
-- **Callout:** "Tips Examiner" (ikon Lightbulb, latar `info` subtle), "Kesalahan Umum" (ikon AlertTriangle, latar warning subtle), border-kiri 4px, teks selalu berlabel.
+- **Callout:** "Tips Examiner" (ikon Lightbulb, latar `info` subtle), "Kesalahan Umum" (ikon AlertTriangle, latar warning subtle), "Pengantar" (ikon Compass, latar `primary` subtle; pembuka artikel di bagian "Mulai dari Sini", backlog C-20), border-kiri 4px, teks selalu berlabel.
 - **Skeleton:** blok `surface-muted` dengan shimmer halus untuk > 300 ms; dihentikan saat reduced-motion.
 
 ### 5.8 Status Skill Tree: Terkunci / Sedang / Selesai (CUR-01)
@@ -446,9 +446,33 @@ Pemetaan ke token shadcn/Tailwind 4 (`--primary`, `--background`, `--card`, `--m
 
 ---
 
+## 11. Visual Refresh v1.1 (2026-11-10) — Modern, ramah, dinamis
+
+Permintaan pemilik: tampilan lebih *human friendly*, menarik, modern, dan dinamis. Palet tema Samudra yang berlaku **tidak berubah**; bagian ini hanya menambah token turunan dan melengkapi aturan yang disebut. Font tetap Plus Jakarta Sans + Inter.
+
+### 11.1 Token baru
+| Token | Light | Dark | Usage |
+|---|---|---|---|
+| `gradient-brand` | `linear-gradient(135deg, #1D4ED8, #0E7490)` | `linear-gradient(135deg, #3B82F6, #22D3EE)` | tombol primary, indikator nav aktif, isi progress bar. Dark memakai gradasi terang karena teks tombol primary di dark gelap (`#06142B`, >= 4.9:1) |
+| `gradient-hero` | `linear-gradient(135deg, #1D4ED8, #0E7490)` | `linear-gradient(135deg, #1E40AF, #0E7490)` | hero sapaan dan logo-mark; selalu dengan teks/ikon putih (>= 5:1 di kedua ujung) |
+| `glow-1` / `glow-2` | biru 10% / sian 9% | biru 16% / sian 10% | latar ambient halaman (radial, statis, di belakang konten) |
+| `shadow-soft` / `shadow-lift` / `shadow-pop` / `shadow-brand` | bayangan lembut bertingkat | dikurangi | kartu, kartu hover, modal, tombol primary |
+| `ease-out-expo` | `cubic-bezier(0.16,1,0.3,1)` | | easing masuk (Bagian 6) sebagai token CSS |
+
+### 11.2 Aturan yang dilengkapi
+- **Card interactive (5.3):** utilitas `card-lift`: hover/fokus = `shadow-lift` + border `primary/40` + `translateY(-2px)` (transform saja, tanpa layout shift).
+- **Button primary (5.1):** latar `gradient-brand` + `shadow-brand`; hover menaikkan kecerahan; active scale 0.98. Varian lain tetap.
+- **Navigasi (5.5):** sidebar menampilkan logo-mark gradasi di samping nama aplikasi; item aktif = pil `primary-subtle` + bilah kiri gradasi 3px. Bottom nav semi-transparan + `backdrop-blur`; item aktif = ikon dalam pil.
+- **Beranda (5.10, 8.1):** judul sapaan menjadi hero bergradasi: sapaan sesuai waktu (pagi/siang/sore/malam) + "Halo, {nama}" + satu kalimat motivasi. Bento di bawahnya tidak berubah.
+- **Motion (6):** blok beranda masuk dengan `fade-up` 400 ms (`translateY 8px -> 0`, opacity 0 -> 1) dan stagger 50 ms (maks. 6 langkah); hanya transform/opacity; mati pada reduced-motion.
+- **Artikel (5.11):** daftar bernomor yang dilanjutkan (contoh Level 2 mulai dari 4) tetap melanjutkan nomornya; penanda nomor tebal; sub-daftar dirapatkan. Teks soal dan pembahasan mempertahankan ganti baris.
+
+---
+
 ## Revision History
 
 | Timestamp | Agen | Perubahan |
 |-----------|------|-----------|
 | 2026-11-03 | UX Designer | Initial design system (token, komponen, motion, a11y, wireframe) |
 | 2026-11-04 | Frontend | SPEC-010: Menambah token highlight-yellow dan highlight-green untuk Reading Workspace |
+| 2026-11-10 | Frontend | Visual Refresh v1.1 (Bagian 11): token gradasi/glow/shadow, kartu terangkat, tombol gradasi, nav & hero beranda, motion masuk, perapian daftar artikel |

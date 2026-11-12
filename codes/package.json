@@ -44,6 +44,7 @@
     "bank:validate": "tsx scripts/bank-validate.ts",
     "listening:check": "tsx scripts/listening-check.ts",
     "listening:build": "tsx scripts/listening-build.ts",
+    "listening:approve": "tsx scripts/listening-approve.ts",
     "bench:gt": "tsx scripts/bench-gt-writing.mts",
     "bench:ai": "node scripts/bench-ai.mjs",
     "format": "prettier --write .",

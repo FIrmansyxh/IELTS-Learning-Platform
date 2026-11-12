@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import type { TierNode } from '@/contracts/curriculum';
 import { fmt, id } from '@/i18n/id';
 import { ModuleCard } from './module-card';
-import { StatusBadge } from './status';
+import { NewContentBadge, StatusBadge } from './status';
 import type { Selection } from './sub-module-node';
 
 function BossButton({ tier }: { tier: TierNode }) {
@@ -57,6 +57,8 @@ export function TierSection({
   const headingId = React.useId();
   const hasAvailable = tier.modules.some((m) => m.sub_modules.some((s) => s.content_state === 'AVAILABLE'));
   const skipSet = tier.skip_test.available ? tier.skip_test.assessment_set_id : null;
+  // C-23: Tier yang sudah selesai tetapi mendapat sub-modul baru.
+  const hasNew = (tier.status === 'COMPLETED' || tier.status === 'SKIPPED') && hasAvailable && tier.progress_percent < 100;
 
   return (
     // Jumlah kolom modul mengikuti lebar wadah (bukan viewport): sidebar dan panel detail ikut menyempitkan area ini.
@@ -76,7 +78,10 @@ export function TierSection({
                 · CEFR {tier.cefr_level}
               </p>
             </div>
-            <StatusBadge status={tier.status} />
+            <div className="flex flex-wrap items-center gap-2">
+              <StatusBadge status={tier.status} />
+              {hasNew ? <NewContentBadge /> : null}
+            </div>
           </div>
           <div className="flex items-center gap-3">
             <Progress

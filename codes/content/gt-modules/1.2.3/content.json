@@ -1,0 +1,514 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 1,
+      "module_code": "1.2",
+      "module_category": "GRAMMAR",
+      "sub_module_title": "Phrases: Noun Phrase, Adjective Phrase, Adverbial Phrase, & Prepositional Phrase",
+      "sub_module_code": "1.2.3",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Mulai dari Sini\n\n:::pengantar\n**Apa yang kamu pelajari?** Bagian ini membahas *phrase* (frasa), yaitu rangkaian kata yang bekerja sama sebagai satu kesatuan makna tetapi belum menjadi kalimat. Dalam bahasa Indonesia kamu sudah memakainya setiap hari: \"gedung tinggi\", \"sangat mahal\", \"di atas meja\". Kamu akan mengenal empat jenis utama dalam bahasa Inggris, yaitu *noun phrase*, *adjective phrase*, *adverbial phrase*, dan *prepositional phrase*, lalu belajar menyusun kata-katanya dalam urutan yang benar.\n\n**Kenapa ini penting?** Urutan kata dalam frasa bahasa Inggris terbalik dari bahasa Indonesia. Kita berkata \"gedung tinggi\", orang Inggris berkata *tall building*. Kalau urutannya salah, kalimatmu terdengar janggal walaupun semua kosakatanya benar. Di IELTS, frasa yang rapi dan padat adalah cara tercepat membuat tulisan terlihat matang, dan kemampuan menemukan kata inti dalam frasa panjang sangat membantu di Reading.\n\n**Bekal sebelum mulai:** Kamu cukup mengenal jenis kata dasar: kata benda (*noun*), kata sifat (*adjective*), kata keterangan (*adverb*), dan kata depan (*preposition*). Kalau masih ragu soal kata benda dan artikel, baca dulu sub-modul 1.1.1. Istilah lain dijelaskan saat pertama muncul.\n:::\n\n### Istilah yang Akan Kamu Temui\n\n| Istilah | Arti sederhana | Contoh |\n|---|---|---|\n| **Phrase** | Rangkaian kata yang bermakna tetapi tidak punya pola subjek + kata kerja | *a tall building* |\n| **Head** | Kata inti, yaitu kata yang dijelaskan | ***building*** dalam *a tall building* |\n| **Modifier** | Kata penjelas yang menerangkan head | ***tall*** dalam *a tall building* |\n| **Clause** | Rangkaian kata yang sudah punya subjek + kata kerja | *because the building is tall* |\n| **Preposition** | Kata depan seperti *in, on, at, of, for, with* | ***on*** *the table* |\n| **Determiner** | Kata kecil pembuka noun phrase: artikel, kata milik, penunjuk, jumlah | *the, my, this, three* |\n\n---\n\n## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Membedakan **phrase**, **clause**, dan **sentence**, serta menunjuk **head** dan **modifier** dalam sebuah frasa.\n2. Membentuk **adjective phrase** dan **adverbial phrase** dengan benar, termasuk posisi *enough*.\n3. Mengenali **prepositional phrase** dan dua fungsinya (menjelaskan kata benda atau menjelaskan kata kerja).\n4. Menyusun **noun phrase** dengan urutan penjelas yang tepat dan memilih kata kerja yang cocok dengan head.\n\n> **Ringkasan 30 detik**\n> - **Phrase** = head (inti) + modifier (penjelas), tanpa pola subjek + kata kerja.\n> - Bahasa Indonesia: inti dulu, penjelas kemudian (*gedung tinggi*). Bahasa Inggris: penjelas dulu, inti di belakang (*tall building*).\n> - Urutan noun phrase: **determiner/jumlah + adjective + noun penjelas + head** (*three expensive beauty products*).\n> - Kata kerja selalu mengikuti **head**, bukan kata benda terdekat: *The quality of the products **is** good.*\n\n---\n\n## 1. Apa Itu Phrase?\n\nPhrase adalah kelompok kata yang maknanya utuh tetapi belum bisa berdiri sebagai kalimat, karena di dalamnya tidak ada pasangan subjek dan kata kerja. Setiap phrase punya satu kata inti yang disebut head, dan kata-kata lain di sekitarnya bertugas menjelaskan head tersebut.\n\nLihat contoh bahasa Indonesia \"gedung tinggi\". Kata \"gedung\" adalah inti (yang dijelaskan), sedangkan \"tinggi\" adalah penjelas. Dalam bahasa Inggris susunannya menjadi *tall building*: penjelas di depan, inti di belakang. Nama sebuah phrase diambil dari jenis kata head-nya. Kalau head-nya noun, namanya noun phrase. Kalau head-nya adjective, namanya adjective phrase.\n\n### 1.1 Phrase, clause, dan sentence\n\n:::compare\nPhrase | Tidak ada subjek + kata kerja; belum bisa berdiri sendiri; a very tall building\nClause | Ada subjek + kata kerja; bisa masih menggantung; because the building is very tall\nSentence | Minimal satu clause yang maknanya lengkap; diakhiri titik; The building is very tall.\n:::\n\nCara cepat mengujinya: cari kata kerja yang punya pelaku. *The building **is** tall* punya pelaku (*the building*) dan kata kerja (*is*), jadi itu clause sekaligus sentence. *A very tall building* tidak punya kata kerja sama sekali, jadi itu phrase.\n\n### 1.2 Peta jenis phrase\n\n| Jenis phrase | Head | Contoh | Tugas dalam kalimat |\n|---|---|---|---|\n| **Noun phrase** | noun | *my new laptop* | subjek, objek, pelengkap |\n| **Adjective phrase** | adjective | *very expensive* | menjelaskan noun |\n| **Adverbial phrase** | adverb | *so patiently* | menjelaskan verb, adjective, atau adverb lain |\n| **Prepositional phrase** | diawali preposition | *in the library* | menjelaskan noun atau verb |\n| **Verb phrase** | main verb | *has been studying* | menjadi kata kerja kalimat |\n\nSatu kalimat biasanya berisi beberapa phrase sekaligus: ***My new laptop*** (noun phrase) ***is working*** (verb phrase) ***very well*** (adverbial phrase) ***in the library*** (prepositional phrase).\n\n---\n\n## 2. Adjective Phrase dan Adverbial Phrase\n\nDua jenis phrase ini dibahas bersama karena cara membentuknya hampir sama. Keduanya memakai kata penguat (*adverb of degree*) seperti *very, so, too, really* di depan head. Bedanya hanya pada head-nya: adjective phrase berinti kata sifat, adverbial phrase berinti kata keterangan.\n\n### 2.1 Adjective phrase\n\nPolanya: **adverb + adjective**. Adverb yang dipakai bisa penguat (*so, very, too, really, quite*) atau adverb lain seperti *absolutely, totally, definitely, highly*.\n\n| Modifier | Head (adjective) | Arti | Contoh kalimat |\n|---|---|---|---|\n| so | clean | begitu bersih | The room is **so clean**. |\n| very | expensive | sangat mahal | That phone is **very expensive**. |\n| too | tired | terlalu lelah | I am **too tired** to cook. |\n| totally | wrong | sepenuhnya salah | Your answer is **totally wrong**. |\n| absolutely | amazing | benar-benar menakjubkan | The view was **absolutely amazing**. |\n\nPerhatikan beda *very* dan *too*. *Very* hanya menguatkan, sedangkan *too* berarti \"berlebihan sehingga ada masalah\": *The coffee is **very hot*** (panas sekali, masih bisa diminum pelan-pelan), *The coffee is **too hot*** (terlalu panas, belum bisa diminum).\n\n### 2.2 Adverbial phrase\n\nPolanya sama: **adverb penguat + adverb**. Adverb cara (*adverb of manner*) umumnya dibentuk dari adjective + *-ly*: *careful → carefully*, *patient → patiently*, *beautiful → beautifully*. Beberapa bentuknya tak beraturan: *good → well*, *fast → fast*, *hard → hard*.\n\n| Modifier | Head (adverb) | Arti | Contoh kalimat |\n|---|---|---|---|\n| so | patiently | begitu sabar | The nurse waited **so patiently**. |\n| very | carefully | dengan sangat hati-hati | Please read the question **very carefully**. |\n| too | slowly | terlalu lambat | The bus moves **too slowly**. |\n| really | well | benar-benar baik | She speaks English **really well**. |\n\n:::kesalahan-umum\n*You dance **very beautiful*** adalah kesalahan khas pelajar Indonesia, karena kata \"indah\" dalam bahasa Indonesia dipakai untuk kata benda maupun kata kerja. Dalam bahasa Inggris, yang menjelaskan kata kerja (*dance*) harus adverb: *You dance **very beautifully***. Adjective hanya dipakai untuk menjelaskan noun atau setelah *be*: *Your dance is **very beautiful***.\n:::\n\n### 2.3 Posisi khusus *enough*\n\nSemua penguat berdiri di depan head, kecuali satu: *enough* (cukup) diletakkan **sesudah** adjective atau adverb.\n\n- The box is **big enough** for all the books. (bukan *enough big*)\n- He speaks **clearly enough** for everyone to understand. (bukan *enough clearly*)\n- She did not study **hard enough**.\n\nCatatan: kalau yang dijelaskan adalah noun, *enough* justru berada di depan: ***enough money***, ***enough time***.\n\n### 2.4 Variasi contoh\n\n- **Level 1:** The test was **very easy**. He runs **very fast**.\n- **Level 2:** The instructions were **too complicated**, so we read them **really slowly**.\n- **Level 3:** Public transport in the capital is not **reliable enough**, and tickets are becoming **increasingly expensive**.\n\n---\n\n## 3. Prepositional Phrase\n\nPrepositional phrase adalah frasa yang diawali kata depan (*preposition*) seperti *in, on, at, to, of, for, with, by, about*, lalu diikuti objeknya. Bahasa Indonesia punya pola yang sama persis, misalnya \"di Bandung\" atau \"dengan teman saya\", jadi bagian ini relatif mudah. Yang perlu kamu latih adalah mengenali tugasnya di dalam kalimat.\n\n### 3.1 Rumus dan jenis objeknya\n\nRumus: **preposition + object of preposition**. Objeknya selalu berupa kata benda atau sesuatu yang berperan sebagai kata benda.\n\n| Objek preposition | Contoh | Arti |\n|---|---|---|\n| Noun | **in** Bandung | di Bandung |\n| Noun phrase | **on** the wooden chair | di atas kursi kayu itu |\n| Pronoun (bentuk objek) | **with** him, **for** us | dengan dia, untuk kami |\n| Gerund (verb + -ing) | **by** reading | dengan membaca |\n| Gerund phrase | **in** learning a new language | dalam mempelajari bahasa baru |\n\nSetelah preposition, kata kerja selalu berbentuk **-ing**: *I am interested **in studying** abroad* (bukan *in study* atau *in to study*).\n\n### 3.2 Dua fungsi prepositional phrase\n\n| Fungsi | Menjelaskan | Posisi | Contoh |\n|---|---|---|---|\n| **Sebagai adjective** | noun | tepat sesudah noun | The cat **on the chair** is very cute. |\n| **Sebagai adverb** | verb, adjective, atau adverb | biasanya di akhir atau awal kalimat | She lives **in Bandung**. |\n\nCara membedakannya adalah bertanya. Kalau frasa itu menjawab \"yang mana?\", ia berfungsi sebagai adjective: kucing yang mana? Yang *on the chair*. Kalau ia menjawab \"di mana, kapan, atau bagaimana?\" tentang sebuah tindakan, ia berfungsi sebagai adverb: tinggal di mana? *In Bandung*.\n\nHati-hati dengan kata *to*, karena ia punya dua peran. Dalam *He comes **to Pare** to learn English*, bagian *to Pare* adalah prepositional phrase (*to* + nama tempat). Bagian *to learn English* bukan prepositional phrase, karena *to* + kata kerja dasar adalah *to infinitive* (lihat Bagian 5).\n\n### 3.3 Variasi contoh\n\n- **Level 1:** My keys are **in my bag**. We study **at night**.\n- **Level 2:** The woman **with long hair** is waiting **for her son** **near the gate**.\n- **Level 3:** **In many developing countries**, people **from rural areas** move **to big cities** **in search of better jobs**.\n\n---\n\n## 4. Noun Phrase\n\nNoun phrase adalah frasa yang intinya kata benda, dan inilah jenis phrase yang paling sering kamu pakai karena subjek dan objek kalimat hampir selalu berupa noun phrase. Semakin lengkap penjelasnya, semakin banyak informasi yang bisa kamu masukkan ke dalam satu kalimat tanpa menambah kalimat baru.\n\n### 4.1 Macam-macam penjelas di depan head\n\n| Penjelas (modifier) | Contoh | Arti |\n|---|---|---|\n| Adjective | bright **face** | wajah cerah |\n| Noun | scholarship **hunters** | para pemburu beasiswa |\n| Adjective phrase | highly qualified **tutor** | tutor yang sangat berkualifikasi |\n| Dua adjective | new green **book** | buku hijau baru |\n| Article | an **hour**, the **girl** | satu jam, gadis itu |\n| Article + adverb + adjective | a fully funded **scholarship** | beasiswa yang dibiayai penuh |\n| Possessive adjective | my **friend**, our lovely **tutor** | temanku, tutor kami yang menyenangkan |\n| Quantifier | many famous **buildings** | banyak gedung terkenal |\n| Demonstrative (*this, that, these, those*) | these **documents** | dokumen-dokumen ini |\n| Angka urutan dan angka jumlah | the first **journal**, two **children** | jurnal pertama, dua anak |\n\nBeberapa penjelas punya aturan pasangan yang wajib diingat:\n\n- **another** + noun tunggal (*another plan*), **other** + noun jamak (*other plans*).\n- **this / that** + noun tunggal, **these / those** + noun jamak (*this book, those books*).\n- **a number of** + noun jamak berarti \"sejumlah\" dan memakai kata kerja jamak: *A number of students **are** absent.*\n- **the number of** + noun jamak berarti \"jumlah\" dan memakai kata kerja tunggal, karena head-nya kata *number*: *The number of students **is** increasing.*\n\n### 4.2 Urutan penjelas: kebalikan bahasa Indonesia\n\nBahasa Indonesia memakai pola **Diterangkan lalu Menerangkan**: inti disebut dulu, penjelas menyusul. Bahasa Inggris memakai pola **Menerangkan lalu Diterangkan**: semua penjelas disebut dulu, inti paling belakang.\n\n:::compare\nBahasa Indonesia | Inti dulu, penjelas di belakang; produk kecantikan mahal; laboratorium biologi yang besar\nBahasa Inggris | Penjelas dulu, inti paling belakang; expensive beauty products; big biology laboratories\n:::\n\nUrutan lengkapnya ada tiga kotak penjelas sebelum head:\n\n| M1: determiner / jumlah | M2: adjective | M3: noun penjelas | Head | Arti |\n|---|---|---|---|---|\n| three | expensive | beauty | **products** | tiga produk kecantikan mahal |\n| two | big | biology | **laboratories** | dua laboratorium biologi yang besar |\n| fifty | new | police | **stations** | lima puluh kantor polisi baru |\n| my | old | school | **bag** | tas sekolah lamaku |\n| the | famous | history | **teacher** | guru sejarah yang terkenal itu |\n\nTrik menerjemahkan: cari dulu kata intinya dalam bahasa Indonesia (biasanya kata benda pertama), taruh di posisi paling belakang, lalu susun sisanya. \"Delapan toko sepatu unik\" → intinya \"toko\" → *eight unique shoe **shops***.\n\nTiga catatan tambahan:\n\n1. Kalau ada kata milik atau artikel bersama angka, kata milik atau artikel disebut lebih dulu: ***my two** best friends*, ***the first three** chapters*.\n2. Kalau ada dua adjective, pendapat disebut sebelum fakta, dan urutan fakta yang aman adalah ukuran, umur, lalu warna: *a **lovely small** house*, *a **new green** book*.\n3. Kata seperti *double, twice, half* berdiri di depan determiner: ***double the** price*, ***half the** students*.\n\n### 4.3 Noun penjelas tetap tunggal\n\nNoun yang bertugas sebagai penjelas (kotak M3) hampir selalu berbentuk **tunggal**, walaupun maknanya jamak. Yang dijamakkan hanya head.\n\n- *shoe shops* (toko sepatu), bukan *shoes shops*\n- *car factories* (pabrik mobil), bukan *cars factories*\n- *a five-year plan* (rencana lima tahun), bukan *a five-years plan*\n\nAda sedikit pengecualian yang memang selalu berakhiran *-s*, misalnya *sports car*, *clothes shop*, dan *sales manager*. Hafalkan sebagai pasangan kata tetap.\n\n### 4.4 Penjelas di belakang head (post-modifier)\n\nTidak semua penjelas berada di depan. Prepositional phrase yang berfungsi sebagai adjective (Bagian 3.2) selalu berada **sesudah** head, sama seperti susunan bahasa Indonesia.\n\n- the **book** on the table (buku di atas meja)\n- the **price** of the tickets (harga tiket-tiket itu)\n- the **students** in my class (para siswa di kelasku)\n\nDi sinilah banyak pelajar terpeleset memilih kata kerja. Kata kerja harus cocok dengan **head**, bukan dengan kata benda yang letaknya paling dekat.\n\n| Noun phrase (subjek) | Head | Kata kerja | Kalimat lengkap |\n|---|---|---|---|\n| The quality of the products | quality (tunggal) | is | The quality of the products **is** good. |\n| The students in my class | students (jamak) | are | The students in my class **are** friendly. |\n| The price of the tickets | price (tunggal) | has | The price of the tickets **has** increased. |\n| The shops near the station | shops (jamak) | open | The shops near the station **open** at nine. |\n\n:::tips-examiner\nDi Writing, penguji menilai apakah kamu bisa mengemas informasi secara padat. Bandingkan *There are problems. The problems are about traffic. They are serious.* dengan *There are **serious traffic problems in the city centre***. Satu noun phrase menggantikan tiga kalimat pendek, dan ini langsung terbaca sebagai kemampuan tata bahasa yang lebih tinggi. Syaratnya satu: kata kerja tetap cocok dengan head.\n:::\n\n### 4.5 Variasi contoh\n\n- **Level 1:** **My sister** bought **a red bag**. **Those children** are **my neighbours**.\n- **Level 2:** **Many famous buildings in the old town** attract **thousands of foreign visitors**.\n- **Level 3:** **The rapid growth of online shopping platforms** has changed **the daily habits of young urban consumers**.\n\n---\n\n## 5. Sekilas: Verb Phrase, To Infinitive Phrase, dan Gerund Phrase\n\nSupaya peta phrase kamu lengkap, ada tiga jenis lagi yang perlu dikenali walaupun tidak dibahas mendalam di sini. Ketiganya berinti kata kerja, dan kamu cukup bisa mengenali bentuknya saat membaca. Pembahasan lengkap gerund dan to infinitive ada di sub-modul 2.1.5 (Gerund & To Infinitive).\n\n| Jenis | Bentuk | Contoh | Contoh dalam kalimat |\n|---|---|---|---|\n| **Verb phrase** | auxiliary (kata kerja bantu) + main verb | *is reading, has finished, will be sent* | She **has finished** her essay. |\n| **To infinitive phrase** | to + verb dasar + pelengkap | *to bring a cup of tea* | He offered **to bring a cup of tea**. |\n| **Gerund phrase** | verb-ing + pelengkap | *bringing a cup of tea* | **Bringing a cup of tea** is a kind gesture. |\n\nGerund phrase berperan sebagai kata benda, sehingga bisa menjadi subjek atau objek. Karena dihitung sebagai satu hal, gerund phrase di posisi subjek memakai kata kerja tunggal: ***Reading English novels** **helps** me learn new words.*\n\n---\n\n## 6. Kesalahan Umum Pelajar Indonesia\n\nSebagian besar kesalahan pada topik ini muncul karena kita membawa urutan kata bahasa Indonesia ke dalam bahasa Inggris. Tutup kolom \"Perbaikan\", tebak dulu jawabannya, lalu cocokkan. Kalau tebakanmu meleset, kembali ke bagian yang disebut di kolom penjelasan.\n\n| # | Kesalahan | Perbaikan | Penjelasan |\n|---|---|---|---|\n| 1 | I live in a **house big**. | a **big house** | Adjective berada di depan noun (Bagian 4.2). |\n| 2 | She bought **products beauty expensive**. | **expensive beauty products** | Urutan: adjective + noun penjelas + head. |\n| 3 | There are many **shoes shops** here. | **shoe shops** | Noun penjelas tetap tunggal (Bagian 4.3). |\n| 4 | You dance **very beautiful**. | **very beautifully** | Yang menjelaskan verb harus adverb. |\n| 5 | The room is **enough big**. | **big enough** | *Enough* berada sesudah adjective atau adverb. |\n| 6 | The quality of the products **are** good. | **is** good | Kata kerja mengikuti head (*quality*). |\n| 7 | The number of students **are** rising. | **is** rising | Head-nya *number*, tunggal. |\n| 8 | I have **other plan**. | **another plan** / **other plans** | *Another* + tunggal, *other* + jamak. |\n| 9 | I am interested **in learn** English. | **in learning** English | Setelah preposition, verb berbentuk -ing. |\n| 10 | **This books** are mine. | **These books** are mine. | *These* untuk noun jamak. |\n| 11 | She gave it **to I**. | **to me** | Setelah preposition memakai pronoun bentuk objek. |\n| 12 | We made **a five-years plan**. | **a five-year plan** | Angka + noun sebagai penjelas tidak dijamakkan. |\n\n---\n\n## 7. Strategi IELTS\n\nFrasa terlihat seperti topik kecil, tetapi pengaruhnya terasa di keempat bagian tes. Butir-butir di bawah menunjukkan di mana pengetahuan tentang head dan modifier langsung menghasilkan poin, beserta satu kebiasaan yang bisa kamu latih mulai hari ini.\n\n- **Writing (Grammatical Range dan Lexical Resource):** gabungkan kalimat pendek menjadi satu noun phrase padat. *The government has a policy. It is new. It is about education.* → *The government has **a new education policy***. Pasangan noun + noun seperti *traffic congestion*, *health care*, dan *job opportunities* juga dinilai sebagai kosakata yang tepat.\n- **Writing (akurasi):** setelah menulis subjek yang panjang, garis bawahi head-nya di dalam kepala, lalu cek kata kerjanya. *The **number** of cars on the roads **has** increased.*\n- **Reading:** pada kalimat panjang, buang dulu semua prepositional phrase untuk menemukan kerangka kalimat. *The results **of the study on sleep patterns among teenagers** were surprising* → kerangkanya *The results were surprising*.\n- **Listening dan Reading (batas kata):** jawaban isian hampir selalu berupa noun phrase pendek. Kalau perintahnya *NO MORE THAN TWO WORDS*, maka *shoe shop* benar, tetapi *a small shoe shop* melewati batas. Ambil head dan penjelas terpentingnya saja.\n- **Speaking:** tambahkan satu adjective phrase atau prepositional phrase pada jawaban pendek. *I live in a house* → *I live in **a fairly small house near the city centre***.\n\n---\n\n## 8. Contoh Jawaban Model (Writing Task 1 GT, paragraf)\n\nDi bawah ini satu soal surat yang dijawab dalam tiga tingkat kemampuan. Isi ketiganya sama, yang berbeda adalah susunan frasanya: urutan penjelas, bentuk noun penjelas, dan kecocokan kata kerja dengan head. Bandingkan baris demi baris.\n\n**Soal:** *The public park near your home is in poor condition. Write a letter to the local council.* Paragraf isi:\n\n- **Band 5:** The park near house my is very dirty. Facilities sport is broken and many lamp not working. The condition of the toilets are enough bad.\n- **Band 6:** The park near my house is very dirty. Some sports facilities are broken, and many lamps do not work. The condition of the toilets is also quite bad.\n- **Band 7:** The small public park near my house is in very poor condition. Several pieces of sports equipment are badly damaged, and most of the street lamps along the main path no longer work. The condition of the public toilets is not clean enough for families with young children.\n\n**Mengapa naik band?** (1) Urutan penjelas benar (*my house*, *sports facilities*), (2) kata kerja cocok dengan head (*The condition ... is*), (3) di Band 7 setiap noun phrase membawa lebih banyak informasi lewat adjective di depan dan prepositional phrase di belakang, dan *enough* berada di posisi yang tepat.\n\n---\n\n## 9. Ringkasan dan Cek Diri\n\nSebelum mengerjakan drill, pastikan empat hal inti di bawah sudah menempel. Baca daftar \"Ingat\", lalu jawab pertanyaan Cek Diri tanpa melihat ke atas. Kalau ada yang salah, buka kembali bagian yang terkait.\n\n**Ingat:**\n\n- Phrase = head + modifier, tanpa subjek + kata kerja. Nama phrase mengikuti jenis kata head.\n- Adjective phrase dan adverbial phrase: penguat di depan (*very expensive, so patiently*), kecuali *enough* yang di belakang (*big enough*).\n- Prepositional phrase = preposition + objek; sesudah noun ia menjelaskan noun, di tempat lain ia menjelaskan verb.\n- Noun phrase: determiner/jumlah + adjective + noun penjelas (tunggal) + head; kata kerja mengikuti head.\n\n**Cek diri (tanpa melihat materi):**\n\n1. *Terjemahkan: \"dua laboratorium biologi yang besar\".*\n2. *The bag is not ___ (enough big / big enough) for my laptop.*\n3. *She answered the question very ___ (careful / carefully).*\n4. *The price of the tickets ___ (is / are) too high.*\n5. *There are three ___ (shoe / shoes) shops on this street.*\n\n**Kunci:** 1. two big biology laboratories. 2. big enough. 3. carefully. 4. is (head-nya price). 5. shoe.",
+        "mini_task": {
+          "task_type": "AI_SHORT_WRITING",
+          "prompt": "Tulis paragraf singkat (sekitar 80 sampai 100 kata) dalam bahasa Inggris yang mendeskripsikan lingkungan tempat tinggalmu (jalan, toko, taman, atau bangunan di sekitarnya).\n\nDalam paragrafmu:\n- pakai setidaknya 3 noun phrase dengan pola jumlah/determiner + adjective + noun penjelas + head (mis. two small coffee shops)\n- pakai setidaknya 2 prepositional phrase sesudah noun untuk menjelaskan noun itu (mis. the park near my house)\n- pakai setidaknya 1 adjective phrase dan 1 adverbial phrase dengan penguat (very, so, too, really), dan pakai enough satu kali di posisi yang benar\n- tulis setidaknya 1 kalimat yang subjeknya noun phrase panjang, lalu pastikan kata kerjanya cocok dengan head",
+          "ai_rubric_criteria": "Grammatical Accuracy: urutan noun phrase benar (determiner/jumlah + adjective + noun penjelas + head), noun penjelas berbentuk tunggal (shoe shops), adjective dipakai untuk noun dan adverb untuk verb, enough berada sesudah adjective/adverb, kata kerja cocok dengan head pada subjek yang memuat prepositional phrase. Task Achievement: semua unsur yang diminta muncul. Lexical Resource dan Coherence: pasangan noun + noun wajar, deskripsi teratur dan mudah diikuti."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 900,
+        "pass_percent": 75,
+        "questions": [
+          {
+            "question_id": "Q-GR118-001",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which group of words is a PHRASE (not a clause)?",
+            "explanation_id": "Phrase tidak punya pasangan subjek + kata kerja. \"A very tall building\" hanya berisi penjelas dan inti (building). Tiga pilihan lain punya subjek dan kata kerja (is, stands), jadi termasuk clause.",
+            "options": [
+              "a very tall building",
+              "the building is tall",
+              "because it is tall",
+              "it stands there"
+            ],
+            "correct_answers": [
+              "a very tall building"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-002",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "What is the HEAD of the noun phrase \"a fully funded scholarship\"?",
+            "explanation_id": "Head adalah kata benda inti yang dijelaskan, dan dalam bahasa Inggris letaknya paling belakang. \"A\", \"fully\", dan \"funded\" semuanya penjelas untuk \"scholarship\".",
+            "options": [
+              "a",
+              "fully",
+              "funded",
+              "scholarship"
+            ],
+            "correct_answers": [
+              "scholarship"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-003",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The room is not ___ for twenty students.",
+            "explanation_id": "\"Enough\" diletakkan sesudah adjective: big enough. Kata \"bigly\" bukan bentuk yang dipakai, dan setelah \"is\" yang dibutuhkan memang adjective.",
+            "options": [
+              "enough big",
+              "big enough",
+              "enough bigly",
+              "bigly enough"
+            ],
+            "correct_answers": [
+              "big enough"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-004",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The teacher explained the rule ___.",
+            "explanation_id": "Yang dijelaskan adalah kata kerja \"explained\", jadi perlu adverb (clearly), bukan adjective (clear). Penguat \"very\" berada di depan head.",
+            "options": [
+              "very clear",
+              "very clearly",
+              "clear very",
+              "clearly very"
+            ],
+            "correct_answers": [
+              "very clearly"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-005",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Terjemahan yang benar untuk \"tiga produk kecantikan mahal\" adalah...",
+            "explanation_id": "Urutan noun phrase: jumlah (three) + adjective (expensive) + noun penjelas (beauty) + head (products). Inti \"produk\" pindah ke posisi paling belakang.",
+            "options": [
+              "three beauty expensive products",
+              "three expensive beauty products",
+              "expensive three beauty products",
+              "three products beauty expensive"
+            ],
+            "correct_answers": [
+              "three expensive beauty products"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-006",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "There are two ___ near my office.",
+            "explanation_id": "Noun penjelas tetap tunggal (shoe), sedangkan head dijamakkan karena jumlahnya dua (shops). \"Shop shoes\" membalik inti dan penjelas.",
+            "options": [
+              "shoes shops",
+              "shoe shops",
+              "shoes shop",
+              "shop shoes"
+            ],
+            "correct_answers": [
+              "shoe shops"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-007",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The quality of the products ___ very good.",
+            "explanation_id": "Head subjek adalah \"quality\" (tunggal), bukan \"products\". \"Of the products\" hanya prepositional phrase penjelas, jadi kata kerjanya \"is\".",
+            "options": [
+              "is",
+              "are",
+              "be",
+              "have"
+            ],
+            "correct_answers": [
+              "is"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-008",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Dalam kalimat \"The cat on the chair is very cute\", frasa \"on the chair\" berfungsi sebagai...",
+            "explanation_id": "Prepositional phrase yang terletak tepat sesudah noun dan menjawab pertanyaan \"kucing yang mana?\" berfungsi sebagai adjective. Subjek lengkapnya \"the cat on the chair\" dan kata kerjanya \"is\".",
+            "options": [
+              "adjective, karena menjelaskan noun \"the cat\"",
+              "adverb, karena menjelaskan kata kerja \"is\"",
+              "subjek kalimat",
+              "kata kerja kalimat"
+            ],
+            "correct_answers": [
+              "adjective, karena menjelaskan noun \"the cat\""
+            ]
+          },
+          {
+            "question_id": "Q-GR118-009",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "___ students in my class come from Sumatra.",
+            "explanation_id": "\"A number of\" berarti sejumlah, diikuti noun jamak dan kata kerja jamak (come). \"The number of\" menuntut kata kerja tunggal, \"another\" hanya untuk noun tunggal, dan \"much\" untuk uncountable.",
+            "options": [
+              "A number of",
+              "The number of",
+              "Another",
+              "Much"
+            ],
+            "correct_answers": [
+              "A number of"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-010",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "I am interested ___ abroad.",
+            "explanation_id": "Adjective \"interested\" berpasangan dengan preposition \"in\", dan kata kerja setelah preposition selalu berbentuk -ing (gerund): in studying.",
+            "options": [
+              "in study",
+              "in studying",
+              "in to study",
+              "to studying"
+            ],
+            "correct_answers": [
+              "in studying"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-011",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "This idea did not work, so we need ___ plan.",
+            "explanation_id": "\"Plan\" adalah noun tunggal, jadi pasangannya \"another\". \"Other\" dan \"these\" diikuti noun jamak, sedangkan \"others\" berdiri sendiri tanpa noun.",
+            "options": [
+              "another",
+              "other",
+              "others",
+              "these"
+            ],
+            "correct_answers": [
+              "another"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-012",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "The government announced a ___ plan to build more schools.",
+            "explanation_id": "Angka + noun yang bertugas sebagai penjelas ditulis dengan tanda hubung dan noun-nya tetap tunggal: a five-year plan.",
+            "options": [
+              "five-years",
+              "five-year",
+              "fives-year",
+              "five-year's"
+            ],
+            "correct_answers": [
+              "five-year"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-013",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: The soup is ___ hot to eat, so wait a few minutes. (too / enough)",
+            "explanation_id": "\"Too\" berarti berlebihan sehingga ada akibat buruk (belum bisa dimakan) dan berada di depan adjective. \"Enough\" tidak bisa di depan adjective.",
+            "correct_answers": [
+              "too"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR118-014",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: He did not run fast ___ to win the race. (too / enough / very)",
+            "explanation_id": "Celah berada sesudah adverb \"fast\", dan satu-satunya penguat yang diletakkan sesudah head adalah \"enough\": fast enough.",
+            "correct_answers": [
+              "enough"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR118-015",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan bentuk yang tepat dari kata beautiful: You dance very ___.",
+            "explanation_id": "Yang dijelaskan adalah kata kerja \"dance\", jadi perlu adverb: beautiful + -ly menjadi beautifully. \"Very beautiful\" hanya benar untuk menjelaskan noun atau setelah be.",
+            "correct_answers": [
+              "beautifully"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR118-016",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Terjemahkan \"empat ekor ayam\" ke bahasa Inggris dengan kata chicken (dua kata): The farmer has ___.",
+            "explanation_id": "Kata bantu bilangan \"ekor\" tidak diterjemahkan. Polanya jumlah + head, dan karena jumlahnya lebih dari satu, head wajib jamak: four chickens.",
+            "correct_answers": [
+              "four chickens",
+              "4 chickens"
+            ],
+            "max_words": 2
+          },
+          {
+            "question_id": "Q-GR118-017",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Susun noun phrase dari kata important, six, rule (jamakkan bila perlu) dengan arti \"enam aturan penting\": Every member must follow ___.",
+            "explanation_id": "Urutan: jumlah (six) + adjective (important) + head (rules). Head dijamakkan karena jumlahnya enam.",
+            "correct_answers": [
+              "six important rules"
+            ],
+            "max_words": 3
+          },
+          {
+            "question_id": "Q-GR118-018",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan is atau are: The price of the tickets ___ too high for most students.",
+            "explanation_id": "Head subjek adalah \"price\" (tunggal). \"Of the tickets\" hanya penjelas di belakang head, jadi kata kerjanya \"is\".",
+            "correct_answers": [
+              "is"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR118-019",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Susun noun phrase dari kata main, problem, education, seven (jamakkan bila perlu) dengan arti \"tujuh masalah pendidikan utama\": The report discusses ___.",
+            "explanation_id": "Urutan: jumlah (seven) + adjective (main) + noun penjelas (education, tetap tunggal) + head (problems). Inti \"masalah\" pindah ke posisi paling belakang.",
+            "correct_answers": [
+              "seven main education problems"
+            ],
+            "max_words": 4
+          },
+          {
+            "question_id": "Q-GR118-020",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat yang benar.",
+            "explanation_id": "Objeknya noun phrase \"two big biology laboratories\": jumlah (two) + adjective (big) + noun penjelas (biology) + head (laboratories).",
+            "segments": [
+              "The university",
+              "built",
+              "two",
+              "big",
+              "biology",
+              "laboratories."
+            ]
+          },
+          {
+            "question_id": "Q-GR118-021",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat yang benar.",
+            "explanation_id": "Urutan noun phrase: article (an) + adjective (expensive) + noun penjelas (sports) + head (car). \"An\" dipakai karena kata sesudahnya, expensive, berawal bunyi vokal.",
+            "segments": [
+              "My brother",
+              "wants",
+              "an",
+              "expensive",
+              "sports",
+              "car."
+            ]
+          },
+          {
+            "question_id": "Q-GR118-022",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat yang benar.",
+            "explanation_id": "Prepositional phrase \"on the chair\" menjelaskan \"the cat\", jadi letaknya tepat sesudah noun itu. Sesudah \"is\" ada adjective phrase: penguat (very) + adjective (cute).",
+            "segments": [
+              "The cat",
+              "on the chair",
+              "is",
+              "very",
+              "cute."
+            ]
+          },
+          {
+            "question_id": "Q-GR118-023",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat yang benar.",
+            "explanation_id": "Objeknya \"fifty new police stations\": jumlah + adjective + noun penjelas (police) + head (stations). Keterangan waktu \"last year\" berada di akhir kalimat.",
+            "segments": [
+              "The city",
+              "opened",
+              "fifty",
+              "new",
+              "police",
+              "stations",
+              "last year."
+            ]
+          },
+          {
+            "question_id": "Q-GR118-024",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Noun yang bertugas sebagai penjelas tetap tunggal: three shoe shops. Yang dijamakkan hanya head (shops).",
+            "tokens": [
+              "I",
+              "visited",
+              "three",
+              "shoes",
+              "shops",
+              "yesterday."
+            ],
+            "correct_answers": [
+              3
+            ]
+          },
+          {
+            "question_id": "Q-GR118-025",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Head subjek adalah \"students\" (jamak), bukan \"class\". Kata kerjanya harus \"are\": The students in my class are very friendly.",
+            "tokens": [
+              "The",
+              "students",
+              "in",
+              "my",
+              "class",
+              "is",
+              "very",
+              "friendly."
+            ],
+            "correct_answers": [
+              5
+            ]
+          },
+          {
+            "question_id": "Q-GR118-026",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Yang dijelaskan adalah kata kerja \"drives\", jadi perlu adverb: very carefully. \"Careful\" adalah adjective dan hanya menjelaskan noun.",
+            "tokens": [
+              "He",
+              "drives",
+              "very",
+              "careful",
+              "on",
+              "wet",
+              "roads."
+            ],
+            "correct_answers": [
+              3
+            ]
+          },
+          {
+            "question_id": "Q-GR118-027",
+            "skill": "GRAMMAR",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan setiap frasa dengan jenisnya.",
+            "explanation_id": "Jenis phrase mengikuti head: \"patiently\" adverb (adverbial phrase), \"wrong\" adjective (adjective phrase), \"laptop\" noun (noun phrase). \"In the library\" diawali preposition, jadi prepositional phrase. Tidak ada yang berupa clause karena tidak ada subjek + kata kerja.",
+            "points": 4,
+            "matching": {
+              "left": [
+                "so patiently",
+                "totally wrong",
+                "in the library",
+                "my new laptop"
+              ],
+              "right": [
+                "adverbial phrase",
+                "adjective phrase",
+                "prepositional phrase",
+                "noun phrase",
+                "clause"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "question_id": "Q-GR118-028",
+            "skill": "GRAMMAR",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan setiap frasa dengan HEAD (kata inti)-nya.",
+            "explanation_id": "Pada noun phrase, head adalah noun yang dijelaskan: \"scholarship\" (dijelaskan a fully funded) dan \"price\" (dijelaskan the dan of the tickets di belakangnya). Pada adverbial phrase \"very carefully\", head-nya adverb \"carefully\" dan \"very\" hanya penguat.",
+            "points": 3,
+            "matching": {
+              "left": [
+                "a fully funded scholarship",
+                "the price of the tickets",
+                "very carefully"
+              ],
+              "right": [
+                "scholarship",
+                "price",
+                "carefully",
+                "tickets",
+                "funded"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR118-029",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih SEMUA noun phrase yang urutan katanya benar.",
+            "explanation_id": "Yang benar mengikuti urutan determiner/jumlah + adjective + head: many famous buildings, our lovely tutor, the first journal. Dua lainnya memakai urutan bahasa Indonesia; yang benar \"a fully funded scholarship\" dan \"two biology laboratories\".",
+            "points": 3,
+            "options": [
+              "many famous buildings",
+              "a scholarship fully funded",
+              "our lovely tutor",
+              "laboratories biology two",
+              "the first journal"
+            ],
+            "correct_answers": [
+              "many famous buildings",
+              "our lovely tutor",
+              "the first journal"
+            ]
+          },
+          {
+            "question_id": "Q-GR118-030",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih SEMUA kalimat yang kata kerjanya sudah cocok dengan head subjeknya.",
+            "explanation_id": "Kata kerja mengikuti head: quality (tunggal) + is, \"a number of visitors\" (sejumlah pengunjung, jamak) + were, children (jamak) + are. Yang salah: head \"books\" jamak sehingga harus are, dan \"the number\" tunggal sehingga harus is.",
+            "points": 3,
+            "options": [
+              "The quality of these phones is excellent.",
+              "The books on the shelf is dusty.",
+              "A number of visitors were late.",
+              "The number of cars are increasing.",
+              "The children in the park are happy."
+            ],
+            "correct_answers": [
+              "The quality of these phones is excellent.",
+              "A number of visitors were late.",
+              "The children in the park are happy."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

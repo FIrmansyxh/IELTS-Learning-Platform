@@ -424,3 +424,42 @@ describe('waktu jawaban dan streak (D8)', () => {
     expect(r[0]!.withinTargetTime).toBe(false);
   });
 });
+
+describe('variasi soal antar-attempt (soal yang belum muncul diutamakan)', () => {
+  const pool = Array.from({ length: 30 }, () => parse(Q.mcq({ options: ['a', 'b', 'c', 'd'], correct_answers: ['a'] })));
+  const start = (recent: string[][]) => buildInitialState(randomUUID(), pool, { limit: 10, keepOrder: false, recent }, 75, NOW);
+
+  it('pool 30 dan 10 soal per attempt: tiga attempt berturut-turut tidak berbagi soal', () => {
+    const a = start([]);
+    const b = start([a.order]);
+    const c = start([b.order, a.order]);
+    const all = [...a.order, ...b.order, ...c.order];
+    expect(new Set(all).size).toBe(30);
+  });
+
+  it('setelah seluruh pool terpakai, soal yang paling lama tidak muncul dipakai lagi lebih dulu', () => {
+    const a = start([]);
+    const b = start([a.order]);
+    const c = start([b.order, a.order]);
+    const d = start([c.order, b.order, a.order]);
+    expect([...d.order].sort()).toEqual([...a.order].sort());
+  });
+
+  it('pool lebih kecil dari dua kali batas: soal baru habis dulu, sisanya dari yang terlama', () => {
+    const small = pool.slice(0, 14);
+    const a = buildInitialState(randomUUID(), small, { limit: 10, keepOrder: false }, 75, NOW);
+    const b = buildInitialState(randomUUID(), small, { limit: 10, keepOrder: false, recent: [a.order] }, 75, NOW);
+    const unseen = small.map((q) => q.question_id).filter((qid) => !a.order.includes(qid));
+    expect(unseen).toHaveLength(4);
+    for (const qid of unseen) expect(b.order).toContain(qid);
+    expect(b.order).toHaveLength(10);
+  });
+
+  it('keepOrder tetap mengurutkan soal terpilih menurut urutan asli', () => {
+    const a = buildInitialState(randomUUID(), pool, { limit: 10, keepOrder: true }, 75, NOW);
+    const b = buildInitialState(randomUUID(), pool, { limit: 10, keepOrder: true, recent: [a.order] }, 75, NOW);
+    const pos = (qid: string) => pool.findIndex((q) => q.question_id === qid);
+    expect(b.order.map(pos)).toEqual([...b.order.map(pos)].sort((x, y) => x - y));
+    expect(b.order.some((qid) => a.order.includes(qid))).toBe(false);
+  });
+});

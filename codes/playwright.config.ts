@@ -26,6 +26,9 @@ export default defineConfig({
     ? undefined
     : {
         command: 'npm run dev',
+        // E2E deterministik: tanpa whisper/LLM asli. Speaking memakai jalur prompt eksternal (SPEC-013 addendum
+        // 2026-11-11 kriteria c); jalur rekam lokal diuji lewat tes unit/integrasi dan uji langsung.
+        env: { ...process.env, SPEAKING_AI_ENABLED: 'false' } as Record<string, string>,
         url: 'http://127.0.0.1:3005/api/health',
         reuseExistingServer: !isCI,
         timeout: 120_000,

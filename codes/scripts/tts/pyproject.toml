@@ -1,0 +1,16 @@
+[project]
+name = "ielts-kokoro-tts"
+version = "0.1.0"
+description = "Pembungkus Kokoro TTS untuk npm run listening:build"
+requires-python = ">=3.10"
+dependencies = ["kokoro-onnx>=0.4", "soundfile>=0.12"]
+
+[project.scripts]
+kokoro-tts = "kokoro_tts:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["kokoro_tts"]

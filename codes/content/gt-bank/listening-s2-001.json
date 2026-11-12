@@ -1,0 +1,194 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-LIS-S2-001",
+      "bank_kind": "LISTENING_GT_S2",
+      "title": "Listening GT Section 2: Tur Pusat Olahraga Lakeside",
+      "skill": "LISTENING",
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "listening_asset_code": "gt-listening/gt-l-s2-001",
+      "tags": [
+        "listening",
+        "section-2",
+        "monologue",
+        "leisure-centre"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTL2-001",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Why did the leisure center open later than planned?",
+          "difficulty": 2,
+          "explanation_id": "Penyebabnya bukan hujan maupun pembangunan: \"the filtration equipment for the swimming pool arrived late from the manufacturer\".",
+          "options": [
+            "The weather was very wet in spring",
+            "Pool equipment was delivered late",
+            "The building work took longer than expected",
+            "There were not enough staff"
+          ],
+          "correct_answers": [
+            "Pool equipment was delivered late"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-002",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Complete the notes. Write ONE WORD AND/OR A NUMBER.\n\nWeekday closing time: ________ p.m.",
+          "difficulty": 2,
+          "explanation_id": "Pada hari kerja pusat ini tutup pukul sepuluh malam: \"we close at ten at night\". Pukul 9.30 adalah jam tutup gedung lama.",
+          "max_words": 1,
+          "correct_answers": [
+            "10",
+            "ten",
+            "10:00",
+            "10.00"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-003",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Where in the center is each facility located? Choose the correct location for each facility.",
+          "difficulty": 3,
+          "explanation_id": "Ruang ganti ada di basement (\"down the stairs in the basement\"), dinding panjat di lantai satu (\"up to the first floor\"), dan kafe ada di luar (\"outside, in the glass building facing the lake\"). Lantai dasar hanyalah pintu masuk utama.",
+          "matching": {
+            "left": [
+              "Changing rooms",
+              "Climbing wall",
+              "Café"
+            ],
+            "right": [
+              "Ground floor",
+              "First floor",
+              "Basement",
+              "Outside, by the lake"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            2,
+            1,
+            3
+          ],
+          "points": 3
+        },
+        {
+          "question_id": "Q-GTL2-004",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Before using the gym, new members must attend a ________ session.",
+          "difficulty": 2,
+          "explanation_id": "Greg menjelaskan: \"Every new member must first attend a safety session with one of our instructors.\"",
+          "max_words": 1,
+          "correct_answers": [
+            "safety"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-005",
+          "question_type": "MCQ_MULTI",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Choose TWO letters. Which TWO things are included in basic membership?",
+          "difficulty": 3,
+          "explanation_id": "Keanggotaan dasar mencakup \"unlimited use of the swimming pool\" dan \"free parking\". Kelas kebugaran dibayar terpisah, sedangkan sauna hanya untuk keanggotaan premium.",
+          "options": [
+            "Use of the swimming pool",
+            "Fitness classes",
+            "Use of the sauna",
+            "Free parking",
+            "Personal training"
+          ],
+          "correct_answers": [
+            "Use of the swimming pool",
+            "Free parking"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-006",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Standard monthly fee for basic membership: $________",
+          "difficulty": 2,
+          "explanation_id": "Harga standar: \"thirty-four dollars a month\". $29 hanya untuk pelajar dan lansia di atas 65 tahun.",
+          "max_words": 1,
+          "correct_answers": [
+            "34",
+            "$34",
+            "thirty-four",
+            "34 dollars"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-007",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Children's swimming lessons take place on ________ mornings.",
+          "difficulty": 2,
+          "explanation_id": "Les renang anak diadakan \"on Saturday mornings\". Minggu pagi khusus untuk renang lintasan dewasa.",
+          "max_words": 1,
+          "correct_answers": [
+            "Saturday",
+            "Saturdays"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-008",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Lockers are opened with a ________.",
+          "difficulty": 2,
+          "explanation_id": "Loker tidak memakai kunci atau koin: \"you'll be given a rubber wristband, and you simply hold it against the locker door\".",
+          "max_words": 1,
+          "correct_answers": [
+            "wristband",
+            "wrist band"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-009",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "What will take place on the morning of the open day?",
+          "difficulty": 2,
+          "explanation_id": "Pagi hari ada \"a free yoga taster class in the morning\". Tidak ada kompetisi renang karena kolam ditutup untuk inspeksi.",
+          "options": [
+            "A swimming competition",
+            "A free yoga taster class",
+            "A cooking demonstration",
+            "Free personal training sessions"
+          ],
+          "correct_answers": [
+            "A free yoga taster class"
+          ]
+        },
+        {
+          "question_id": "Q-GTL2-010",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 2,
+          "prompt": "Code for half-price first month: ________",
+          "difficulty": 1,
+          "explanation_id": "Kode dieja oleh pembicara: \"S-P-L-A-S-H\".",
+          "max_words": 1,
+          "correct_answers": [
+            "SPLASH"
+          ]
+        }
+      ]
+    }
+  ]
+}

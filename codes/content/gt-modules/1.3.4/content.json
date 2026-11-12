@@ -1,0 +1,484 @@
+{
+  "contract_version": "1.1",
+  "sub_modules": [
+    {
+      "tier_number": 1,
+      "module_code": "1.3",
+      "module_category": "GRAMMAR",
+      "sub_module_title": "Modals of Ability, Obligation & Possibility (can, must, should, might)",
+      "sub_module_code": "1.3.4",
+      "passing_score_percent": 75,
+      "origin": "AI_GENERATED_REVIEWED",
+      "source_code": "OWN",
+      "materials": {
+        "article_markdown": "## Mulai dari Sini\n\n:::pengantar\n**Apa yang kamu pelajari?** Bagian ini membahas *modal verb*, yaitu kata bantu kecil yang diletakkan di depan kata kerja untuk menambah makna seperti \"bisa\", \"harus\", \"sebaiknya\", atau \"mungkin\". Contohnya *can*, *must*, *should*, dan *might*. Cara kerjanya mirip bahasa Indonesia: \"saya bisa berenang\" menjadi *I can swim*, kata bantunya di depan dan kata kerjanya tetap bentuk dasar. Bedanya, satu modal bahasa Inggris bisa punya beberapa arti. Kata *must* bisa berarti \"harus\" (*You must go*) dan bisa juga berarti \"pasti\" (*She must be tired*).\n\n**Kenapa ini penting?** Modal dipakai setiap kali kamu meminta tolong, memberi saran, menjelaskan aturan, atau menebak sesuatu. Di IELTS, modal muncul dalam aturan dan instruksi di Listening, permintaan sopan di surat, dan pendapat di Speaking. Salah pilih modal bisa mengubah arti, misalnya dari \"dilarang\" menjadi \"tidak wajib\".\n\n**Bekal sebelum mulai:** Sebaiknya kamu sudah paham kalimat positif, negatif, dan tanya dari 1.3.1 (Present Simple vs. Present Continuous). Beberapa contoh memakai bentuk V3 dari 1.3.2 (Past Simple vs. Present Perfect). Pelajari satu fungsi sampai paham, baru pindah ke fungsi berikutnya. Tabel perbandingan cukup dirujuk kembali saat kamu ragu.\n:::\n\n### Istilah yang Akan Kamu Temui\n\n| Istilah | Arti sederhana | Contoh |\n|---|---|---|\n| **Modal verb** | Kata bantu bermakna bisa, harus, sebaiknya, atau mungkin | *can, must, should, might* |\n| **V1** | Kata kerja bentuk dasar, tanpa tambahan apa pun | *swim, go, help* |\n| **Ability** | Kemampuan (bisa atau tidak bisa) | *I can swim.* |\n| **Obligation / prohibition** | Kewajiban (harus) / larangan (tidak boleh) | *must* / *mustn't* |\n| **Advice** | Saran atau nasihat | *You should rest.* |\n| **Possibility / deduction** | Kemungkinan / dugaan berdasarkan petunjuk | *It might rain.* |\n| **Permission / request** | Izin / permintaan | *May I come in?* |\n| **Tingkat kepastian** | Seberapa yakin kamu bahwa sesuatu benar | *must* (yakin), *might* (ragu) |\n\n---\n\n## Tujuan Belajar\n\nSetelah bagian ini, kamu bisa:\n\n1. Menyusun kalimat dengan **modal verb** (can, could, must, have to, should, might, may, will, would) dalam bentuk positif, negatif, dan tanya.\n2. Memilih modal yang tepat untuk **kemampuan, kewajiban, saran, izin, permintaan, dan kemungkinan**.\n3. Membedakan **tingkat kepastian** (must / should / might / can't) untuk menyatakan dugaan, yang berguna di Speaking dan Writing.\n\n> **Ringkasan 30 detik**\n> - Modal verb + **V1 (bentuk dasar)**, tanpa -s, tanpa *to* (kecuali *have to, ought to*).\n> - Satu modal punya beberapa fungsi: *can* = kemampuan / izin / kemungkinan; *must* = kewajiban kuat / dugaan kuat.\n> - Negatif dan tanya **tidak memakai do/does**: *She can't swim. Can she swim?*\n\n---\n\n## 1. Aturan Dasar Modal Verb\n\nSebelum mempelajari arti tiap modal, pahami dulu cara memasangnya di kalimat. Kabar baiknya, semua modal mengikuti aturan yang sama: modal tidak pernah berubah bentuk, dan kata kerja sesudahnya selalu bentuk dasar (V1). Tabel pertama merangkum lima cirinya, tabel kedua menunjukkan rumus kalimat positif, negatif, dan tanya.\n\n### 1.1 Ciri-ciri\n\n| Ciri | Penjelasan | Contoh |\n|---|---|---|\n| Diikuti **V1** | Kata kerja setelah modal tidak berubah | She **can speak** English. |\n| **Tanpa -s** | Tidak berubah untuk he/she/it | He **can** swim. (bukan *cans*) |\n| **Tanpa do/does** | Negatif dengan *not*, tanya dengan membalik posisi | **Can** you help me? I **can't** go. |\n| **Tanpa to** | Tidak ada *to* setelah modal | I **must go**. (bukan *must to go*) |\n| Satu per kalimat | Dua modal tidak dipakai bersamaan | She **will be able to** come. (bukan *will can*) |\n\n### 1.2 Rumus lengkap\n\n| Bentuk | Rumus | Contoh |\n|---|---|---|\n| Positif | S + modal + V1 | She **can swim**. |\n| Negatif | S + modal + **not** + V1 | She **cannot (can't) swim**. |\n| Tanya | Modal + S + V1 ? | **Can** she **swim**? |\n| Tanya WH | WH + modal + S + V1 ? | **Where should** we **meet**? |\n| Jawaban singkat | Yes, S + modal. / No, S + modal + not. | Yes, she **can**. / No, she **can't**. |\n\n:::kesalahan-umum\nJangan menambahkan **-s, to, atau do/does** pada modal. Salah: *He **cans** swim*, *She must **to** go*, *Does she can swim?* Benar: *He **can** swim*, *She **must** go*, ***Can** she swim?*\n:::\n\n---\n\n## 2. Fungsi Modal Verb\n\nSetelah tahu cara memasangnya, sekarang kita lihat artinya. Modal dikelompokkan menurut gunanya: menyatakan kemampuan, kewajiban, saran, dugaan, izin, dan rencana. Kotak perbandingan di bawah memberi gambaran singkat empat kelompok utama. Sesudah itu tiap kelompok dibahas satu per satu dengan tabel dan contoh.\n\n:::compare\nKemampuan | can; could; be able to\nKewajiban dan larangan | must; have to; mustn't; don't have to\nSaran | should; ought to; had better\nDugaan | must (pasti); might / may / could (mungkin); can't (mustahil)\n:::\n\n### 2.1 Kemampuan (Ability)\n\n| Modal | Fungsi | Contoh |\n|---|---|---|\n| **can** | Kemampuan sekarang | I **can** speak three languages. |\n| **could** | Kemampuan di masa lampau (umum) | I **could** swim when I was five. |\n| **be able to** | Kemampuan, semua tense | I **will be able to** vote next year. She **has been able to** finish the project. |\n| **couldn't** | Tidak mampu di masa lampau | I **couldn't** open the door. |\n\n> **Catatan:** untuk satu kejadian spesifik yang berhasil di masa lampau, pakai **was/were able to**, bukan *could*: *After three hours, we **were able to** fix the problem.*\n\n### 2.2 Kewajiban dan larangan (Obligation and prohibition)\n\n| Modal | Fungsi | Contoh |\n|---|---|---|\n| **must** | Kewajiban kuat (dari penutur/aturan internal) | You **must** wear a seatbelt. I **must** finish this today. |\n| **have to** | Kewajiban eksternal (aturan, keadaan) | Students **have to** wear uniforms. |\n| **mustn't** | **Larangan** | You **mustn't** use phones in the exam room. |\n| **don't have to** | **Tidak wajib** (boleh tetapi tidak perlu) | You **don't have to** come early. |\n| **need to** | Perlu | We **need to** book tickets. |\n\n:::tips-examiner\n**Mustn't ≠ don't have to.** *You mustn't smoke here* = dilarang. *You don't have to smoke here* = tidak wajib. Perbedaan ini sering menjadi jebakan di **Listening** (instruksi dan aturan) dan **Reading** (pilihan MCQ tentang \"wajib\" vs \"tidak wajib\").\n:::\n\n### 2.3 Saran dan nasihat (Advice)\n\n| Modal | Kekuatan | Contoh |\n|---|---|---|\n| **should / ought to** | Saran umum | You **should** drink more water. You **ought to** see a doctor. |\n| **had better** | Saran kuat, ada konsekuensi | You **had better** hurry, or you'll miss the train. |\n| **shouldn't** | Saran untuk tidak melakukan | You **shouldn't** stay up late. |\n| **If I were you, I'd...** | Saran sopan | **If I were you, I'd** apply for the scholarship. |\n\n### 2.4 Kemungkinan dan dugaan (Possibility and deduction)\n\nDugaan adalah tebakan berdasarkan petunjuk yang kamu lihat, dan kata *range* di bawah berarti ragam bentuk tata bahasa yang kamu kuasai.\n\nIni bagian terpenting untuk IELTS, karena memperlihatkan **range** tata bahasa.\n\n| Tingkat kepastian | Modal | Contoh |\n|---|---|---|\n| ~95% pasti benar | **must** | She **must** be at home; the lights are on. |\n| ~60% mungkin | **may / might / could** | It **might** rain later. He **could** be in the library. |\n| ~0% mustahil | **can't** | That **can't** be true! He was abroad last year. |\n\n**Bentuk lampau untuk dugaan:** modal + **have + V3**\n\n- *She **must have** forgotten the meeting.* (pasti sudah lupa)\n- *They **might have** missed the bus.* (mungkin ketinggalan bus)\n- *He **can't have** finished already.* (mustahil sudah selesai)\n\n### 2.5 Izin dan permintaan (Permission and requests)\n\n| Situasi | Modal | Contoh | Tingkat kesopanan |\n|---|---|---|---|\n| Meminta izin | **can** | **Can** I use your pen? | Biasa |\n| | **could** | **Could** I use your pen? | Lebih sopan |\n| | **may** | **May** I come in? | Sangat sopan / formal |\n| Meminta bantuan | **can/could** | **Could** you open the window? | Sopan |\n| | **would** | **Would** you mind helping me? | Sangat sopan |\n| Menawarkan | **shall/can/would** | **Shall** I carry that for you? **Would** you like some tea? | Sopan |\n\n### 2.6 Rencana, prediksi, dan kebiasaan\n\nIstilah \"kondisional\" di tabel ini berarti kalimat pengandaian (\"kalau..., saya akan...\"), yang dibahas lengkap di 2.1.4 (Conditional Sentences).\n\n| Modal | Fungsi | Contoh |\n|---|---|---|\n| **will** | Keputusan spontan, prediksi, janji | I **will** call you tonight. It **will** be sunny tomorrow. |\n| **would** | Kebiasaan lampau, kondisional | We **would** play outside every evening. I **would** study abroad if I had a scholarship. |\n| **used to** | Kebiasaan/keadaan lampau (sudah tidak) | I **used to** live in Surabaya. |\n\n---\n\n## 3. Variasi Contoh (dari mudah ke sulit)\n\nBagian ini mengumpulkan contoh kalimat dari yang paling pendek sampai yang dipakai dalam tulisan formal. Bacalah dengan suara keras. Di setiap kalimat, coba sebutkan fungsi modal yang dicetak tebal: kemampuan, kewajiban, saran, permintaan, atau dugaan.\n\n#### Level 1: dasar\n\n1. She **can** play the piano.\n2. You **should** see a doctor.\n3. **Must** I wear a helmet? ~ Yes, you **must**.\n\n#### Level 2: sehari-hari (Speaking)\n\n1. I **couldn't** concentrate because the neighbours **were** loud, so I **had to** study in the library.\n2. You **don't have to** book in advance, but you **had better** arrive early.\n3. **Could** you tell me where the post office is? ~ Sure. You **can't** miss it; it's next to the bank.\n\n#### Level 3: dugaan dan formal (Writing, Reading)\n\n1. Climate change **might** have a greater impact on poorer countries than anyone **can** predict.\n2. Governments **should** invest more in public transport, because private cars **can** cause serious congestion.\n3. The results **cannot** be generalised; further research **must** be carried out.\n\n---\n\n## 4. Perbandingan yang Sering Tertukar\n\nBeberapa modal terlihat mirip, padahal artinya berbeda dan sering tertukar. Tabel ini menaruh pasangan-pasangan itu berdampingan, lengkap dengan dua contoh pembanding. Beri perhatian khusus pada *mustn't* dan *don't have to*, karena bagi pelajar Indonesia keduanya sama-sama terasa seperti \"tidak harus\".\n\n| Pasangan | Perbedaan | Contoh |\n|---|---|---|\n| **must** vs. **have to** | *must* dari penutur; *have to* dari aturan luar | I **must** call my mother. (keinginan sendiri) / We **have to** pay tax. (aturan) |\n| **mustn't** vs. **don't have to** | dilarang vs. tidak wajib | You **mustn't** touch it. / You **don't have to** touch it. |\n| **can** vs. **could** (kemampuan lampau) | umum vs. satu kejadian | I **could** swim at six. / I **was able to** swim across the river yesterday. |\n| **may** vs. **might** | sama untuk kemungkinan; *might* sedikit kurang pasti | It **may** rain. / It **might** rain. |\n| **should** vs. **must** | saran vs. kewajiban | You **should** exercise. / You **must** exercise (dokter berkata begitu). |\n| **will** vs. **would** | sekarang/masa depan vs. kondisional | I **will** help you. / I **would** help you if I could. |\n\n---\n\n## 5. Kesalahan Umum Pelajar Indonesia\n\nHampir semua kesalahan di tabel ini terjadi karena modal diperlakukan seperti kata kerja biasa: diberi *-s*, diberi *to*, atau dipasangkan dengan *do/does*. Tebak dulu perbaikannya sebelum melihat kolom ketiga. Kalau masih sering salah, baca ulang lima ciri modal di Bagian 1.\n\n| # | Kesalahan | Perbaikan | Penjelasan |\n|---|---|---|---|\n| 1 | She **cans** swim. | She **can** swim. | Modal tanpa -s. |\n| 2 | He must **to** go. | He **must go**. | Tanpa *to* setelah modal. |\n| 3 | Do you **can** swim? | **Can** you swim? | Tanya modal tanpa do/does. |\n| 4 | I **can't to** attend. | I **can't attend**. | Sama: tanpa *to*. |\n| 5 | She **musts** leave early. | She **must** leave early. | Tanpa -s. |\n| 6 | I **will can** help you. | I **will be able to** help you. | Dua modal tidak bersamaan. |\n| 7 | You **mustn't** come, it's optional. | You **don't have to** come. | Arti dibalik: larangan vs. tidak wajib. |\n| 8 | He **should studied**. | He **should study**. | Setelah modal, V1. |\n| 9 | She **may be gone** yesterday. | She **may have gone** yesterday. | Dugaan masa lampau = modal + have + V3. |\n| 10 | You **should to** go. | You **should** go. | Tanpa *to*. |\n| 11 | I **am can** swim. | I **can** swim. | Jangan menambahkan *am/is/are* sebelum modal. |\n| 12 | **Could** you **to** help me? | **Could** you help me? | Tanpa *to*. |\n\n---\n\n## 6. Strategi IELTS\n\nBagian ini memperlihatkan modal mana yang berguna di tiap bagian tes IELTS. Ada modal untuk berpendapat dengan hati-hati, untuk meminta dengan sopan di surat, dan untuk mengenali aturan saat mendengarkan atau membaca. Pilih satu atau dua contoh kalimat untuk kamu tiru saat latihan.\n\n- **Speaking Part 3:** modal dugaan menunjukkan *range* dan kesadaran akan ketidakpastian. Contoh: *I think the trend **might** continue, but it **could** also slow down.* Hindari semua kalimat tegas tanpa nuansa.\n- **Speaking Part 1:** jawab dengan fleksibel: *I **can** cook a few dishes, but I **wouldn't** call myself a good cook.*\n- **Writing Task 2 (opinion, solution):** *should*, *must*, *could*, *might* untuk argumen dan solusi: *Governments **should** subsidise renewable energy*, *This **could** reduce pollution.* Hindari kalimat absolut (*always, never, all*); lebih aman dengan *may/might/can*.\n- **Writing Task 1 GT (surat):** permintaan sopan: *I would be grateful if you **could** send me a refund.* *Would you mind...* untuk surat semi-formal. *Can you...* hanya untuk surat informal.\n- **Listening:** kewajiban (*must, have to*) dan larangan (*mustn't, can't*) sering muncul dalam instruksi, aturan perpustakaan, dan pengumuman.\n- **Reading (T/F/NG):** perbedaan *must / should / may / might* sering menentukan jawaban True/False/Not Given (mis. teks berkata \"may\", soal berkata \"will\").\n\n---\n\n## 7. Contoh Jawaban Model (Speaking Part 3)\n\nSatu pertanyaan Speaking dijawab dalam tiga tingkat, Band 5 sampai Band 7. Perhatikan modal yang dipakai di tiap jawaban. Jawaban terendah hanya memakai *can*, sedangkan jawaban tertinggi memakai beberapa modal untuk menunjukkan seberapa yakin si pembicara.\n\n**Pertanyaan:** *How might technology change education in the future?*\n\n- **Band 5:** Technology is change education. Student can learn online. Teacher is not need.\n- **Band 6:** Technology can change education. Students can study online, and teachers should use it in class. Maybe schools will be different.\n- **Band 7:** I think technology could change education quite dramatically. Students might be able to learn at their own pace, which should make lessons more personal. That said, I don't think teachers will disappear. They may simply take on a different role, as guides rather than lecturers.\n\n**Mengapa naik band?** (1) Modal dipakai untuk menyatakan **tingkat kepastian** (*could, might, should, may*), bukan hanya *can*, (2) tidak ada kesalahan bentuk (*is not need* → *won't be needed*), (3) ada kontra-argumen (*That said...*) yang menunjukkan pemikiran analitis.\n\n---\n\n## 8. Ringkasan dan Cek Diri\n\nSebelum latihan, cek dulu apakah lima hal inti di daftar \"Ingat\" sudah kamu pegang. Lalu kerjakan Cek Diri tanpa melihat materi. Untuk setiap soal, tentukan dulu fungsinya (larangan, dugaan, permintaan, atau kemampuan), baru pilih modalnya.\n\n**Ingat:**\n\n- Modal + V1; tanpa -s, tanpa *to*, tanpa do/does.\n- Kewajiban: must / have to. Larangan: mustn't. Tidak wajib: don't have to.\n- Saran: should / ought to / had better.\n- Dugaan: must (pasti), may/might/could (mungkin), can't (mustahil). Lampau: modal + have + V3.\n- Permintaan sopan: can < could < would < would you mind.\n\n**Cek diri (tanpa melihat materi):**\n\n1. *You ___ (mustn't / don't have to) park here. It's forbidden.*\n2. *She ___ (must / can't) be tired; she has worked since 6 a.m.*\n3. *___ (Could / Do) you help me with this exercise?*\n4. *He studied hard, so he ___ (should / mustn't) pass the exam.*\n5. *I ___ (could / was able to) swim when I was four years old.*\n\n**Kunci:** 1. mustn't. 2. must. 3. Could. 4. should. 5. could.",
+        "mini_task": {
+          "task_type": "AI_SHORT_WRITING",
+          "prompt": "Tulis paragraf pendek (sekitar 90 sampai 110 kata) dalam bahasa Inggris berisi saran untuk temanmu yang akan mengikuti ujian IELTS bulan depan.\n\nDalam paragrafmu:\n- berikan minimal 2 saran dengan should / ought to / had better\n- sebutkan satu kewajiban dengan must atau have to dan satu hal yang TIDAK wajib dengan don't have to\n- nyatakan satu dugaan atau kemungkinan dengan might / may / could (mis. tentang hasil ujiannya)\n- gunakan satu permintaan sopan dengan Could you... atau Would you mind...",
+          "ai_rubric_criteria": "Grammatical Range and Accuracy: modal selalu diikuti V1 tanpa -s, tanpa to, tanpa do/does; mustn't dan don't have to dipakai sesuai maknanya; dugaan masa lampau memakai modal + have + V3 bila ada; tidak ada dua modal berurutan (will can). Task Achievement: semua fungsi yang diminta (saran, kewajiban, tidak wajib, dugaan, permintaan sopan) muncul. Lexical Resource dan Coherence: pilihan modal sesuai tingkat kepastian dan kesopanan, paragraf terhubung."
+        }
+      },
+      "active_drill": {
+        "time_limit_seconds": 900,
+        "pass_percent": 75,
+        "questions": [
+          {
+            "question_id": "Q-GR114-001",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "She ___ speak three languages.",
+            "explanation_id": "Modal tidak berubah untuk he/she/it dan tidak memakai to atau am/is/are.",
+            "options": [
+              "can",
+              "cans",
+              "can to",
+              "is can"
+            ],
+            "correct_answers": [
+              "can"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-002",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "___ you swim when you were a child?",
+            "explanation_id": "Kemampuan umum di masa lampau memakai could. Tanya modal: Could + S + V1.",
+            "options": [
+              "Could",
+              "Do",
+              "Did",
+              "Are"
+            ],
+            "correct_answers": [
+              "Could"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-003",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "You ___ park here. It's forbidden.",
+            "explanation_id": "Mustn't menyatakan larangan. \"Don't have to\" berarti tidak wajib (boleh, tetapi tidak harus).",
+            "options": [
+              "mustn't",
+              "don't have to",
+              "needn't to",
+              "might not"
+            ],
+            "correct_answers": [
+              "mustn't"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-004",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "You ___ come early; the event starts at ten, and there is no need to be early.",
+            "explanation_id": "\"Don't have to\" = tidak wajib. \"Mustn't\" akan berarti dilarang datang awal, yang tidak sesuai konteks.",
+            "options": [
+              "mustn't",
+              "don't have to",
+              "can't",
+              "shouldn't"
+            ],
+            "correct_answers": [
+              "don't have to"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-005",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "She has worked since 6 a.m., so she ___ be tired.",
+            "explanation_id": "Dugaan kuat (hampir pasti) dengan alasan yang jelas memakai must.",
+            "options": [
+              "must",
+              "can't",
+              "mustn't",
+              "might not"
+            ],
+            "correct_answers": [
+              "must"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-006",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "That ___ be Rina. She is on holiday in Bali this week.",
+            "explanation_id": "Mustahil menurut bukti (dia sedang di Bali) = can't be.",
+            "options": [
+              "must",
+              "can't",
+              "should",
+              "might"
+            ],
+            "correct_answers": [
+              "can't"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-007",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "It is cloudy. It ___ rain later, but I'm not sure.",
+            "explanation_id": "Kemungkinan kecil/tidak pasti memakai might, may, atau could.",
+            "options": [
+              "must",
+              "might",
+              "has to",
+              "doesn't have to"
+            ],
+            "correct_answers": [
+              "might"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-008",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which sentence is the MOST polite request?",
+            "explanation_id": "Could + please lebih sopan daripada can. Perintah langsung dan must tidak sopan untuk permintaan.",
+            "options": [
+              "Open the window.",
+              "Can you open the window?",
+              "Could you open the window, please?",
+              "You must open the window."
+            ],
+            "correct_answers": [
+              "Could you open the window, please?"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-009",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which sentence is grammatically CORRECT?",
+            "explanation_id": "Modal tidak memakai to atau -s; bentuk tanya modal dengan membalik posisi, tanpa do/does.",
+            "options": [
+              "She can to swim.",
+              "She cans swim.",
+              "Does she can swim?",
+              "Can she swim?"
+            ],
+            "correct_answers": [
+              "Can she swim?"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-010",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "After three hours of work, we finally ___ fix the problem.",
+            "explanation_id": "Untuk satu kejadian spesifik yang berhasil di masa lampau digunakan was/were able to, bukan could.",
+            "options": [
+              "could",
+              "were able to",
+              "can",
+              "must"
+            ],
+            "correct_answers": [
+              "were able to"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-011",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan modal yang tepat: You ___ see a doctor. You look ill. (saran)",
+            "explanation_id": "Saran umum memakai should (atau ought to).",
+            "correct_answers": [
+              "should"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR114-012",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi: Students ___ to wear uniforms at this school. (aturan sekolah)",
+            "explanation_id": "Kewajiban dari aturan eksternal memakai have to (students have to wear).",
+            "correct_answers": [
+              "have",
+              "need"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR114-013",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan modal yang tepat: She ___ have forgotten the meeting. (dugaan: pasti lupa)",
+            "explanation_id": "Dugaan kuat tentang masa lampau: must + have + V3.",
+            "correct_answers": [
+              "must"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR114-014",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan V3: He might have ___ the bus. (miss)",
+            "explanation_id": "Modal + have + V3. V3 dari miss adalah missed.",
+            "correct_answers": [
+              "missed"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR114-015",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan modal yang tepat: I ___ study abroad if I had a scholarship. (kondisional)",
+            "explanation_id": "Kalimat kondisional (if + past) memakai would + V1.",
+            "correct_answers": [
+              "would"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR114-016",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi pertanyaan yang benar.",
+            "explanation_id": "Tanya dengan modal: Modal + subjek + V1 + keterangan, tanpa do/does.",
+            "segments": [
+              "Could",
+              "you",
+              "help",
+              "me",
+              "with this exercise?"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-017",
+            "skill": "GRAMMAR",
+            "question_type": "SENTENCE_REORDER",
+            "prompt": "Susun menjadi kalimat larangan yang benar.",
+            "explanation_id": "Larangan: subjek + mustn't + V1 + keterangan tempat.",
+            "segments": [
+              "You",
+              "mustn't",
+              "use",
+              "your phone",
+              "in the exam room."
+            ]
+          },
+          {
+            "question_id": "Q-GR114-018",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Modal tidak memakai to. Seharusnya: He must go home now.",
+            "tokens": [
+              "He",
+              "must",
+              "to",
+              "go",
+              "home",
+              "now."
+            ],
+            "correct_answers": [
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR114-019",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Dua modal tidak dipakai bersamaan. Gunakan will be able to: I will be able to help you.",
+            "tokens": [
+              "I",
+              "will",
+              "can",
+              "help",
+              "you",
+              "tomorrow."
+            ],
+            "correct_answers": [
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR114-020",
+            "skill": "GRAMMAR",
+            "question_type": "MATCHING_DROPDOWN",
+            "prompt": "Cocokkan modal dengan fungsinya.",
+            "explanation_id": "Must = kewajiban/dugaan kuat; should = saran; might = kemungkinan kecil.",
+            "points": 3,
+            "matching": {
+              "left": [
+                "You must wear a seatbelt.",
+                "You should drink more water.",
+                "It might rain tomorrow."
+              ],
+              "right": [
+                "kewajiban",
+                "saran",
+                "kemungkinan",
+                "larangan"
+              ],
+              "allow_reuse": false
+            },
+            "correct_answers": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "question_id": "Q-GR114-021",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_MULTI",
+            "prompt": "Pilih SEMUA kalimat yang benar.",
+            "explanation_id": "Modal tidak memakai -s atau to. \"Must have + V3\" dan \"can't\" untuk dugaan benar. \"He cans\" dan \"She must to\" salah.",
+            "points": 2,
+            "options": [
+              "He cans swim very fast.",
+              "She must have forgotten the key.",
+              "They must to leave now.",
+              "That can't be true."
+            ],
+            "correct_answers": [
+              "She must have forgotten the key.",
+              "That can't be true."
+            ]
+          },
+          {
+            "question_id": "Q-GR114-022",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "You ___ hurry, or you will miss the train.",
+            "explanation_id": "Saran kuat yang punya konsekuensi memakai had better + V1, tanpa to.",
+            "options": [
+              "had better",
+              "have better",
+              "had better to",
+              "would better"
+            ],
+            "correct_answers": [
+              "had better"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-023",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "Which is the MOST formal way to ask for permission?",
+            "explanation_id": "\"May\" adalah pilihan paling sopan/formal untuk meminta izin; \"can\" bernada biasa.",
+            "options": [
+              "Can I come in?",
+              "May I come in?",
+              "I come in?",
+              "Do I can come in?"
+            ],
+            "correct_answers": [
+              "May I come in?"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-024",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "I ___ live in Surabaya, but now I live in Jakarta.",
+            "explanation_id": "\"Used to + V1\" menyatakan keadaan atau kebiasaan lampau yang sudah tidak berlaku.",
+            "options": [
+              "use to",
+              "used to",
+              "am used to",
+              "would to"
+            ],
+            "correct_answers": [
+              "used to"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-025",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "He ___ have finished already. He only started five minutes ago.",
+            "explanation_id": "Dugaan mustahil tentang masa lampau: can't + have + V3.",
+            "options": [
+              "must",
+              "can't",
+              "should",
+              "has to"
+            ],
+            "correct_answers": [
+              "can't"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-026",
+            "skill": "GRAMMAR",
+            "question_type": "MCQ_SINGLE",
+            "prompt": "I ___ vote next year when I turn seventeen.",
+            "explanation_id": "Dua modal tidak dipakai bersamaan. Kemampuan di masa depan memakai will be able to.",
+            "options": [
+              "will can",
+              "will be able to",
+              "can to",
+              "am can"
+            ],
+            "correct_answers": [
+              "will be able to"
+            ]
+          },
+          {
+            "question_id": "Q-GR114-027",
+            "skill": "GRAMMAR",
+            "question_type": "ERROR_RECOGNITION",
+            "prompt": "Klik kata yang salah.",
+            "explanation_id": "Modal tidak pernah mendapat -s, juga untuk subjek she. Seharusnya: She must leave early today.",
+            "tokens": [
+              "She",
+              "musts",
+              "leave",
+              "early",
+              "today."
+            ],
+            "correct_answers": [
+              1
+            ]
+          },
+          {
+            "question_id": "Q-GR114-028",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan satu kata: You ___ to see a doctor about that cough. (saran; sama artinya dengan should)",
+            "explanation_id": "\"Ought to\" bermakna sama dengan should untuk saran umum, dan merupakan pengecualian yang memakai to.",
+            "correct_answers": [
+              "ought"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR114-029",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan bentuk yang benar dari kata kerja dalam kurung: He should ___ harder for the exam. (studied)",
+            "explanation_id": "Setelah modal, kata kerja selalu V1: should study, bukan should studied.",
+            "correct_answers": [
+              "study"
+            ],
+            "max_words": 1
+          },
+          {
+            "question_id": "Q-GR114-030",
+            "skill": "GRAMMAR",
+            "question_type": "FILL_IN_BLANK",
+            "prompt": "Lengkapi dengan satu kata: She may ___ gone home early yesterday. (dugaan masa lampau)",
+            "explanation_id": "Dugaan tentang masa lampau memakai modal + have + V3: may have gone.",
+            "correct_answers": [
+              "have"
+            ],
+            "max_words": 1
+          }
+        ]
+      }
+    }
+  ]
+}

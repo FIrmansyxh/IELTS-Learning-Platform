@@ -1,0 +1,175 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-LIS-S4-001",
+      "bank_kind": "LISTENING_GT_S4",
+      "title": "Listening GT Section 4: Pelatihan Ergonomi Meja Kerja",
+      "skill": "LISTENING",
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "listening_asset_code": "gt-listening/gt-l-s4-001",
+      "tags": [
+        "listening",
+        "section-4",
+        "lecture",
+        "workplace-training"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTL4-001",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "Complete the notes. Write NO MORE THAN TWO WORDS AND/OR A NUMBER.\n\nBack and neck pain caused about ________ of all sick days.",
+          "difficulty": 2,
+          "explanation_id": "Pembicara menyebut nyeri punggung dan leher \"accounted for about one third of all sick days\".",
+          "max_words": 2,
+          "correct_answers": [
+            "one third",
+            "a third",
+            "1/3",
+            "one-third",
+            "33%"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-002",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "Screen position: the top of the screen should be level with your ________.",
+          "difficulty": 3,
+          "explanation_id": "Bukan tengah layar setinggi mata: \"The top of the screen should be roughly level with your eyebrows.\"",
+          "max_words": 1,
+          "correct_answers": [
+            "eyebrows"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-003",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "Screen distance: about an ________ away",
+          "difficulty": 2,
+          "explanation_id": "Aturan praktisnya: \"place the screen about an arm's length away\".",
+          "max_words": 2,
+          "correct_answers": [
+            "arm's length",
+            "arms length",
+            "arm length"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-004",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "If your feet cannot reach the floor, ask for a ________.",
+          "difficulty": 2,
+          "explanation_id": "Pembicara menyarankan: \"Ask for a footrest.\" Benda ini gratis bagi staf.",
+          "max_words": 1,
+          "correct_answers": [
+            "footrest",
+            "foot rest",
+            "foot-rest"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-005",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "What does the speaker say about standing desks?",
+          "difficulty": 3,
+          "explanation_id": "Meja berdiri \"are only helpful if you change position regularly, moving between sitting and standing\".",
+          "options": [
+            "They are the best solution for back pain",
+            "They are only useful if people change position regularly",
+            "They are too expensive for most companies",
+            "They cause more problems than they solve"
+          ],
+          "correct_answers": [
+            "They are only useful if people change position regularly"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-006",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "The 20-20-20 rule: every 20 minutes, look at something 20 ________ away for 20 seconds.",
+          "difficulty": 2,
+          "explanation_id": "Aturannya: \"look at something twenty feet away for twenty seconds\".",
+          "max_words": 1,
+          "correct_answers": [
+            "feet",
+            "foot",
+            "ft"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-007",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "Laptop users should raise the laptop on a stand and use a separate ________ and mouse.",
+          "difficulty": 2,
+          "explanation_id": "Pengguna laptop lebih dari satu jam per hari disarankan \"use a separate keyboard and mouse\".",
+          "max_words": 1,
+          "correct_answers": [
+            "keyboard"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-008",
+          "question_type": "MCQ_MULTI",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "Choose TWO letters. Which TWO results of the pilot scheme does the speaker mention?",
+          "difficulty": 3,
+          "explanation_id": "Hasil uji coba: jumlah hari sakit karena nyeri punggung/leher turun dan staf melaporkan \"higher job satisfaction\". Produktivitas tidak diukur dan biaya justru naik dalam jangka pendek.",
+          "options": [
+            "Fewer sick days due to back and neck pain",
+            "Higher productivity",
+            "Higher job satisfaction",
+            "Lower costs in the short term",
+            "Fewer staff leaving the company"
+          ],
+          "correct_answers": [
+            "Fewer sick days due to back and neck pain",
+            "Higher job satisfaction"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-009",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "Lighting: position the desk at ________ angles to the window.",
+          "difficulty": 2,
+          "explanation_id": "Pembicara menyarankan \"position your desk at right angles to the window\" agar cahaya datang dari samping.",
+          "max_words": 1,
+          "correct_answers": [
+            "right"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-010",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "Individual workstation assessments are carried out by the ________ team.",
+          "difficulty": 2,
+          "explanation_id": "Penilaian dilakukan \"by the facilities team, not by occupational health\".",
+          "max_words": 1,
+          "correct_answers": [
+            "facilities"
+          ]
+        }
+      ]
+    }
+  ]
+}

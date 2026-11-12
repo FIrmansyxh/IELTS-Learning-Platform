@@ -3,6 +3,7 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { checkPengantar } from '../../content/_src/check-pengantar.mjs';
 import { extractToc, MarkdownArticle } from '../../src/components/player/markdown-article';
 import { enhanceMarkdown } from '../../src/components/player/markdown-enhance';
 
@@ -13,7 +14,7 @@ import { enhanceMarkdown } from '../../src/components/player/markdown-enhance';
 const ROOT = path.resolve(__dirname, '..', '..', 'content', 'gt-modules');
 /** Drill yang dikunci tes E2E (kunci jawaban dibaca dari content.json); hanya artikelnya yang diperkaya. */
 const DRILL_DIKUNCI_E2E = new Set(['3.3.3']);
-/** Semua paket di gt-modules (seluruh 33 sub-modul) wajib memenuhi standar C-12. */
+/** Semua paket di gt-modules (seluruh 40 sub-modul) wajib memenuhi standar C-12. */
 const MODUL_DIPERKAYA = readdirSync(ROOT, { withFileTypes: true })
   .filter((e) => e.isDirectory())
   .map((e) => e.name)
@@ -33,7 +34,7 @@ const load = (code: string): Pkg['sub_modules'][number] =>
 
 describe('Materi Diperkaya (C-12)', () => {
   it('semua kode yang diwajibkan punya content.json', () => {
-    expect(MODUL_DIPERKAYA.length).toBe(33);
+    expect(MODUL_DIPERKAYA.length).toBe(40);
     for (const c of MODUL_DIPERKAYA) expect(existsSync(path.join(ROOT, c, 'content.json')), c).toBe(true);
   });
 
@@ -59,6 +60,18 @@ describe('Materi Diperkaya (C-12)', () => {
         expect(md).toMatch(/Strategi IELTS/);
         expect(md).toMatch(/Contoh Jawaban Model/);
         expect(md).toMatch(/Cek Diri/);
+      });
+
+      it('pengantar dasar (C-20): pembuka "Mulai dari Sini" dan paragraf pengantar di tiap bagian bernomor', () => {
+        expect(checkPengantar(md)).toEqual([]);
+        // Pembuka adalah butir pertama daftar isi dan dirender sebagai callout berlabel "Pengantar".
+        expect(extractToc(md)[0]?.text).toBe('Mulai dari Sini');
+        const { container, unmount } = render(<MarkdownArticle markdown={md} />);
+        const intro = container.querySelector('aside[data-callout="pengantar"]');
+        expect(intro).not.toBeNull();
+        expect(intro?.textContent ?? '').toMatch(/^Pengantar/);
+        expect(intro?.querySelectorAll('p').length ?? 0).toBeGreaterThanOrEqual(4);
+        unmount();
       });
 
       it('dirender tanpa sisa sintaks tabel/callout mentah, dengan banyak tabel dan >= 2 callout', () => {
@@ -120,8 +133,8 @@ describe('Materi Diperkaya (C-12)', () => {
     }
   });
 
-  it('peta tense di 1.1.2 memuat 16 bentuk termasuk Past Future (bukan patokan 12)', () => {
-    const md = load('1.1.2').materials.article_markdown;
+  it('peta tense di 1.3.1 memuat 16 bentuk termasuk Past Future (bukan patokan 12)', () => {
+    const md = load('1.3.1').materials.article_markdown;
     for (const t of ['Past Future Perfect Continuous', 'Future Perfect Continuous', 'Present Perfect Continuous', 'Past Perfect Continuous'])
       expect(md).toContain(t);
     expect(md).toMatch(/16 bentuk/);

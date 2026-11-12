@@ -21,17 +21,17 @@ describe('SPEC-021: Jalur Belajar & Gaya Penyampaian Materi (Integration)', () =
   });
 
   describe('AC-1 & AC-17: GET /api/v1/tracks', () => {
-    it('mengembalikan tepat 4 jalur PUBLISHED dengan GT-STRUCT aktif secara default', async () => {
+    it('mengembalikan tepat 5 jalur PUBLISHED dengan GT-STRUCT aktif secara default', async () => {
       const res = await getTracks(user);
       expect(res.status).toBe(200);
       const tracks = res.json.data;
-      expect(tracks).toHaveLength(4);
+      expect(tracks).toHaveLength(5);
 
       const codes = tracks.map((t: any) => t.code);
-      expect(codes).toEqual(['GT-STRUCT', 'GT-WRITING', 'GT-READING', 'GT-SPRINT-4W']);
+      expect(codes).toEqual(['GT-STRUCT', 'GT-WRITING', 'GT-READING', 'GT-SPRINT-4W', 'GT-GRAMMAR']);
 
       const struct = tracks.find((t: any) => t.code === 'GT-STRUCT');
-      expect(struct.total_sub_modules).toBe(31);
+      expect(struct.total_sub_modules).toBe(38);
       expect(struct.checkpoint_count).toBe(0);
       expect(struct.is_active).toBe(true);
 
@@ -78,7 +78,7 @@ describe('SPEC-021: Jalur Belajar & Gaya Penyampaian Materi (Integration)', () =
       const resDefault = await getTree(user);
       expect(resDefault.status).toBe(200);
       expect(resDefault.json.data.track.code).toBe('GT-STRUCT');
-      expect(resDefault.json.data.track.items).toHaveLength(31);
+      expect(resDefault.json.data.track.items).toHaveLength(38);
 
       const resWriting = await getTree(user, { track: 'GT-WRITING' });
       expect(resWriting.status).toBe(200);
@@ -153,8 +153,8 @@ describe('SPEC-021: Jalur Belajar & Gaya Penyampaian Materi (Integration)', () =
     });
 
     it('AC-10: bila sub-modul selesai dan kolam cukup, startCheckpoint mengembalikan 201 dengan 10 soal', async () => {
-      // Siapkan 4 sub-modul pertama GT-WRITING: 1.1.1, 1.1.2, 1.1.3, 1.1.4
-      const subs = ['1.1.1', '1.1.2', '1.1.3', '1.1.4'];
+      // Siapkan 4 sub-modul pertama GT-WRITING: 1.1.1, 1.3.1, 1.3.2, 1.3.4
+      const subs = ['1.1.1', '1.3.1', '1.3.2', '1.3.4'];
       for (const s of subs) {
         await seedMaterial(s);
         await addDrill(s, [Q.mcq(), Q.mcq(), Q.mcq(), Q.mcq()]);

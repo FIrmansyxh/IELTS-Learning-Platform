@@ -7,7 +7,7 @@
  */
 import { afterAll, afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { eq, sql } from 'drizzle-orm';
-import { assessmentSets, attemptSections, attempts, contentAssets, contentSources } from '@/db/schema';
+import { assessmentSets, attemptAnswers, attemptSections, attempts, contentAssets, contentSources } from '@/db/schema';
 import { closeDb, execute, getDb } from '@/server/db';
 import { setClockForTest } from '@/server/clock';
 import { resetRateLimits } from '@/server/http/rate-limit';
@@ -32,11 +32,15 @@ import { GET as examHistoryRoute } from '@/app/api/v1/me/exam-history/route';
 import { POST as writingSubRoute } from '@/app/api/v1/submissions/writing/route';
 import { POST as speakingSubRoute } from '@/app/api/v1/submissions/speaking-external/route';
 import { POST as selfAssessRoute } from '@/app/api/v1/submissions/[submission_id]/self-assessment/route';
+import { GET as audioRoute } from '@/app/api/v1/attempts/[attempt_id]/audio/route';
+import { getStorage } from '@/server/storage';
 import { call, learnerSession } from './helpers';
 import {
   abundantPool,
   idsOf,
   listeningBank,
+  listeningQs,
+  makeBank,
   minimalPool,
   readingBank,
   speakingBank,
@@ -585,6 +589,88 @@ describe('SPEC-023: bukti AC pasca-audit (integrasi)', () => {
       for (const q of r.json.data.questions) expect((await answer(user, id, q.question_id, { selected: 'True' })).status).toBe(200);
       const rs = await submitSection(user, id, 'READING');
       expect(rs.json.data).toMatchObject({ raw_score: 40, max_score: 40, band: 9 });
+    });
+
+    it('audio Listening simulasi dapat diputar lewat /attempts/:id/audio?asset= (bukan /assets/:id/file)', async () => {
+      await insertPool([...minimalPool(), listeningBank(1, 'AUD-L1'), listeningBank(2, 'AUD-L2'), listeningBank(3, 'AUD-L3'), listeningBank(4, 'AUD-L4')]);
+      const mp3 = Buffer.from('ID3fake-mp3-bytes');
+      const key = await getStorage().put(mp3, 'mp3');
+      await execute(db, sql`UPDATE content_assets SET storage_key = ${key} WHERE asset_code LIKE 'gt-listening/simac-%'`);
+      const c = await createSim(user, ['LISTENING']);
+      const id = c.json.data.attempt_id as string;
+      const audio = (url: string) =>
+        audioRoute(new Request(`http://localhost:3000${url}`, { headers: { cookie: user.cookie!, origin: 'http://localhost:3000' } }), {
+          params: Promise.resolve({ attempt_id: id }),
+        });
+
+      expect((await startSection(user, id, 'LISTENING')).status).toBe(200);
+      const parts = (await getSection(user, id, 'LISTENING')).json.data.parts as Array<{ listening: { audio_url: string } | null }>;
+      expect(parts).toHaveLength(4);
+      for (const p of parts) expect(p.listening!.audio_url).toMatch(new RegExp(`^/api/v1/attempts/${id}/audio\\?asset=[0-9a-f-]{36}$`));
+
+      const ok = await audio(parts[0]!.listening!.audio_url);
+      expect(ok.status).toBe(200);
+      expect(ok.headers.get('content-type')).toBe('audio/mpeg');
+      expect(Buffer.from(await ok.arrayBuffer())).toEqual(mp3);
+      // Asset di luar attempt ini -> 404; tanpa ?asset -> 404.
+      expect((await audio(`/api/v1/attempts/${id}/audio?asset=00000000-0000-4000-8000-000000000000`)).status).toBe(404);
+      expect((await audio(`/api/v1/attempts/${id}/audio`)).status).toBe(404);
+      // Setelah section dikumpulkan, audio tidak lagi dilayani.
+      expect((await submitSection(user, id, 'LISTENING')).status).toBe(200);
+      expect((await audio(parts[0]!.listening!.audio_url)).status).not.toBe(200);
+    });
+
+    it('jawaban berbentuk standar (option_ids, pairs, text) dinilai mesin soal: MCQ_MULTI, MATCHING multi-poin, FILL_IN_BLANK', async () => {
+      const mixed = [
+        ...listeningQs('MIX', 7),
+        {
+          question_id: 'Q-MIX-MULTI', question_type: 'MCQ_MULTI', skill: 'LISTENING', prompt: 'Choose TWO',
+          options: ['Bus', 'Taxi', 'Bike', 'Car'], correct_answers: ['Bus', 'Bike'], explanation_id: 'p', points: 1,
+        },
+        {
+          question_id: 'Q-MIX-MATCH', question_type: 'MATCHING_DROPDOWN', skill: 'LISTENING', prompt: 'Match',
+          matching: { left: ['Tent', 'Stage', 'First aid'], right: ['Gate', 'Garden', 'Lake', 'Car park'], allow_reuse: false },
+          correct_answers: [1, 2, 3], explanation_id: 'p', points: 3,
+        },
+        {
+          question_id: 'Q-MIX-FILL', question_type: 'FILL_IN_BLANK', skill: 'LISTENING', prompt: 'Bring a reusable ____.',
+          correct_answers: ['cup'], max_words: 1, explanation_id: 'p', points: 1,
+        },
+      ];
+      await insertPool([
+        ...minimalPool(),
+        listeningBank(1, 'MX-L1'),
+        makeBank({ kind: 'LISTENING_GT_S2', code: 'MX-L2', questions: mixed, audioSec: 5 }),
+        listeningBank(3, 'MX-L3'),
+        listeningBank(4, 'MX-L4'),
+      ]);
+      const c = await createSim(user, ['LISTENING']);
+      const id = c.json.data.attempt_id as string;
+      expect((await startSection(user, id, 'LISTENING')).status).toBe(200);
+      const qs = (await getSection(user, id, 'LISTENING')).json.data.questions as any[];
+      const byId = (qid: string) => qs.find((q) => q.question_id === qid)!;
+
+      const multi = byId('Q-MIX-MULTI');
+      const optIds = multi.options.filter((o: any) => o.text === 'Bus' || o.text === 'Bike').map((o: any) => o.option_id);
+      expect((await answer(user, id, 'Q-MIX-MULTI', { option_ids: optIds })).status).toBe(200);
+
+      const match = byId('Q-MIX-MATCH');
+      const choice = (t: string) => match.matching.right.find((r: any) => r.text === t).choice_id;
+      const pairs = [
+        { item_id: match.matching.left[0].item_id, choice_id: choice('Garden') },
+        { item_id: match.matching.left[1].item_id, choice_id: choice('Lake') },
+        { item_id: match.matching.left[2].item_id, choice_id: choice('Gate') }, // salah: 2 dari 3 benar
+      ];
+      expect((await answer(user, id, 'Q-MIX-MATCH', { pairs })).status).toBe(200);
+      expect((await answer(user, id, 'Q-MIX-FILL', { text: ' Cup ' })).status).toBe(200);
+      // Bentuk tidak sesuai tipe ditolak, bukan disimpan diam-diam.
+      expect((await answer(user, id, 'Q-MIX-FILL', { option_ids: ['o0'] })).status).toBe(400);
+
+      const rows = await db.select().from(attemptAnswers).where(eq(attemptAnswers.attemptId, id));
+      const score = (qid: string) => Number(rows.find((r) => r.questionId === qid)!.score);
+      expect(score('Q-MIX-MULTI')).toBe(1);
+      expect(score('Q-MIX-MATCH')).toBe(2);
+      expect(score('Q-MIX-FILL')).toBe(1);
     });
 
     it('AC-17: tabel progres tier/modul/sub-modul dan user_stats identik sebelum-sesudah, points_awarded=0, radar READING terbarui, riwayat memuat MOCK_TEST', async () => {

@@ -1,0 +1,1376 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-RD-S1-SIM2",
+      "bank_kind": "READING_GT_S1",
+      "title": "Reading GT Section 1 (simulasi 2): jadwal kolam renang, pasar petani, pemberitahuan air",
+      "skill": "READING",
+      "tags": [
+        "simulation",
+        "everyday"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "reading_passage_markdown": "## Section 1: Teks Sehari-hari\n\n### Text A: Riverside Leisure Pool, Summer Opening Times\n\nFrom 1 July to 31 August, Riverside Leisure Pool will open from 6.00 a.m. to 9.00 p.m. on weekdays and from 8.00 a.m. to 6.00 p.m. at weekends. The main pool is reserved for lane swimming before 9.00 a.m. every day. Family sessions, with inflatables and music, take place on Saturday and Sunday afternoons from 2.00 p.m. to 4.00 p.m. Children under eight must be accompanied in the water by an adult aged 16 or over. A single adult swim costs £4.50, and children under five swim free. A book of ten swims can be bought at reception for £38. Lockers require a £1 coin, which is returned when you open the locker. Please note that the pool will be closed for cleaning on Monday 14 July.\n\n### Text B: Hillcrest Farmers' Market\n\nHillcrest Farmers' Market takes place on the first and third Sunday of every month in the car park behind the town hall, from 9.00 a.m. to 1.00 p.m. More than 40 local producers sell fruit, vegetables, cheese, bread, honey and plants. All goods are grown or made within 30 miles of the town. Most stalls accept card payments, but some smaller sellers take cash only, and there is a cash machine at the entrance. Visitors are encouraged to bring their own bags, as plastic bags are not provided. Dogs on leads are welcome. If you would like to run a stall, the fee is £15 per market; applications must be made to the market manager at least one month before the date.\n\n### Text C: Notice to Residents of Elm Court, Planned Water Interruption\n\nThe water supply to all flats in Elm Court will be switched off on Thursday 9 October between 10.00 a.m. and 3.00 p.m. while engineers replace a main pipe. Residents are advised to store enough drinking water before the work begins. Water may look cloudy for a short time afterwards; if so, run the cold tap until it is clear. Any questions should be directed to the building manager on 555 0198.",
+      "questions": [
+        {
+          "question_id": "Q-GTSIM4-001",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text A. At weekends the pool closes at ___ p.m.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'from 8.00 a.m. to 6.00 p.m. at weekends'.",
+          "correct_answers": [
+            "6.00",
+            "6",
+            "6:00",
+            "six"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-002",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. Family sessions take place every afternoon.",
+          "difficulty": 1,
+          "explanation_id": "Text A: sesi keluarga hanya 'on Saturday and Sunday afternoons', bukan setiap sore.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-003",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. A seven-year-old child may swim without an adult in the water.",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'Children under eight must be accompanied in the water by an adult'. Anak tujuh tahun masih di bawah delapan.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-004",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Text A. How much does a book of ten swims cost? (Maximum ONE word and/or a number)",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'A book of ten swims can be bought at reception for £38'.",
+          "correct_answers": [
+            "£38",
+            "38",
+            "£38.00",
+            "38.00"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-005",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. Swimming lessons for children are offered during the summer.",
+          "difficulty": 3,
+          "explanation_id": "Text A tidak menyebut kursus/les renang sama sekali; yang disebut hanya lane swimming dan family sessions.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-006",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text A. Why will the pool be closed on Monday 14 July?",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'the pool will be closed for cleaning on Monday 14 July'.",
+          "options": [
+            "For a swimming competition",
+            "For cleaning",
+            "For staff training",
+            "For repairs to the lockers"
+          ],
+          "correct_answers": [
+            "For cleaning"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-007",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. The market is held on the first and ___ Sunday of every month.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'on the first and third Sunday of every month'.",
+          "correct_answers": [
+            "third",
+            "3rd"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-008",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. The market takes place in the car park behind the ___.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'in the car park behind the town hall'.",
+          "correct_answers": [
+            "town hall"
+          ],
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-009",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. Everything sold at the market is produced within 30 miles of the town.",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'All goods are grown or made within 30 miles of the town'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-010",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. Every stall at the market accepts card payments.",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'Most stalls accept card payments, but some smaller sellers take cash only'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-011",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. Paper bags can be bought at the market.",
+          "difficulty": 3,
+          "explanation_id": "Text B hanya menyatakan 'plastic bags are not provided'; tidak ada informasi tentang kantong kertas yang dijual.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-012",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. The fee for running a stall is £___ per market.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'the fee is £15 per market'.",
+          "correct_answers": [
+            "15",
+            "fifteen"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-013",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text C. Why will the water supply be switched off?",
+          "difficulty": 1,
+          "explanation_id": "Text C: 'while engineers replace a main pipe'.",
+          "options": [
+            "To test the quality of the water",
+            "To repair a boiler",
+            "So that engineers can replace a main pipe",
+            "To install water meters"
+          ],
+          "correct_answers": [
+            "So that engineers can replace a main pipe"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM4-014",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Which text (A, B or C) mentions each piece of information? You may use any text more than once.",
+          "difficulty": 3,
+          "explanation_id": "Membawa tas sendiri: Text B ('bring their own bags'). Gratis untuk anak kecil: Text A ('children under five swim free'). Nomor telepon: Text C ('the building manager on 555 0198').",
+          "matching": {
+            "left": [
+              "something visitors should bring themselves",
+              "a free service for very young children",
+              "a phone number to call with questions"
+            ],
+            "right": [
+              "Text A",
+              "Text B",
+              "Text C"
+            ],
+            "allow_reuse": true
+          },
+          "correct_answers": [
+            1,
+            0,
+            2
+          ],
+          "points": 3,
+          "passage_no": 1
+        }
+      ]
+    },
+    {
+      "bank_code": "GT-RD-S2-SIM2",
+      "bank_kind": "READING_GT_S2",
+      "title": "Reading GT Section 2 (simulasi 2): kebijakan seragam hotel dan lowongan layanan pelanggan",
+      "skill": "READING",
+      "tags": [
+        "simulation",
+        "work"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "reading_passage_markdown": "## Section 2: Teks Dunia Kerja\n\n### Text A: Northgate Hotel Group, Staff Uniform and Appearance Policy\n\nAll staff who work in guest-facing roles are provided with three sets of uniform free of charge when they join. Replacement items are issued once a year, or sooner if a uniform is damaged at work. Staff are responsible for washing and ironing their own uniforms, although chefs' clothing is laundered by the hotel. Name badges must be worn at all times while on duty. Comfortable black shoes with low heels are required; trainers are not permitted, except for staff in the leisure centre. Jewellery should be kept to a minimum, and for health and safety reasons kitchen staff may wear only a plain wedding ring. Staff who leave the company must return all uniform items on their last working day; any items not returned will be charged at cost.\n\n### Text B: Vacancy, Part-time Customer Service Adviser at Brightline Energy\n\nBrightline Energy is recruiting customer service advisers to work in our call centre in Kelby. Advisers handle telephone and email enquiries from customers about bills, meter readings and payment plans. The role is 20 hours per week, worked over four evenings and alternate Saturdays. Full training is given during the first three weeks, which take place during the day, Monday to Friday. No previous call-centre experience is needed, but you must have good computer skills and a clear speaking voice. The hourly rate is £12.40, with an extra 10% for Saturday shifts. Benefits include free parking, a staff discount on energy bills and 28 days' holiday a year (pro rata). Applications should be made online; shortlisted candidates will be invited to a telephone interview.",
+      "questions": [
+        {
+          "question_id": "Q-GTSIM5-001",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text A. New guest-facing staff receive ___ sets of uniform.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'provided with three sets of uniform free of charge'.",
+          "correct_answers": [
+            "three",
+            "3"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-002",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. Staff have to pay for the uniforms they receive when they join.",
+          "difficulty": 1,
+          "explanation_id": "Text A: seragam diberikan 'free of charge when they join'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-003",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Text A. Whose work clothing is washed by the hotel? (Maximum TWO words)",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'chefs' clothing is laundered by the hotel'. Staf lain mencuci seragam sendiri.",
+          "correct_answers": [
+            "chefs",
+            "chefs'",
+            "the chefs",
+            "the chefs'",
+            "chefs' clothing",
+            "chef"
+          ],
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-004",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. Staff working in the leisure centre are allowed to wear trainers.",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'trainers are not permitted, except for staff in the leisure centre'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-005",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text A. What jewellery may kitchen staff wear?",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'kitchen staff may wear only a plain wedding ring'.",
+          "options": [
+            "Small earrings",
+            "A watch",
+            "A plain wedding ring",
+            "No jewellery at all"
+          ],
+          "correct_answers": [
+            "A plain wedding ring"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-006",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. Staff who lose their name badge must pay for a new one.",
+          "difficulty": 3,
+          "explanation_id": "Text A hanya mewajibkan name badge dipakai 'at all times while on duty'; tidak ada aturan tentang biaya badge yang hilang.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-007",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Text A. When must staff who leave the company return their uniform? (Maximum FOUR words)",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'must return all uniform items on their last working day'.",
+          "correct_answers": [
+            "on their last working day",
+            "their last working day",
+            "last working day",
+            "on the last working day",
+            "the last working day"
+          ],
+          "max_words": 4,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-008",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. The job is ___ hours per week.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'The role is 20 hours per week'.",
+          "correct_answers": [
+            "20",
+            "twenty"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-009",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. The training for new advisers takes place in the evenings.",
+          "difficulty": 2,
+          "explanation_id": "Text B: pelatihan tiga minggu pertama 'take place during the day, Monday to Friday'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-010",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. Applicants must have worked in a call centre before.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'No previous call-centre experience is needed'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-011",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. Advisers are paid an extra ___ per cent for Saturday shifts.",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'with an extra 10% for Saturday shifts'.",
+          "correct_answers": [
+            "10",
+            "ten"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-012",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text B. Which of the following is NOT mentioned as a benefit of the job?",
+          "difficulty": 3,
+          "explanation_id": "Text B menyebut 'free parking, a staff discount on energy bills and 28 days' holiday'. Pensiun perusahaan tidak disebut.",
+          "options": [
+            "Free parking",
+            "A company pension",
+            "A staff discount on energy bills",
+            "28 days' holiday a year"
+          ],
+          "correct_answers": [
+            "A company pension"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM5-013",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Which text (A or B) contains each piece of information? You may use any text more than once.",
+          "difficulty": 3,
+          "explanation_id": "Sepatu: Text A ('Comfortable black shoes'). Upah per jam: Text B ('The hourly rate is £12.40'). Biaya barang tidak dikembalikan: Text A ('charged at cost'). Wawancara: Text B ('a telephone interview').",
+          "matching": {
+            "left": [
+              "rules about footwear",
+              "an hourly rate of pay",
+              "a charge for items that are not returned",
+              "how interviews will be held"
+            ],
+            "right": [
+              "Text A",
+              "Text B"
+            ],
+            "allow_reuse": true
+          },
+          "correct_answers": [
+            0,
+            1,
+            0,
+            1
+          ],
+          "points": 4,
+          "passage_no": 1
+        }
+      ]
+    },
+    {
+      "bank_code": "GT-RD-S3-SIM2",
+      "bank_kind": "READING_GT_S3",
+      "title": "Reading GT Section 3 (simulasi 2): kafe reparasi komunitas",
+      "skill": "READING",
+      "tags": [
+        "simulation",
+        "long-text"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "reading_passage_markdown": "## Section 3: Fixing Things Together, the Rise of Repair Cafés\n\n[A] Not long ago, a broken toaster or a lamp with a loose wire was usually thrown away. Replacing an item was often cheaper and quicker than finding someone to fix it, and many small repair shops had disappeared from local high streets. Over the past fifteen years, however, a different idea has been spreading through towns and cities: the repair café, a free event where volunteers with practical skills help members of the public mend their own belongings. The idea began with a handful of neighbours meeting in a borrowed room, and it has since been copied by thousands of communities. Today, the events attract people of all ages and backgrounds.\n\n[B] The format is simple. A repair café usually takes place once a month in a community hall, church or library. Visitors bring along anything from clothes with torn seams to bicycles, radios and kitchen equipment. They are paired with a volunteer who specialises in that type of object, and the two work on the repair together. Organisers stress that the visitor is expected to take part rather than simply leave the item and collect it later. The aim is not only to fix the object but also to show its owner how it works and how it can be looked after in future. Most events last about three hours, and visitors are asked to sign a short form at the door confirming that they understand the volunteers are not professional repairers.\n\n[C] The people who volunteer are a varied group. Many are retired engineers, electricians or tailors who enjoy using skills developed over a lifetime. Others are younger people who have taught themselves through online videos. At a typical event in the town of Pellbridge, the organiser, a former school science teacher named Helen Marsh, counts around twelve regular volunteers. New volunteers usually spend a few sessions working alongside an experienced member before taking on repairs of their own. \"Some of them were nervous at first about fixing things in front of strangers,\" she says, \"but they quickly discover how satisfying it is to see someone's face when a favourite object works again.\"\n\n[D] Supporters argue that the environmental benefits are considerable. Electrical goods are among the fastest-growing types of household waste, and many of the materials they contain are difficult to recycle. Each item that is repaired instead of replaced means that fewer resources are used in manufacturing a new one. The Pellbridge group keeps a careful record of every item brought in, and its figures show that roughly two thirds of the objects are repaired successfully. In its first year alone, the group estimates that it kept more than a tonne of material out of landfill. Items that cannot be fixed on the day are sometimes taken away by a volunteer, who orders the necessary parts and returns the item at the next event.\n\n[E] Yet repair cafés face real obstacles. Some modern products are designed in ways that make repair difficult: cases are glued shut rather than screwed together, and replacement parts may be expensive or simply unavailable. Volunteers also have to be careful about safety, particularly with electrical items. Most groups therefore insist that every repaired electrical appliance is tested before it leaves the event, and they hold insurance in case anything goes wrong. Finding a suitable venue at low cost can be another challenge, especially in cities where rents are high. Small groups often rely on a single organiser, and if that person moves away, the café may simply close.\n\n[F] There is also a social side to the events that surprises many first-time visitors. Tea and cake are usually available, and people who are waiting for a volunteer often start conversations with strangers. For older residents who live alone, the café can be one of the few regular occasions when they meet others. Several groups report that some visitors return month after month even when they have nothing to repair, simply to enjoy the company or to help serve refreshments. Friendships formed at the events sometimes continue outside them.\n\n[G] The movement has begun to influence wider attitudes as well. In some countries, campaigners have used evidence gathered at repair cafés to argue for laws requiring manufacturers to make spare parts available for a set number of years. Some manufacturers have responded by publishing repair guides for their products. Whether or not such laws spread, organisers such as Helen Marsh believe the real change is happening at a personal level. \"Once people have repaired something themselves,\" she says, \"they start to look at everything they buy in a different way.\"",
+      "questions": [
+        {
+          "question_id": "Q-GTSIM6-001",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Choose the correct heading for each paragraph (B-G). There are more headings than paragraphs.",
+          "difficulty": 4,
+          "explanation_id": "B: format acara (\"The format is simple\"). C: siapa relawannya (\"The people who volunteer\"). D: manfaat lingkungan/limbah (\"household waste\"). E: hambatan (\"face real obstacles\"). F: sisi sosial (\"a social side\"). G: pengaruh pada sikap dan undang-undang (\"argue for laws\"). Tiga judul lain adalah pengecoh.",
+          "matching": {
+            "left": [
+              "Paragraph B",
+              "Paragraph C",
+              "Paragraph D",
+              "Paragraph E",
+              "Paragraph F",
+              "Paragraph G"
+            ],
+            "right": [
+              "Difficulties that groups must overcome",
+              "How a typical session works",
+              "The cost of buying new appliances",
+              "More than just a place to fix things",
+              "The people who give their time",
+              "Training courses for professional repairers",
+              "Reducing waste and saving resources",
+              "A wider impact on attitudes and the law",
+              "Why repair shops are returning to the high street"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            1,
+            4,
+            6,
+            0,
+            3,
+            7
+          ],
+          "points": 6,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-002",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Visitors usually leave their broken items at the café and collect them later.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf B: 'the visitor is expected to take part rather than simply leave the item and collect it later'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-003",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Some volunteers learned their repair skills by watching online videos.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf C: 'younger people who have taught themselves through online videos'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-004",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "The Pellbridge repair café receives money from the local council.",
+          "difficulty": 3,
+          "explanation_id": "Teks tidak menyebut sumber dana kelompok Pellbridge maupun dukungan dewan kota.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-005",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "The Pellbridge figures show that roughly ___ of the objects brought in are repaired successfully.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf D: 'roughly two thirds of the objects are repaired successfully'.",
+          "correct_answers": [
+            "two thirds",
+            "two-thirds",
+            "2/3"
+          ],
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-006",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "What sometimes happens to items that cannot be fixed on the day?",
+          "difficulty": 2,
+          "explanation_id": "Paragraf D: 'taken away by a volunteer, who orders the necessary parts and returns the item at the next event'.",
+          "options": [
+            "They are sent to a recycling centre",
+            "A volunteer takes them away and orders the parts needed",
+            "The owner is given money to buy a new item",
+            "They are sold to a repair shop"
+          ],
+          "correct_answers": [
+            "A volunteer takes them away and orders the parts needed"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-007",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Most groups insist that every repaired electrical appliance is ___ before it leaves the event.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf E: 'every repaired electrical appliance is tested before it leaves the event'.",
+          "correct_answers": [
+            "tested"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-008",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Which design feature is mentioned as making repair difficult?",
+          "difficulty": 3,
+          "explanation_id": "Paragraf E: 'cases are glued shut rather than screwed together'.",
+          "options": [
+            "Batteries that cannot be removed",
+            "Instructions written in a foreign language",
+            "Cases that are glued shut",
+            "Screws that are too small to see"
+          ],
+          "correct_answers": [
+            "Cases that are glued shut"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-009",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Some people go to repair cafés even when they have nothing to repair.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf F: 'some visitors return month after month even when they have nothing to repair'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-010",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "For which group of people can the café be one of the few regular chances to meet others? (Maximum FIVE words)",
+          "difficulty": 2,
+          "explanation_id": "Paragraf F: 'For older residents who live alone, the café can be one of the few regular occasions when they meet others'.",
+          "correct_answers": [
+            "older residents who live alone",
+            "older residents living alone",
+            "older residents",
+            "older people who live alone"
+          ],
+          "max_words": 5,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-011",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Which paragraph (A-G) contains each piece of information?",
+          "difficulty": 3,
+          "explanation_id": "Tempat mahal: E ('Finding a suitable venue at low cost'). Bukti untuk mendorong undang-undang: G ('used evidence gathered at repair cafés'). Barang yang dibawa: B ('clothes with torn seams to bicycles, radios'). Sulit didaur ulang: D ('difficult to recycle').",
+          "matching": {
+            "left": [
+              "a reason why finding a place to meet can be hard",
+              "an example of evidence being used to push for change",
+              "examples of the kinds of things visitors bring",
+              "a problem with recycling certain materials"
+            ],
+            "right": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            4,
+            6,
+            1,
+            3
+          ],
+          "points": 4,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-012",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "According to Helen Marsh, what is the most important change?",
+          "difficulty": 3,
+          "explanation_id": "Paragraf G: 'the real change is happening at a personal level ... they start to look at everything they buy in a different way'.",
+          "options": [
+            "New laws about spare parts",
+            "People see what they buy differently after repairing something",
+            "More repair shops opening in town centres",
+            "Manufacturers making stronger products"
+          ],
+          "correct_answers": [
+            "People see what they buy differently after repairing something"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM6-013",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Electrical goods are among the fastest-growing types of household ___.",
+          "difficulty": 1,
+          "explanation_id": "Paragraf D: 'Electrical goods are among the fastest-growing types of household waste'.",
+          "correct_answers": [
+            "waste"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        }
+      ]
+    },
+    {
+      "bank_code": "GT-RD-S1-SIM3",
+      "bank_kind": "READING_GT_S1",
+      "title": "Reading GT Section 1 (simulasi 3): bus bandara, kerja bakti taman, jadwal sampah",
+      "skill": "READING",
+      "tags": [
+        "simulation",
+        "everyday"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "reading_passage_markdown": "## Section 1: Teks Sehari-hari\n\n### Text A: Coastline Coaches, Airport Express\n\nCoastline Coaches runs an Airport Express service between Kingsford Bus Station and Belmont Airport every 30 minutes from 5.00 a.m. to 11.30 p.m., seven days a week. The journey normally takes 55 minutes, but passengers should allow extra time during the morning rush hour (7.00 to 9.00 a.m.). Single tickets cost £14 and return tickets £24; return tickets are valid for one month. Tickets bought online are £2 cheaper than those bought from the driver. Each passenger may bring one large suitcase and one small bag. Bicycles cannot be carried. Children under 12 travel at half price, and children under three travel free if they do not occupy a seat. Free Wi-Fi is available on all coaches.\n\n### Text B: Volunteers Wanted, Oakfield Park Clean-up Day\n\nOakfield Residents' Association is holding its spring clean-up day on Saturday 12 April, starting at 9.30 a.m. and finishing at 12.30 p.m. Volunteers will meet at the café beside the main gate. Gloves, litter pickers and rubbish bags will be provided, but please wear old clothes and strong boots. Volunteers under 16 must be accompanied by a parent or guardian. After the event, all helpers are invited to a free lunch at the community centre. If it rains heavily, the event will move to the following Saturday. To register, email the association secretary, Mrs Patel, by 5 April.\n\n### Text C: Changes to Bin Collections, Harlow Road Area\n\nFrom Monday 3 March, household rubbish in the Harlow Road area will be collected every two weeks instead of every week. Recycling will continue to be collected weekly. Food waste should be placed in the small brown caddy, which is collected on the same day as recycling. Garden waste collections require a yearly permit costing £45. Bins must be put out by 7.00 a.m. on collection day and brought back in by the end of the day. Residents who need a larger bin because they have a big household can apply to the council free of charge.",
+      "questions": [
+        {
+          "question_id": "Q-GTSIM7-001",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text A. Airport Express coaches leave every ___ minutes.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'every 30 minutes from 5.00 a.m. to 11.30 p.m.'.",
+          "correct_answers": [
+            "30",
+            "thirty"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-002",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text A. The journey normally takes ___ minutes.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'The journey normally takes 55 minutes'.",
+          "correct_answers": [
+            "55",
+            "fifty-five",
+            "fifty five"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-003",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. A return ticket can be used for up to one month.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'return tickets are valid for one month'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-004",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. Tickets cost the same online as from the driver.",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'Tickets bought online are £2 cheaper than those bought from the driver'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-005",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. There are toilets on all Airport Express coaches.",
+          "difficulty": 3,
+          "explanation_id": "Text A hanya menyebut 'Free Wi-Fi is available on all coaches'; toilet tidak dibahas.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-006",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text A. Who can travel free?",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'children under three travel free if they do not occupy a seat'. Anak di bawah 12 membayar setengah harga.",
+          "options": [
+            "Children under 12",
+            "Children under three who do not occupy a seat",
+            "Passengers with only a small bag",
+            "Passengers who book online"
+          ],
+          "correct_answers": [
+            "Children under three who do not occupy a seat"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-007",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. Volunteers will meet at the café beside the ___.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'Volunteers will meet at the café beside the main gate'.",
+          "correct_answers": [
+            "main gate"
+          ],
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-008",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. Volunteers must bring their own gloves.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'Gloves, litter pickers and rubbish bags will be provided'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-009",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. Young people under 16 can take part if a parent or guardian comes with them.",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'Volunteers under 16 must be accompanied by a parent or guardian'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-010",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Text B. What will all helpers be offered after the event? (Maximum THREE words)",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'all helpers are invited to a free lunch at the community centre'.",
+          "correct_answers": [
+            "a free lunch",
+            "free lunch",
+            "lunch"
+          ],
+          "max_words": 3,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-011",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text B. What will happen if it rains heavily?",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'If it rains heavily, the event will move to the following Saturday'.",
+          "options": [
+            "The event will be cancelled",
+            "The event will take place indoors",
+            "The event will move to the following Saturday",
+            "The event will start later"
+          ],
+          "correct_answers": [
+            "The event will move to the following Saturday"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-012",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text C. Household rubbish will be collected less often than before.",
+          "difficulty": 2,
+          "explanation_id": "Text C: 'collected every two weeks instead of every week'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-013",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text C. Food waste should be put in the small ___ caddy.",
+          "difficulty": 1,
+          "explanation_id": "Text C: 'placed in the small brown caddy'.",
+          "correct_answers": [
+            "brown"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM7-014",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Which text (A, B or C) mentions each piece of information? You may use any text more than once.",
+          "difficulty": 3,
+          "explanation_id": "Izin tahunan: Text C ('a yearly permit costing £45'). Batas mendaftar: Text B ('email ... by 5 April'). Layanan gratis di perjalanan: Text A ('Free Wi-Fi is available on all coaches'). Waktu menaruh tempat sampah: Text C ('put out by 7.00 a.m.').",
+          "matching": {
+            "left": [
+              "something that must be paid for every year",
+              "a date by which you must contact someone",
+              "a free service available during a journey",
+              "a time by which something must be put outside"
+            ],
+            "right": [
+              "Text A",
+              "Text B",
+              "Text C"
+            ],
+            "allow_reuse": true
+          },
+          "correct_answers": [
+            2,
+            1,
+            0,
+            2
+          ],
+          "points": 4,
+          "passage_no": 1
+        }
+      ]
+    },
+    {
+      "bank_code": "GT-RD-S2-SIM3",
+      "bank_kind": "READING_GT_S2",
+      "title": "Reading GT Section 2 (simulasi 3): minggu pertama karyawan baru dan kebijakan kerja dari rumah",
+      "skill": "READING",
+      "tags": [
+        "simulation",
+        "work"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "reading_passage_markdown": "## Section 2: Teks Dunia Kerja\n\n### Text A: Fenwick Logistics, Your First Week\n\nWelcome to Fenwick Logistics. On your first morning, please report to reception at 8.45 a.m., where you will be given your security pass and met by your induction buddy, an experienced colleague who will support you during your first month. Your first day will include a building tour, a fire safety briefing and a meeting with the IT department to set up your computer account. You will need to bring your bank details and proof of your right to work in the UK, as we cannot process your first salary payment without them. All new employees complete an online health and safety course during their first week; the course takes about three hours and can be done in sections. At the end of your first month, you will have a review meeting with your manager to discuss how you are settling in. Staff are paid monthly, on the last working day of each month.\n\n### Text B: Ashby Council, Working from Home Policy\n\nEmployees whose roles allow it may work from home for up to two days per week, with their manager's agreement. Requests should be made in writing and will normally be answered within ten working days. Home workers must be available by phone and email during the core hours of 10.00 a.m. to 3.00 p.m. The council will provide a laptop and a headset but is not responsible for broadband costs or furniture. However, staff can claim up to £150 once towards an office chair or desk, provided they supply a receipt. Home working may be withdrawn if service levels fall. Employees who are in their probation period are not eligible for home working. Before working from home for the first time, staff must complete a short self-assessment form about their computer workstation.",
+      "questions": [
+        {
+          "question_id": "Q-GTSIM8-001",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text A. On their first morning, new employees should report to reception at ___ a.m.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'please report to reception at 8.45 a.m.'.",
+          "correct_answers": [
+            "8.45",
+            "8:45"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-002",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Text A. Who will support new employees during their first month? (Maximum THREE words)",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'your induction buddy, an experienced colleague who will support you during your first month'.",
+          "correct_answers": [
+            "induction buddy",
+            "an induction buddy",
+            "their induction buddy",
+            "your induction buddy",
+            "an experienced colleague",
+            "experienced colleague"
+          ],
+          "max_words": 3,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-003",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. The first day includes a fire safety briefing.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'Your first day will include a building tour, a fire safety briefing ...'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-004",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "Text A. Why must new employees bring their bank details?",
+          "difficulty": 2,
+          "explanation_id": "Text A: 'we cannot process your first salary payment without them'.",
+          "options": [
+            "To receive their security pass",
+            "To set up their computer account",
+            "So that their first salary payment can be processed",
+            "To join the company pension scheme"
+          ],
+          "correct_answers": [
+            "So that their first salary payment can be processed"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-005",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. The online health and safety course must be completed in one session.",
+          "difficulty": 2,
+          "explanation_id": "Text A: kursus itu 'can be done in sections'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-006",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text A. New employees are given a laptop on their first day.",
+          "difficulty": 3,
+          "explanation_id": "Text A hanya menyebut pertemuan dengan IT 'to set up your computer account'; tidak ada informasi bahwa laptop diberikan.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-007",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text A. Staff are paid on the last ___ day of each month.",
+          "difficulty": 1,
+          "explanation_id": "Text A: 'on the last working day of each month'.",
+          "correct_answers": [
+            "working"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-008",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. Employees may work from home for up to ___ days per week.",
+          "difficulty": 1,
+          "explanation_id": "Text B: 'work from home for up to two days per week'.",
+          "correct_answers": [
+            "two",
+            "2"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-009",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Text B. Home workers must be available from 10.00 a.m. until ___ p.m.",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'core hours of 10.00 a.m. to 3.00 p.m.'.",
+          "correct_answers": [
+            "3.00",
+            "3",
+            "3:00",
+            "three"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-010",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. The council pays for home workers' broadband.",
+          "difficulty": 2,
+          "explanation_id": "Text B: dewan kota 'is not responsible for broadband costs'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-011",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "Text B. What must staff supply to claim money towards a chair or desk? (Maximum TWO words)",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'claim up to £150 ... provided they supply a receipt'.",
+          "correct_answers": [
+            "a receipt",
+            "receipt"
+          ],
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-012",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Text B. Employees on probation may work from home one day a week.",
+          "difficulty": 2,
+          "explanation_id": "Text B: 'Employees who are in their probation period are not eligible for home working'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM8-013",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Which text (A or B) contains each piece of information? You may use any text more than once.",
+          "difficulty": 3,
+          "explanation_id": "Formulir sebelum WFH pertama: Text B ('must complete a short self-assessment form'). Rapat evaluasi: Text A ('a review meeting with your manager'). Batas pembayaran sekali: Text B ('up to £150 once'). Jam datang: Text A ('8.45 a.m.').",
+          "matching": {
+            "left": [
+              "a form to complete before starting something new",
+              "a meeting to discuss how a new employee is settling in",
+              "a limit on a one-off payment",
+              "the time to arrive on the first day"
+            ],
+            "right": [
+              "Text A",
+              "Text B"
+            ],
+            "allow_reuse": true
+          },
+          "correct_answers": [
+            1,
+            0,
+            1,
+            0
+          ],
+          "points": 4,
+          "passage_no": 1
+        }
+      ]
+    },
+    {
+      "bank_code": "GT-RD-S3-SIM3",
+      "bank_kind": "READING_GT_S3",
+      "title": "Reading GT Section 3 (simulasi 3): polusi cahaya dan langit malam",
+      "skill": "READING",
+      "tags": [
+        "simulation",
+        "long-text"
+      ],
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "reading_passage_markdown": "## Section 3: Bringing Back the Dark\n\n[A] For most of human history, a clear night sky revealed thousands of stars. Today, many people who live in or near towns can see only a handful. The cause is artificial light: street lamps, illuminated advertising, sports grounds and security lights all send light upwards and outwards, creating a glow that hides the stars. Scientists call this effect \"skyglow\", and in some areas it has made the night sky several times brighter than its natural level. In parts of some large cities, a child growing up today may never see the band of stars known as the Milky Way.\n\n[B] Light pollution is not only a problem for astronomers. Researchers studying wildlife have found that artificial light can confuse animals that depend on darkness. Moths and other night-flying insects are drawn towards bright lamps, where many die from exhaustion or are caught by predators. Young sea turtles, which normally find the ocean by moving towards the brighter horizon over the water, may crawl inland towards roads and buildings instead. Some birds that migrate at night have been shown to change direction when they pass over brightly lit cities. Bats, frogs and even some plants are also affected, because their daily and seasonal behaviour is linked to the length of the night.\n\n[C] There may also be effects on human health. Our bodies follow a daily cycle that is partly controlled by light and darkness. Exposure to bright light late in the evening, especially light with a high proportion of blue, can delay the release of hormones that help us sleep. Although scientists are still debating how serious the long-term consequences are, many doctors already advise patients to reduce their use of bright screens and lamps in the hour before going to bed. Shift workers, who are often exposed to light at night, are among the groups that researchers are most interested in studying.\n\n[D] Much outdoor lighting is also simply wasteful. Lamps that shine sideways or upwards light the sky rather than the ground, and many office buildings remain fully lit all night although nobody is inside. Lighting engineer Tomas Varga estimates that in a typical town, around a third of the electricity used for outdoor lighting serves no useful purpose. \"People assume that more light always means more safety,\" he says, \"but badly designed lights create glare, which can actually make it harder to see.\" Varga recommends that lights should be pointed only where they are needed and switched on only when they are needed, for example by using motion sensors.\n\n[E] Several communities have decided to act. The small town of Westholm replaced all of its street lamps over a period of four years with shielded fittings that direct light downwards. The project was planned together with residents, who were invited to public meetings to choose between different lamp designs. The new lamps also use a warmer colour and are dimmed after midnight on quiet residential streets. According to the town council, energy costs for street lighting fell by more than half, and there was no increase in the number of reported crimes or road accidents. Residents were initially worried, but a survey carried out after the project found that most of them preferred the new lighting.\n\n[F] Some places have gone further and applied for recognition as \"dark sky\" areas. To qualify, a community must usually show that it has introduced lighting rules, measured the darkness of its sky and educated the public about the issue. The rewards can be economic as well as environmental. A rural district in the hills near Westholm has seen a steady growth in visitors since it began holding stargazing evenings, and local guesthouses now advertise telescopes as one of their facilities. Schools in the district have also added night-sky lessons to their science programmes.\n\n[G] Campaigners admit that the challenge is growing. New types of lamp are cheap to run, which has encouraged some councils and businesses to install more lights rather than fewer. In addition, some new lamps produce a bright white light that spreads further into the sky than older orange lamps did. Nevertheless, they point out that light pollution is unusual among environmental problems because it can be reversed almost immediately: as soon as a badly designed light is switched off or replaced, the darkness returns. \"We do not have to wait decades to see results,\" says one campaigner. \"We just have to decide that the night sky is worth protecting.\"",
+      "questions": [
+        {
+          "question_id": "Q-GTSIM9-001",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Choose the correct heading for each paragraph (B-G). There are more headings than paragraphs.",
+          "difficulty": 4,
+          "explanation_id": "B: dampak pada hewan ('confuse animals that depend on darkness'). C: kesehatan dan tidur ('delay the release of hormones that help us sleep'). D: lampu yang boros ('simply wasteful'). E: perubahan di Westholm. F: status 'dark sky' dan manfaat ekonomi. G: masalah yang bisa dipulihkan cepat ('can be reversed almost immediately'). 'The high price of modern lamps' pengecoh: G justru menyebut lampu baru 'cheap to run'.",
+          "matching": {
+            "left": [
+              "Paragraph B",
+              "Paragraph C",
+              "Paragraph D",
+              "Paragraph E",
+              "Paragraph F",
+              "Paragraph G"
+            ],
+            "right": [
+              "Possible effects on our sleep",
+              "The history of street lighting",
+              "One town's successful change",
+              "Harm to creatures that need darkness",
+              "The high price of modern lamps",
+              "A problem that can be quickly solved",
+              "Light that serves no useful purpose",
+              "Official recognition and its benefits",
+              "Why astronomers are moving abroad"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            3,
+            0,
+            6,
+            2,
+            7,
+            5
+          ],
+          "points": 6,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-002",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "In some areas, skyglow has made the night sky several times brighter than it would naturally be.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf A: 'it has made the night sky several times brighter than its natural level'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-003",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Young sea turtles normally find the ocean by moving towards the darker horizon.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf B: penyu muda bergerak 'towards the brighter horizon over the water', bukan yang lebih gelap.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-004",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Scientists agree about how serious the long-term health effects of evening light are.",
+          "difficulty": 3,
+          "explanation_id": "Paragraf C: 'scientists are still debating how serious the long-term consequences are'.",
+          "correct_answers": [
+            "False"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-005",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "Tomas Varga estimates that around ___ of the electricity used for outdoor lighting serves no useful purpose.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf D: 'around a third of the electricity used for outdoor lighting serves no useful purpose'.",
+          "correct_answers": [
+            "a third",
+            "one third",
+            "one-third",
+            "1/3"
+          ],
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-006",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "According to Tomas Varga, what problem do badly designed lights cause?",
+          "difficulty": 2,
+          "explanation_id": "Paragraf D: 'badly designed lights create glare, which can actually make it harder to see'.",
+          "options": [
+            "They increase crime",
+            "They damage buildings",
+            "They create glare that makes it harder to see",
+            "They attract more traffic"
+          ],
+          "correct_answers": [
+            "They create glare that makes it harder to see"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-007",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "READING",
+          "prompt": "In Westholm, the new lamps are ___ after midnight on quiet residential streets.",
+          "difficulty": 1,
+          "explanation_id": "Paragraf E: 'are dimmed after midnight on quiet residential streets'.",
+          "correct_answers": [
+            "dimmed"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-008",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Westholm's new street lamps were paid for by the national government.",
+          "difficulty": 3,
+          "explanation_id": "Paragraf E menyebut penghematan energi, tetapi tidak menyebut siapa yang membiayai penggantian lampu.",
+          "correct_answers": [
+            "Not Given"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-009",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "How long did it take Westholm to replace all of its street lamps? (Maximum TWO words)",
+          "difficulty": 1,
+          "explanation_id": "Paragraf E: 'replaced all of its street lamps over a period of four years'.",
+          "correct_answers": [
+            "four years",
+            "4 years"
+          ],
+          "max_words": 2,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-010",
+          "question_type": "MCQ_SINGLE",
+          "skill": "READING",
+          "prompt": "What did the survey of Westholm residents find?",
+          "difficulty": 2,
+          "explanation_id": "Paragraf E: 'a survey carried out after the project found that most of them preferred the new lighting'.",
+          "options": [
+            "Most residents wanted brighter lamps",
+            "Most residents preferred the new lighting",
+            "Most residents were worried about crime",
+            "Most residents had not noticed the change"
+          ],
+          "correct_answers": [
+            "Most residents preferred the new lighting"
+          ],
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-011",
+          "question_type": "SHORT_ANSWER",
+          "skill": "READING",
+          "prompt": "What do local guesthouses in the rural district now advertise as one of their facilities? (ONE word only)",
+          "difficulty": 2,
+          "explanation_id": "Paragraf F: 'local guesthouses now advertise telescopes as one of their facilities'.",
+          "correct_answers": [
+            "telescopes",
+            "telescope"
+          ],
+          "max_words": 1,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-012",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "READING",
+          "prompt": "Which paragraph (A-G) contains each piece of information?",
+          "difficulty": 3,
+          "explanation_id": "Hewan berubah arah: B ('birds that migrate at night ... change direction'). Syarat komunitas: F ('To qualify, a community must usually show ...'). Alasan menambah lampu: G ('cheap to run, which has encouraged ... more lights'). Saran dokter: C ('doctors already advise patients').",
+          "matching": {
+            "left": [
+              "an example of animals changing their route",
+              "the conditions a community must meet",
+              "a reason why some places are adding more lights",
+              "advice given to patients"
+            ],
+            "right": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            1,
+            5,
+            6,
+            2
+          ],
+          "points": 4,
+          "passage_no": 1
+        },
+        {
+          "question_id": "Q-GTSIM9-013",
+          "question_type": "TFNG",
+          "skill": "READING",
+          "prompt": "Campaigners say that light pollution can be reversed very quickly.",
+          "difficulty": 2,
+          "explanation_id": "Paragraf G: 'it can be reversed almost immediately'.",
+          "correct_answers": [
+            "True"
+          ],
+          "passage_no": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { assessmentSets, attempts, contentAssets } from '@/db/schema';
+import { assessmentSets, attemptSections, attempts, contentAssets } from '@/db/schema';
 import { Uuid } from '@/contracts/common';
 import { getDb } from '@/server/db';
 import { ApiError, notFound } from '@/server/http/errors';
@@ -9,11 +9,14 @@ import { logger } from '@/server/logger';
 import { getStorage } from '@/server/storage';
 import { AttemptIdParamSchema } from '@/server/attempts/schemas';
 import { parseByteRange } from '@/lib/audio/range';
+import { mockStateOf } from '@/server/simulation/state';
 
 export const dynamic = 'force-dynamic';
 
 const AudioStreamQuerySchema = z.object({
   section: Uuid.optional(),
+  // Simulasi (MOCK_TEST): content_assets.id audio bagian Listening yang diminta.
+  asset: Uuid.optional(),
 });
 
 const ALLOWED_MIME_TYPES = new Set(['audio/mpeg', 'audio/ogg', 'audio/wav']);
@@ -41,43 +44,60 @@ export const GET = withApi(
       throw new ApiError('ATTEMPT_NOT_ACTIVE'); // 409
     }
 
-    // 3. Muat assessment set (attempt tanpa set, mis. MIX_PRACTICE, tidak punya audio ujian)
-    if (!attempt.assessmentSetId) throw notFound();
-    const [set] = await db
-      .select()
-      .from(assessmentSets)
-      .where(eq(assessmentSets.id, attempt.assessmentSetId))
-      .limit(1);
-
-    if (!set) throw notFound();
-
-    // 4. Penanganan attempt TIER_BOSS_EXAM
-    let targetSet = set;
-    if (set.assessmentType === 'TIER_BOSS_EXAM') {
-      if (!query.section) throw notFound(); // Boss attempt tanpa section -> 404
-      const [childSet] = await db
+    let listeningAssetId: string | null;
+    if (attempt.assessmentType === 'MOCK_TEST') {
+      // 3a. Simulasi (tanpa set): audio per bagian dipilih lewat `?asset=`, wajib termasuk bagian Listening
+      // attempt ini, dan section Listening sedang dikerjakan (sudah dimulai, belum dikumpulkan).
+      if (!query.asset) throw notFound();
+      const listening = mockStateOf(attempt).sections.find((s) => s.section === 'LISTENING');
+      if (!listening?.parts.some((p) => p.listening_asset_id === query.asset)) throw notFound();
+      const [secRow] = await db
+        .select()
+        .from(attemptSections)
+        .where(and(eq(attemptSections.attemptId, attempt.id), eq(attemptSections.skill, 'LISTENING')))
+        .limit(1);
+      if (!secRow?.startedAt || secRow.submittedAt) throw new ApiError('ATTEMPT_NOT_ACTIVE');
+      listeningAssetId = query.asset;
+    } else {
+      // 3. Muat assessment set (attempt tanpa set, mis. MIX_PRACTICE, tidak punya audio ujian)
+      if (!attempt.assessmentSetId) throw notFound();
+      const [set] = await db
         .select()
         .from(assessmentSets)
-        .where(and(eq(assessmentSets.id, query.section), eq(assessmentSets.parentSetId, set.id)))
+        .where(eq(assessmentSets.id, attempt.assessmentSetId))
         .limit(1);
-      if (!childSet) throw notFound();
 
-      // Periksa apakah section berstatus ACTIVE
-      const state = attempt.state as { sections?: Record<string, { status?: string; phase?: string }> } | null;
-      const secState = state?.sections?.[query.section];
-      if (!secState || (secState.phase !== 'ACTIVE' && secState.status !== 'ACTIVE')) {
-        throw new ApiError('ATTEMPT_NOT_ACTIVE');
+      if (!set) throw notFound();
+
+      // 4. Penanganan attempt TIER_BOSS_EXAM
+      let targetSet = set;
+      if (set.assessmentType === 'TIER_BOSS_EXAM') {
+        if (!query.section) throw notFound(); // Boss attempt tanpa section -> 404
+        const [childSet] = await db
+          .select()
+          .from(assessmentSets)
+          .where(and(eq(assessmentSets.id, query.section), eq(assessmentSets.parentSetId, set.id)))
+          .limit(1);
+        if (!childSet) throw notFound();
+
+        // Periksa apakah section berstatus ACTIVE
+        const state = attempt.state as { sections?: Record<string, { status?: string; phase?: string }> } | null;
+        const secState = state?.sections?.[query.section];
+        if (!secState || (secState.phase !== 'ACTIVE' && secState.status !== 'ACTIVE')) {
+          throw new ApiError('ATTEMPT_NOT_ACTIVE');
+        }
+        targetSet = childSet;
       }
-      targetSet = childSet;
+      listeningAssetId = targetSet.listeningAssetId;
     }
 
     // 5. Muat asset audio
-    if (!targetSet.listeningAssetId) throw notFound();
+    if (!listeningAssetId) throw notFound();
 
     const [asset] = await db
       .select()
       .from(contentAssets)
-      .where(eq(contentAssets.id, targetSet.listeningAssetId))
+      .where(eq(contentAssets.id, listeningAssetId))
       .limit(1);
 
     if (!asset || asset.kind !== 'AUDIO_LISTENING' || !asset.storageKey) {

@@ -82,6 +82,174 @@
           "prompt": "Let's talk about the weather. What is the weather usually like where you live, and how does it affect what you do?",
           "part": 1,
           "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-010",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about music. What kind of music do you enjoy, and when do you usually listen to it?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-011",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about your neighbours. How well do you know the people who live near you?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-012",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about sport. Do you play any sports or do any exercise regularly? Why or why not?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-013",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about your mobile phone. What do you use your phone for most, and could you live without it for a week?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-014",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about weekends. What do you usually do at the weekend, and how is it different from your weekdays?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-015",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about clothes. What kind of clothes do you like to wear, and do you dress differently for work and for free time?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-016",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about reading. Do you enjoy reading? What do you usually read?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-017",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about friends. Do you prefer spending time with one close friend or with a group of friends? Why?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-018",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about holidays. Where did you go on your last holiday, and what did you do there?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-019",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about cooking. Do you enjoy cooking, and who taught you to cook?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-020",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about parks. Is there a park near where you live, and how often do you go there?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-021",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about films and television. What kind of programmes or films do you like to watch, and who do you usually watch them with?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-022",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about birthdays. How do you usually celebrate your birthday, and is this different from when you were younger?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-023",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about learning languages. Apart from English, are there any other languages you would like to learn? Why?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-024",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about festivals and public holidays. What is the most important public holiday in your country, and how do you spend it?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-025",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about pets and animals. Have you ever had a pet? What do you think about keeping animals at home?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-026",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about the internet. How much time do you spend online each day, and what do you mainly do?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-027",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about writing by hand. Do you still write things by hand, such as notes or lists? Why or why not?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-028",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about colours. What is your favourite colour, and are there any colours you never wear?",
+          "part": 1,
+          "difficulty": 1
+        },
+        {
+          "question_id": "Q-GTSPK1-029",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about sleep. How many hours do you usually sleep, and do you think it is enough?",
+          "part": 1,
+          "difficulty": 2
+        },
+        {
+          "question_id": "Q-GTSPK1-030",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Let's talk about art. Do you like visiting museums or art galleries? Why or why not?",
+          "part": 1,
+          "difficulty": 2
         }
       ],
       "exam_module": "GENERAL_TRAINING",
@@ -181,6 +349,202 @@
             "how you would learn it",
             "and explain how it would help you"
           ]
+        },
+        {
+          "question_id": "Q-GTSPK2-007",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a book you enjoyed reading.",
+          "part": 2,
+          "difficulty": 2,
+          "cue_points": [
+            "what the book was",
+            "when you read it",
+            "what it was about",
+            "and explain why you enjoyed it"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-008",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a piece of technology that you use every day.",
+          "part": 2,
+          "difficulty": 2,
+          "cue_points": [
+            "what it is",
+            "when you started using it",
+            "what you use it for",
+            "and explain how your life would be different without it"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-009",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a journey that you remember well.",
+          "part": 2,
+          "difficulty": 3,
+          "cue_points": [
+            "where you were going",
+            "how you travelled",
+            "who you were with",
+            "and explain why you remember this journey"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-010",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a friend you have known for a long time.",
+          "part": 2,
+          "difficulty": 2,
+          "cue_points": [
+            "who this friend is",
+            "how and when you met",
+            "what you usually do together",
+            "and explain why your friendship has lasted so long"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-011",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe an outdoor place in your town or city where you like to spend time.",
+          "part": 2,
+          "difficulty": 2,
+          "cue_points": [
+            "where it is",
+            "how often you go there",
+            "what you do there",
+            "and explain why you like this place"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-012",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a family celebration that you attended.",
+          "part": 2,
+          "difficulty": 3,
+          "cue_points": [
+            "what was being celebrated",
+            "where and when it took place",
+            "what people did",
+            "and explain how you felt during the celebration"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-013",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a difficult decision that you once made.",
+          "part": 2,
+          "difficulty": 4,
+          "cue_points": [
+            "what the decision was",
+            "when you made it",
+            "what choices you had",
+            "and explain why it was difficult and whether you made the right choice"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-014",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a job you would like to do in the future.",
+          "part": 2,
+          "difficulty": 3,
+          "cue_points": [
+            "what the job is",
+            "what skills or qualifications it needs",
+            "how you could get this job",
+            "and explain why it interests you"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-015",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a time when you helped someone.",
+          "part": 2,
+          "difficulty": 3,
+          "cue_points": [
+            "who you helped",
+            "what the situation was",
+            "what you did to help",
+            "and explain how you felt afterwards"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-016",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a present you gave to someone.",
+          "part": 2,
+          "difficulty": 2,
+          "cue_points": [
+            "what the present was",
+            "who you gave it to",
+            "why you chose it",
+            "and explain how the person reacted"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-017",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a person who is very good at their job.",
+          "part": 2,
+          "difficulty": 3,
+          "cue_points": [
+            "who this person is",
+            "what job they do",
+            "how you know about their work",
+            "and explain what makes them so good at it"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-018",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a café or restaurant that you enjoy going to.",
+          "part": 2,
+          "difficulty": 2,
+          "cue_points": [
+            "where it is",
+            "how you first found it",
+            "what you usually eat or drink there",
+            "and explain why you like going there"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-019",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a time when you had to change your plans.",
+          "part": 2,
+          "difficulty": 3,
+          "cue_points": [
+            "what you had planned to do",
+            "why you had to change your plans",
+            "what you did instead",
+            "and explain how you felt about the change"
+          ]
+        },
+        {
+          "question_id": "Q-GTSPK2-020",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Describe a piece of good advice that someone gave you.",
+          "part": 2,
+          "difficulty": 3,
+          "cue_points": [
+            "who gave you the advice",
+            "what the advice was",
+            "when you received it",
+            "and explain how it helped you"
+          ]
         }
       ],
       "exam_module": "GENERAL_TRAINING",
@@ -244,6 +608,150 @@
           "prompt": "How do you think technology will change the way people work in the future?",
           "part": 3,
           "difficulty": 5
+        },
+        {
+          "question_id": "Q-GTSPK3-007",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Do you think people read less than they did in the past? Why?",
+          "part": 3,
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-GTSPK3-008",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "What are the advantages of reading printed books compared with reading on a screen?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-009",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Do you think people today depend too much on technology in their daily lives?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-010",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "How has technology changed the way older people communicate with their families?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-011",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Why do some people prefer travelling by car rather than by public transport?",
+          "part": 3,
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-GTSPK3-012",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "What qualities do you think make someone a good friend?",
+          "part": 3,
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-GTSPK3-013",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Is it easier for adults or for children to make new friends? Why?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-014",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Why is it important for cities to have parks and other green spaces?",
+          "part": 3,
+          "difficulty": 3
+        },
+        {
+          "question_id": "Q-GTSPK3-015",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Should local governments spend more money on public spaces, such as parks and squares? Why or why not?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-016",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Are traditional family celebrations becoming less important in modern society?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-017",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Why do some people spend a lot of money on celebrations such as weddings?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-018",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Should young people ask their parents for advice before making important decisions? Why?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-019",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "What factors do people consider most when choosing a career?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-020",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Do you think it is better to stay in one job for many years or to change jobs often?",
+          "part": 3,
+          "difficulty": 5
+        },
+        {
+          "question_id": "Q-GTSPK3-021",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Why do some people volunteer to help others without being paid?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-022",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Do you think people give too much importance to expensive gifts nowadays?",
+          "part": 3,
+          "difficulty": 4
+        },
+        {
+          "question_id": "Q-GTSPK3-023",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "Should people who do important jobs, such as nurses, be paid more than famous entertainers?",
+          "part": 3,
+          "difficulty": 5
+        },
+        {
+          "question_id": "Q-GTSPK3-024",
+          "question_type": "SPEAKING_TASK",
+          "skill": "SPEAKING",
+          "prompt": "How has the popularity of eating out changed in your country in recent years?",
+          "part": 3,
+          "difficulty": 3
         }
       ],
       "exam_module": "GENERAL_TRAINING",

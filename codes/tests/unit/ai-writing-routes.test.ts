@@ -228,6 +228,7 @@ describe('AI Writing Endpoints (SPEC-012)', () => {
     vi.mocked(getAiStatus).mockResolvedValue({
       enabled: true,
       available: true,
+      speaking_enabled: true,
       queue: { waiting: 1, estimated_wait_sec: 45 },
       quota: dummyQuota,
       recording_retention_days: 90,

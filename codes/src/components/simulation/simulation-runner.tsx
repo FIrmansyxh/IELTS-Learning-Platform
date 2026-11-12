@@ -13,7 +13,8 @@ import {
 } from 'lucide-react';
 import { simulationsApi } from '@/lib/api/simulations';
 import { attemptsApi } from '@/lib/api/attempts';
-import type { AnswerResponse, QuestionPublic } from '@/contracts/attempts';
+import { AnswerResponseSchema, type AnswerResponse, type QuestionPublic } from '@/contracts/attempts';
+import { QuestionRenderer } from '@/components/quiz/question-renderer';
 import type { SimulationPart, SimulationSection, SimulationSubmission } from '@/contracts/simulation';
 import { fmt, id } from '@/i18n/id';
 import { Button } from '@/components/ui/button';
@@ -24,6 +25,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { apiFetch } from '@/lib/api/client';
+import { PassageMarkdown } from '@/components/reading/passage-markdown';
+import { SpeakingTaskPanel, useSpeakingEnabled } from '@/components/speaking/speaking-task-panel';
 
 export function SimulationRunner({ attemptId }: { attemptId: string }) {
   const router = useRouter();
@@ -135,7 +138,7 @@ export function SimulationRunner({ attemptId }: { attemptId: string }) {
 
   if (simLoading) {
     return (
-      <div className="mx-auto max-w-6xl space-y-6 py-12">
+      <div className="w-full space-y-6 py-12">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-40 w-full" />
       </div>
@@ -144,7 +147,7 @@ export function SimulationRunner({ attemptId }: { attemptId: string }) {
 
   if (!sim || !currentSectionState) {
     return (
-      <div className="mx-auto max-w-6xl py-12 text-center">
+      <div className="w-full py-12 text-center">
         <AlertCircle className="mx-auto size-12 text-destructive" />
         <h2 className="mt-4 text-xl font-bold">Simulasi tidak ditemukan</h2>
       </div>
@@ -161,7 +164,7 @@ export function SimulationRunner({ attemptId }: { attemptId: string }) {
   const isLowTime = timeLeft !== null && timeLeft <= 300;
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pb-12 pt-2">
+    <div className="w-full space-y-6 pb-12 pt-2">
       {/* Top Header Runner */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
         <div>
@@ -357,8 +360,8 @@ function ReadingWorkspaceSection({
           <CardHeader className="sticky top-0 z-10 border-b bg-card/90 py-3 backdrop-blur">
             <CardTitle className="text-sm font-semibold">Teks Bacaan {activePart}</CardTitle>
           </CardHeader>
-          <CardContent className="prose prose-sm dark:prose-invert p-5">
-            <div className="whitespace-pre-wrap leading-relaxed">{part?.passage_markdown}</div>
+          <CardContent className="p-5">
+            <PassageMarkdown markdown={part?.passage_markdown ?? ''} />
           </CardContent>
         </Card>
 
@@ -470,52 +473,45 @@ function ObjectiveQuestionCard({
   response: Record<string, unknown> | undefined;
   onAnswer: (resp: Record<string, unknown>) => void;
 }) {
-  const isMcq = question.question_type === 'MCQ_SINGLE';
-  const isShort = question.question_type === 'SHORT_ANSWER';
+  // Semua tipe soal (MCQ tunggal/ganda, TFNG/YNNG, isian, matching, reorder, error recognition) memakai renderer
+  // yang sama dengan Active Drill dan Ujian. Jawaban disimpan setelah jeda singkat agar mengetik tidak mengirim
+  // permintaan per ketukan; jawaban kosong/tak lengkap (null) tidak dikirim.
+  const [value, setValue] = React.useState<AnswerResponse | null>(() => {
+    const parsed = AnswerResponseSchema.safeParse(response);
+    return parsed.success ? parsed.data : null;
+  });
+  const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pending = React.useRef<AnswerResponse | null>(null);
+  const onAnswerRef = React.useRef(onAnswer);
+  onAnswerRef.current = onAnswer;
+  React.useEffect(
+    () => () => {
+      // Keluar dari kartu (ganti bagian/section): simpan jawaban yang masih tertunda.
+      if (timer.current) clearTimeout(timer.current);
+      if (pending.current) onAnswerRef.current(pending.current);
+    },
+    [],
+  );
+  const onChange = (next: AnswerResponse | null) => {
+    setValue(next);
+    if (timer.current) clearTimeout(timer.current);
+    pending.current = next;
+    if (!next) return;
+    timer.current = setTimeout(() => {
+      timer.current = null;
+      pending.current = null;
+      onAnswer(next);
+    }, 600);
+  };
 
   return (
-    <Card className="p-4">
+    <Card className="p-4" data-testid="sim-question" data-question-type={question.question_type}>
       <div className="flex items-start gap-3">
         <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold">
           {index}
         </span>
-        <div className="flex-1 space-y-3">
-          <p className="text-sm font-medium">{question.prompt}</p>
-
-          {isMcq && question.options && (
-            <div className="space-y-2">
-              {question.options.map((opt) => {
-                const optText = typeof opt === 'string' ? opt : opt.text;
-                const selected = response?.selected === optText;
-                return (
-                  <button
-                    key={optText}
-                    type="button"
-                    onClick={() => onAnswer({ selected: optText })}
-                    className={`flex w-full items-center gap-3 rounded-lg border p-2.5 text-left text-sm transition-all ${
-                      selected ? 'border-primary bg-primary/10 font-medium' : 'hover:bg-muted/50'
-                    }`}
-                  >
-                    <div
-                      className={`size-4 rounded-full border ${
-                        selected ? 'border-primary bg-primary' : 'border-muted-foreground'
-                      }`}
-                    />
-                    <span>{optText}</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {isShort && (
-            <Input
-              placeholder="Ketik jawaban Anda..."
-              value={typeof response?.text === 'string' ? response.text : ''}
-              onChange={(e) => onAnswer({ text: e.target.value })}
-              className="max-w-md text-sm"
-            />
-          )}
+        <div className="min-w-0 flex-1 text-sm [&_legend]:text-sm [&_legend]:font-medium">
+          <QuestionRenderer question={question} value={value} onChange={onChange} disabled={false} feedback={null} />
         </div>
       </div>
     </Card>
@@ -643,11 +639,13 @@ function SpeakingWorkspaceSection({
   onSubmitted: () => void;
 }) {
   const [activePart, setActivePart] = React.useState<1 | 2 | 3>(1);
+  const speaking = useSpeakingEnabled();
 
   const partQuestions = questions.filter(
     (q) => q.ai_task?.part === activePart || (q as unknown as { part?: number }).part === activePart,
   );
   const partFirstQ = partQuestions[0];
+  const partDone = submissions.some((s) => partQuestions.some((q) => q.question_id === s.question_id));
 
   const [copied, setCopied] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
@@ -726,9 +724,31 @@ function SpeakingWorkspaceSection({
 
       {/* Guide Banner */}
       <div className="rounded-lg bg-primary/10 p-4 text-xs leading-relaxed text-primary">
-        {id.simulation.runner.speakingGuide}
+        {speaking.enabled ? id.simulation.runner.speakingLocalGuide : id.simulation.runner.speakingGuide}
       </div>
 
+      {speaking.enabled && partFirstQ ? (
+        partDone ? (
+          <p className="rounded-lg border p-4 text-sm text-muted-foreground">{id.simulation.runner.speakingSubmitted}</p>
+        ) : (
+          <SpeakingTaskPanel
+            key={`spk-part-${activePart}`}
+            context={{ kind: `SPEAKING_PART${activePart}`, attempt_id: attemptId, question_id: partFirstQ.question_id }}
+            promptText={
+              activePart === 2
+                ? partFirstQ.prompt
+                : partQuestions.map((q, i) => `${i + 1}. ${q.prompt}`).join('\n')
+            }
+            cuePoints={activePart === 2 ? partFirstQ.ai_task?.cue_points : undefined}
+            prepSeconds={activePart === 2 ? 60 : 0}
+            recordSeconds={120}
+            externalPrompt={fullPromptText}
+            onSubmitted={onSubmitted}
+            onExternalSaved={onSubmitted}
+          />
+        )
+      ) : (
+      <>
       {/* Prompt Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -814,6 +834,8 @@ function SpeakingWorkspaceSection({
           </div>
         </CardContent>
       </Card>
+      </>
+      )}
     </div>
   );
 }

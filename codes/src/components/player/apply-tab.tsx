@@ -4,7 +4,7 @@ import { CheckCircle2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { SubModuleDetail } from '@/contracts/player';
-import { SpeakingExternalPromptCard } from '@/components/speaking/external-prompt-card';
+import { SpeakingTaskPanel } from '@/components/speaking/speaking-task-panel';
 import { WritingTaskPanel } from '@/components/writing/writing-task-panel';
 import { id } from '@/i18n/id';
 import { buildSpeakingExternalPrompt } from '@/lib/speaking-external-prompt';
@@ -83,9 +83,11 @@ export function ApplyTab({
             </div>
           )
         ) : task.task_type === 'AI_SHORT_SPEAKING' ? (
-          <SpeakingExternalPromptCard
-            prompt={buildSpeakingExternalPrompt({ part: 1, prompt: task.prompt })}
+          <SpeakingTaskPanel
+            promptText={task.prompt}
+            externalPrompt={buildSpeakingExternalPrompt({ part: 1, prompt: task.prompt })}
             context={learnDone ? { kind: 'MINI_TASK_SPEAKING', sub_module_id: detail.sub_module.id } : undefined}
+            disabledHint={id.player.apply.needLearn}
           />
         ) : task.task_type === 'AI_SHORT_WRITING' ? (
           learnDone ? (
