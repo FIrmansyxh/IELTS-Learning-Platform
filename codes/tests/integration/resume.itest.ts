@@ -79,7 +79,7 @@ describe('PUT /me/last-learned', () => {
     const u = await learnerSession();
     expect((await put(u, { sub_module_id: locked, active_tab: 'LEARN' })).json.error.code).toBe('LOCKED_CONTENT');
     expect((await put(u, { sub_module_id: randomUUID(), active_tab: 'LEARN' })).status).toBe(404);
-    expect((await put(u, { sub_module_id: await subId('1.1.3'), active_tab: 'LEARN' })).status).toBe(404);
+    expect((await put(u, { sub_module_id: await subId('1.2.1'), active_tab: 'LEARN' })).status).toBe(404);
     const id = await subId('1.1.1');
     expect((await put(u, { sub_module_id: id, active_tab: 'LEARN', video_progress_sec: -1 })).json.error.details[0].code).toBe('out_of_range');
     expect((await put(u, { sub_module_id: id, active_tab: 'LEARN', video_progress_sec: 21601 })).status).toBe(400);

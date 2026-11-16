@@ -19,6 +19,18 @@ const passage = `## How Cities Cool Themselves
 
 [E] Planners increasingly argue that no single measure is enough. The most successful programmes combine trees, reflective surfaces and water features with building rules that require shaded windows and ventilation. A city official quoted in the study noted that the cheapest approach is often to protect the green spaces that already exist.`;
 
+const passage2 = `## Riverside Leisure Centre: Membership Information
+
+[A] Riverside Leisure Centre offers three types of membership. Standard members may use the gym and the swimming pool every day from 6 a.m. to 10 p.m. Off-peak members pay less but may only enter between 9 a.m. and 4 p.m., Monday to Friday. Family membership covers two adults and up to three children under 16 living at the same address.
+
+[B] All new members pay a joining fee of £25, which is non-refundable. Monthly fees are collected by direct debit on the first working day of each month. Members who pay for a full year in advance receive one month free of charge.
+
+[C] Exercise classes are included in standard and family membership, while off-peak members pay £4 per class. Places must be booked at least 24 hours in advance, either online or at reception. Members who miss three booked classes in one month without cancelling will lose the right to book for the following four weeks.
+
+[D] To cancel a membership, members must give one month's notice in writing. Membership may be suspended for up to three months for medical reasons, provided that a doctor's letter is supplied. Lockers are available on a first-come, first-served basis; members should bring their own padlock, as the centre does not sell them.`;
+
+const p2 = (q) => ({ ...q, passage_no: 2 });
+
 const sub = {
   meta: {
     tier_number: 4,
@@ -35,7 +47,7 @@ const sub = {
   },
   drill: {
     time_limit_seconds: 1200,
-    passages: [passage],
+    passages: [passage, passage2],
     questions: [
       g(1, {
         question_type: 'MATCHING_DROPDOWN',
@@ -123,6 +135,22 @@ const sub = {
         correct_answers: ['Do a full timed test every week', 'Read English articles for 20-30 minutes a day'],
       }),
       fill(20, 'Tulis angka: In the real test, there are ___ questions in total.', ['40', 'forty'], 'Reading IELTS terdiri dari 40 soal dalam 3 teks dan 60 menit.'),
+      p2(tfng(21, 'Off-peak members may use the centre on Saturday mornings.', 'False', 'Paragraf A teks 2: anggota off-peak hanya boleh masuk pukul 9 pagi sampai 4 sore, Senin sampai Jumat.')),
+      p2(tfng(22, 'The joining fee is returned to members who cancel within the first month.', 'False', 'Paragraf B teks 2: biaya pendaftaran £25 bersifat "non-refundable", jadi tidak dikembalikan.')),
+      p2(tfng(23, 'Family membership costs less than two standard memberships.', 'Not Given', 'Teks 2 tidak menyebut harga keanggotaan family maupun standard, jadi tidak bisa dibandingkan.')),
+      p2(tfng(24, 'Members who pay for a whole year at once are not charged for one of the months.', 'True', 'Paragraf B teks 2: "Members who pay for a full year in advance receive one month free of charge".')),
+      p2(fill(25, 'Class places must be booked at least ___ hours in advance.', ['24', 'twenty-four'], 'Paragraf C teks 2: "booked at least 24 hours in advance".')),
+      p2(fill(26, 'Members who want to use a locker should bring their own ___.', ['padlock', 'padlocks'], 'Paragraf D teks 2: "members should bring their own padlock".')),
+      p2(g(27, {
+        question_type: 'SHORT_ANSWER',
+        prompt: 'What must be supplied in order to suspend a membership for medical reasons? (Maximum THREE words)',
+        correct_answers: ["a doctor's letter", "doctor's letter", 'a doctors letter', 'doctors letter'],
+        max_words: 3,
+        explanation_id: 'Paragraf D teks 2: "provided that a doctor\'s letter is supplied".',
+      })),
+      p2(mcq(28, 'What happens to members who miss three booked classes in one month without cancelling?', ['They cannot book classes for the next four weeks', 'They must pay the joining fee again', 'Their membership is cancelled', 'They are charged £4 for each missed class'], 'They cannot book classes for the next four weeks', 'Paragraf C teks 2: mereka "lose the right to book for the following four weeks".')),
+      mcq(29, 'On test day, what is the suggested maximum time to spend on Text 1?', ['17 minutes', '10 minutes', '25 minutes', '30 minutes'], '17 minutes', 'Teks 1 adalah yang termudah; jangan lewat 17 menit agar teks 3 tidak kekurangan waktu.'),
+      mcq(30, 'A text says only that sales and temperatures both rose in July. A statement claims that the heat CAUSED the rise in sales. What is the answer?', ['Not Given', 'True', 'False', 'Leave it blank'], 'Not Given', 'Jebakan sebab-akibat tersirat: teks hanya menyebut dua hal terjadi bersamaan, jadi hubungan sebab-akibat itu Not Given.'),
     ],
   },
 };

@@ -42,6 +42,17 @@ import type { AssessmentTypeHandler } from '../attempts/handlers';
 import { assessmentTypeHandlers } from '../attempts/handlers';
 import { evaluationGradedHooks, type EvaluationGradedContext } from '../ai/hooks';
 
+/**
+ * Skor maksimum section Listening/Reading = jumlah `points` soal (bawaan 1). Soal matching bernilai
+ * sebanyak butirnya, sehingga total poin bisa melebihi 40 soal; skor mentah lalu diskalakan ke 40 (C-30).
+ */
+export function sectionMaxPoints(questions: ReadonlyArray<{ question: Record<string, unknown> }>): number {
+  return questions.reduce((sum, q) => {
+    const p = Number(q.question?.points ?? 1);
+    return sum + (Number.isFinite(p) && p > 0 ? p : 1);
+  }, 0);
+}
+
 export const mockTestHandler: AssessmentTypeHandler = {
   async start() {
     throw new ApiError('ASSESSMENT_TYPE_NOT_ENABLED');
@@ -286,7 +297,8 @@ export class SimulationService {
       let listening: SimulationPart['listening'] = null;
       if (p.listening_asset_id) {
         listening = {
-          audio_url: `/api/v1/assets/${p.listening_asset_id}/file`,
+          // Bukan /assets/:id/file: rute itu hanya melayani lampiran materi, sehingga audio Listening selalu 404.
+          audio_url: `/api/v1/attempts/${attempt.id}/audio?asset=${p.listening_asset_id}`,
           mime_type: 'audio/mpeg',
           duration_sec: p.audio_duration_sec ?? 0,
           note: p.attribution_text ?? null,
@@ -524,7 +536,7 @@ export class SimulationService {
 
         const answerMap = new Map(answers.map((a) => [a.questionId, a]));
         let raw = 0;
-        const max = 40;
+        const max = sectionMaxPoints(secConfig.questions);
 
         for (const q of secConfig.questions) {
           const a = answerMap.get(q.question_id);
@@ -533,7 +545,7 @@ export class SimulationService {
           }
         }
 
-        const raw40 = max > 0 ? scaleToForty(raw, max) : 0;
+        const raw40 = max > 0 ? scaleToForty(Math.min(raw, max), max) : 0;
         const skillCategory = section === 'READING' ? 'READING_GENERAL' : 'LISTENING';
         const table = await getActiveTable(tx, skillCategory);
         const band = convertRawToBand(table.rows, raw40);
@@ -1155,14 +1167,14 @@ export class SimulationService {
 
       const answerMap = new Map(answers.map((a) => [a.questionId, a]));
       let raw = 0;
-      const max = 40;
+      const max = sectionMaxPoints(secConfig.questions);
 
       for (const q of secConfig.questions) {
         const a = answerMap.get(q.question_id);
         if (a && a.isCorrect) raw += Number(a.score ?? 1);
       }
 
-      const raw40 = max > 0 ? scaleToForty(raw, max) : 0;
+      const raw40 = max > 0 ? scaleToForty(Math.min(raw, max), max) : 0;
       const skillCategory = section === 'READING' ? 'READING_GENERAL' : 'LISTENING';
       const table = await getActiveTable(tx, skillCategory);
       const band = convertRawToBand(table.rows, raw40);

@@ -50,7 +50,7 @@ export function FeedbackPanel({ feedback }: { feedback: Feedback | null }) {
           {feedback.explanation_id ? (
             <div>
               <p className="text-sm font-semibold">{id.quiz.explanation}</p>
-              <p className="text-sm leading-relaxed">{feedback.explanation_id}</p>
+              <p className="whitespace-pre-line text-sm leading-relaxed">{feedback.explanation_id}</p>
             </div>
           ) : null}
         </div>

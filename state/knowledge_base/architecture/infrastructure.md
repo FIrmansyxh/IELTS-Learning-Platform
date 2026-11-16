@@ -124,6 +124,7 @@ Mesin sasaran belum diketahui, sehingga model **tidak dikunci**. Desain: konfigu
 | RAM 8 sampai 12 GB, tanpa GPU | kelas 3B Q4 (mis. Llama 3.2 3B / Qwen2.5 3B Instruct) | whisper `base` | Writing ~30 sampai 80 dtk, kualitas skor rendah-menengah | Tier A |
 | RAM >=16 GB, tanpa GPU | kelas 7/8B Q4 (Qwen2.5 7B / Llama 3.1 8B) | whisper `small` | Writing ~1 sampai 4 menit; kualitas baik tapi melampaui target 60 dtk | Tier B; terima waktu tunggu atau pilih 3B untuk Speaking |
 | NVIDIA >=8 GB VRAM | 7/8B Q4 penuh di GPU | whisper `small` (opsional CUDA) | ~10 sampai 25 dtk | Tier C; jalankan Ollama di host Windows bila passthrough Docker bermasalah |
+| NVIDIA 6 GB VRAM + RAM >=32 GB (mesin pemilik, **terukur 2026-11-11**) | gpt-oss-20b MXFP4 (MoE; expert sebagian di RAM, `--n-cpu-moe 20`), ADR-004 | n/a (Speaking via prompt eksternal) | Writing median ~70 dtk (7,6 token/dtk), evaluasi pertama setelah server menyala >250 dtk; ~3,4 GB VRAM + 10-11 GB RAM | **Model terpilih.** RAM 16 GB belum diuji; di atas target 10-60 dtk, diterima lewat antrean (ADR-002). Skor indikatif |
 | NVIDIA >=12 GB VRAM | 7/8B Q8 atau model 14B Q4 | whisper `small`/`medium` | ~15 sampai 40 dtk, kualitas terbaik | Opsional |
 | GPU AMD/Intel | Ollama native di host (ROCm/Vulkan sesuai dukungan terkini); tidak lewat Docker | `base`/`small` CPU | bervariasi | Verifikasi dukungan saat benchmark |
 

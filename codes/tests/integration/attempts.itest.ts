@@ -149,8 +149,8 @@ describe('POST /attempts', () => {
 
   it('sub-modul LOCKED -> 403 LOCKED_CONTENT; set DRAFT / tidak ada -> 404; id bukan uuid -> 400', async () => {
     const { u } = await setup();
-    await seedMaterial('1.1.3');
-    const lockedSet = await addDrill('1.1.3', mcqs(3));
+    await seedMaterial('1.2.1');
+    const lockedSet = await addDrill('1.2.1', mcqs(3));
     expect((await start(u, lockedSet.id)).json.error.code).toBe('LOCKED_CONTENT');
     const draft = await addDrill('1.1.2', mcqs(3), { status: 'DRAFT' });
     expect((await start(u, draft.id)).status).toBe(404);

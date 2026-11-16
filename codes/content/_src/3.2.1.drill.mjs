@@ -27,6 +27,20 @@ Typing is undeniably faster, and no sensible teacher should deny pupils the chan
 
 I would therefore not abolish handwriting but shorten it: ten minutes a day would be enough to keep the skill alive. Critics may say that even this is a waste of time. I disagree. A child who can write legibly by hand is rarely left helpless when a battery dies, and the habit of slowing down to think is hard to teach in any other way.`;
 
+const passage3 = `## Riverside Community Garden: Information for New Members
+
+Welcome to Riverside Community Garden. The garden was opened in 2012 on land that used to be a car park, and it now has 64 plots that are rented to local residents.
+
+**Plots and fees.** A full plot costs £45 a year and a half plot costs £25. Fees are due on 1 March. Members who are over 65 or who are full-time students pay half the normal fee. Because demand is high, each household may rent only one plot, and new applicants usually wait about eight months before a plot becomes free.
+
+**Opening hours.** Members may enter the garden at any time between 7 a.m. and sunset, using the code for the main gate. The code is changed every three months and is sent to members by email. Please do not share it with non-members. Visitors are welcome, but they must be accompanied by a member at all times.
+
+**Tools and water.** Spades, forks and watering cans are kept in the green shed and are free to borrow, but they must be cleaned and returned on the same day. Members must bring their own gloves. Water comes from six taps around the site. Hosepipes may be used before 9 a.m. and after 6 p.m. only; at other times, please use a watering can.
+
+**What you may grow.** Members may grow vegetables, fruit, herbs and flowers. Trees are not allowed because they shade neighbouring plots. Produce is for members' own use and must not be sold, although surplus vegetables may be left in the sharing box by the gate for anyone to take.
+
+**Keeping your plot.** The committee inspects all plots in April and September. If a plot has been left uncultivated, the member receives a written warning and has four weeks to improve it. After that, the plot may be offered to the next person on the waiting list.`;
+
 const sub = {
   meta: {
     tier_number: 3,
@@ -43,7 +57,7 @@ const sub = {
   },
   drill: {
     time_limit_seconds: 1200,
-    passages: [passage1, passage2],
+    passages: [passage1, passage2, passage3],
     questions: [
       tfng(1, 'The walking bus began with more routes than it had two years later.', 'False', 'Paragraf B: mulai dengan tiga rute dan pada tahun kedua menjadi sembilan rute. Jadi di awal rutenya lebih sedikit, bukan lebih banyak.'),
       tfng(2, 'The proportion of pupils walking to school more than tripled during the study period.', 'True', 'Paragraf C: 12% naik menjadi 46%. 46 dibagi 12 sekitar 3,8, jadi lebih dari tiga kali lipat.'),
@@ -113,7 +127,44 @@ const sub = {
       ynng(16, 'The writer believes that taking notes by hand can help people remember ideas.', 'Yes', 'Paragraf 2: "That effort of choosing, I believe, is exactly what helps ideas stay in the mind." Penulis menyatakan keyakinannya.'),
       ynng(17, 'The writer thinks schools should stop teaching typing.', 'No', 'Paragraf 2: "no sensible teacher should deny pupils the chance to learn it" menolak gagasan itu.'),
       ynng(18, 'The writer states that employers prefer applicants with neat handwriting.', 'Not Given', 'Penulis tidak membahas preferensi pemberi kerja.'),
-      ynng(19, 'The writer is certain that the studies prove his argument.', 'No', 'Paragraf 2: studi itu "involve too few students to be conclusive", jadi penulis tidak menganggapnya pasti.'),
+      ynng(19, 'The writer is certain that the studies prove his argument.', 'No', 'Paragraf 2: studi itu "involve too few students to be conclusive", jadi penulis tidak menganggapnya pasti.'),
+      ynng(20, 'The writer thinks that a short daily handwriting session is sufficient.', 'Yes', 'Paragraf 3: "ten minutes a day would be enough to keep the skill alive". Penulis menganggap sesi singkat sudah cukup.'),
+      ynng(21, 'The writer believes that children should learn handwriting before they learn to type.', 'Not Given', 'Penulis mendukung keduanya, tetapi tidak pernah membahas mana yang harus diajarkan lebih dulu.'),
+      g(22, { question_type: 'TFNG', passage_no: 3, prompt: 'The garden was created on a site that had previously been used for parking.', correct_answers: ['True'], explanation_id: 'Paragraf 1: taman dibuka "on land that used to be a car park". Pernyataan adalah parafrase kalimat itu.' }),
+      g(23, { question_type: 'TFNG', passage_no: 3, prompt: 'A full-time student pays £45 a year for a full plot.', correct_answers: ['False'], explanation_id: 'Bagian "Plots and fees": mahasiswa penuh waktu "pay half the normal fee", jadi bukan £45.' }),
+      g(24, { question_type: 'TFNG', passage_no: 3, prompt: 'Members receive a new gate code four times a year.', correct_answers: ['True'], explanation_id: 'Bagian "Opening hours": kode diganti "every three months" dan dikirim ke anggota. Setiap tiga bulan sama dengan empat kali setahun.' }),
+      g(25, { question_type: 'TFNG', passage_no: 3, prompt: 'Children under twelve are not allowed to enter the garden.', correct_answers: ['Not Given'], explanation_id: 'Teks hanya mengatur bahwa pengunjung harus didampingi anggota. Tidak ada informasi tentang batas usia.' }),
+      g(26, { question_type: 'TFNG', passage_no: 3, prompt: 'Gloves can be borrowed from the green shed.', correct_answers: ['False'], explanation_id: 'Bagian "Tools and water": yang bisa dipinjam adalah spades, forks, dan watering cans, sedangkan "Members must bring their own gloves".' }),
+      g(27, { question_type: 'TFNG', passage_no: 3, prompt: 'Most members choose to grow vegetables rather than flowers.', correct_answers: ['Not Given'], explanation_id: 'Teks menyebut apa saja yang boleh ditanam, tetapi tidak menyebut tanaman mana yang paling banyak dipilih anggota.' }),
+      g(28, {
+        question_type: 'MCQ_SINGLE',
+        passage_no: 3,
+        prompt: 'When are members allowed to use a hosepipe?',
+        options: [
+          'At any time between 7 a.m. and sunset.',
+          'Only between 9 a.m. and 6 p.m.',
+          'Only before 9 a.m. and after 6 p.m.',
+          'Only in April and September.',
+        ],
+        correct_answers: ['Only before 9 a.m. and after 6 p.m.'],
+        explanation_id: 'Bagian "Tools and water": "Hosepipes may be used before 9 a.m. and after 6 p.m. only". Pukul 7 a.m. sampai sunset adalah jam masuk taman.',
+      }),
+      g(29, {
+        question_type: 'SHORT_ANSWER',
+        passage_no: 3,
+        prompt: 'Where can members leave vegetables that they do not need? (Maximum THREE words)',
+        correct_answers: ['the sharing box', 'sharing box'],
+        max_words: 3,
+        explanation_id: 'Bagian "What you may grow": "surplus vegetables may be left in the sharing box by the gate".',
+      }),
+      g(30, {
+        question_type: 'FILL_IN_BLANK',
+        passage_no: 3,
+        prompt: 'After a written warning, a member has ___ weeks to improve the plot. (ONE word)',
+        correct_answers: ['four', '4'],
+        max_words: 1,
+        explanation_id: 'Bagian "Keeping your plot": anggota "has four weeks to improve it".',
+      }),
     ],
   },
 };

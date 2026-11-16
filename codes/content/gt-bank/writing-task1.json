@@ -45,6 +45,39 @@
           "time_limit_minutes": 20,
           "difficulty": 3,
           "explanation_id": "Register FORMAL untuk surat lamaran. Sebut posisi dan sumber iklan di paragraf pertama, jelaskan pengalaman yang RELEVAN dengan contoh, dan beri tanggal/jam konkret. Tutup dengan 'I look forward to hearing from you.' dan 'Yours faithfully,'."
+        },
+        {
+          "question_id": "Q-GTWF-004",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You recently travelled by plane, but when you arrived at your destination your suitcase was missing. It has still not been returned to you after two weeks.\n\nWrite a letter to the airline. In your letter:\n- give details of your flight and your suitcase\n- explain the problems this has caused you\n- say what you want the airline to do\n\nBegin your letter: Dear Sir or Madam,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 3,
+          "explanation_id": "Register FORMAL kepada perusahaan: 'Dear Sir or Madam,' ... 'Yours faithfully,'. Berikan detail yang bisa diverifikasi (nomor penerbangan, tanggal, warna/ukuran koper, nomor laporan). Jelaskan dampak nyata (harus membeli pakaian, rapat terganggu) dan ajukan tuntutan spesifik (koper dikirim ke alamat, ganti rugi biaya). Nada tegas tetapi tetap sopan."
+        },
+        {
+          "question_id": "Q-GTWF-005",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "The local council is planning to close the public swimming pool in your area because it is too expensive to run.\n\nWrite a letter to the editor of your local newspaper. In your letter:\n- explain how people in your area use the swimming pool\n- say why you disagree with the plan to close it\n- suggest other ways the council could save money or raise funds\n\nBegin your letter: Dear Sir or Madam,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 4,
+          "explanation_id": "Register FORMAL untuk surat pembaca ke redaksi: 'Dear Sir or Madam,' ... 'Yours faithfully,'. Nyatakan tujuan di kalimat pertama ('I am writing to express my concern about...'). Argumen harus didukung contoh (anak sekolah, lansia, klub renang), dan saran harus realistis (tarif keanggotaan, sponsor lokal). Hindari nada emosional berlebihan."
+        },
+        {
+          "question_id": "Q-GTWF-006",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You would like to take an evening course in computer skills at a local college, but the college website does not give enough information.\n\nWrite a letter to the college. In your letter:\n- explain why you want to take the course\n- ask for information about the course, such as dates and fees\n- describe any special requirements you have\n\nBegin your letter: Dear Sir or Madam,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 2,
+          "explanation_id": "Register FORMAL untuk surat permintaan informasi: 'Dear Sir or Madam,' ... 'Yours faithfully,'. Gunakan pertanyaan tidak langsung yang sopan ('I would be grateful if you could tell me...', 'Could you please let me know...'). Kebutuhan khusus harus jelas (mis. hanya bisa hadir setelah pukul 19.00, butuh akses kursi roda). Tutup dengan 'I look forward to hearing from you.'"
         }
       ],
       "exam_module": "GENERAL_TRAINING",
@@ -95,6 +128,39 @@
           "time_limit_minutes": 20,
           "difficulty": 3,
           "explanation_id": "Register SEMI-FORMAL ke atasan. Tonjolkan manfaat bagi perusahaan, bukan hanya diri sendiri, dan tawarkan solusi nyata untuk pekerjaan Anda selama cuti. Gunakan 'I would be grateful if...' lalu tutup 'Yours sincerely,'."
+        },
+        {
+          "question_id": "Q-GTWS-004",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You are going abroad for two weeks and need someone to look after your cat while you are away. Your neighbour, Mrs Patel, has offered to help.\n\nWrite a letter to Mrs Patel. In your letter:\n- thank her for her offer\n- explain how to look after your cat\n- tell her how she can contact you while you are away\n\nBegin your letter: Dear Mrs Patel,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 2,
+          "explanation_id": "Register SEMI-FORMAL ke tetangga yang dikenal: 'Dear Mrs Patel,' ... 'Yours sincerely,' atau 'Kind regards,'. Ucapan terima kasih tulus di awal, instruksi tersusun runtut (makanan, jam, kunci, dokter hewan) memakai penanda urutan (First, After that, Finally). Nada hangat tetapi tetap sopan, hindari slang."
+        },
+        {
+          "question_id": "Q-GTWS-005",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You are a member of a local sports club. You think the club could be improved in some ways.\n\nWrite a letter to the club manager, Ms Taylor. In your letter:\n- say how long you have been a member and what you enjoy about the club\n- describe the problems you have noticed\n- suggest some improvements\n\nBegin your letter: Dear Ms Taylor,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 3,
+          "explanation_id": "Register SEMI-FORMAL ke pengelola yang dikenal: 'Dear Ms Taylor,' ... 'Yours sincerely,'. Mulai dengan hal positif sebelum kritik agar nada tetap konstruktif. Masalah harus spesifik (alat rusak, ruang ganti penuh pada jam sibuk) dan saran langsung menjawab masalah. Gunakan bahasa saran yang sopan ('It might be a good idea to...', 'Perhaps the club could...')."
+        },
+        {
+          "question_id": "Q-GTWS-006",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Your child will miss three days of school next month because your family needs to travel to an important family event.\n\nWrite a letter to your child's class teacher, Mr Brown. In your letter:\n- explain why your child will be absent and on which dates\n- ask about the work your child will miss\n- say how you will help your child catch up\n\nBegin your letter: Dear Mr Brown,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 2,
+          "explanation_id": "Register SEMI-FORMAL kepada guru: 'Dear Mr Brown,' ... 'Yours sincerely,'. Beri tanggal yang jelas dan alasan singkat yang meyakinkan, minta materi dengan sopan ('I would appreciate it if...'), dan tunjukkan tanggung jawab orang tua lewat rencana konkret (belajar setiap sore, mengumpulkan tugas saat kembali)."
         }
       ],
       "exam_module": "GENERAL_TRAINING",
@@ -144,6 +210,39 @@
           "time_limit_minutes": 20,
           "difficulty": 2,
           "explanation_id": "Register INFORMAL. Ceritakan dengan detail yang hidup (bukan daftar fakta), seimbangkan hal yang disukai dan tidak disukai, dan beri undangan dengan tanggal konkret. Kohesi: gunakan 'Anyway,', 'By the way,', 'Speaking of which,' secara wajar."
+        },
+        {
+          "question_id": "Q-GTWI-004",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You recently stayed for a week at the home of a friend while you were on holiday in their city.\n\nWrite a letter to your friend, Taylor. In your letter:\n- thank your friend for letting you stay\n- say what you enjoyed most about your visit\n- invite your friend to come and stay with you\n\nBegin your letter: Dear Taylor,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 2,
+          "explanation_id": "Register INFORMAL (teman): 'Dear Taylor,' ... 'Love,' / 'Best wishes,'. Ucapan terima kasih harus spesifik (masakan, tur keliling kota), bukan sekadar 'thanks for everything'. Gunakan singkatan dan ungkapan akrab ('I had a blast', 'You must come over'), serta beri waktu kunjungan yang konkret."
+        },
+        {
+          "question_id": "Q-GTWI-005",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "You want to organise a reunion for the people who were in your class at school ten years ago.\n\nWrite a letter to an old school friend, Morgan. In your letter:\n- explain your idea for the reunion\n- suggest when and where it could take place\n- ask your friend to help you with the organisation\n\nBegin your letter: Dear Morgan,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 3,
+          "explanation_id": "Register INFORMAL. Buka dengan sapaan akrab dan kenangan singkat masa sekolah, lalu jelaskan rencana secara hidup (tempat, tanggal, kegiatan). Permintaan bantuan harus jelas tugasnya (menghubungi teman lama, memesan tempat). Gunakan penghubung santai ('Anyway,', 'So,', 'What do you think?')."
+        },
+        {
+          "question_id": "Q-GTWI-006",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "A friend, Pat, has been offered a job in your city and has asked for your advice about whether to accept it.\n\nWrite a letter to Pat. In your letter:\n- describe what life is like in your city\n- explain the advantages and disadvantages of moving there\n- give your advice about what your friend should do\n\nBegin your letter: Dear Pat,\n\nWrite at least 150 words. You do NOT need to write any addresses.",
+          "task_kind": "TASK1",
+          "min_words": 150,
+          "time_limit_minutes": 20,
+          "difficulty": 3,
+          "explanation_id": "Register INFORMAL dengan nada mendukung. Gambarkan kota secara jujur (biaya hidup, transportasi, suasana), seimbangkan kelebihan dan kekurangan, lalu beri saran yang tegas dengan ungkapan akrab ('If I were you, I'd...', 'Honestly, I think...'). Tutup dengan tawaran membantu dan 'Take care,'."
         }
       ],
       "exam_module": "GENERAL_TRAINING",

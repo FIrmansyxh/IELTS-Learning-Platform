@@ -57,11 +57,18 @@ async function answerCorrectly(u: L, attemptId: string, qid: string, dto: any, r
   throw new Error(`tipe belum didukung helper: ${pub.question_type}`);
 }
 
+/** Impor sah: exit 0, atau exit 2 yang semata-mata karena bank Listening belum lolos uji dengar human (C-30). */
+function expectImportOk(r: { exitCode: number; lines: string[]; banks?: unknown[] }) {
+  const onlyReviewGate =
+    r.exitCode === 2 && (r.banks?.length ?? 0) > 0 && r.lines.some((l) => /^listening_review_(missing|stale):/.test(l));
+  expect(r.exitCode === 0 || onlyReviewGate, r.lines.join('\n')).toBe(true);
+}
+
 beforeAll(async () => {
   const assets = await runImport(db, { dir: LISTENING_DIR, publish: true, dryRun: false, actorUserId: null });
   expect(assets.exitCode, assets.lines.join('\n')).toBe(0);
   const out = await runImport(db, { dir: BANK_DIR, publish: true, dryRun: false, actorUserId: null });
-  expect(out.exitCode, out.lines.join('\n')).toBe(0);
+  expectImportOk(out);
 });
 afterAll(async () => {
   await execute(db, sql`DELETE FROM attempts`);
@@ -84,14 +91,15 @@ describe('impor bank lewat CLI service (AC-12, AC-11c)', () => {
   it('bank awal terimpor dan terbit; hitungan per kind sesuai AC-2', async () => {
     const r = await rows(sql`SELECT bank_kind, sum(question_count) AS n, min(status) AS st FROM assessment_sets WHERE assessment_type = 'QUESTION_BANK' GROUP BY bank_kind`);
     const by = Object.fromEntries(r.map((x) => [x.bank_kind, Number(x.n)]));
-    expect(by).toMatchObject({ WRITING_GT_T1_FORMAL: 3, WRITING_GT_T1_SEMI: 3, WRITING_GT_T1_INFORMAL: 3, WRITING_GT_T2: 9, SPEAKING_P1: 9, SPEAKING_P2: 6, SPEAKING_P3: 6, READING_GT_S1: 22, READING_GT_S2: 21, READING_GT_S3: 13 }); // termasuk bank simulasi (SIM) dan bank pelengkap
+    expect(by).toMatchObject({ WRITING_GT_T1_FORMAL: 6, WRITING_GT_T1_SEMI: 6, WRITING_GT_T1_INFORMAL: 6, WRITING_GT_T2: 20, SPEAKING_P1: 30, SPEAKING_P2: 20, SPEAKING_P3: 24, READING_GT_S1: 50, READING_GT_S2: 47, READING_GT_S3: 39 }); // termasuk bank simulasi (SIM) dan bank pelengkap
     expect(by.GRAMMAR_GT_REGISTER).toBeGreaterThanOrEqual(16);
-    expect(r.every((x) => x.st === 'PUBLISHED')).toBe(true);
+    // Bank Listening terbit hanya setelah uji dengar human (reviews/*.review.json), jadi tidak ikut diperiksa di sini (C-30).
+    expect(r.filter((x) => !String(x.bank_kind).startsWith('LISTENING_')).every((x) => x.st === 'PUBLISHED')).toBe(true);
   });
 
   it('run kedua tanpa perubahan = semua NOOP; satu soal diubah = UPDATE dan version naik 1', async () => {
     const again = await runImport(db, { dir: BANK_DIR, publish: true, dryRun: false, actorUserId: null });
-    expect(again.exitCode).toBe(0);
+    expectImportOk(again);
     expect(again.banks!.every((b) => b.action === 'NOOP')).toBe(true);
 
     const tmp = mkdtempSync(path.join(tmpdir(), 'bank-'));
@@ -102,7 +110,7 @@ describe('impor bank lewat CLI service (AC-12, AC-11c)', () => {
     writeFileSync(f, JSON.stringify(j));
     const before = (await rows(sql`SELECT version FROM assessment_sets WHERE bank_code = ${j.banks[0].bank_code}`))[0].version;
     const upd = await runImport(db, { dir: tmp, publish: true, dryRun: false, actorUserId: null });
-    expect(upd.exitCode, upd.lines.join('\n')).toBe(0);
+    expectImportOk(upd);
     expect(upd.banks!.filter((b) => b.action === 'UPDATE').map((b) => b.bank_code)).toEqual([j.banks[0].bank_code]);
     expect((await rows(sql`SELECT version, status FROM assessment_sets WHERE bank_code = ${j.banks[0].bank_code}`))[0]).toEqual({ version: before + 1, status: 'PUBLISHED' });
     // pulihkan isi asli agar tes lain tidak terpengaruh
@@ -207,7 +215,7 @@ describe('POST /mix-sessions', () => {
     // D4 menang atas kalimat AC-9 lama: satuan Reading = paket (bank, passage_no). Bank fixture ini satu teks 8 soal;
     // bank awal repo (S1: 3/3/2, S2: 4/4) dibuktikan terpisah di bawah (paket utuh per passage_no).
     // Bank simulasi S3 (GT-RD-S3-SIM) disisihkan agar hanya bank uji yang bertipe READING_GT_S3.
-    await execute(db, sql`UPDATE assessment_sets SET status = 'DRAFT' WHERE bank_code = 'GT-RD-S3-SIM'`);
+    await execute(db, sql`UPDATE assessment_sets SET status = 'DRAFT' WHERE bank_code LIKE 'GT-RD-S3-SIM%'`);
     const tmp = mkdtempSync(path.join(tmpdir(), 'bank-r-'));
     const qs = Array.from({ length: 8 }, (_, i) => ({ question_id: `Q-GTRT-00${i + 1}`, question_type: 'TFNG', skill: 'READING', prompt: `Pernyataan ${i + 1} benar?`, correct_answers: ['True'], explanation_id: 'Lihat teks.', difficulty: 2, passage_no: 1 }));
     writeFileSync(path.join(tmp, 'r.json'), JSON.stringify({ bank_contract_version: '1.0', banks: [{ bank_code: 'GT-RD-S3-TEST', bank_kind: 'READING_GT_S3', title: 'Reading uji', skill: 'READING', exam_module: 'GENERAL_TRAINING', origin: 'ORIGINAL_AUTHORED', reading_passage_markdown: 'Teks tunggal untuk pengujian.', questions: qs }] }));
@@ -225,11 +233,11 @@ describe('POST /mix-sessions', () => {
     expect(dto.questions.every((q: any) => q.passage_index === 0 && q.bank_code === 'GT-RD-S3-TEST')).toBe(true);
     await execute(db, sql`DELETE FROM attempts`);
     await execute(db, sql`DELETE FROM assessment_sets WHERE bank_code = 'GT-RD-S3-TEST'`);
-    await execute(db, sql`UPDATE assessment_sets SET status = 'PUBLISHED' WHERE bank_code = 'GT-RD-S3-SIM'`);
+    await execute(db, sql`UPDATE assessment_sets SET status = 'PUBLISHED' WHERE bank_code LIKE 'GT-RD-S3-SIM%'`);
 
     // Bank asli S1 (paket 3/3/2): setiap paket yang terbawa utuh kecuali yang terpotong di akhir; soal satu paket berurutan.
     const SIZE: Record<number, number> = { 1: 3, 2: 3, 3: 2 };
-    await execute(db, sql`UPDATE assessment_sets SET status = 'DRAFT' WHERE bank_code = 'GT-RD-S1-SIM'`); // ukuran paket bank simulasi berbeda
+    await execute(db, sql`UPDATE assessment_sets SET status = 'DRAFT' WHERE bank_code LIKE 'GT-RD-S1-SIM%'`); // ukuran paket bank simulasi berbeda
     for (const seed of ['p1', 'p2', 'p3', 'p4', 'p5']) {
       const m = await mix(u, { bank_kinds: ['READING_GT_S1'], count: 5, mode: 'MANUAL', seed });
       expect(m.status).toBe(201);
@@ -252,7 +260,7 @@ describe('POST /mix-sessions', () => {
     const rd = (await getAttempt(u, real.json.data.attempt_id)).json.data;
     expect(rd.passages.every((p: any) => !p.markdown.includes('===PASSAGE==='))).toBe(true);
     expect(real.json.data.passage_count).toBe(rd.passages.length);
-    await execute(db, sql`UPDATE assessment_sets SET status = 'PUBLISHED' WHERE bank_code = 'GT-RD-S1-SIM'`);
+    await execute(db, sql`UPDATE assessment_sets SET status = 'PUBLISHED' WHERE bank_code LIKE 'GT-RD-S1-SIM%'`);
     expect(dto.title).toContain('Latihan campur');
     expect(dto.time_limit_seconds).toBe(0);
     expect(dto.assessment_set_id).toBeNull();

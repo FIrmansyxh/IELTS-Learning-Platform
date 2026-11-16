@@ -1,5 +1,7 @@
 /**
- * Struktur kurikulum SPEC-004: 4 Tier, 13 Modul, 33 Sub-Modul (seed `curriculum-structure`).
+ * Struktur kurikulum SPEC-004: 4 Tier, 15 Modul, 40 Sub-Modul (seed `curriculum-structure`).
+ * Backlog C-22 menambah 7 sub-modul grammar dari slide kursus Basic + Intermediate; backlog C-24 memecah Modul 1.1
+ * menjadi 1.1-1.3 dan menggeser Vocab ke 1.4 dan Reading ke 1.5 (migrasi basis data: `CODE_RENUMBER_C24`).
  * ADR-004: tiap sub-modul membawa tag `exam` (COMMON bila kosong). Sub-modul ACADEMIC disembunyikan dari
  * learner saat EXAM_MODULE=GENERAL_TRAINING (default); sub-modul GENERAL_TRAINING menggantikannya.
  */
@@ -25,9 +27,11 @@ export const TIER_SEEDS: TierSeed[] = [
 export type SkillCategoryName = 'GRAMMAR' | 'VOCAB' | 'LISTENING' | 'READING' | 'WRITING' | 'SPEAKING';
 
 export const MODULE_SEEDS: Array<{ code: string; tier: number; skill: SkillCategoryName; title: string }> = [
-  { code: '1.1', tier: 1, skill: 'GRAMMAR', title: 'Core Sentence Architecture' },
-  { code: '1.2', tier: 1, skill: 'VOCAB', title: 'Survival Vocabulary & Pronunciation' },
-  { code: '1.3', tier: 1, skill: 'READING', title: 'Basic Comprehension (Listening & Reading)' },
+  { code: '1.1', tier: 1, skill: 'GRAMMAR', title: 'Core Sentence Architecture: Nouns & Modifiers' },
+  { code: '1.2', tier: 1, skill: 'GRAMMAR', title: 'Core Sentence Architecture: Verbs, Prepositions & Phrases' },
+  { code: '1.3', tier: 1, skill: 'GRAMMAR', title: 'Core Sentence Architecture: Tenses & Modals' },
+  { code: '1.4', tier: 1, skill: 'VOCAB', title: 'Survival Vocabulary & Pronunciation' },
+  { code: '1.5', tier: 1, skill: 'READING', title: 'Basic Comprehension (Listening & Reading)' },
   { code: '2.1', tier: 2, skill: 'GRAMMAR', title: 'Complex Grammar & Sentence Combining' },
   { code: '2.2', tier: 2, skill: 'WRITING', title: 'Paragraphing & Paraphrasing' },
   { code: '2.3', tier: 2, skill: 'READING', title: 'Intermediate Listening & Reading Mechanics' },
@@ -42,17 +46,24 @@ export const MODULE_SEEDS: Array<{ code: string; tier: number; skill: SkillCateg
 
 export const SUB_MODULE_SEEDS: Array<{ code: string; title: string; exam?: ExamModuleName }> = [
   { code: '1.1.1', title: 'Nouns, Pronouns, Articles (a/an/the), & Plurals' },
-  { code: '1.1.2', title: 'Present Simple vs. Present Continuous' },
-  { code: '1.1.3', title: 'Past Simple vs. Present Perfect' },
-  { code: '1.1.4', title: 'Modals of Ability, Obligation & Possibility (can, must, should, might)' },
-  { code: '1.2.1', title: '1.000 Kata Inti (Oxford A1-A2) dalam Konteks Kalimat' },
-  { code: '1.2.2', title: 'Fonetik Dasar, Bunyi Vokal Panjang/Pendek, & Word Stress' },
-  { code: '1.3.1', title: 'Mendengarkan Angka, Ejaan Nama, Waktu, & Alamat' },
-  { code: '1.3.2', title: 'Menangkap Ide Pokok & Informasi Spesifik pada Teks Pendek' },
+  { code: '1.1.2', title: 'Adjectives & Adverbs: Jenis, Posisi, & Akhiran Pembentuk Kata (Suffix)' },
+  { code: '1.2.1', title: 'Verbs: Bentuk Kata Kerja, Transitive/Intransitive, Linking Verb, & Auxiliary' },
+  { code: '1.2.2', title: 'Prepositions (in, on, at, & Bound Prepositions) dan Interjections' },
+  { code: '1.2.3', title: 'Phrases: Noun Phrase, Adjective Phrase, Adverbial Phrase, & Prepositional Phrase' },
+  { code: '1.3.1', title: 'Present Simple vs. Present Continuous' },
+  { code: '1.3.2', title: 'Past Simple vs. Present Perfect' },
+  { code: '1.3.3', title: 'Simple Future (will, shall, be going to): Aktif, Pasif, & Kalimat Nominal' },
+  { code: '1.3.4', title: 'Modals of Ability, Obligation & Possibility (can, must, should, might)' },
+  { code: '1.4.1', title: '1.000 Kata Inti (Oxford A1-A2) dalam Konteks Kalimat' },
+  { code: '1.4.2', title: 'Fonetik Dasar, Bunyi Vokal Panjang/Pendek, & Word Stress' },
+  { code: '1.5.1', title: 'Mendengarkan Angka, Ejaan Nama, Waktu, & Alamat' },
+  { code: '1.5.2', title: 'Menangkap Ide Pokok & Informasi Spesifik pada Teks Pendek' },
   { code: '2.1.1', title: 'Conjunctions & Discourse Markers (however, although, despite, therefore, whereas)' },
   { code: '2.1.2', title: 'Relative Clauses (who, which, that, whose, where)' },
   { code: '2.1.3', title: 'Passive Voice untuk Deskripsi Proses & Laporan Ilmiah' },
   { code: '2.1.4', title: 'Conditional Sentences (Zero, First, Second, Third) untuk Argumen Esai' },
+  { code: '2.1.5', title: 'Gerund & To Infinitive (Verb + -ing vs. to + Verb)' },
+  { code: '2.1.6', title: 'Meringkas Adjective Clause: Reducing, Omitting, & Appositive' },
   { code: '2.2.1', title: 'Anatomi Paragraf Akademik: Topic Sentence + Explanation + Concrete Example' },
   { code: '2.2.2', title: 'Teknik Paraphrasing (Sinonim, Word Form, Aktif-Pasif)' },
   { code: '2.3.1', title: 'Teknik Skimming (Ide Utama) vs. Scanning (Kata Kunci, Nama, Tahun)' },
@@ -75,3 +86,23 @@ export const SUB_MODULE_SEEDS: Array<{ code: string; title: string; exam?: ExamM
   { code: '4.3.1', title: 'Menyelesaikan 3 Reading Passages (40 Soal) dalam 50 Menit dengan Akurasi >= 30/40' },
   { code: '4.3.2', title: 'Latihan Shadowing, Intonasi Natural, & Idiomatic Expressions untuk Speaking Band 7.0+' },
 ];
+
+/**
+ * C-24: kode lama -> kode baru untuk basis data yang dibuat sebelum Modul 1.1 dipecah. Dipakai langkah seed
+ * `curriculum-renumber-c24` (scripts/seed.ts) yang mengubah baris yang sama, sehingga id sub-modul, progres,
+ * mahkota, riwayat, dan jalur tetap utuh.
+ */
+export const CODE_RENUMBER_C24: Record<string, string> = {
+  '1.1.5': '1.1.2',
+  '1.1.6': '1.2.1',
+  '1.1.7': '1.2.2',
+  '1.1.8': '1.2.3',
+  '1.1.2': '1.3.1',
+  '1.1.3': '1.3.2',
+  '1.1.9': '1.3.3',
+  '1.1.4': '1.3.4',
+  '1.2.1': '1.4.1',
+  '1.2.2': '1.4.2',
+  '1.3.1': '1.5.1',
+  '1.3.2': '1.5.2',
+};

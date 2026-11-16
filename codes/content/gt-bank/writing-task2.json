@@ -111,6 +111,127 @@
           "time_limit_minutes": 40,
           "difficulty": 2,
           "explanation_id": "Tipe OPINION. Pertimbangkan sisi karyawan (waktu, biaya) dan perusahaan (produktivitas, kerja tim). Berikan satu contoh nyata. Pastikan jumlah kata >= 250; tulisan di bawah batas dikenai penalti Task Response."
+        },
+        {
+          "question_id": "Q-GTWE-010",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some people believe that everyone should stop working at a fixed age, such as 65, so that younger people can find jobs more easily.\n\nTo what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 3,
+          "explanation_id": "Tipe OPINION. Tentukan posisi di pembukaan (setuju, tidak setuju, atau sebagian) dan pertahankan. Kembangkan alasan seperti pengalaman pekerja senior, kesehatan dan kemampuan yang berbeda-beda, serta peluang kerja bagi generasi muda. Contoh konkret (pekerja paruh waktu, mentor) memperkuat Task Response."
+        },
+        {
+          "question_id": "Q-GTWE-011",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some people think that public transport in cities should be free for everyone, while others believe that passengers should pay for the service they use.\n\nDiscuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 3,
+          "explanation_id": "Tipe DISCUSSION + OPINION. Satu paragraf untuk transportasi gratis (mengurangi kemacetan dan polusi, membantu warga berpenghasilan rendah) dan satu untuk berbayar (biaya perawatan, beban pajak). Nyatakan pendapat sendiri dengan jelas dan konsisten sampai kesimpulan."
+        },
+        {
+          "question_id": "Q-GTWE-012",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Nowadays, many people work on short-term contracts rather than having a permanent job with one employer.\n\nDo the advantages of this outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 4,
+          "explanation_id": "Tipe ADVANTAGES/DISADVANTAGES. Jawab pertanyaan 'outweigh' secara eksplisit di pembukaan. Keunggulan: fleksibilitas, pengalaman beragam; kelemahan: penghasilan tidak pasti, minim tunjangan, sulit mengajukan pinjaman rumah. Simpulkan sisi mana yang lebih berat dengan alasan yang konsisten."
+        },
+        {
+          "question_id": "Q-GTWE-013",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "In many towns and cities, people do not know their neighbours as well as they did in the past.\n\nWhy is this the case? What can be done to improve relationships between neighbours?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 3,
+          "explanation_id": "Tipe PROBLEM-SOLUTION (sebab dan solusi). Sebab: jam kerja panjang, sering pindah rumah, hiburan di dalam rumah. Solusi harus menjawab sebab tersebut (acara lingkungan, grup pesan warga, ruang bersama). Gunakan penghubung sebab-akibat yang bervariasi dan contoh nyata."
+        },
+        {
+          "question_id": "Q-GTWE-014",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "More and more adults are returning to education, for example by attending evening classes or online courses.\n\nWhy do adults choose to study later in life? What benefits does this bring to them and to society?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 3,
+          "explanation_id": "Tipe TWO-PART. Jawab kedua pertanyaan di paragraf terpisah: alasan (ganti karier, tuntutan teknologi, minat pribadi) lalu manfaat bagi individu DAN masyarakat. Jangan hanya membahas manfaat pribadi; pertanyaan meminta keduanya."
+        },
+        {
+          "question_id": "Q-GTWE-015",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some people say that parents, rather than schools, should be responsible for teaching children how to manage money.\n\nTo what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 2,
+          "explanation_id": "Tipe OPINION. Pertimbangkan peran orang tua (contoh sehari-hari, uang saku) dan sekolah (pengetahuan yang merata untuk semua anak). Posisi sebagian setuju diperbolehkan asalkan jelas sejak pembukaan. Berikan contoh praktis seperti menabung atau membuat anggaran."
+        },
+        {
+          "question_id": "Q-GTWE-016",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some people think that tourism brings many benefits to local communities, while others believe it causes more problems than it solves.\n\nDiscuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 4,
+          "explanation_id": "Tipe DISCUSSION + OPINION. Manfaat: lapangan kerja, pendapatan usaha kecil, pelestarian budaya; masalah: harga sewa naik, kepadatan, kerusakan lingkungan. Berikan bobot adil untuk kedua sisi dan pendapat pribadi yang dikembangkan, bukan hanya disebut di kesimpulan."
+        },
+        {
+          "question_id": "Q-GTWE-017",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Traffic congestion is becoming a serious problem in many cities around the world.\n\nWhat are the causes of this problem? What solutions can you suggest?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 3,
+          "explanation_id": "Tipe PROBLEM-SOLUTION. Sebab: jumlah mobil pribadi meningkat, transportasi umum kurang memadai, perencanaan kota. Pasangkan setiap solusi dengan sebabnya (jalur bus khusus, kerja jarak jauh, biaya parkir). Hindari daftar solusi tanpa penjelasan bagaimana solusi itu bekerja."
+        },
+        {
+          "question_id": "Q-GTWE-018",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some parents give their children a smartphone at a young age.\n\nDo the advantages of this outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 3,
+          "explanation_id": "Tipe ADVANTAGES/DISADVANTAGES. Keunggulan: keamanan dan komunikasi dengan orang tua, akses belajar; kelemahan: waktu layar berlebihan, konten tidak pantas, kurang bergerak. Nyatakan sisi yang lebih berat sejak awal dan pertahankan; contoh dari kehidupan sehari-hari sangat membantu."
+        },
+        {
+          "question_id": "Q-GTWE-019",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Some people think that supermarkets should be required by law to give food they cannot sell to charities.\n\nDo you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 4,
+          "explanation_id": "Tipe OPINION. Argumen pendukung: mengurangi limbah makanan, membantu keluarga kurang mampu; sanggahan: keamanan pangan, biaya distribusi. Antisipasi sanggahan lalu jawab. Kosakata topik (food waste, surplus, distribution) meningkatkan Lexical Resource."
+        },
+        {
+          "question_id": "Q-GTWE-020",
+          "question_type": "WRITING_TASK",
+          "skill": "WRITING",
+          "prompt": "Today, many people throw away items such as clothes and electronic devices instead of repairing them.\n\nWhy do people do this? What can be done to encourage people to repair things?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "task_kind": "TASK2",
+          "min_words": 250,
+          "time_limit_minutes": 40,
+          "difficulty": 4,
+          "explanation_id": "Tipe TWO-PART (sebab dan solusi). Sebab: barang baru murah, biaya perbaikan tinggi, desain yang sulit diperbaiki, tren mode. Solusi: kafe reparasi, garansi lebih panjang, aturan suku cadang. Jawab kedua pertanyaan dengan proporsi seimbang dan contoh nyata."
         }
       ],
       "exam_module": "GENERAL_TRAINING",

@@ -1,6 +1,7 @@
 /**
  * Pemrosesan berkas audio dengan ffprobe dan ffmpeg (SPEC-013).
  * Semua pemanggilan proses memakai spawn dengan argumen array untuk mencegah command injection.
+ * Biner dari FFPROBE_PATH/FFMPEG_PATH bila diisi (sama dengan Listening), selain itu dari PATH.
  */
 import { spawn } from 'node:child_process';
 import { ApiError } from '../http/errors';
@@ -23,9 +24,10 @@ export async function probeAudioDuration(filePath: string): Promise<AudioProbeRe
 
   return new Promise((resolve, reject) => {
     const args = ['-v', 'error', '-show_entries', 'format=duration', '-of', 'json', filePath];
-    const proc = spawn('ffprobe', args, {
+    const proc = spawn(process.env.FFPROBE_PATH || 'ffprobe', args, {
       stdio: ['ignore', 'pipe', 'pipe'],
       timeout: 10_000,
+      windowsHide: true,
     });
 
     let stdout = '';
@@ -83,9 +85,10 @@ export async function convertAudioToWav(inputPath: string, outputPath: string): 
 
   return new Promise((resolve, reject) => {
     const args = ['-nostdin', '-y', '-i', inputPath, '-ac', '1', '-ar', '16000', '-f', 'wav', outputPath];
-    const proc = spawn('ffmpeg', args, {
+    const proc = spawn(process.env.FFMPEG_PATH || 'ffmpeg', args, {
       stdio: ['ignore', 'ignore', 'pipe'],
       timeout: 60_000,
+      windowsHide: true,
     });
 
     let stderr = '';

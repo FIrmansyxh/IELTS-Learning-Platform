@@ -73,25 +73,25 @@ test('pengguna baru: kartu "Berikutnya untuk Anda" paling atas, satu CTA primer,
     state: 'FALLBACK_NEXT',
     active_tab: 'LEARN',
     position_label: 'Sub-modul berikutnya',
-    resume_path: '/belajar/1.2.1?tab=pelajari',
+    resume_path: '/belajar/1.4.1?tab=pelajari',
     change_path: '/peta',
   });
-  expect(api!.sub_module.sub_module_code).toBe('1.2.1');
+  expect(api!.sub_module.sub_module_code).toBe('1.4.1');
 
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(`Halo, ${p.name}`);
   const card = page.getByTestId('resume-card');
   await expect(card).toBeVisible();
   await expect(card.getByText('Berikutnya untuk Anda')).toBeVisible();
-  await expect(card.getByRole('heading', { level: 2 })).toHaveText(SUB_TITLES['1.2.1']!);
+  await expect(card.getByRole('heading', { level: 2 })).toHaveText(SUB_TITLES['1.4.1']!);
   await expect(card).toContainText('Tier 1 > Survival Vocabulary & Pronunciation');
   await expect(card).toContainText('Sub-modul berikutnya');
   // Progress dengan nilai terbaca pembaca layar; tombol bernama "Lanjutkan Belajar: {judul}".
   const bar = card.getByRole('progressbar');
   await expect(bar).toHaveAttribute('aria-valuenow', /^\d+$/);
   const cta = cardCta(page);
-  await expect(cta).toHaveAttribute('aria-label', `Lanjutkan Belajar: ${SUB_TITLES['1.2.1']}`);
-  await expect(cta).toHaveAttribute('href', '/belajar/1.2.1?tab=pelajari');
+  await expect(cta).toHaveAttribute('aria-label', `Lanjutkan Belajar: ${SUB_TITLES['1.4.1']}`);
+  await expect(cta).toHaveAttribute('href', '/belajar/1.4.1?tab=pelajari');
   await expect(card.getByRole('link', { name: 'Ganti sub-modul' })).toHaveAttribute('href', '/peta');
   // Satu-satunya CTA "Lanjutkan Belajar" di layar; kartu berada di atas slot lain (statistik/radar).
   await expect(page.getByRole('link', { name: /Lanjutkan Belajar/ })).toHaveCount(1);
@@ -105,7 +105,7 @@ test('pengguna baru: kartu "Berikutnya untuk Anda" paling atas, satu CTA primer,
   const t0 = Date.now();
   await cta.click();
   await expect(page).toHaveURL(/\/belajar\/1\.2\.1\?tab=pelajari$/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(SUB_TITLES['1.2.1']!);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(SUB_TITLES['1.4.1']!);
   expect(Date.now() - t0, 'satu klik sampai halaman sub-modul < 10 detik').toBeLessThan(10_000);
 
   // Setelah sub-modul dibuka, posisi terakhir tersimpan: kartu menjadi "Lanjutkan Belajar" (RESUME).
@@ -119,7 +119,7 @@ test('menonton video lalu kembali ke beranda: "Video mm:ss" dan Lanjutkan Belaja
   const p = await mk('rsm-v');
   await context.addCookies(p.cookies);
   await stubYouTube(page);
-  await page.goto('/belajar/1.2.1?tab=pelajari&sub=video');
+  await page.goto('/belajar/1.4.1?tab=pelajari&sub=video');
   await expect(page.locator('iframe[data-stub]')).toBeVisible();
   // Pemutar dalam keadaan PLAYING pada detik 22 lalu dijeda (stub mengendalikan getCurrentTime).
   await page.evaluate(() => {
@@ -140,7 +140,7 @@ test('menonton video lalu kembali ke beranda: "Video mm:ss" dan Lanjutkan Belaja
     active_tab: 'LEARN',
     active_learn_subtab: 'VIDEO',
     video_progress_sec: 24,
-    resume_path: '/belajar/1.2.1?tab=pelajari&sub=video&t=24',
+    resume_path: '/belajar/1.4.1?tab=pelajari&sub=video&t=24',
   });
 
   // "Tutup tab" (pindah ke beranda) lalu satu klik.
@@ -195,13 +195,13 @@ test('keluar di soal ke-4 drill (10 soal): "Tab Latihan - Soal 4 dari 10" dan La
 test('label posisi: Slide dan Terapkan; sub-tab Slide menyimpan sub=slide', async ({ page, context }) => {
   const p = await mk('rsm-s');
   await context.addCookies(p.cookies);
-  await page.goto('/belajar/1.2.1?tab=pelajari&sub=slide');
+  await page.goto('/belajar/1.4.1?tab=pelajari&sub=slide');
   await expect(page.getByRole('region', { name: 'Slide materi' })).toBeVisible();
   await expectLabel(page, 'Tab Pelajari - Slide');
-  expect((await lastLearned(page))!.resume_path).toBe('/belajar/1.2.1?tab=pelajari&sub=slide');
+  expect((await lastLearned(page))!.resume_path).toBe('/belajar/1.4.1?tab=pelajari&sub=slide');
   await page.getByRole('tab', { name: /^Terapkan/ }).click();
   await expectLabel(page, 'Tab Terapkan');
-  expect((await lastLearned(page))!.resume_path).toBe('/belajar/1.2.1?tab=terapkan');
+  expect((await lastLearned(page))!.resume_path).toBe('/belajar/1.4.1?tab=terapkan');
   await page.goto('/');
   await expect(page.getByTestId('resume-card')).toContainText('Tab Terapkan');
   await cardCta(page).click();
@@ -212,23 +212,23 @@ test('label posisi: Slide dan Terapkan; sub-tab Slide menyimpan sub=slide', asyn
 test('sub-modul tersimpan sudah selesai -> kartu berpindah ke sub-modul berikutnya; semua selesai -> keadaan kosong "Mulai dari Tier 1"', async ({ page, context }) => {
   const p = await mk('rsm-f');
   await context.addCookies(p.cookies);
-  await page.goto('/belajar/1.2.1');
+  await page.goto('/belajar/1.4.1');
   await expectLabel(page, 'Tab Pelajari - Artikel');
-  await completeSub(page, '1.2.1');
-  // Sub-modul tersimpan kini COMPLETED -> FALLBACK_NEXT ke 1.2.2 (tab fallback: materi belum selesai = Pelajari).
+  await completeSub(page, '1.4.1');
+  // Sub-modul tersimpan kini COMPLETED -> FALLBACK_NEXT ke 1.4.2 (tab fallback: materi belum selesai = Pelajari).
   const next = await lastLearned(page);
-  expect(next).toMatchObject({ state: 'FALLBACK_NEXT', active_tab: 'LEARN', resume_path: '/belajar/1.2.2?tab=pelajari' });
-  expect(next!.sub_module.sub_module_code).toBe('1.2.2');
+  expect(next).toMatchObject({ state: 'FALLBACK_NEXT', active_tab: 'LEARN', resume_path: '/belajar/1.4.2?tab=pelajari' });
+  expect(next!.sub_module.sub_module_code).toBe('1.4.2');
   await page.goto('/');
   await expect(page.getByTestId('resume-card').getByText('Berikutnya untuk Anda')).toBeVisible();
-  await expect(page.getByTestId('resume-card').getByRole('heading', { level: 2 })).toHaveText(SUB_TITLES['1.2.2']!);
+  await expect(page.getByTestId('resume-card').getByRole('heading', { level: 2 })).toHaveText(SUB_TITLES['1.4.2']!);
 
-  // Materi 1.2.2 selesai tetapi drill belum: tab fallback = Latihan.
-  await learnFast(page, '1.2.2');
-  expect(await lastLearned(page)).toMatchObject({ state: 'FALLBACK_NEXT', active_tab: 'DRILL', resume_path: '/belajar/1.2.2?tab=latihan' });
+  // Materi 1.4.2 selesai tetapi drill belum: tab fallback = Latihan.
+  await learnFast(page, '1.4.2');
+  expect(await lastLearned(page)).toMatchObject({ state: 'FALLBACK_NEXT', active_tab: 'DRILL', resume_path: '/belajar/1.4.2?tab=latihan' });
 
   // Semua sub-modul yang terbuka selesai -> tidak ada kandidat: data null dan keadaan kosong.
-  await completeSub(page, '1.2.2');
+  await completeSub(page, '1.4.2');
   expect(await lastLearned(page)).toBeNull();
   await page.goto('/');
   const empty = page.getByTestId('resume-empty');

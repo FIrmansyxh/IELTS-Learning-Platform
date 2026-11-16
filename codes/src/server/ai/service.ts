@@ -449,20 +449,18 @@ export async function createSpeakingSubmission(
       .limit(1);
 
     if (!attempt || attempt.userId !== userId) throw notFound();
-    if (attempt.status !== 'IN_PROGRESS') throw new ApiError('ATTEMPT_NOT_ACTIVE');
 
     if (attempt.assessmentType === 'MOCK_TEST') {
-      const [wSec] = await db
+      // Simulasi: aturan sama dengan jalur Speaking eksternal (section SPEAKING belum dinilai).
+      if (attempt.status === 'ABANDONED') throw new ApiError('ATTEMPT_NOT_ACTIVE');
+      const [sSec] = await db
         .select()
         .from(attemptSections)
-        .where(and(eq(attemptSections.attemptId, input.attempt_id), eq(attemptSections.skill, 'WRITING')))
+        .where(and(eq(attemptSections.attemptId, input.attempt_id), eq(attemptSections.skill, 'SPEAKING')))
         .limit(1);
-      if (!wSec || !wSec.startedAt || wSec.status !== 'IN_PROGRESS') {
-        throw new ApiError('SECTION_NOT_ACTIVE');
-      }
-      if (wSec.deadlineAt && nowMs() > new Date(wSec.deadlineAt).getTime() + 5000) {
-        throw new ApiError('SECTION_EXPIRED');
-      }
+      if (!sSec || sSec.status === 'GRADED') throw new ApiError('ATTEMPT_NOT_ACTIVE');
+    } else if (attempt.status !== 'IN_PROGRESS') {
+      throw new ApiError('ATTEMPT_NOT_ACTIVE');
     }
 
     // SPEC-022: attempt tanpa set (MIX_PRACTICE) membaca soal dari attempts.state.
@@ -482,6 +480,15 @@ export async function createSpeakingSubmission(
       throw new ApiError('QUESTION_TYPE_MISMATCH');
     }
     promptSnapshot = foundQuestion.prompt ?? 'Speaking Task Prompt';
+    if (attempt.assessmentType === 'MOCK_TEST') {
+      // Simulasi: satu rekaman menjawab semua pertanyaan Part ini, jadi penilai melihat seluruh daftarnya.
+      const partPrompts = questions
+        .filter((q) => q.question_type === 'SPEAKING_TASK' && q.part === expectedPart && q.prompt)
+        .map((q) => `- ${q.prompt}`);
+      if (partPrompts.length > 1) {
+        promptSnapshot = `IELTS Speaking Part ${expectedPart}. The candidate answers all of these questions in one recording:\n${partPrompts.join('\n')}`;
+      }
+    }
 
     const [existingSub] = await db
       .select({ id: submissions.id })
@@ -1459,6 +1466,8 @@ export async function getAiStatus(db: Db, userId: string) {
   return {
     enabled,
     available,
+    // ADR-004 Addendum 3: Speaking dinilai lokal bila AI dan penilai Speaking sama-sama aktif.
+    speaking_enabled: enabled && config.speakingAiEnabled(),
     queue: {
       waiting,
       estimated_wait_sec: waiting > 0 ? waiting * 45 : null,

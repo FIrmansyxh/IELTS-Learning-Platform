@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
+import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import { Providers } from '@/components/providers';
 import { id } from '@/i18n/id';
 import './globals.css';
 
-const body = Inter({ subsets: ['latin'], variable: '--font-body', display: 'swap' });
-const heading = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-heading', display: 'swap' });
+// Embun Biru (C-28): satu keluarga font untuk judul dan isi; judul dibedakan lewat ketebalan.
+const body = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-body', display: 'swap' });
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" className={`${body.variable} ${heading.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="id" className={`${body.variable} ${mono.variable}`} suppressHydrationWarning>
       <body>
         <a
           href="#main"

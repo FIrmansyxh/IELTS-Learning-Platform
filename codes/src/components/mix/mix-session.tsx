@@ -12,22 +12,13 @@ import type { AttemptResult } from '@/contracts/attempts';
 import { id } from '@/i18n/id';
 import { attemptsApi } from '@/lib/api/attempts';
 import { isApiError } from '@/lib/api/client';
-import { parsePassages, type Passage } from '@/lib/reading/parsePassages';
+import { PassageMarkdown } from '@/components/reading/passage-markdown';
 import { MixResultView } from './mix-result';
 import { passageForQuestion, type MixPassageRef } from './mix-utils';
-
-function parseOne(markdown: string): Passage | null {
-  try {
-    return parsePassages(markdown)[0] ?? null;
-  } catch {
-    return null;
-  }
-}
 
 /** Teks bacaan pendamping soal Reading (bisa dilipat; panel bergulir sendiri agar soal tetap terlihat). */
 export function MixPassageCard({ passage }: { passage: MixPassageRef }) {
   const [open, setOpen] = React.useState(true);
-  const parsed = React.useMemo(() => parseOne(passage.markdown), [passage.markdown]);
   const bodyId = React.useId();
   return (
     <section aria-label={id.mix.run.passage} className="rounded-xl border bg-card" data-testid="mix-passage">
@@ -45,19 +36,7 @@ export function MixPassageCard({ passage }: { passage: MixPassageRef }) {
         </span>
       </button>
       <div id={bodyId} hidden={!open} className="max-h-[40dvh] overflow-y-auto border-t px-4 py-3" lang="en">
-        {parsed ? (
-          <div className="grid gap-3 text-sm leading-relaxed">
-            {parsed.title && !/^Teks \d+$/.test(parsed.title) ? <h3 className="font-semibold">{parsed.title}</h3> : null}
-            {parsed.paragraphs.map((p) => (
-              <p key={p.index}>
-                {p.label ? <strong className="mr-1.5">{p.label}</strong> : null}
-                {p.text}
-              </p>
-            ))}
-          </div>
-        ) : (
-          <p className="whitespace-pre-line text-sm leading-relaxed">{passage.markdown}</p>
-        )}
+        <PassageMarkdown markdown={passage.markdown} />
       </div>
     </section>
   );

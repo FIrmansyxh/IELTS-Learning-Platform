@@ -504,6 +504,26 @@ export const attemptAnswers = sqliteTable('attempt_answers', {
   index('attempt_answers_set_q_idx').on(t.assessmentSetId, t.questionId, t.isCorrect),
 ]);
 
+// ───────────────────────────── PENGULANGAN BERJARAK (SPEC-026) ─────────────────────────────
+/** Jadwal ulang soal objektif mandiri yang pernah dijawab salah (Leitner 5 kotak). */
+export const questionReviews = sqliteTable('question_reviews', {
+  id: id(),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  assessmentSetId: uuid('assessment_set_id').notNull().references(() => assessmentSets.id, { onDelete: 'cascade' }),
+  questionId: varchar('question_id', { length: 40 }).notNull(),
+  skill: skillCategory('skill'),
+  box: smallint('box').notNull().default(1),                    // 1..5
+  dueAt: ts('due_at'),                                          // NULL bila sudah dikuasai
+  lapses: integer('lapses').notNull().default(1),               // berapa kali dijawab salah
+  lastAnsweredAt: ts('last_answered_at').notNull(),
+  masteredAt: ts('mastered_at'),
+  createdAt: createdAt(),
+  updatedAt: updatedAt(),
+}, (t) => [
+  uniqueIndex('question_reviews_uq').on(t.userId, t.assessmentSetId, t.questionId),
+  index('question_reviews_due_idx').on(t.userId, t.dueAt),
+]);
+
 // ───────────────────────────── PENILAIAN AI (Writing & Speaking) ─────────────────────────────
 export const gradingRubrics = sqliteTable('grading_rubrics', {
   id: id(),

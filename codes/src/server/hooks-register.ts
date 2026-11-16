@@ -18,6 +18,7 @@ import {
   skillScoreEvaluationHook,
   skillScoreHook,
 } from './skills/service';
+import { reviewScheduleHook } from './review/service';
 
 if (!userCreatedHooks.includes(onUserCreated)) userCreatedHooks.push(onUserCreated);
 
@@ -32,6 +33,11 @@ if (!attemptCompletedHooks.includes(gamificationHook)) {
 
 if (!attemptCompletedHooks.includes(skillScoreHook)) {
   attemptCompletedHooks.push(skillScoreHook);
+}
+
+// SPEC-026: jadwal pengulangan berjarak dari jawaban Active Drill / Latihan campur.
+if (!attemptCompletedHooks.includes(reviewScheduleHook)) {
+  attemptCompletedHooks.push(reviewScheduleHook);
 }
 
 if (!evaluationGradedHooks.includes(skillScoreEvaluationHook)) {

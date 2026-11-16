@@ -194,15 +194,21 @@ export function subProgressPercent(s: SubNode): number {
   return s.hasMiniTask ? 40 * L + 40 * D + 20 * M : 50 * L + 50 * D;
 }
 
-export function moduleProgressPercent(m: ModuleNode): number {
-  const avail = availableSubs(m);
+/**
+ * D7 (C-23): Modul/Tier dihitung dari sub-modul AVAILABLE walau statusnya sudah terminal, supaya sub-modul
+ * yang dipublikasikan belakangan terlihat belum selesai. Status tersimpan tetap lengket.
+ */
+function doneShare(status: Status, avail: SubNode[]): number {
+  if (avail.length === 0) return isTerminal(status) ? 100 : 0;
   return percentOf(avail.filter((s) => isDone(s.status)).length, avail.length);
 }
 
+export function moduleProgressPercent(m: ModuleNode): number {
+  return doneShare(m.status, availableSubs(m));
+}
+
 export function tierProgressPercent(t: TierNode): number {
-  if (isTerminal(t.status)) return 100;
-  const avail = t.modules.flatMap(availableSubs);
-  return percentOf(avail.filter((s) => isDone(s.status)).length, avail.length);
+  return doneShare(t.status, t.modules.flatMap(availableSubs));
 }
 
 export type BossBlockedReason = 'TIER_LOCKED' | 'MODULES_INCOMPLETE' | 'NO_BOSS_PUBLISHED' | 'ALREADY_PASSED';

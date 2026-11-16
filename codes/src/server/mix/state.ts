@@ -53,6 +53,7 @@ const SKILL_LABEL: Record<string, string> = { GRAMMAR: 'Grammar', VOCAB: 'Vocab'
 export function mixTitle(state: MixState): string {
   const n = state.questions.length;
   if (state.mode === 'AUTO_WEAKNESS') return `Latihan campur otomatis: ${n} soal`;
+  if (state.mode === 'REVIEW_DUE') return `Ulangi soal yang salah: ${n} soal`;
   const skills = [...new Set(state.questions.map((q) => SKILL_LABEL[q.skill] ?? q.skill))];
   return `Latihan campur: ${n} soal (${skills.join(', ')})`;
 }

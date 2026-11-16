@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   BookOpen,
   Check,
@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { MIX_COUNT_MAX, MIX_COUNT_MIN, MIX_SKILLS, type MixMode } from '@/contracts/mix';
+import { REVIEW_SESSION_MAX } from '@/contracts/review';
 import { fmt, id } from '@/i18n/id';
 import { isApiError } from '@/lib/api/client';
 import { apiErrorMessage } from '@/lib/api/errors';
@@ -42,6 +43,7 @@ import {
   selectableBanks,
   skillQuestionCount,
 } from './mix-utils';
+import { ReviewCard, MIX_REVIEWS_KEY } from './review-card';
 
 /** Jumlah soal otomatis (dibatasi oleh soal yang tersedia). */
 const MIX_COUNT_DEFAULT = 10;
@@ -101,9 +103,9 @@ function Section({
 
 function SummaryRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="grid gap-0.5">
+    <div className="grid min-w-0 gap-0.5">
       <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</dt>
-      <dd className="break-words font-medium">{children}</dd>
+      <dd className="font-medium [overflow-wrap:anywhere]">{children}</dd>
     </div>
   );
 }
@@ -138,6 +140,7 @@ function useActiveSession() {
 
 export function MixBuilder() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const params = useSearchParams();
   const presetBank = params.get('bank');
   const banksQuery = useQuery({
@@ -219,6 +222,7 @@ export function MixBuilder() {
   const start = useMutation({
     mutationFn: (mode: MixMode) => {
       if (mode === 'AUTO_WEAKNESS') return mixApi.start(buildAutoRequest(effectiveCount));
+      if (mode === 'REVIEW_DUE') return mixApi.start({ count: REVIEW_SESSION_MAX, mode: 'REVIEW_DUE' });
       const kinds = [...new Set(chosenBanks.map((b) => b.bank_kind))];
       return mixApi.start(
         buildManualRequest({
@@ -235,6 +239,12 @@ export function MixBuilder() {
       router.push(`/latihan/campur/${session.attempt_id}`);
     },
     onError: (e, mode) => {
+      if (mode === 'REVIEW_DUE' && isApiError(e) && e.code === 'MIX_NOT_ENOUGH_QUESTIONS') {
+        // Jadwal berubah sejak kartu dimuat: segarkan ringkasan, jangan ubah batas soal mode manual.
+        void queryClient.invalidateQueries({ queryKey: MIX_REVIEWS_KEY });
+        toast.info(id.mix.review.noneDue);
+        return;
+      }
       if (isApiError(e) && e.code === 'MIX_NOT_ENOUGH_QUESTIONS') {
         const n = parseMaxAvailable(e.details);
         setServerMax(n);
@@ -303,7 +313,9 @@ export function MixBuilder() {
         </div>
       ) : null}
 
-      <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_22rem]">
+      <ReviewCard pending={start.isPending && start.variables === 'REVIEW_DUE'} disabled={start.isPending} onStart={() => requestStart('REVIEW_DUE')} />
+
+      <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_24rem]">
         <div className="grid gap-5">
           <Section step={1} title={id.mix.skillsTitle} hint={id.mix.skillsHint} titleId="mix-skills">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
@@ -447,9 +459,9 @@ export function MixBuilder() {
           </div>
         </div>
 
-        <aside aria-label={id.mix.summaryTitle} className="grid gap-4 rounded-xl border bg-card p-4 sm:p-5 xl:sticky xl:top-4">
+        <aside aria-label={id.mix.summaryTitle} className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4 rounded-xl border bg-card p-4 sm:p-5 xl:sticky xl:top-4">
           <h2 className="text-base font-semibold">{id.mix.summaryTitle}</h2>
-          <dl className="grid gap-2 text-sm">
+          <dl className="grid grid-cols-[minmax(0,1fr)] gap-3 text-sm">
             <SummaryRow label={id.mix.summarySkills}>
               {selectedSkills.length > 0 ? selectedSkills.map((s) => id.mix.skillNames[s] ?? s).join(', ') : id.mix.summaryNone}
             </SummaryRow>
@@ -485,15 +497,16 @@ export function MixBuilder() {
             ) : null}
           </div>
 
-          <Button size="lg" disabled={!canStart} loading={start.isPending && start.variables === 'MANUAL'} onClick={() => requestStart('MANUAL')}>
+          <Button size="lg" className="h-auto min-h-[52px] whitespace-normal py-2.5 text-center" disabled={!canStart} loading={start.isPending && start.variables === 'MANUAL'} onClick={() => requestStart('MANUAL')}>
             {start.isPending && start.variables === 'MANUAL' ? id.mix.starting : id.mix.start}
           </Button>
 
-          <div className="grid gap-2 border-t pt-4">
+          <div className="grid min-w-0 gap-2 border-t pt-4">
             <p className="text-xs font-medium text-muted-foreground">{id.mix.orQuick}</p>
             <Button
               size="lg"
               variant="outline"
+              className="h-auto min-h-[52px] whitespace-normal py-2.5 text-center"
               disabled={autoDisabled}
               loading={start.isPending && start.variables === 'AUTO_WEAKNESS'}
               onClick={() => requestStart('AUTO_WEAKNESS')}
@@ -541,10 +554,11 @@ function Header() {
         {id.mix.title}
       </h1>
       <p className="max-w-4xl text-muted-foreground">{id.mix.subtitle}</p>
-      <ol className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-foreground" aria-label={id.mix.howTitle}>
+      <ol className="grid gap-2 text-sm text-muted-foreground md:grid-cols-3" aria-label={id.mix.howTitle}>
         {id.mix.howSteps.map((t, i) => (
-          <li key={t}>
-            <strong className="text-foreground">{fmt(id.mix.stepLabel, { n: i + 1 })}:</strong> {t}
+          <li key={t} className="rounded-lg border bg-card/60 px-3 py-2">
+            <strong className="block text-foreground">{fmt(id.mix.stepLabel, { n: i + 1 })}</strong>
+            {t}
           </li>
         ))}
       </ol>

@@ -6,9 +6,9 @@
  * `materializeCorePackage(dir)` menulis paket + berkas aset (disalin dari content/golden-sample) ke `dir`,
  * lalu diimpor lewat CLI resmi `content-import.ts import` (lihat helpers/core.ts).
  *
- * Peta kode -> isi (kode sengaja menghindari 1.1.x [tracks.spec], 1.3.x/2.3.x/3.4.x dan Boss Tier 1-2 [domain Ujian]):
- *   Tier 1: 1.2.1 (materi lengkap: video, slide, lampiran PDF, Mini-Task SELF_CHECK; drill 4 soal),
- *           1.2.2 (artikel saja; drill 2 soal). Modul 1.1 tidak punya sub-modul terbit (Segera hadir).
+ * Peta kode -> isi (kode sengaja menghindari 1.1.x [tracks.spec], 1.5.x/2.3.x/3.4.x dan Boss Tier 1-2 [domain Ujian]):
+ *   Tier 1: 1.4.1 (materi lengkap: video, slide, lampiran PDF, Mini-Task SELF_CHECK; drill 4 soal),
+ *           1.4.2 (artikel saja; drill 2 soal). Modul 1.1 tidak punya sub-modul terbit (Segera hadir).
  *   Tier 2: 2.1.1 (+ set Skip Modul 2.1, 6 soal), 2.2.1 (drill 10 tipe soal, berbobot), 2.2.2.
  *   Tier 3: set Skip Tier 3 (4 soal, 30 detik). Sub-modul 3.3.3 berasal dari runner.
  *   Tier 4: 4.2.1, [4.2.2 sengaja TIDAK terbit], 4.3.1 + Boss Tier 4 (Listening 4 soal, Reading 4 soal).
@@ -51,7 +51,7 @@ const mcq = (tag: string, prompt: string, right: string, wrong: string[], extra:
   };
 };
 
-// ---------------------------------------------------------------- drill 1.2.1 (4 soal, lulus 75% = 3 benar)
+// ---------------------------------------------------------------- drill 1.4.1 (4 soal, lulus 75% = 3 benar)
 export const D121 = {
   mcq: 'Pilih kata benda dari daftar berikut.',
   tfng: 'Pernyataan: "Artikel a dipakai sebelum bunyi vokal." (menurut teks)',
@@ -190,8 +190,8 @@ export const SKIP_TIER_TITLE = 'E2E Core Uji Kompetensi Tier 3';
 export const BOSS_TITLE = 'E2E Core Boss Stage Tier 4';
 
 export const SUB_TITLES: Record<string, string> = {
-  '1.2.1': '1.000 Kata Inti (Oxford A1-A2) dalam Konteks Kalimat',
-  '1.2.2': 'Fonetik Dasar, Bunyi Vokal Panjang/Pendek, & Word Stress',
+  '1.4.1': '1.000 Kata Inti (Oxford A1-A2) dalam Konteks Kalimat',
+  '1.4.2': 'Fonetik Dasar, Bunyi Vokal Panjang/Pendek, & Word Stress',
   '2.1.1': 'Conjunctions & Discourse Markers (however, although, despite, therefore, whereas)',
   '2.2.1': 'Anatomi Paragraf Akademik: Topic Sentence + Explanation + Concrete Example',
   '2.2.2': 'Teknik Paraphrasing (Sinonim, Word Form, Aktif-Pasif)',
@@ -220,7 +220,7 @@ export function buildCorePackage(): { content: Record<string, unknown>; manifest
     contract_version: '1.1',
     sub_modules: [
       sub(
-        1, '1.2', 'VOCAB', '1.2.1',
+        1, '1.4', 'VOCAB', '1.4.1',
         {
           article_markdown: ARTICLE_121,
           videos: [VIDEO],
@@ -230,7 +230,7 @@ export function buildCorePackage(): { content: Record<string, unknown>; manifest
         },
         drill121(),
       ),
-      sub(1, '1.2', 'VOCAB', '1.2.2', { article_markdown: ARTICLE_SIMPLE('Fonetik Dasar') }, drillMini('122')),
+      sub(1, '1.4', 'VOCAB', '1.4.2', { article_markdown: ARTICLE_SIMPLE('Fonetik Dasar') }, drillMini('122')),
       sub(2, '2.1', 'GRAMMAR', '2.1.1', { article_markdown: ARTICLE_SIMPLE('Conjunctions') }, drillMini('211')),
       sub(2, '2.2', 'WRITING', '2.2.1', { article_markdown: ARTICLE_SIMPLE('Anatomi Paragraf') }, drill221(), 600),
       sub(2, '2.2', 'WRITING', '2.2.2', { article_markdown: ARTICLE_SIMPLE('Paraphrasing') }, drillMini('222')),

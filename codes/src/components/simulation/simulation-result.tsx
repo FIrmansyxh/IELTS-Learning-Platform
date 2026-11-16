@@ -42,7 +42,7 @@ export function SimulationResultView({ attemptId }: { attemptId: string }) {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-6xl space-y-6 py-12">
+      <div className="w-full space-y-6 py-12">
         <Skeleton className="h-10 w-64" />
         <Skeleton className="h-40 w-full" />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -55,7 +55,7 @@ export function SimulationResultView({ attemptId }: { attemptId: string }) {
 
   if (error || !data) {
     return (
-      <div className="mx-auto max-w-6xl py-12 text-center">
+      <div className="w-full py-12 text-center">
         <AlertCircle className="mx-auto size-12 text-destructive" />
         <h2 className="mt-4 text-xl font-bold">Hasil simulasi tidak ditemukan</h2>
         <Button className="mt-4" onClick={() => refetch()}>
@@ -68,7 +68,7 @@ export function SimulationResultView({ attemptId }: { attemptId: string }) {
   const { overall, sections, disclaimer } = data;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8 py-6">
+    <div className="w-full space-y-8 py-6">
       {/* Disclaimer Atas (Wajib) */}
       <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-center text-xs font-semibold text-amber-900 dark:text-amber-200">
         {disclaimer}

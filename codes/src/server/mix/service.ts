@@ -25,6 +25,7 @@ import { newRngSeed, seededCsprng } from '../attempts/prng';
 import { serveQuestion, type Served } from '../attempts/engine';
 import type { AnswerRow } from '../attempts/dto';
 import { splitPassages } from '../content/passages';
+import { loadDueReviewPool } from '../review/service';
 import {
   passageKeyOf,
   rngFromSeed,
@@ -152,18 +153,33 @@ export async function createMixSession(db: Db, userId: string, req: MixRequest):
           WHERE user_id = ${userId} AND assessment_type = 'MIX_PRACTICE' AND status = 'IN_PROGRESS'`,
     );
 
-    const { pool, banks } = await loadPool(tx);
-    const auto = req.mode === 'AUTO_WEAKNESS';
-    const radar = auto ? await loadRadar(tx, userId) : [];
-    const history: MixHistory = auto ? await loadHistory(tx, userId, now.getTime()) : { answers: [], now_ms: now.getTime() };
-    // Tanpa seed: angka acak CSPRNG; seed hanya memengaruhi penarikan soal (D5.6).
-    const rng = rngFromSeed(req.seed ?? randomBytes(16).toString('hex'));
-
-    const sel = selectMix(pool, req, radar, history, rng);
-    if (!sel.ok) {
-      throw new ApiError('MIX_NOT_ENOUGH_QUESTIONS', {
-        details: [{ path: 'count', code: `max_available:${sel.max_available}`, message: `Hanya ${sel.max_available} soal tersedia untuk filter ini.` }],
-      });
+    let sel: { questions: PoolQuestion[] };
+    let banks: Map<string, BankRow>;
+    if (req.mode === 'REVIEW_DUE') {
+      // SPEC-026 D4: soal jatuh tempo pengulangan berjarak; `count` hanya batas atas.
+      const due = await loadDueReviewPool(tx, userId, req.count);
+      if (due.questions.length === 0) {
+        throw new ApiError('MIX_NOT_ENOUGH_QUESTIONS', {
+          details: [{ path: 'count', code: 'max_available:0', message: 'Belum ada soal yang jatuh tempo untuk diulang.' }],
+        });
+      }
+      sel = { questions: due.questions };
+      banks = due.sets;
+    } else {
+      const loaded = await loadPool(tx);
+      banks = loaded.banks;
+      const auto = req.mode === 'AUTO_WEAKNESS';
+      const radar = auto ? await loadRadar(tx, userId) : [];
+      const history: MixHistory = auto ? await loadHistory(tx, userId, now.getTime()) : { answers: [], now_ms: now.getTime() };
+      // Tanpa seed: angka acak CSPRNG; seed hanya memengaruhi penarikan soal (D5.6).
+      const rng = rngFromSeed(req.seed ?? randomBytes(16).toString('hex'));
+      const picked = selectMix(loaded.pool, { ...req, mode: req.mode }, radar, history, rng);
+      if (!picked.ok) {
+        throw new ApiError('MIX_NOT_ENOUGH_QUESTIONS', {
+          details: [{ path: 'count', code: `max_available:${picked.max_available}`, message: `Hanya ${picked.max_available} soal tersedia untuk filter ini.` }],
+        });
+      }
+      sel = picked;
     }
 
     // Urutan opsi: seed CSPRNG rahasia terpisah dari `seed` permintaan (disimpan di state, tidak dikirim ke klien).

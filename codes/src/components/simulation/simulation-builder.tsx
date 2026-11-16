@@ -101,7 +101,7 @@ export function SimulationBuilder() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-6xl space-y-6 py-8">
+      <div className="w-full space-y-6 py-8">
         <Skeleton className="h-10 w-64" />
         <Skeleton className="h-24 w-full" />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -114,7 +114,7 @@ export function SimulationBuilder() {
 
   if (error || !data) {
     return (
-      <div className="mx-auto max-w-6xl py-12 text-center">
+      <div className="w-full py-12 text-center">
         <AlertCircle className="mx-auto size-12 text-destructive" />
         <h2 className="mt-4 text-xl font-bold">Gagal memuat opsi simulasi</h2>
         <Button className="mt-4" onClick={() => refetch()}>
@@ -135,7 +135,7 @@ export function SimulationBuilder() {
   const totalMinutes = Math.ceil(totalSeconds / 60);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 pb-6 md:py-4">
+    <div className="w-full space-y-6 pb-6 md:py-4">
       {/* Header */}
       <div>
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">

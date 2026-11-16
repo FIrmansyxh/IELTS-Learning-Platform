@@ -203,6 +203,25 @@ Status: draft (menunggu persetujuan human). Berlaku selama `SPEAKING_AI_ENABLED=
 
 **Kriteria penerimaan tambahan.** (a) Prompt memuat soal, rubrik 4 kriteria, dan format keluaran; (b) parser menerima blok hasil dengan koma/titik desimal dan menolak nilai bukan kelipatan 0,5; (c) skor tersimpan menggerakkan skill SPEAKING di radar; (d) kegagalan validasi konteks mengembalikan kode yang sama dengan `POST /submissions/speaking`.
 
+## Addendum 2026-11-11: Speaking AI Lokal Aktif, Prompt Eksternal sebagai Cadangan (ADR-004 Addendum 3)
+
+Status: approved (human, 2026-11-11). Menggantikan syarat "Berlaku selama `SPEAKING_AI_ENABLED=false`" pada Addendum 2026-11-08: jalur eksternal kini cadangan, bukan jalur utama.
+
+**Konfigurasi.** `SPEAKING_AI_ENABLED=true`, `STT_DRIVER=whisper`, `STT_BASE_URL=http://127.0.0.1:8081`, `WHISPER_BIN` (path `whisper-server.exe`), `WHISPER_MODEL_PATH` (berkas `ggml-*.bin`), `WHISPER_ARGS` (opsional, tanpa `--host/--port`), `STT_MODEL` (label, mis. `small.en`). `ffprobe`/`ffmpeg` pada pipeline STT memakai `FFPROBE_PATH`/`FFMPEG_PATH` bila diisi (sama dengan Listening).
+
+**start-local.** Bila `AI_ENABLED=true`, `SPEAKING_AI_ENABLED=true`, `STT_DRIVER=whisper`, dan `STT_BASE_URL` loopback: probe `{STT_BASE_URL}/health`; bila belum hidup dan `WHISPER_MODEL_PATH` terisi, jalankan `WHISPER_BIN -m <model> --host 127.0.0.1 --port <port> -l en ...WHISPER_ARGS` (log `data/logs/whisper-server.log`, berhenti bersama aplikasi). Gagal menyala hanya memberi peringatan "Penilai Speaking tidak dinyalakan: ...".
+
+**Status AI.** `GET /api/v1/ai/status` mendapat field `speaking_enabled: boolean` = `AI_ENABLED && SPEAKING_AI_ENABLED`.
+
+**UI (`SpeakingTaskPanel`).** Dipakai pada soal `SPEAKING_TASK` dalam attempt (drill, Latihan campur, ujian) dan Mini-Task `AI_SHORT_SPEAKING` (setelah materi selesai).
+- `speaking_enabled=true`: `SpeakingRecorder` (persetujuan rekaman, pra-cek mikrofon, persiapan, rekam, tinjau, kirim), lalu `AiJobStatus` dua tahap dan `EvaluationCard` (4 kriteria Speaking, transkrip, rekaman). Di bawahnya `<details>` tertutup "Cadangan: latihan dengan AI suara lain" berisi kartu prompt eksternal + input skor manual.
+- `speaking_enabled=false` atau status gagal dimuat: kartu prompt eksternal seperti sebelumnya (tanpa perekam).
+- Penilaian gagal: tombol "Coba lagi" dan "Nilai sendiri" dengan kunci `fluency`, `lexical`, `grammar`, `pronunciation` (form nilai sendiri menampilkan kriteria Speaking, bukan Writing).
+
+**Doctor.** `OFFLINE_NOTES` menyebut evaluasi Speaking berjalan lokal; hanya jalur cadangan pihak ketiga yang butuh internet.
+
+**Kriteria penerimaan tambahan.** (a) Dengan whisper-server dan llama-server hidup, rekaman 30-120 detik menghasilkan transkrip dan evaluasi `AI_LOCAL` dengan 4 kriteria Speaking; (b) kartu prompt eksternal tetap dapat disalin dan skor manual tetap tersimpan saat penilai lokal aktif; (c) `SPEAKING_AI_ENABLED=false` mengembalikan tampilan kartu prompt saja; (d) tes unit `planWhisper` mencakup skip, warn (bukan loopback, argumen host/port), dan start.
+
 ## Human Approval
 
 **Human Approval Status:** approved
@@ -215,3 +234,4 @@ Status: draft (menunggu persetujuan human). Berlaku selama `SPEAKING_AI_ENABLED=
 |------|--------|---------|
 | 2026-11-03 | Analyst Agent | Initial draft; persetujuan rekaman dan opsi tanpa simpan (ADR-003 #19), retensi 90 hari |
 | 2026-11-08 | Orchestrator | Addendum: penilaian Speaking via AI pihak ketiga + input skor manual (ADR-004) |
+| 2026-11-11 | Claude (atas permintaan human) | Addendum: Speaking AI lokal aktif (whisper.cpp + LLM lokal), prompt eksternal menjadi cadangan |

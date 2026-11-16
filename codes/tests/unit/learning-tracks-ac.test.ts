@@ -118,28 +118,28 @@ const track = (code: string, sort: number, items: unknown[], over: Record<string
 });
 const pkgOf = (tracks: unknown[]) => ({ contract_version: '1.2', learning_tracks: tracks });
 /** Dasar valid: 4 sub-modul Tier 1 lalu Checkpoint. */
-const base = (): unknown[] => [S('1.1.1'), S('1.1.2'), S('1.1.3'), S('1.1.4'), CP];
+const base = (): unknown[] => [S('1.1.1'), S('1.1.2'), S('1.2.1'), S('1.2.2'), CP];
 
 describe('AC-14: validator konten jalur (fixture positif dan satu fixture negatif per kode galat)', () => {
   const negatives: Array<[string, () => unknown]> = [
     ['duplicate_track_code', () => pkgOf([track('GT-A', 1, base()), track('GT-A', 2, base())])],
     ['duplicate_sort_order', () => pkgOf([track('GT-A', 1, base()), track('GT-B', 1, base())])],
-    ['sub_module_not_found', () => pkgOf([track('GT-A', 1, [S('1.1.1'), S('1.1.2'), S('1.1.3'), S('4.9.9'), CP])])],
-    ['sub_module_not_gt', () => pkgOf([track('GT-A', 1, [S('1.1.1'), S('1.1.2'), S('1.1.3'), S('3.3.1'), CP])])],
-    ['duplicate_sub_module_in_track', () => pkgOf([track('GT-A', 1, [S('1.1.1'), S('1.1.2'), S('1.1.3'), S('1.1.3'), CP])])],
+    ['sub_module_not_found', () => pkgOf([track('GT-A', 1, [S('1.1.1'), S('1.1.2'), S('1.2.1'), S('4.9.9'), CP])])],
+    ['sub_module_not_gt', () => pkgOf([track('GT-A', 1, [S('1.1.1'), S('1.1.2'), S('1.2.1'), S('3.3.1'), CP])])],
+    ['duplicate_sub_module_in_track', () => pkgOf([track('GT-A', 1, [S('1.1.1'), S('1.1.2'), S('1.2.1'), S('1.2.1'), CP])])],
     ['tier_order_violation', () => pkgOf([track('GT-A', 1, [S('2.1.1'), S('2.1.2'), S('2.1.4'), S('1.1.1'), CP])])],
     ['checkpoint_first', () => pkgOf([track('GT-A', 1, [CP, ...base()])])],
     ['checkpoint_adjacent', () => pkgOf([track('GT-A', 1, [...base(), CP])])],
-    ['checkpoint_last_required', () => pkgOf([track('GT-A', 1, [...base(), S('1.2.1')])])],
-    ['checkpoint_group_size', () => pkgOf([track('GT-A', 1, [S('1.1.1'), S('1.1.2'), S('1.1.3'), CP, S('1.1.4'), S('2.1.1'), S('2.1.2'), S('2.1.4'), CP])])],
+    ['checkpoint_last_required', () => pkgOf([track('GT-A', 1, [...base(), S('1.2.3')])])],
+    ['checkpoint_group_size', () => pkgOf([track('GT-A', 1, [S('1.1.1'), S('1.1.2'), S('1.2.1'), CP, S('1.2.2'), S('2.1.1'), S('2.1.2'), S('2.1.4'), CP])])],
     [
       'sprint_slot_required',
       () =>
         pkgOf([
-          track('GT-A', 1, [S('1.1.1', { week_no: 1, day_no: 1 }), S('1.1.2', { week_no: 1, day_no: 2 }), S('1.1.3', { week_no: 1, day_no: 3 }), S('1.1.4'), CP], { layout: 'SPRINT' }),
+          track('GT-A', 1, [S('1.1.1', { week_no: 1, day_no: 1 }), S('1.1.2', { week_no: 1, day_no: 2 }), S('1.2.1', { week_no: 1, day_no: 3 }), S('1.2.2'), CP], { layout: 'SPRINT' }),
         ]),
     ],
-    ['slot_not_allowed', () => pkgOf([track('GT-A', 1, [S('1.1.1', { week_no: 1, day_no: 1 }), S('1.1.2'), S('1.1.3'), S('1.1.4'), CP])])],
+    ['slot_not_allowed', () => pkgOf([track('GT-A', 1, [S('1.1.1', { week_no: 1, day_no: 1 }), S('1.1.2'), S('1.2.1'), S('1.2.2'), CP])])],
     [
       'sprint_slot_order',
       () =>
@@ -147,7 +147,7 @@ describe('AC-14: validator konten jalur (fixture positif dan satu fixture negati
           track(
             'GT-A',
             1,
-            [S('1.1.1', { week_no: 1, day_no: 1 }), S('1.1.2', { week_no: 1, day_no: 2 }), S('1.1.3', { week_no: 1, day_no: 2 }), S('1.1.4', { week_no: 1, day_no: 3 }), CP],
+            [S('1.1.1', { week_no: 1, day_no: 1 }), S('1.1.2', { week_no: 1, day_no: 2 }), S('1.2.1', { week_no: 1, day_no: 2 }), S('1.2.2', { week_no: 1, day_no: 3 }), CP],
             { layout: 'SPRINT' },
           ),
         ]),
@@ -187,7 +187,7 @@ describe('AC-14: validator konten jalur (fixture positif dan satu fixture negati
     expect(codesOf(parseContentPackage(list))).toEqual([]);
     expect(parseContentPackage(list).ok).toBe(true);
     const sprint = pkgOf([
-      track('GT-B', 2, [S('1.1.3', { week_no: 1, day_no: 1 }), S('1.1.4', { week_no: 1, day_no: 2 }), S('2.1.1', { week_no: 1, day_no: 3 }), S('2.1.2', { week_no: 1, day_no: 4 }), CP], { layout: 'SPRINT' }),
+      track('GT-B', 2, [S('1.2.1', { week_no: 1, day_no: 1 }), S('1.2.2', { week_no: 1, day_no: 2 }), S('2.1.1', { week_no: 1, day_no: 3 }), S('2.1.2', { week_no: 1, day_no: 4 }), CP], { layout: 'SPRINT' }),
     ]);
     expect(parseContentPackage(sprint).ok).toBe(true);
     const variants = { contract_version: '1.2', sub_modules: [subItem({ materials_variants: [{ style: 'PRACTICE_FIRST', article_markdown: '# A' }, { style: 'CASE_BASED', article_markdown: '# B' }] })] };

@@ -131,7 +131,7 @@ const sub = (tier, module, code, title, category, p, mini, audio) => ({
 });
 
 const subModules = [
-  sub(1, '1.3', '1.3.2', 'E2E Reading Dasar (sintetis)', 'READING', 'X132'),
+  sub(1, '1.5', '1.5.2', 'E2E Reading Dasar (sintetis)', 'READING', 'X132'),
   sub(2, '2.3', '2.3.2', 'E2E Listening Menengah (sintetis)', 'READING', 'X232', undefined, true),
   sub(3, '3.4', '3.4.1', 'E2E Speaking Part 1 (sintetis)', 'SPEAKING', 'X341', {
     task_type: 'AI_SHORT_SPEAKING',
@@ -172,8 +172,8 @@ const content = {
   assessment_sets: [
     {
       set_type: 'SKIP_MODULE_TEST',
-      title: 'E2E Skip Modul 1.3 (Reading, 2 teks)',
-      module_code: '1.3',
+      title: 'E2E Skip Modul 1.5 (Reading, 2 teks)',
+      module_code: '1.5',
       time_limit_seconds: 600,
       pass_percent: 85,
       reading_passage_markdown: PASSAGE,

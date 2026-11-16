@@ -46,6 +46,16 @@ The band7_rewrite must be a complete improved essay on the same prompt.`;
 const MINI_TASK = `
 This is a short Writing practice mini-task, not a full exam task. Judge it against the task prompt, be proportionate to its length, and do not penalise it for being shorter than 150/250 words.`;
 
+/**
+ * Petunjuk tambahan pada pesan pengguna (ADR-004 addendum 2026-11-11), divalidasi pada benchmark putaran 3-4
+ * dengan gpt-oss-20b: `text` mencegah komentar placeholder ("K1", "komentar1"); `calib` menekan skor yang melambung.
+ * Dipasang di akhir pesan pengguna (bukan system prompt) sesuai posisi saat divalidasi.
+ */
+export const WRITING_USER_HINTS =
+  '\n\nFORMAT RULE: Every comment_id, strengths_id, improvements_id and reason_id value must be a complete, natural Indonesian sentence of at least 8 words. Never output placeholders or identifiers such as "K1", "komentar1" or "T1-1".' +
+  '\n\nCOMMENT QUALITY: Each comment_id must state a concrete judgement about that criterion and point to specific evidence from the student\'s response (a quoted phrase, a missing bullet point, a repeated error). Never write a bare label such as "Komentar mengenai pencapaian tugas" and never begin a comment with the word "Komentar" or "Keterangan".' +
+  '\n\nCALIBRATION: Score like a strict, experienced IELTS examiner. Most candidates score between 5.0 and 7.0. Band 8 or 9 is extremely rare and requires near-flawless, natural, sophisticated writing; never give above 7.5 to a response that contains noticeable errors, a formulaic structure or unnatural phrasing.';
+
 export type WritingKind = 'WRITING_TASK1' | 'WRITING_TASK2' | 'MINI_TASK_WRITING' | (string & {});
 
 export function buildWritingSystemPrompt(kind: WritingKind): string {

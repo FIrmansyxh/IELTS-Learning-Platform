@@ -3,7 +3,7 @@ import { BASE_URL, createProfile, deleteProfile, signIn, type TestProfile } from
 import { answerVisible, completeSubModule, confirmEnd, ensureExamContent, examIds, expectNoHorizontalScroll, solve, unlockSafe, type ApiQuestion, type ExamIds } from './helpers/exams';
 
 // SPEC-014 Boss Stage (paket sintetis: Tier 1 gate PERCENT 80 dan Tier 2 gate BAND 5.0; L 4 soal, R 6 soal, W 1, S 1).
-// Prasyarat tier: sub-modul sintetis 1.3.2 (Tier 1) / 2.3.2 (Tier 2) diselesaikan lewat API. Alur UI penuh pada profil "pass";
+// Prasyarat tier: sub-modul sintetis 1.5.2 (Tier 1) / 2.3.2 (Tier 2) diselesaikan lewat API. Alur UI penuh pada profil "pass";
 // jalur gagal, cooldown, dan gate BAND lewat API + verifikasi UI hasil. Dijalankan lewat tests/e2e/helpers/run-e2e.mjs.
 const orig = { headers: { Origin: BASE_URL } };
 let ids: ExamIds;
@@ -83,7 +83,7 @@ test('UI intro Boss memuat blok Boss: daftar section, durasi, penjelasan gerbang
   test.setTimeout(75_000);
   await signIn(context, await fresh('boss-intro'));
   ids = await examIds(page.request);
-  await completeSubModule(page.request, '1.3.2');
+  await completeSubModule(page.request, '1.5.2');
   const intro = (await (await page.request.get(`/api/v1/exams/${ids.bossT1}/intro`)).json()) as { data: { boss: { advisory_note: string } } };
   const advisory = intro.data.boss.advisory_note;
   await page.goto(`/ujian/mulai/${ids.bossT1}`);
@@ -115,7 +115,7 @@ test.describe('Boss Tier 1 (gate PERCENT 80): alur UI penuh, lulus', () => {
   test('syarat terpenuhi: intro memuat 4 section berurutan L, R, W, S dan gerbang PERCENT 80; UI intro menampilkan daftar section + gerbang + catatan', async ({ page }) => {
     test.setTimeout(120_000);
     ids = await examIds(page.request);
-    await completeSubModule(page.request, '1.3.2');
+    await completeSubModule(page.request, '1.5.2');
     const intro = (await (await page.request.get(`/api/v1/exams/${ids.bossT1}/intro`)).json()) as {
       data: { available: boolean; requires_audio: boolean; boss: { gate: { type: string; value: number }; sections: Array<{ skill: string; counts_toward_gate: boolean }>; total_time_limit_seconds: number; advisory_note: string } };
     };
@@ -315,7 +315,7 @@ test('Boss gagal (API): 0% < 80% -> Belum lulus, Tier 2 tetap terkunci, cooldown
   const p = await fresh('boss-fail');
   await signIn(context, p);
   ids = await examIds(page.request);
-  await completeSubModule(page.request, '1.3.2');
+  await completeSubModule(page.request, '1.5.2');
   const attemptId = await bossViaApi(page.request, ids.bossT1, true);
   await page.goto(`/ujian/${attemptId}/hasil`);
   const view = page.getByTestId('boss-result-view');

@@ -11,14 +11,25 @@ export interface AiJobStatusProps {
   status: SubmissionStatusName;
   onRetry?: () => void;
   onSelfAssess?: () => void;
+  /** Speaking: rekam jawaban baru (dipakai untuk galat audio yang tidak dapat diulang). */
+  onRerecord?: () => void;
   isRetrying?: boolean;
 }
+
+/** Galat rekaman Speaking (SPEC-013) yang tidak dapat di-retry; learner merekam ulang. */
+const AUDIO_ERRORS: Record<string, string> = {
+  STT_EMPTY: 'Suara tidak terdeteksi. Rekam ulang dengan mikrofon lebih dekat.',
+  AUDIO_TOO_SHORT: 'Rekaman terlalu pendek (minimal 3 detik). Rekam ulang.',
+  AUDIO_TOO_LONG: 'Rekaman terlalu panjang (maksimal 2,5 menit). Rekam ulang lebih ringkas.',
+  AUDIO_UNREADABLE: 'Rekaman tidak dapat dibaca. Rekam ulang.',
+};
 
 export function AiJobStatus({
   job,
   status,
   onRetry,
   onSelfAssess,
+  onRerecord,
   isRetrying = false,
 }: AiJobStatusProps) {
   if (status === 'FALLBACK_SELF_ASSESSMENT') {
@@ -50,7 +61,8 @@ export function AiJobStatus({
 
   if (status === 'FAILED') {
     const attempts = job?.attempt ?? 0;
-    const canRetry = attempts < 3 && !!onRetry;
+    const audioError = job?.error_code ? AUDIO_ERRORS[job.error_code] : undefined;
+    const canRetry = attempts < 3 && !!onRetry && !audioError;
 
     return (
       <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-6 shadow-xs flex flex-col gap-4">
@@ -63,7 +75,9 @@ export function AiJobStatus({
           <div>
             <h4 className="font-semibold text-destructive text-sm">{id.ai.status.failed}</h4>
             <p className="text-sm text-muted-foreground mt-1">
-              {job?.error_code === 'LLM_TIMEOUT'
+              {audioError
+                ? audioError
+                : job?.error_code === 'LLM_TIMEOUT'
                 ? id.ai.status.failedTimeout
                 : 'Layanan evaluasi sedang mengalami kendala. Anda dapat mencoba lagi atau melakukan penilaian mandiri.'}
             </p>
@@ -74,6 +88,11 @@ export function AiJobStatus({
           {onSelfAssess && (
             <Button onClick={onSelfAssess} variant="outline" size="sm">
               {id.ai.actions.selfAssess}
+            </Button>
+          )}
+          {onRerecord && (
+            <Button onClick={onRerecord} variant={audioError ? 'default' : 'outline'} size="sm">
+              Rekam ulang
             </Button>
           )}
           {canRetry && (

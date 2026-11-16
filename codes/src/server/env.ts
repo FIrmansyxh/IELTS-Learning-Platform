@@ -53,6 +53,10 @@ const baseSchema = z.object({
   OLLAMA_KEEP_ALIVE: z.string().default('5m'),
   STT_DRIVER: z.enum(['whisper', 'mock']).default('whisper'),
   STT_BASE_URL: z.string().url().optional(),
+  STT_MODEL: z.string().optional(),
+  WHISPER_BIN: z.string().optional(),
+  WHISPER_MODEL_PATH: z.string().optional(),
+  WHISPER_ARGS: z.string().optional(),
   AI_JOB_TIMEOUT_SEC: intRange(180, 10, 3600),
   AI_NUM_PREDICT: intRange(1500, 100, 8192),
 });

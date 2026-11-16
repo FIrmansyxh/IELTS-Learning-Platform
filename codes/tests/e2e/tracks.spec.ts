@@ -28,10 +28,10 @@ function trackCard(page: Page, title: string) {
   return picker(page).locator('[aria-pressed]').filter({ hasText: title });
 }
 
-test('pemilih jalur: empat jalur tampil, ganti jalur aktif ke GT-WRITING', async ({ page }) => {
+test('pemilih jalur: lima jalur tampil, ganti jalur aktif ke GT-WRITING', async ({ page }) => {
   await page.goto('/peta');
   await expect(picker(page)).toBeVisible();
-  for (const title of ['Terstruktur Tier 1-4', 'Intensif Writing GT', 'Intensif Reading GT', 'Sprint 4 Minggu']) {
+  for (const title of ['Terstruktur Tier 1-4', 'Intensif Writing GT', 'Intensif Reading GT', 'Sprint 4 Minggu', 'Fondasi Grammar (Basic ke Intermediate)']) {
     await expect(trackCard(page, title)).toBeVisible();
   }
   // Bawaan: GT-STRUCT aktif.

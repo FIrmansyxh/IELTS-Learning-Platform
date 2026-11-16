@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { BASE_URL, createProfile, deleteProfile, signIn, type TestProfile } from './helpers/app';
 import { answerVisible, confirmEnd, ensureExamContent, examIds, expectNoHorizontalScroll, keyFor, type ExamIds } from './helpers/exams';
 
-// SPEC-010 Reading split-screen + penyorot (ujian Skip Modul 1.3 = Reading 2 teks, 6 soal; paket sintetis).
+// SPEC-010 Reading split-screen + penyorot (ujian Skip Modul 1.5 = Reading 2 teks, 6 soal; paket sintetis).
 // Dijalankan lewat tests/e2e/helpers/run-e2e.mjs. Desktop: panel terbelah; mobile 375px: tab "Teks | Soal".
 // Tes saling independen (profil + attempt dibagi lewat state modul); kegagalan satu tes tidak membatalkan yang lain.
 
@@ -71,7 +71,7 @@ const lsGet = (page: Page, key: string) => page.evaluate((k) => localStorage.get
 test('intro ujian lalu mulai: ujian EXAM berjalan dengan teks, soal, header timer dan tombol Akhiri', async ({ page }) => {
   ids = await examIds(page.request);
   await page.goto(`/ujian/mulai/${ids.skipReading}`);
-  await expect(page.getByRole('heading', { name: 'E2E Skip Modul 1.3 (Reading, 2 teks)' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'E2E Skip Modul 1.5 (Reading, 2 teks)' })).toBeVisible();
   await expect(page.getByText('6 soal - 10 menit')).toBeVisible();
   await page.getByRole('button', { name: 'Mulai Ujian' }).click();
   await expect(page).toHaveURL(/\/ujian\/[0-9a-f-]{36}$/, { timeout: 30_000 });

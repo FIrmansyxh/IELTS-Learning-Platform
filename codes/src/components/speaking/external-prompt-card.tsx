@@ -11,7 +11,15 @@ import { ExternalScoreForm, type ExternalScoreContext } from './external-score-f
  * Kartu latihan Speaking (ADR-004): penilaian otomatis ditunda, jadi pengguna menyalin prompt ke
  * AI suara pihak ketiga (Claude, ChatGPT, Gemini) dan menjawab dengan mikrofon di sana.
  */
-export function SpeakingExternalPromptCard({ prompt, context }: { prompt: string; context?: ExternalScoreContext }) {
+export function SpeakingExternalPromptCard({
+  prompt,
+  context,
+  onSaved,
+}: {
+  prompt: string;
+  context?: ExternalScoreContext;
+  onSaved?: () => void;
+}) {
   const t = id.quiz.speakingExternal;
   const [copied, setCopied] = React.useState(false);
 
@@ -48,7 +56,7 @@ export function SpeakingExternalPromptCard({ prompt, context }: { prompt: string
         </pre>
       </details>
       <p className="text-xs text-muted-foreground">{t.disclaimer}</p>
-      {context ? <ExternalScoreForm context={context} /> : null}
+      {context ? <ExternalScoreForm context={context} onSaved={onSaved} /> : null}
     </div>
   );
 }

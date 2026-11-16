@@ -635,6 +635,14 @@ describe('LLAMACPP_ARGS tidak boleh menimpa bind loopback (M-5)', () => {
     const plan = planLlama({ AI_ENABLED: 'true', LLAMACPP_MODEL_PATH: '/m.gguf', LLAMACPP_ARGS: '--device Vulkan0 -ngl 99' });
     expect(plan.kind).toBe('start');
   });
+  it('-c/--ctx-size di LLAMACPP_ARGS menggantikan konteks default 4096 (tanpa flag ganda)', () => {
+    for (const extra of ['--n-cpu-moe 20 -c 6144', '--ctx-size 6144', '--ctx-size=6144']) {
+      const plan = planLlama({ AI_ENABLED: 'true', LLAMACPP_MODEL_PATH: '/m.gguf', LLAMACPP_ARGS: extra });
+      expect(plan.kind).toBe('start');
+      expect(plan.args).not.toContain('4096');
+      expect(plan.args.filter((a: string) => a === '-c' || a.startsWith('--ctx-size'))).toHaveLength(1);
+    }
+  });
   it('peluncur: tidak ada proses llama, satu peringatan, aplikasi tetap naik', async () => {
     const h = harness({ env: { AI_ENABLED: 'true', LLAMACPP_MODEL_PATH: '/m.gguf', LLAMACPP_ARGS: '--host 0.0.0.0' } });
     const code = await runUntilServerExit(h, 0);
@@ -659,5 +667,51 @@ describe('openBrowser Windows (L-2)', () => {
     expect(seen[0].args).toEqual(['/c', 'start', '""', 'http://127.0.0.1:3005']);
     await openBrowser('http://x', { platform: 'linux', spawn });
     expect(seen[1].opts.windowsVerbatimArguments).toBeUndefined();
+  });
+});
+
+describe('whisper-server opsional (ADR-004 Addendum 3, SPEC-013 addendum 2026-11-11)', () => {
+  const on = { AI_ENABLED: 'true', SPEAKING_AI_ENABLED: 'true', STT_DRIVER: 'whisper' };
+
+  it('skip bila AI, Speaking, atau driver STT tidak aktif', () => {
+    for (const env of [{}, { ...on, AI_ENABLED: 'false' }, { ...on, SPEAKING_AI_ENABLED: 'false' }, { ...on, STT_DRIVER: 'mock' }]) {
+      expect(lib.planWhisper(env).kind).toBe('skip');
+    }
+  });
+
+  it('warn bila STT_BASE_URL bukan loopback atau WHISPER_ARGS memuat --host/--port', () => {
+    expect(lib.planWhisper({ ...on, STT_BASE_URL: 'http://10.0.0.2:8081', WHISPER_MODEL_PATH: '/m.bin' })).toMatchObject({ kind: 'warn', reason: expect.stringContaining('loopback') });
+    expect(lib.planWhisper({ ...on, WHISPER_MODEL_PATH: '/m.bin', WHISPER_ARGS: '--port 9000' }).kind).toBe('warn');
+    expect(lib.planWhisper({ ...on, WHISPER_MODEL_PATH: '/m.bin', WHISPER_ARGS: '--host=0.0.0.0' }).kind).toBe('warn');
+  });
+
+  it('start: argumen dikunci ke 127.0.0.1, port dari STT_BASE_URL, bahasa en, lalu WHISPER_ARGS', () => {
+    const plan = lib.planWhisper({ ...on, STT_BASE_URL: 'http://127.0.0.1:8081', WHISPER_BIN: 'C:\w\whisper-server.exe', WHISPER_MODEL_PATH: 'C:\w\ggml-small.en.bin', WHISPER_ARGS: '-t  8' });
+    expect(plan).toMatchObject({ kind: 'start', bin: 'C:\w\whisper-server.exe', healthUrl: 'http://127.0.0.1:8081/health', missingModel: false });
+    expect(plan.args).toEqual(['-m', 'C:\w\ggml-small.en.bin', '--host', '127.0.0.1', '--port', '8081', '-l', 'en', '-t', '8']);
+    expect(lib.planWhisper(on)).toMatchObject({ kind: 'start', missingModel: true, args: [] });
+  });
+
+  it('peluncur: whisper-server dijalankan sekali dengan shell:false dan dimatikan saat berhenti', async () => {
+    const h = harness({
+      env: { ...on, WHISPER_BIN: 'whisper-server', WHISPER_MODEL_PATH: '/m/ggml-small.en.bin' },
+      behave: (cmd) => (cmd === 'whisper-server' ? 'hang' : undefined),
+    });
+    await runUntilServerExit(h);
+    const w = h.calls.filter((c) => c.cmd === 'whisper-server');
+    expect(w).toHaveLength(1);
+    expect(w[0]!.opts.shell).toBe(false);
+    expect(h.outText()).toContain('whisper-server dijalankan');
+    expect(w[0]!.child.killed.length).toBeGreaterThan(0);
+  });
+
+  it('peluncur: model belum diisi -> satu peringatan Penilai Speaking, aplikasi tetap naik', async () => {
+    const h = harness({ env: on });
+    const code = await runUntilServerExit(h, 0);
+    expect(h.calls.filter((c) => c.cmd === 'whisper-server')).toHaveLength(0);
+    const warns = h.err.filter((l) => l.includes('Penilai Speaking tidak dinyalakan:'));
+    expect(warns).toHaveLength(1);
+    expect(warns[0]).toContain('WHISPER_MODEL_PATH');
+    expect(code).toBe(0);
   });
 });

@@ -39,6 +39,22 @@ export interface SelectionOptions {
   keepOrder: boolean;
   /** Hanya untuk pengujian: seed tetap. Produksi selalu memakai seed CSPRNG baru. */
   seed?: string;
+  /**
+   * Soal yang dilayani pada attempt sebelumnya untuk set yang sama (terbaru lebih dulu). Saat `limit` memotong pool,
+   * soal yang belum pernah muncul diutamakan, lalu yang paling lama tidak muncul, supaya pengulangan drill tidak
+   * menyajikan soal yang sama terus.
+   */
+  recent?: readonly (readonly string[])[];
+}
+
+/** Peringkat "kesegaran" soal: belum pernah muncul = tertinggi; makin baru muncul makin rendah. */
+const NEVER_SEEN = Number.MAX_SAFE_INTEGER;
+function freshnessOf(recent: readonly (readonly string[])[] | undefined): (id: string) => number {
+  const lastSeen = new Map<string, number>();
+  (recent ?? []).forEach((ids, attemptsAgo) => {
+    for (const qid of ids) if (!lastSeen.has(qid)) lastSeen.set(qid, attemptsAgo);
+  });
+  return (qid) => lastSeen.get(qid) ?? NEVER_SEEN;
 }
 
 /**
@@ -112,7 +128,14 @@ export function buildInitialState(
 
   // 2. Tentukan indeks dan terapkan batas limit bila ada
   let idx = pool.map((_, i) => i);
-  if (opts.limit !== null && idx.length > opts.limit) idx = shuffled(idx, rng).slice(0, opts.limit);
+  if (opts.limit !== null && idx.length > opts.limit) {
+    // Acak dulu, lalu urutkan stabil menurut kesegaran: soal yang belum/lama tidak muncul terpilih lebih dulu,
+    // dan urutan acak tetap menentukan pilihan di antara soal yang sama segarnya.
+    const freshness = freshnessOf(opts.recent);
+    idx = shuffled(idx, rng)
+      .sort((a, b) => freshness(pool[b]!.question_id) - freshness(pool[a]!.question_id))
+      .slice(0, opts.limit);
+  }
 
   // 3. Acak urutan susunan secara total bila keepOrder = false
   idx = opts.keepOrder ? [...idx].sort((a, b) => a - b) : shuffled(idx, rng);

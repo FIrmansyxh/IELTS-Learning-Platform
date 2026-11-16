@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { Sparkles } from 'lucide-react';
 import { useMe } from '@/hooks/use-auth';
 import { fmt, id } from '@/i18n/id';
 import { placementApi } from '@/lib/api/placement';
@@ -26,6 +27,53 @@ import { RadarCompetencyCard } from '@/components/dashboard/radar-competency-car
 import { TierProgressCard } from '@/components/dashboard/tier-progress-card';
 import { CrownCollectionGrid } from '@/components/dashboard/crown-collection-grid';
 import { RecentExamHistory } from '@/components/dashboard/recent-exam-history';
+
+type TimeKey = keyof typeof id.home.timeGreeting;
+
+function timeKey(hour: number): TimeKey {
+  if (hour >= 4 && hour < 11) return 'morning';
+  if (hour >= 11 && hour < 15) return 'day';
+  if (hour >= 15 && hour < 19) return 'afternoon';
+  return 'night';
+}
+
+/** Sapaan sesuai jam lokal; dihitung setelah mount agar tidak berbeda dengan HTML server. */
+function useTimeGreeting(): string | null {
+  const [greeting, setGreeting] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    setGreeting(id.home.timeGreeting[timeKey(new Date().getHours())]);
+  }, []);
+  return greeting;
+}
+
+/** Hero sapaan bergradasi (design-system 11.2). */
+function Hero({ name }: { name: string | null }) {
+  const timeGreeting = useTimeGreeting();
+  return (
+    <section
+      aria-labelledby="home-greeting"
+      className="animate-fade-up relative isolate overflow-hidden rounded-[1.25rem] bg-gradient-hero px-6 py-6 text-white shadow-brand sm:px-8 sm:py-7"
+    >
+      {/* Ornamen dekoratif: cahaya melayang pelan (mati pada reduced-motion). */}
+      <span
+        aria-hidden="true"
+        className="animate-float absolute -top-16 -right-10 -z-10 size-56 rounded-full bg-white/15 blur-2xl motion-reduce:animate-none"
+      />
+      <span
+        aria-hidden="true"
+        className="animate-float absolute -bottom-20 left-1/3 -z-10 size-48 rounded-full bg-cyan-300/25 blur-3xl [animation-delay:-4s] motion-reduce:animate-none"
+      />
+      <p className="flex min-h-5 items-center gap-1.5 text-sm font-medium text-white/90">
+        <Sparkles className="size-4" aria-hidden="true" />
+        <span>{timeGreeting ?? '\u00a0'}</span>
+      </p>
+      <h1 id="home-greeting" className="mt-1.5 text-3xl font-extrabold tracking-tight sm:text-4xl">
+        {name ? fmt(id.home.greeting, { name }) : id.home.title}
+      </h1>
+      <p className="mt-2 max-w-xl text-[0.95rem] leading-relaxed text-white/90">{id.home.heroSubtitle}</p>
+    </section>
+  );
+}
 
 /**
  * Dashboard `/` (SPEC-007, C-15): bento grid action-first. Baris atas: Lanjutkan Belajar (aksi utama) + streak/target
@@ -54,9 +102,7 @@ export function Dashboard() {
 
   return (
     <div className="grid gap-6">
-      <h1 className="text-3xl font-bold">
-        {me.data ? fmt(id.home.greeting, { name: me.data.display_name }) : id.home.title}
-      </h1>
+      <Hero name={me.data?.display_name ?? null} />
 
       {/* Card Hasil Placement Menunggu (jika ada) */}
       {pending && (
@@ -77,7 +123,7 @@ export function Dashboard() {
 
       {/* Bento: dua kolom yang tingginya mengikuti isi (tanpa meregangkan card). Di bawah xl menjadi satu kolom dengan urutan `order`. */}
       <div id="dashboard-slots" data-slot="dashboard-slots" className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
-        <div className="contents xl:grid xl:gap-4">
+        <div className="stagger-in contents xl:grid xl:gap-4">
           <ResumeLearningCard
             placementAvailable={Boolean(placementQ.data?.available)}
             className="order-1 xl:order-none"
@@ -91,7 +137,7 @@ export function Dashboard() {
             />
           )}
         </div>
-        <div className="contents xl:grid xl:gap-4">
+        <div className="stagger-in contents xl:grid xl:gap-4">
           <StreakHero
             loading={statsQ.isPending}
             data={

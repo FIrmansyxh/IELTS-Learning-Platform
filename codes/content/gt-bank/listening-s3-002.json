@@ -1,0 +1,192 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-LIS-S3-002",
+      "bank_kind": "LISTENING_GT_S3",
+      "title": "Listening GT Section 3: Diskusi Pelatihan Keamanan Pangan Hotel",
+      "skill": "LISTENING",
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "listening_asset_code": "gt-listening/gt-l-s3-002",
+      "tags": [
+        "listening",
+        "section-3",
+        "discussion",
+        "workplace-training"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTL3-011",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 3,
+          "prompt": "Why must the staff complete the food safety course?",
+          "difficulty": 2,
+          "explanation_id": "Keluhan soal prasmanan dingin bukan alasannya: \"The real reason is that the city council has introduced a new regulation.\"",
+          "options": [
+            "A guest complained about the cold buffet",
+            "The city council introduced a new regulation",
+            "The hotel is opening a new restaurant",
+            "The insurance company requires it"
+          ],
+          "correct_answers": [
+            "The city council introduced a new regulation"
+          ]
+        },
+        {
+          "question_id": "Q-GTL3-012",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 3,
+          "prompt": "Complete the notes. Write ONE WORD AND/OR A NUMBER.\n\nNumber of online modules: ________",
+          "difficulty": 2,
+          "explanation_id": "Dulu ada delapan modul, tetapi sekarang \"it's six modules in total\".",
+          "max_words": 1,
+          "correct_answers": [
+            "6",
+            "six"
+          ]
+        },
+        {
+          "question_id": "Q-GTL3-013",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 3,
+          "prompt": "Deadline for the online modules: the end of ________",
+          "difficulty": 2,
+          "explanation_id": "Linda berkata: \"you need to finish all of them by the end of February\" karena inspeksi awal Maret.",
+          "max_words": 1,
+          "correct_answers": [
+            "February"
+          ]
+        },
+        {
+          "question_id": "Q-GTL3-014",
+          "question_type": "MCQ_MULTI",
+          "skill": "LISTENING",
+          "section_no": 3,
+          "prompt": "Choose TWO letters. Which TWO topics did Jenny find difficult?",
+          "difficulty": 3,
+          "explanation_id": "Jenny berkata: \"I agree about allergens. And I struggled with temperature control, too.\" Modul kebersihan dan pengendalian hama dianggap mudah.",
+          "options": [
+            "Allergens",
+            "Cleaning",
+            "Temperature control",
+            "Pest control",
+            "Personal hygiene"
+          ],
+          "correct_answers": [
+            "Allergens",
+            "Temperature control"
+          ]
+        },
+        {
+          "question_id": "Q-GTL3-015",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 3,
+          "prompt": "The practical session will be held in the ________ kitchen.",
+          "difficulty": 3,
+          "explanation_id": "Dapur utama terlalu sibuk, jadi dipakai \"the banqueting kitchen on the lower floor\".",
+          "max_words": 1,
+          "correct_answers": [
+            "banqueting",
+            "banquet"
+          ]
+        },
+        {
+          "question_id": "Q-GTL3-016",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "LISTENING",
+          "section_no": 3,
+          "prompt": "Who will do each of the following tasks before the practical session?",
+          "difficulty": 3,
+          "explanation_id": "Linda memesan sesi karena harus menandatangani kontrak, Jenny mencetak lembar log suhu (\"I can print the temperature log sheets\"), dan Marcus memperbarui kartu alergen (\"I'll update the allergen cards on the menu\").",
+          "matching": {
+            "left": [
+              "Book the practical session",
+              "Print the temperature log sheets",
+              "Update the allergen cards on the menu"
+            ],
+            "right": [
+              "Linda",
+              "Marcus",
+              "Jenny"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            0,
+            2,
+            1
+          ],
+          "points": 3
+        },
+        {
+          "question_id": "Q-GTL3-017",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 3,
+          "prompt": "Pass mark for the final test: ________ percent",
+          "difficulty": 2,
+          "explanation_id": "Nilai lulus dulu 75 persen, tetapi dinaikkan: \"now you need eighty percent to pass\".",
+          "max_words": 1,
+          "correct_answers": [
+            "80",
+            "eighty",
+            "80%"
+          ]
+        },
+        {
+          "question_id": "Q-GTL3-018",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 3,
+          "prompt": "What does Linda say about the certificate?",
+          "difficulty": 2,
+          "explanation_id": "Linda menjelaskan: \"You'll need to renew it every three years\", dan biaya perpanjangan ditanggung hotel.",
+          "options": [
+            "It is valid for life",
+            "It must be renewed every three years",
+            "Staff must pay for the renewal themselves",
+            "It can only be used at this hotel"
+          ],
+          "correct_answers": [
+            "It must be renewed every three years"
+          ]
+        },
+        {
+          "question_id": "Q-GTL3-019",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 3,
+          "prompt": "Bonus for passing on the first attempt: $________",
+          "difficulty": 2,
+          "explanation_id": "Manajemen setuju memberi \"a one-time bonus of one hundred and fifty dollars\".",
+          "max_words": 1,
+          "correct_answers": [
+            "150",
+            "$150",
+            "one hundred and fifty",
+            "150 dollars"
+          ]
+        },
+        {
+          "question_id": "Q-GTL3-020",
+          "question_type": "SHORT_ANSWER",
+          "skill": "LISTENING",
+          "section_no": 3,
+          "prompt": "Contact for questions about the course: Mr ________ (Human Resources)",
+          "difficulty": 1,
+          "explanation_id": "Nama kontak dieja: \"O-K-A-F-O-R\".",
+          "max_words": 1,
+          "correct_answers": [
+            "Okafor"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -8,7 +8,7 @@ const fill = (n, prompt, answers, explanation_id, max_words = 1) =>
 const sub = {
   meta: {
     tier_number: 1,
-    module_code: '1.1',
+    module_code: '1.3',
     module_category: 'GRAMMAR',
     sub_module_title: 'Modals of Ability, Obligation & Possibility (can, must, should, might)',
   },
@@ -83,6 +83,21 @@ const sub = {
         options: ['He cans swim very fast.', 'She must have forgotten the key.', 'They must to leave now.', 'That can\'t be true.'],
         correct_answers: ['She must have forgotten the key.', 'That can\'t be true.'],
       }),
+      mcq(22, 'You ___ hurry, or you will miss the train.', ['had better', 'have better', 'had better to', 'would better'], 'had better', 'Saran kuat yang punya konsekuensi memakai had better + V1, tanpa to.'),
+      mcq(23, 'Which is the MOST formal way to ask for permission?', ['Can I come in?', 'May I come in?', 'I come in?', 'Do I can come in?'], 'May I come in?', '"May" adalah pilihan paling sopan/formal untuk meminta izin; "can" bernada biasa.'),
+      mcq(24, 'I ___ live in Surabaya, but now I live in Jakarta.', ['use to', 'used to', 'am used to', 'would to'], 'used to', '"Used to + V1" menyatakan keadaan atau kebiasaan lampau yang sudah tidak berlaku.'),
+      mcq(25, 'He ___ have finished already. He only started five minutes ago.', ['must', 'can\'t', 'should', 'has to'], 'can\'t', 'Dugaan mustahil tentang masa lampau: can\'t + have + V3.'),
+      mcq(26, 'I ___ vote next year when I turn seventeen.', ['will can', 'will be able to', 'can to', 'am can'], 'will be able to', 'Dua modal tidak dipakai bersamaan. Kemampuan di masa depan memakai will be able to.'),
+      g(27, {
+        question_type: 'ERROR_RECOGNITION',
+        prompt: 'Klik kata yang salah.',
+        explanation_id: 'Modal tidak pernah mendapat -s, juga untuk subjek she. Seharusnya: She must leave early today.',
+        tokens: ['She', 'musts', 'leave', 'early', 'today.'],
+        correct_answers: [1],
+      }),
+      fill(28, 'Lengkapi dengan satu kata: You ___ to see a doctor about that cough. (saran; sama artinya dengan should)', ['ought'], '"Ought to" bermakna sama dengan should untuk saran umum, dan merupakan pengecualian yang memakai to.'),
+      fill(29, 'Lengkapi dengan bentuk yang benar dari kata kerja dalam kurung: He should ___ harder for the exam. (studied)', ['study'], 'Setelah modal, kata kerja selalu V1: should study, bukan should studied.'),
+      fill(30, 'Lengkapi dengan satu kata: She may ___ gone home early yesterday. (dugaan masa lampau)', ['have'], 'Dugaan tentang masa lampau memakai modal + have + V3: may have gone.'),
     ],
   },
 };

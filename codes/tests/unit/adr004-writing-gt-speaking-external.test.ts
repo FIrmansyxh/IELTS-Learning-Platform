@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { buildWritingSystemPrompt } from '@/server/ai/writing-prompts';
+import { buildWritingSystemPrompt, WRITING_USER_HINTS } from '@/server/ai/writing-prompts';
 import { snapBandsToHalf } from '@/server/ai/pipeline';
 import { buildSpeakingExternalPrompt } from '@/lib/speaking-external-prompt';
 import { LlamaCppClient, getLlmClient, setLlmClient } from '@/server/ai/llm';
@@ -17,6 +17,15 @@ describe('ADR-004: prompt Writing General Training', () => {
   it('Task 2 = esai 250 kata; mini-task tidak dihukum karena pendek', () => {
     expect(buildWritingSystemPrompt('WRITING_TASK2')).toContain('250 words');
     expect(buildWritingSystemPrompt('MINI_TASK_WRITING')).toContain('do not penalise');
+  });
+});
+
+describe('ADR-004: petunjuk pengguna Writing', () => {
+  it('memuat aturan format komentar dan kalibrasi band', () => {
+    expect(WRITING_USER_HINTS).toContain('complete, natural Indonesian sentence');
+    expect(WRITING_USER_HINTS).toContain('"K1"');
+    expect(WRITING_USER_HINTS).toContain('Band 8 or 9 is extremely rare');
+    expect(WRITING_USER_HINTS).toContain('never begin a comment with the word "Komentar"');
   });
 });
 
@@ -85,6 +94,14 @@ describe('ADR-004: driver llama.cpp', () => {
     const body = JSON.parse((init as { body: string }).body);
     expect(body.response_format.type).toBe('json_schema');
     expect(body.messages[0].role).toBe('system');
+    // Konfigurasi yang divalidasi di benchmark (gpt-oss butuh reasoning_effort, Qwen/Gemma enable_thinking).
+    expect(body.chat_template_kwargs).toEqual({ enable_thinking: false, reasoning_effort: 'low' });
+  });
+
+  it('label model default adalah gpt-oss-20b (ADR-004 addendum 2026-11-11)', () => {
+    vi.stubEnv('LLAMACPP_MODEL_WRITING', '');
+    delete process.env.LLAMACPP_MODEL_WRITING;
+    expect(new LlamaCppClient().name).toBe('gpt-oss-20b-mxfp4');
   });
 
   it('driver default (di luar test) adalah llamacpp; "ollama" tetap bisa dipilih', () => {

@@ -52,6 +52,7 @@ export function SpeakingRecorder({
 
   // Audio level meter (0 to 10)
   const [audioLevel, setAudioLevel] = useState(0);
+  const audioLevelRef = useRef(0);
   const [isTooQuiet, setIsTooQuiet] = useState(false);
 
   // Recording state & result
@@ -77,11 +78,20 @@ export function SpeakingRecorder({
     }
   }, []);
 
-  // Clean up on unmount
+  // Lepas URL rekaman lama saat diganti atau saat komponen dilepas.
   useEffect(() => {
     return () => {
-      if (blobUrl) {
-        URL.revokeObjectURL(blobUrl);
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
+    };
+  }, [blobUrl]);
+
+  // Mikrofon dan AudioContext hanya dilepas saat komponen dilepas (bukan saat rekaman baru dibuat,
+  // agar "Rekam ulang" tetap punya stream).
+  useEffect(() => {
+    return () => {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+        mediaRecorderRef.current.onstop = null;
+        mediaRecorderRef.current.stop();
       }
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((t) => t.stop());
@@ -90,7 +100,7 @@ export function SpeakingRecorder({
         void audioContextRef.current.close().catch(() => {});
       }
     };
-  }, [blobUrl]);
+  }, []);
 
   // Request Microphone and initialize AudioContext
   const requestMic = useCallback(async () => {
@@ -138,7 +148,8 @@ export function SpeakingRecorder({
       const avg = sum / dataArray.length;
       // Map 0-255 to 0-10 level
       const level = Math.min(10, Math.round((avg / 128) * 10));
-      setAudioLevel(level);
+      audioLevelRef.current = level;
+      setAudioLevel((prev) => (prev === level ? prev : level));
 
       animId = requestAnimationFrame(checkVolume);
     };
@@ -149,7 +160,8 @@ export function SpeakingRecorder({
 
   // Prep timer
   useEffect(() => {
-    if (phase !== 'PREP') return;
+    // Timer persiapan baru berjalan setelah izin mikrofon; tanpa waktu persiapan (Part 1/3) mulai manual.
+    if (phase !== 'PREP' || !micGranted || consentOpen || prepSeconds <= 0) return;
     if (prepRemaining <= 0) {
       setPhase('COUNTDOWN_321');
       return;
@@ -158,7 +170,7 @@ export function SpeakingRecorder({
       setPrepRemaining((prev) => prev - 1);
     }, 1000);
     return () => clearInterval(timer);
-  }, [phase, prepRemaining]);
+  }, [phase, prepRemaining, micGranted, consentOpen, prepSeconds]);
 
   // Stop recording helper
   const stopRecording = useCallback(() => {
@@ -254,7 +266,7 @@ export function SpeakingRecorder({
       setRecordRemaining((prev) => prev - 1);
 
       // Check quiet level for 3 consecutive seconds
-      if (audioLevel < 2) {
+      if (audioLevelRef.current < 2) {
         quietSecondsCountRef.current += 1;
         if (quietSecondsCountRef.current >= 3) {
           setIsTooQuiet(true);
@@ -266,7 +278,7 @@ export function SpeakingRecorder({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [phase, recordRemaining, audioLevel, stopRecording]);
+  }, [phase, recordRemaining, stopRecording]);
 
   const handleStartPrepEarly = () => {
     setPhase('COUNTDOWN_321');
@@ -504,7 +516,7 @@ export function SpeakingRecorder({
                 <h4 className="text-sm font-semibold text-foreground">
                   Topik Soal
                 </h4>
-                <p className="text-sm text-foreground/90 leading-relaxed font-serif">
+                <p className="whitespace-pre-line text-sm text-foreground/90 leading-relaxed">
                   {promptText}
                 </p>
                 {cuePoints && cuePoints.length > 0 && (
@@ -543,10 +555,9 @@ export function SpeakingRecorder({
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-medium text-muted-foreground">
-                    {id.speaking.prepCountdown.replace(
-                      '{sec}',
-                      prepRemaining.toString()
-                    )}
+                    {prepSeconds > 0
+                      ? id.speaking.prepCountdown.replace('{sec}', prepRemaining.toString())
+                      : id.speaking.prepManual}
                   </span>
                 </div>
                 <Button type="button" onClick={handleStartPrepEarly}>
@@ -571,6 +582,9 @@ export function SpeakingRecorder({
           {/* PHASE 2: RECORDING */}
           {phase === 'RECORDING' && (
             <div className="flex flex-col items-center justify-center py-8 gap-6">
+              <p className="w-full whitespace-pre-line rounded-lg border border-border/80 bg-muted/20 p-4 text-sm leading-relaxed">
+                {promptText}
+              </p>
               {/* Giant Recording Button (72px) */}
               <div className="relative flex items-center justify-center">
                 <button

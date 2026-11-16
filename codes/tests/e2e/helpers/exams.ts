@@ -151,7 +151,7 @@ export async function examIds(request: APIRequestContext): Promise<ExamIds> {
   const p = await request.get('/api/v1/placement');
   const pl = (await p.json()) as { data: { assessment_set_id: string | null } };
   return {
-    skipReading: skip(1, '1.3'),
+    skipReading: skip(1, '1.5'),
     skipListening: skip(2, '2.3'),
     bossT1: tier(1).boss.assessment_set_id!,
     bossT2: tier(2).boss.assessment_set_id!,

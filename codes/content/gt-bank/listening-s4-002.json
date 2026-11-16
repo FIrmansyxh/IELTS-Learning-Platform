@@ -1,0 +1,195 @@
+{
+  "bank_contract_version": "1.0",
+  "banks": [
+    {
+      "bank_code": "GT-LIS-S4-002",
+      "bank_kind": "LISTENING_GT_S4",
+      "title": "Listening GT Section 4: Ceramah Beternak Lebah di Kota",
+      "skill": "LISTENING",
+      "exam_module": "GENERAL_TRAINING",
+      "origin": "ORIGINAL_AUTHORED",
+      "source_code": "OWN",
+      "listening_asset_code": "gt-listening/gt-l-s4-002",
+      "tags": [
+        "listening",
+        "section-4",
+        "lecture",
+        "urban-beekeeping"
+      ],
+      "questions": [
+        {
+          "question_id": "Q-GTL4-011",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "How did the speaker first become interested in beekeeping?",
+          "difficulty": 2,
+          "explanation_id": "Ia tidak tumbuh di pertanian; tetangganya memintanya \"to look after her hives while she was away\".",
+          "options": [
+            "She grew up on a farm",
+            "She looked after a neighbor's hives",
+            "She attended a talk at the library",
+            "She read a book about bees"
+          ],
+          "correct_answers": [
+            "She looked after a neighbor's hives"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-012",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "Complete the notes. Write NO MORE THAN TWO WORDS AND/OR A NUMBER.\n\nIn summer, one hive may contain up to ________ bees.",
+          "difficulty": 2,
+          "explanation_id": "Di musim dingin sekitar 10.000 lebah, tetapi di musim panas \"a single hive can contain up to sixty thousand\".",
+          "max_words": 2,
+          "correct_answers": [
+            "60,000",
+            "60000",
+            "sixty thousand",
+            "60 000"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-013",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "City hives often produce more honey because of the variety of ________ in parks and gardens.",
+          "difficulty": 3,
+          "explanation_id": "Alasannya adalah \"the sheer variety of flowering plants in parks, gardens, and along streets\".",
+          "max_words": 2,
+          "correct_answers": [
+            "flowering plants",
+            "plants"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-014",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "The biggest danger for rooftop hives is strong ________.",
+          "difficulty": 2,
+          "explanation_id": "Panas juga masalah, tetapi \"the biggest danger on a rooftop is strong wind\".",
+          "max_words": 1,
+          "correct_answers": [
+            "wind",
+            "winds"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-015",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "What is the purpose of each piece of equipment?",
+          "difficulty": 3,
+          "explanation_id": "Smoker \"calms the bees\", veil \"protects your face\", dan hive tool dipakai \"to separate the frames\".",
+          "matching": {
+            "left": [
+              "Smoker",
+              "Veil",
+              "Hive tool"
+            ],
+            "right": [
+              "Calms the bees",
+              "Protects the face",
+              "Separates the frames",
+              "Feeds the colony",
+              "Collects the honey"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            0,
+            1,
+            2
+          ],
+          "points": 3
+        },
+        {
+          "question_id": "Q-GTL4-016",
+          "question_type": "MCQ_MULTI",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "Choose TWO letters. According to the speaker, which TWO are the biggest challenges for urban beekeepers?",
+          "difficulty": 3,
+          "explanation_id": "Dua tantangan terbesar menurut pembicara: tetangga yang khawatir tersengat dan \"finding a reliable source of water\". Penyakit dan pencurian sarang jarang menjadi masalah.",
+          "options": [
+            "Disease",
+            "Neighbors who worry about stings",
+            "Theft of hives",
+            "Finding a reliable water source",
+            "High running costs"
+          ],
+          "correct_answers": [
+            "Neighbors who worry about stings",
+            "Finding a reliable water source"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-017",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "A good beginners' course lasts about ________ weeks.",
+          "difficulty": 2,
+          "explanation_id": "Kursus pemula yang baik \"lasts about eight weeks\".",
+          "max_words": 1,
+          "correct_answers": [
+            "8",
+            "eight"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-018",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "Start-up cost (hive, equipment and bees): roughly $________",
+          "difficulty": 2,
+          "explanation_id": "Biaya awal: \"roughly four hundred dollars on a hive, the basic equipment, and your first colony\".",
+          "max_words": 1,
+          "correct_answers": [
+            "400",
+            "$400",
+            "four hundred"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-019",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "In spring and summer, inspect the hive once a ________.",
+          "difficulty": 2,
+          "explanation_id": "Saran pembicara: \"inspecting your hive once a week\" selama musim semi dan panas.",
+          "max_words": 1,
+          "correct_answers": [
+            "week"
+          ]
+        },
+        {
+          "question_id": "Q-GTL4-020",
+          "question_type": "MCQ_SINGLE",
+          "skill": "LISTENING",
+          "section_no": 4,
+          "prompt": "What does the City Beekeepers Association offer new members?",
+          "difficulty": 2,
+          "explanation_id": "Asosiasi tidak memberi sarang gratis atau menjual madu, tetapi \"they do run an excellent mentoring scheme\".",
+          "options": [
+            "Free hives",
+            "A mentoring scheme",
+            "Help selling their honey",
+            "Discounts on equipment"
+          ],
+          "correct_answers": [
+            "A mentoring scheme"
+          ]
+        }
+      ]
+    }
+  ]
+}

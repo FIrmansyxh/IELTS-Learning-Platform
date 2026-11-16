@@ -40,6 +40,18 @@ describe('MarkdownArticle (keamanan render, security-standards 3.2)', () => {
     expect(screen.getByText('Kesalahan Umum')).toBeInTheDocument();
   });
 
+  it('directive :::pengantar menjadi Callout berlabel "Pengantar" dengan isi Markdown (C-20)', () => {
+    const { container } = render(
+      <MarkdownArticle markdown={':::pengantar\n**Apa yang kamu pelajari?** Kata benda (*noun*).\n\n**Kenapa ini penting?** Dipakai di semua kalimat.\n:::'} />,
+    );
+    const box = container.querySelector('aside[data-callout="pengantar"]');
+    expect(box).not.toBeNull();
+    expect(box).toHaveAttribute('aria-label', 'Pengantar');
+    expect(box?.querySelector('strong')?.textContent).toBe('Apa yang kamu pelajari?');
+    expect(box?.querySelector('em')?.textContent).toBe('noun');
+    expect(container.textContent).not.toContain(':::');
+  });
+
   it('":" biasa pada teks (mis. 3:ab) tidak hilang menjadi directive', () => {
     const { container } = render(<MarkdownArticle markdown="Rasio 3:ab dan Catatan: penting" />);
     expect(container.textContent).toContain('3:ab');

@@ -3,9 +3,9 @@
   "sub_modules": [
     {
       "tier_number": 1,
-      "module_code": "1.3",
+      "module_code": "1.5",
       "module_category": "READING",
-      "sub_module_code": "1.3.2",
+      "sub_module_code": "1.5.2",
       "sub_module_title": "E2E Reading Dasar (sintetis)",
       "passing_score_percent": 60,
       "origin": "AI_GENERATED_REVIEWED",
@@ -212,8 +212,8 @@
   "assessment_sets": [
     {
       "set_type": "SKIP_MODULE_TEST",
-      "title": "E2E Skip Modul 1.3 (Reading, 2 teks)",
-      "module_code": "1.3",
+      "title": "E2E Skip Modul 1.5 (Reading, 2 teks)",
+      "module_code": "1.5",
       "time_limit_seconds": 600,
       "pass_percent": 85,
       "reading_passage_markdown": "# The Saturday Market\n\n[A] Green Lane Market opens every Saturday morning from eight until one. Local farmers sell fresh vegetables and fruit.\n\n[B] Visitors can also buy bread, cheese and flowers. Parking is free for the first two hours.\n\n[C] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[D] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[E] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[F] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[G] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n[H] This extra paragraph only adds length so that the text panel can scroll on small screens. It says nothing about opening times, parking or prices, and it is repeated several times on purpose to fill the panel with plain words that need no thinking at all.\n\n===PASSAGE===\n# Library Notice\n\n[A] The city library will close for repairs for one week in March. Books can be returned in the box outside.\n\n[B] Members who borrow books during the closure will receive a one week extension.",

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { GraduationCap, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import * as React from 'react';
 import { isNavActive, NAV_ITEMS, type NavItem } from '@/app/nav.config';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -60,20 +60,35 @@ function NavLink({
       aria-current={active ? 'page' : undefined}
       aria-label={variant === 'bottom' && item.shortLabel ? item.label : undefined}
       className={cn(
-        'relative flex items-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        'group relative flex items-center rounded-md outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-ring',
         variant === 'side'
           ? collapsed
             ? 'min-h-11 justify-center px-0 text-sm font-medium hover:bg-accent'
             : 'min-h-11 gap-3 px-3 text-sm font-medium hover:bg-accent'
           : 'min-h-14 min-w-0 flex-1 flex-col justify-center gap-1 px-0.5 text-[11px] leading-none font-medium whitespace-nowrap',
         active ? 'text-[var(--color-primary)]' : 'text-muted-foreground hover:text-foreground',
-        active && variant === 'side' && 'bg-accent',
+        active && variant === 'side' && 'bg-accent font-semibold',
       )}
     >
-      {active && variant === 'bottom' ? (
-        <span aria-hidden="true" className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-primary" />
+      {active && variant === 'side' ? (
+        <span aria-hidden="true" className="absolute inset-y-2 left-0 w-[3px] rounded-full bg-gradient-brand" />
       ) : null}
-      <Icon className={cn('size-5', active && 'fill-primary/15')} aria-hidden="true" />
+      {variant === 'bottom' ? (
+        <span
+          aria-hidden="true"
+          className={cn(
+            'flex h-7 w-12 items-center justify-center rounded-full transition-[background-color,transform] duration-200',
+            active ? 'bg-accent' : 'group-active:scale-90',
+          )}
+        >
+          <Icon className={cn('size-5', active && 'fill-primary/15')} />
+        </span>
+      ) : (
+        <Icon
+          className={cn('size-5 transition-transform duration-200 group-hover:scale-110', active && 'fill-primary/15')}
+          aria-hidden="true"
+        />
+      )}
       <span className={cn(collapsed && variant === 'side' && 'sr-only')}>
         {variant === 'bottom' ? (item.shortLabel ?? item.label) : item.label}
       </span>
@@ -118,12 +133,22 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-dvh">
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-10 hidden flex-col border-r bg-card transition-[width] duration-200 lg:flex',
+          'fixed inset-y-0 left-0 z-10 hidden flex-col border-r bg-card/85 backdrop-blur-xl transition-[width] duration-200 lg:flex',
           collapsed ? 'w-16 p-2' : 'w-64 p-4',
         )}
       >
-        <div className={cn('mb-6 flex items-center', collapsed ? 'justify-center' : 'justify-between gap-2 px-3')}>
-          {collapsed ? null : <p className="font-heading text-lg font-bold">{id.app.name}</p>}
+        <div className={cn('mb-6 flex items-center', collapsed ? 'justify-center' : 'justify-between gap-2 px-1')}>
+          {collapsed ? null : (
+            <p className="flex min-w-0 items-center gap-2.5 font-heading text-[1.02rem] leading-tight font-bold">
+              <span
+                aria-hidden="true"
+                className="flex size-9 shrink-0 items-center justify-center rounded-[0.7rem] bg-gradient-hero text-white shadow-brand"
+              >
+                <GraduationCap className="size-5" />
+              </span>
+              <span>{id.app.name}</span>
+            </p>
+          )}
           <button
             type="button"
             onClick={() => setCollapsed(!collapsed)}
@@ -165,7 +190,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <nav
         aria-label={id.nav.main}
-        className="fixed inset-x-0 bottom-0 z-30 flex border-t bg-card pb-[env(safe-area-inset-bottom)] lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 flex border-t bg-card/85 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_20px_rgb(11_27_51/0.06)] backdrop-blur-xl lg:hidden"
       >
         {items.map((item) => (
           <NavLink key={item.href} item={item} pathname={pathname} variant="bottom" />

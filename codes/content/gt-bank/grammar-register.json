@@ -287,6 +287,300 @@
           "correct_answers": [
             3
           ]
+        },
+        {
+          "question_id": "Q-GTGR-017",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Which sentence is the most appropriate way to apologise in a formal letter?",
+          "difficulty": 1,
+          "explanation_id": "Permintaan maaf formal: 'Please accept my sincere apologies for...'. Pilihan lain adalah bahasa lisan/slang.",
+          "options": [
+            "Please accept my sincere apologies for the inconvenience caused.",
+            "Sorry about the mess, my fault!",
+            "Oops, that was a mistake.",
+            "My bad, it won't happen again."
+          ],
+          "correct_answers": [
+            "Please accept my sincere apologies for the inconvenience caused."
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-018",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "In a formal letter, which verb best replaces 'put off' in: 'The meeting has been put off until next week'?",
+          "difficulty": 2,
+          "explanation_id": "Put off = menunda -> versi formal 'postponed'. Cancelled = dibatalkan, brought forward = dimajukan.",
+          "options": [
+            "postponed",
+            "cancelled",
+            "brought forward",
+            "called up"
+          ],
+          "correct_answers": [
+            "postponed"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-019",
+          "question_type": "MATCHING_DROPDOWN",
+          "skill": "GRAMMAR",
+          "prompt": "Match each phrasal verb with its formal equivalent.",
+          "difficulty": 2,
+          "explanation_id": "look into = investigate, get in touch with = contact, put up with = tolerate, turn down = reject. Surat formal lebih memilih kata kerja satu kata.",
+          "matching": {
+            "left": [
+              "look into",
+              "get in touch with",
+              "put up with",
+              "turn down"
+            ],
+            "right": [
+              "tolerate",
+              "investigate",
+              "postpone",
+              "reject",
+              "contact",
+              "arrive"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            1,
+            4,
+            0,
+            3
+          ],
+          "points": 4
+        },
+        {
+          "question_id": "Q-GTGR-020",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Rewrite without a contraction for a formal letter: 'I won't be able to attend.' -> I ___ be able to attend.",
+          "difficulty": 1,
+          "explanation_id": "Surat formal menghindari kontraksi: won't -> will not.",
+          "correct_answers": [
+            "will not"
+          ],
+          "max_words": 2
+        },
+        {
+          "question_id": "Q-GTGR-021",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "You are writing to your neighbour, Mrs Clarke, whom you know a little. Which opening is most suitable?",
+          "difficulty": 1,
+          "explanation_id": "Semi-formal dan nama diketahui: 'Dear Mrs Clarke,'. 'Dear Sir or Madam' dan 'To whom it may concern' untuk penerima tanpa nama.",
+          "options": [
+            "Dear Mrs Clarke,",
+            "Dear Sir or Madam,",
+            "Hey Clarkey!",
+            "To whom it may concern,"
+          ],
+          "correct_answers": [
+            "Dear Mrs Clarke,"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-022",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Which closing best suits a semi-formal letter to a colleague you call by their first name?",
+          "difficulty": 2,
+          "explanation_id": "Semi-formal: 'Kind regards,' (atau 'Best wishes,'). 'Yours faithfully' untuk penerima tanpa nama; dua lainnya terlalu akrab.",
+          "options": [
+            "Kind regards,",
+            "Yours faithfully,",
+            "Lots of love,",
+            "Later!"
+          ],
+          "correct_answers": [
+            "Kind regards,"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-023",
+          "question_type": "MCQ_MULTI",
+          "skill": "GRAMMAR",
+          "prompt": "Choose TWO sentences that suit an informal letter to a close friend.",
+          "difficulty": 1,
+          "explanation_id": "Surat informal memakai kontraksi, seruan, dan nada akrab. Tiga lainnya adalah frasa surat formal.",
+          "options": [
+            "Guess what? I've finally got a new job!",
+            "I am writing to inform you of my new employment.",
+            "Can't wait to see you next month!",
+            "I would be obliged if you could reply promptly.",
+            "Please find attached my CV."
+          ],
+          "correct_answers": [
+            "Guess what? I've finally got a new job!",
+            "Can't wait to see you next month!"
+          ],
+          "points": 2
+        },
+        {
+          "question_id": "Q-GTGR-024",
+          "question_type": "ERROR_RECOGNITION",
+          "skill": "GRAMMAR",
+          "prompt": "Click the word that is NOT appropriate in a formal letter.",
+          "difficulty": 2,
+          "explanation_id": "'Mate' adalah sapaan akrab dan tidak pantas dalam surat formal; kalimat lainnya sudah formal.",
+          "tokens": [
+            "I",
+            "would",
+            "appreciate",
+            "it",
+            "if",
+            "you",
+            "could",
+            "reply",
+            "by",
+            "Friday,",
+            "mate."
+          ],
+          "correct_answers": [
+            10
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-025",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Complete the formal request: 'I would be ___ if you could send me a copy of the contract.'",
+          "difficulty": 2,
+          "explanation_id": "Pola permintaan formal: I would be grateful/obliged if you could + V1.",
+          "correct_answers": [
+            "grateful",
+            "obliged"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGR-026",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Which sentence states a complaint most appropriately in a formal letter?",
+          "difficulty": 1,
+          "explanation_id": "Keluhan formal tetap sopan dan lengkap: 'I was extremely disappointed with...'. Pilihan lain kasar, slang, atau tidak lengkap.",
+          "options": [
+            "I was extremely disappointed with the quality of the meal.",
+            "The food was gross, seriously.",
+            "Your restaurant is the worst ever!!!",
+            "Food bad. Not happy."
+          ],
+          "correct_answers": [
+            "I was extremely disappointed with the quality of the meal."
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-027",
+          "question_type": "SENTENCE_REORDER",
+          "skill": "GRAMMAR",
+          "prompt": "Put the parts in order to make a formal closing sentence.",
+          "difficulty": 3,
+          "explanation_id": "Pola formal: Should you require ... (= If you need ...), please do not hesitate to contact me.",
+          "segments": [
+            "Should you require",
+            "any further information,",
+            "please do not hesitate",
+            "to contact me."
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-028",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Choose the most formal verb to complete: 'I did not ___ your letter of 3 May.'",
+          "difficulty": 1,
+          "explanation_id": "Receive adalah padanan formal dari 'get' untuk surat/dokumen.",
+          "options": [
+            "receive",
+            "grab",
+            "catch",
+            "pick"
+          ],
+          "correct_answers": [
+            "receive"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-029",
+          "question_type": "MATCHING_DRAG",
+          "skill": "GRAMMAR",
+          "prompt": "Match each formal phrase with its purpose.",
+          "difficulty": 1,
+          "explanation_id": "Please accept my apologies = meminta maaf; complain = mengeluh; I would be grateful if = meminta; enquire = menanyakan informasi.",
+          "matching": {
+            "left": [
+              "Please accept my apologies for...",
+              "I am writing to complain about...",
+              "I would be grateful if you could...",
+              "I am writing to enquire about..."
+            ],
+            "right": [
+              "Making a request",
+              "Apologising",
+              "Complaining",
+              "Asking for information",
+              "Inviting"
+            ],
+            "allow_reuse": false
+          },
+          "correct_answers": [
+            1,
+            2,
+            0,
+            3
+          ],
+          "points": 4
+        },
+        {
+          "question_id": "Q-GTGR-030",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "You missed your friend's birthday party. Which apology is most natural in an informal letter?",
+          "difficulty": 2,
+          "explanation_id": "Kepada teman, permintaan maaf memakai bahasa akrab dan kontraksi. Tiga pilihan lain terlalu kaku.",
+          "options": [
+            "I'm really sorry I couldn't make it to your party!",
+            "I wish to offer my formal apologies for my absence.",
+            "Please accept our regrets regarding the event.",
+            "We regret to inform you that I was absent."
+          ],
+          "correct_answers": [
+            "I'm really sorry I couldn't make it to your party!"
+          ]
+        },
+        {
+          "question_id": "Q-GTGR-031",
+          "question_type": "FILL_IN_BLANK",
+          "skill": "GRAMMAR",
+          "prompt": "Replace 'carry on' with a formal one-word verb: 'Please ___ to use the side entrance until the work is finished.'",
+          "difficulty": 2,
+          "explanation_id": "Carry on = continue. Struktur 'continue to + V1' cocok dengan kalimat ini.",
+          "correct_answers": [
+            "continue"
+          ],
+          "max_words": 1
+        },
+        {
+          "question_id": "Q-GTGR-032",
+          "question_type": "MCQ_SINGLE",
+          "skill": "GRAMMAR",
+          "prompt": "Which sentence would sound TOO formal in a letter to a close friend?",
+          "difficulty": 2,
+          "explanation_id": "'I hereby acknowledge receipt of...' adalah bahasa dokumen resmi. Tiga lainnya wajar untuk teman.",
+          "options": [
+            "I hereby acknowledge receipt of your letter.",
+            "Thanks so much for your letter!",
+            "It was lovely to hear from you.",
+            "Write back soon!"
+          ],
+          "correct_answers": [
+            "I hereby acknowledge receipt of your letter."
+          ]
         }
       ],
       "exam_module": "GENERAL_TRAINING",

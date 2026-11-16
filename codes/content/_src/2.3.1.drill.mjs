@@ -17,6 +17,16 @@ const passage = `## Cycling in Harbour City
 
 [D] Today, 18% of journeys are made by bicycle. The city offers free bike repair stations at ten locations, and schools run weekly cycling lessons. Officials say that the next goal is to reach 25% by 2030, mainly by connecting the lanes in the northern suburbs.`;
 
+const passage2 = `## Westfield Community Library: Information for New Members
+
+[A] Joining the library is free for anyone who lives, works or studies in Westfield. To register, bring one document showing your address, such as a bank letter, to the front desk. Your membership card is ready in about ten minutes, and children under 12 need a parent to sign the form.
+
+[B] Members may borrow up to eight books at a time for three weeks. Films on DVD can be kept for one week only. If nobody else is waiting for an item, you may renew it twice, either online or by phone. Late books cost 20 pence per day, but there are no late charges for members over 65.
+
+[C] The library is more than a place for books. The Study Room on the first floor has 24 desks and free wireless internet, and it can be booked for up to two hours a day. Every Thursday evening, a volunteer called Mrs Okafor runs a free computer class for beginners. Places are limited to twelve people, so early booking is advised.
+
+[D] From 1 March, the building will open on Sundays for the first time, from 10 a.m. to 2 p.m. The council has also agreed to pay for a new children's corner, which should be finished by September. During the building work, the main entrance will be closed and visitors should use the side door on Mill Lane.`;
+
 const sub = {
   meta: {
     tier_number: 2,
@@ -33,7 +43,7 @@ const sub = {
   },
   drill: {
     time_limit_seconds: 1200,
-    passages: [passage],
+    passages: [passage, passage2],
     questions: [
       g(1, {
         question_type: 'MATCHING_DROPDOWN',
@@ -114,7 +124,50 @@ const sub = {
         options: ['Years and percentages', 'Names with capital letters', 'The word "the"', 'Abstract ideas'],
         correct_answers: ['Years and percentages', 'Names with capital letters'],
       }),
-      mcq(20, 'Why is searching for the exact words of a question risky?', ['Questions often use synonyms or paraphrase instead of the same words', 'Questions never contain names', 'Texts do not contain numbers', 'Scanning is not allowed in the test'], 'Questions often use synonyms or paraphrase instead of the same words', 'Soal sering memarafrase teks, sehingga carilah sinonim, angka, dan nama sebagai jangkar.'),
+      mcq(20, 'Why is searching for the exact words of a question risky?', ['Questions often use synonyms or paraphrase instead of the same words', 'Questions never contain names', 'Texts do not contain numbers', 'Scanning is not allowed in the test'], 'Questions often use synonyms or paraphrase instead of the same words', 'Soal sering memarafrase teks, sehingga carilah sinonim, angka, dan nama sebagai jangkar.'),
+      g(21, {
+        passage_no: 2,
+        question_type: 'MATCHING_DROPDOWN',
+        prompt: 'Choose the correct heading for each paragraph (A-D) of the library text. There are more headings than paragraphs.',
+        matching: {
+          left: ['Paragraph A', 'Paragraph B', 'Paragraph C', 'Paragraph D'],
+          right: [
+            'How to become a member',
+            'Rules for borrowing',
+            'Other services in the building',
+            'Changes that are coming',
+            'The history of the library',
+            'Jobs available at the library',
+          ],
+          allow_reuse: false,
+        },
+        points: 4,
+        correct_answers: [0, 1, 2, 3],
+        explanation_id: 'Kalimat pertama tiap paragraf memberi ide pokok: A cara mendaftar, B aturan meminjam, C layanan selain buku, D perubahan mulai 1 Maret. Dua judul lain adalah pengecoh.',
+      }),
+      { ...fill(22, 'Members may borrow up to ___ books at a time.', ['eight', '8'], 'Scanning kata kunci "borrow up to": paragraf B, "up to eight books at a time".'), passage_no: 2 },
+      { ...fill(23, 'Late books cost ___ pence per day.', ['20', 'twenty'], 'Scanning kata kunci "pence": paragraf B, "Late books cost 20 pence per day".'), passage_no: 2 },
+      g(24, {
+        passage_no: 2,
+        question_type: 'SHORT_ANSWER',
+        prompt: 'Who runs the free computer class for beginners? (Maximum TWO words)',
+        correct_answers: ['Mrs Okafor', 'Mrs. Okafor', 'Okafor'],
+        max_words: 2,
+        explanation_id: 'Nama berhuruf kapital mudah di-scan. Paragraf C: "a volunteer called Mrs Okafor runs a free computer class".',
+      }),
+      { ...tfng(25, 'Members can renew an item twice if no one else is waiting for it.', 'True', 'Paragraf B: "If nobody else is waiting for an item, you may renew it twice". Nobody else = no one else.'), passage_no: 2 },
+      { ...tfng(26, 'Members over 65 must pay 20 pence per day for late books.', 'False', 'Paragraf B: "there are no late charges for members over 65", jadi mereka tidak membayar denda.'), passage_no: 2 },
+      { ...tfng(27, 'The computer class for beginners takes place in the Study Room.', 'Not Given', 'Teks menyebut hari dan pengajarnya, tetapi tidak menyebut di ruang mana kelas komputer diadakan.'), passage_no: 2 },
+      { ...mcq(28, 'Which entrance should visitors use during the building work?', ['The side door on Mill Lane', 'The main entrance', 'The door on the first floor', 'The front desk'], 'The side door on Mill Lane', 'Paragraf D: pintu utama ditutup dan pengunjung memakai "the side door on Mill Lane".'), passage_no: 2 },
+      { ...mcq(29, 'When should the new children\'s corner be finished?', ['By September', 'On 1 March', 'On Thursday evening', 'Within three weeks'], 'By September', 'Paragraf D: "a new children\'s corner, which should be finished by September". 1 March adalah awal buka hari Minggu.'), passage_no: 2 },
+      g(30, {
+        passage_no: 2,
+        question_type: 'ERROR_RECOGNITION',
+        prompt: 'Klik detail yang salah menurut teks perpustakaan: "The Study Room can be booked for up to three hours a day."',
+        explanation_id: 'Paragraf C: Study Room dapat dipesan "for up to two hours a day", bukan three.',
+        tokens: ['The', 'Study', 'Room', 'can', 'be', 'booked', 'for', 'up', 'to', 'three', 'hours', 'a', 'day.'],
+        correct_answers: [9],
+      }),
     ],
   },
 };
